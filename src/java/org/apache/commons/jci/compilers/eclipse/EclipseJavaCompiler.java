@@ -113,6 +113,7 @@ public final class EclipseJavaCompiler implements JavaCompiler {
         settings.put(CompilerOptions.OPTION_LineNumberAttribute, CompilerOptions.GENERATE);
         settings.put(CompilerOptions.OPTION_SourceFileAttribute, CompilerOptions.GENERATE);
         settings.put(CompilerOptions.OPTION_ReportDeprecation, CompilerOptions.IGNORE);
+        settings.put(CompilerOptions.OPTION_ReportUnusedImport, CompilerOptions.IGNORE);
         settings.put(CompilerOptions.OPTION_Encoding, "UTF-8");
         settings.put(CompilerOptions.OPTION_LocalVariableAttribute, CompilerOptions.GENERATE);
         settings.put(CompilerOptions.OPTION_Source, CompilerOptions.VERSION_1_4);
