@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <pomVersion>3</pomVersion>
+  <artifactId>jci</artifactId>
+  <name>jci</name>
+  <groupId>commons</groupId>
+  <currentVersion>0.1-dev</currentVersion>
+  <inceptionYear>2004</inceptionYear>
+
+  <logo>/images/logo.gif</logo>
+
+  <shortDescription>java compiler interface</shortDescription>
+
+  <description>
+  </description>
+
+  <url>http://</url>
+  <siteAddress></siteAddress>
+  <siteDirectory>/</siteDirectory>
+
+  <mailingLists>
+    <mailingList>
+      <name>${pom.name} Dev List</name>
+    </mailingList>
+    <mailingList>
+      <name>${pom.name} User List</name>
+    </mailingList>
+  </mailingLists>
+
+  <build>
+    <sourceDirectory>src/java</sourceDirectory>
+    <!--
+    <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
+    <unitTest>
+      <includes>
+        <include>**/*Test.java</include>
+      </includes>
+    </unitTest>
+    -->
+  </build>
+
+  <developers>
+
+    <developer>
+      <name>Torsten Curdt</name>
+      <id>tcurdt</id>
+      <email>tcurdt at apache.org</email>
+    </developer>
+
+  </developers>
+
+
+  <dependencies>
+
+   <dependency>
+     <groupId>bcel</groupId>
+     <artifactId>bcel</artifactId>
+     <version>20040329</version>
+   </dependency>
+
+   <dependency>
+     <groupId>commons-io</groupId>
+     <artifactId>commons-io</artifactId>
+     <version>1.0</version>
+   </dependency>
+
+   <dependency>
+     <groupId>commons-lang</groupId>
+     <artifactId>commons-lang</artifactId>
+     <version>2.0</version>
+   </dependency>
+
+   <dependency>
+     <groupId>eclipse</groupId>
+     <artifactId>jdtcore</artifactId>
+     <version>3.0.1</version>
+   </dependency>
+
+  </dependencies>
+
+</project>
+

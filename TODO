@@ -1,0 +1,8 @@
+o integrate just4log into the build system
+o use jakarta commons-logging
+o monitor multiple repositories
+o compiler factory
+o compiler implementations
+  o groovy
+  o embedded java compiler
+  o javac 
