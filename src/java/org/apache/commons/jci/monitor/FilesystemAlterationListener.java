@@ -21,7 +21,7 @@ import java.io.File;
  * @author tcurdt
  *
  */
-public interface AlterationListener {
+public interface FilesystemAlterationListener {
     void onStart();
     void onCreateFile( final File file );
     void onChangeFile( final File file );

@@ -26,8 +26,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.jci.compilers.JavaCompiler;
 import org.apache.commons.jci.compilers.eclipse.EclipseJavaCompiler;
-import org.apache.commons.jci.monitor.AlterationListener;
-import org.apache.commons.jci.monitor.AlterationMonitor;
+import org.apache.commons.jci.monitor.FilesystemAlterationListener;
+import org.apache.commons.jci.monitor.FilesystemAlterationMonitor;
 import org.apache.commons.jci.problems.ConsoleCompilationProblemHandler;
 import org.apache.commons.jci.readers.FileResourceReader;
 import org.apache.commons.jci.readers.ResourceReader;
@@ -48,7 +48,7 @@ public class CompilingClassLoader extends ClassLoader {
     private final TransactionalResourceStore store;
     private final ResourceReader reader;
     private final JavaCompiler compiler; 
-    private final AlterationMonitor fam;
+    private final FilesystemAlterationMonitor fam;
 
     public CompilingClassLoader(final ClassLoader pParent, final File pRepository) {
         this(pParent, pRepository,
@@ -70,9 +70,9 @@ public class CompilingClassLoader extends ClassLoader {
         store = pStore;
         compiler = new EclipseJavaCompiler();
                 
-        fam = new AlterationMonitor(repository); 
+        fam = new FilesystemAlterationMonitor(); 
 
-        fam.addListener(new AlterationListener() {
+        fam.addListener(new FilesystemAlterationListener() {
 
             private Collection created = new ArrayList();
             private Collection changed = new ArrayList();
@@ -97,7 +97,7 @@ public class CompilingClassLoader extends ClassLoader {
                 if (deleted.size() > 0) {
                     for (Iterator it = deleted.iterator(); it.hasNext();) {
                         final File file = (File) it.next();
-                        store.remove(clazzName(fam.getRoot(), file));
+                        store.remove(clazzName(repository, file));
                     }
                     reload = true;
                 }
@@ -113,7 +113,7 @@ public class CompilingClassLoader extends ClassLoader {
                     int i = 0;
                     for (Iterator it = compileables.iterator(); it.hasNext();) {
                         final File file = (File) it.next();
-                        clazzes[i] = clazzName(fam.getRoot(),file);
+                        clazzes[i] = clazzName(repository,file);
                         //log.debug(clazzes[i]);
                         i++;
                     }
@@ -174,7 +174,7 @@ public class CompilingClassLoader extends ClassLoader {
             }
             public void onDeleteDirectory( final File file ) {
             }
-            });
+            }, repository);
         
         delegate = new ResourceStoreClassLoader(parent, store);
 

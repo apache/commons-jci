@@ -24,8 +24,8 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.jci.monitor.AlterationListener;
-import org.apache.commons.jci.monitor.AlterationMonitor;
+import org.apache.commons.jci.monitor.FilesystemAlterationListener;
+import org.apache.commons.jci.monitor.FilesystemAlterationMonitor;
 import org.apache.commons.jci.readers.FileResourceReader;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.MemoryResourceStore;
@@ -46,7 +46,7 @@ public class ReloadingClassLoader extends ClassLoader {
     private ClassLoader delegate;
     private final ResourceStore store;
     private final ResourceReader reader;
-    private final AlterationMonitor fam;
+    private final FilesystemAlterationMonitor fam;
 
     public ReloadingClassLoader(final ClassLoader pParent, final File pRepository) {
         this(pParent, pRepository, new MemoryResourceStore());
@@ -59,9 +59,9 @@ public class ReloadingClassLoader extends ClassLoader {
         reader = new FileResourceReader(repository);
         store = pStore;
                 
-        fam = new AlterationMonitor(repository); 
+        fam = new FilesystemAlterationMonitor(); 
 
-        fam.addListener(new AlterationListener() {
+        fam.addListener(new FilesystemAlterationListener() {
 
             private Collection created = new ArrayList();
             private Collection changed = new ArrayList();
@@ -79,7 +79,7 @@ public class ReloadingClassLoader extends ClassLoader {
                 if (deleted.size() > 0) {
                     for (Iterator it = deleted.iterator(); it.hasNext();) {
                         final File file = (File) it.next();
-                        store.remove(clazzName(fam.getRoot(), file));
+                        store.remove(clazzName(repository, file));
                     }
                     reload = true;
                 }
@@ -89,7 +89,7 @@ public class ReloadingClassLoader extends ClassLoader {
                         final File file = (File) it.next();
                         try {
                             final byte[] bytes = IOUtils.toByteArray(new FileReader(file));
-                            store.write(clazzName(fam.getRoot(), file), bytes);
+                            store.write(clazzName(repository, file), bytes);
                         } catch(final Exception e) {
                             log.error("could not load " + file, e);
                         }
@@ -127,7 +127,7 @@ public class ReloadingClassLoader extends ClassLoader {
             }
             public void onDeleteDirectory( final File file ) {
             }
-            });
+            }, repository);
         
         delegate = new ResourceStoreClassLoader(parent, store);
 

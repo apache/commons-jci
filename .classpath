@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/java"/>
+	<classpathentry kind="src" path="src/test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry sourcepath="/jakarta-bcel-trunk/src/java" kind="lib" path="lib/jakarta-bcel-20040329.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/commons-io/jars/commons-io-1.0.jar"/>
@@ -8,5 +9,6 @@
 	<classpathentry kind="var" path="MAVEN_REPO/eclipse/jars/jdtcore-3.0.1.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/commons-logging/jars/commons-logging-1.0.4.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/commons-logging/jars/commons-logging-api-1.0.4.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="var" path="MAVEN_REPO/commons-collections/jars/commons-collections-3.1.jar"/>
+	<classpathentry kind="output" path="eclipse"/>
 </classpath>
