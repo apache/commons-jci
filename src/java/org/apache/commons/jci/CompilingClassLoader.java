@@ -71,10 +71,6 @@ public class CompilingClassLoader extends ClassLoader {
         compiler = new EclipseJavaCompiler();
                 
         fam = new AlterationMonitor(repository); 
-        Thread myThread = new Thread(fam); 
-        myThread.start();
-
-        delegate = new ResourceStoreClassLoader(parent, store);
 
         fam.addListener(new AlterationListener() {
 
@@ -180,7 +176,10 @@ public class CompilingClassLoader extends ClassLoader {
             }
             });
         
-        
+        delegate = new ResourceStoreClassLoader(parent, store);
+
+        Thread myThread = new Thread(fam); 
+        myThread.start();        
     }
 
     private void reload() {
