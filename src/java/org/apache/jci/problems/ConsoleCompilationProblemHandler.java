@@ -15,6 +15,9 @@
  */
 package org.apache.jci.problems;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 
 /**
@@ -22,6 +25,8 @@ package org.apache.jci.problems;
  *
  */
 public class ConsoleCompilationProblemHandler implements CompilationProblemHandler {
+    
+    private final static Log log = LogFactory.getLog(ConsoleCompilationProblemHandler.class);
 
     private int errors;
     private int warnings;
@@ -33,7 +38,7 @@ public class ConsoleCompilationProblemHandler implements CompilationProblemHandl
             warnings++;
         }
         
-        System.out.println(pProblem);
+        log.debug(pProblem);
     }
     
     

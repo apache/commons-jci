@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.jci.compilers.JavaCompiler;
 import org.apache.jci.compilers.eclipse.EclipseJavaCompiler;
 import org.apache.jci.problems.ConsoleCompilationProblemHandler;
@@ -34,6 +36,8 @@ import org.apache.jci.stores.ResourceStore;
  *
  */
 public final class Test {
+
+    private final static Log log = LogFactory.getLog(Test.class);
 
     public static String clazzName( final File base, final File file ) {
         final int rootLength = base.getAbsolutePath().length();
@@ -68,9 +72,9 @@ public final class Test {
                 deleted.clear();
             }
             public void onStop() {
-                System.out.println(created.size() + " resources created");
-                System.out.println(changed.size() + " resources changed");
-                System.out.println(deleted.size() + " resources deleted");
+                log.debug(created.size() + " resources created");
+                log.debug(changed.size() + " resources changed");
+                log.debug(deleted.size() + " resources deleted");
 
                 if (deleted.size() > 0) {
 	                for (Iterator it = deleted.iterator(); it.hasNext();) {
@@ -90,7 +94,7 @@ public final class Test {
 	                for (Iterator it = compileables.iterator(); it.hasNext();) {
 	                    final File file = (File) it.next();
 	                    clazzes[i] = clazzName(fam.getRoot(),file);
-	                    System.out.println(clazzes[i]);
+	                    log.debug(clazzes[i]);
 	                    i++;
 	                }
 	                
@@ -104,7 +108,7 @@ public final class Test {
 	                        );
 	                
 	                
-	                System.out.println(
+	                log.debug(
 	                        problemHandler.getErrorCount() + " errors, " +
 	                        problemHandler.getWarningCount() + " warnings"
 	                        );

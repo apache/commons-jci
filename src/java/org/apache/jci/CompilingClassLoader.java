@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.jci.compilers.JavaCompiler;
 import org.apache.jci.compilers.eclipse.EclipseJavaCompiler;
 import org.apache.jci.monitor.AlterationListener;
@@ -37,6 +39,8 @@ import org.apache.jci.stores.TransactionalResourceStore;
  *
  */
 public class CompilingClassLoader extends ClassLoader {
+    
+    private final static Log log = LogFactory.getLog(CompilingClassLoader.class);
     
     private final ClassLoader parent;
     private final File repository;
@@ -86,7 +90,7 @@ public class CompilingClassLoader extends ClassLoader {
             }
             public void onStop() {
                 /*
-                System.out.println("resources " +
+                log.debug("resources " +
                         created.size() + " created, " + 
                         changed.size() + " changed, " + 
                         deleted.size() + " deleted");
@@ -114,7 +118,7 @@ public class CompilingClassLoader extends ClassLoader {
                     for (Iterator it = compileables.iterator(); it.hasNext();) {
                         final File file = (File) it.next();
                         clazzes[i] = clazzName(fam.getRoot(),file);
-                        //System.out.println(clazzes[i]);
+                        //log.debug(clazzes[i]);
                         i++;
                     }
                     
@@ -128,7 +132,7 @@ public class CompilingClassLoader extends ClassLoader {
                             );
                     
                     
-                    System.out.println(
+                    log.debug(
                             problemHandler.getErrorCount() + " errors, " +
                             problemHandler.getWarningCount() + " warnings"
                             );
@@ -145,7 +149,7 @@ public class CompilingClassLoader extends ClassLoader {
 
                 store.onStop();
 
-                //System.out.println(store);
+                //log.debug(store);
                 
                 if (reload) {
                     reload();
@@ -180,7 +184,7 @@ public class CompilingClassLoader extends ClassLoader {
     }
 
     private void reload() {
-        System.out.println("reloading");
+        log.debug("reloading");
         delegate = new ResourceStoreClassLoader(parent, store );
         
     }

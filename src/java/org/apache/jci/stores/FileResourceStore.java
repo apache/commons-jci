@@ -23,11 +23,12 @@ package org.apache.jci.stores;
 public final class FileResourceStore implements ResourceStore {
 
     public byte[] read( final String resourceName ) {
-        return null;
+        throw new RuntimeException("NYI");
     }
     public void write( final String resourceName, final byte[] clazzData ) {
-    }
-    
+        throw new RuntimeException("NYI");
+    }    
     public void remove( final String resourceName ) {
+        throw new RuntimeException("NYI");
     }
 }

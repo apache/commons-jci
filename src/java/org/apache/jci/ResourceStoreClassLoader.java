@@ -15,6 +15,8 @@
  */
 package org.apache.jci;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.jci.stores.ResourceStore;
 
 
@@ -23,6 +25,8 @@ import org.apache.jci.stores.ResourceStore;
  *
  */
 public final class ResourceStoreClassLoader extends ClassLoader {
+
+    private final static Log log = LogFactory.getLog(ResourceStoreClassLoader.class);
 
     private final ResourceStore store;
     private final ClassLoader parent;
@@ -54,13 +58,13 @@ public final class ResourceStoreClassLoader extends ClassLoader {
                 final ClassLoader parent = getParent();
                 if (parent != null) {
                     clazz = parent.loadClass(name);
-                    //System.out.println("loaded from parent: " + name);
+                    //log.debug("loaded from parent: " + name);
                 } else {
                     throw new ClassNotFoundException(name);
                 }
                 
             } else {
-                System.out.println("loaded from store: " + name);
+                log.debug("loaded from store: " + name);
             }
         }
 

@@ -25,6 +25,8 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.jci.compilers.JavaCompiler;
 import org.apache.jci.problems.CompilationProblem;
 import org.apache.jci.problems.CompilationProblemHandler;
@@ -50,7 +52,9 @@ import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.jdt.internal.compiler.problem.DefaultProblemFactory;
 
 public final class EclipseJavaCompiler implements JavaCompiler {
-    
+
+    private final static Log log = LogFactory.getLog(EclipseJavaCompiler.class);
+
     final class CompilationUnit implements ICompilationUnit {
 
         final private String clazzName;
@@ -120,7 +124,7 @@ public final class EclipseJavaCompiler implements JavaCompiler {
             final String clazzName = clazzNames[i];
             compilationUnits[i] = new CompilationUnit(reader, clazzName);
             clazzIndex.add(clazzName);
-            System.out.println("compiling " + clazzName);
+            log.debug("compiling " + clazzName);
         }
         
         final IErrorHandlingPolicy policy = DefaultErrorHandlingPolicies.proceedWithAllProblems();
@@ -128,7 +132,7 @@ public final class EclipseJavaCompiler implements JavaCompiler {
         final INameEnvironment nameEnvironment = new INameEnvironment() {
 
             public NameEnvironmentAnswer findType( final char[][] compoundTypeName ) {
-                //System.out.println("NameEnvironment.findType compound");
+                //log.debug("NameEnvironment.findType compound");
 
                 final StringBuffer result = new StringBuffer();
                 for (int i = 0; i < compoundTypeName.length; i++) {
@@ -142,7 +146,7 @@ public final class EclipseJavaCompiler implements JavaCompiler {
             }
 
             public NameEnvironmentAnswer findType( final char[] typeName, final char[][] packageName ) {
-                //System.out.println("NameEnvironment.findType");
+                //log.debug("NameEnvironment.findType");
 
                 final StringBuffer result = new StringBuffer();
                 for (int i = 0; i < packageName.length; i++) {
@@ -160,11 +164,11 @@ public final class EclipseJavaCompiler implements JavaCompiler {
             }
 
             private NameEnvironmentAnswer findType(final String clazzName) {
-                //System.out.println("NameEnvironment.findType " + clazzName);
+                //log.debug("NameEnvironment.findType " + clazzName);
 
                 byte[] clazzBytes = store.read(clazzName);
                 if (clazzBytes != null) {
-                    //System.out.println("loading from store " + clazzName);
+                    //log.debug("loading from store " + clazzName);
 
                     final char[] fileName = clazzName.toCharArray();
                     try {
@@ -178,7 +182,7 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                 else {
 
                     if (reader.isAvailable(clazzName.replace('.', '/') + ".java")) {
-	                    System.out.println("compile " + clazzName);
+	                    log.debug("compile " + clazzName);
 	                    ICompilationUnit compilationUnit = new CompilationUnit(reader, clazzName);
 	                    return new NameEnvironmentAnswer(compilationUnit);                                            
                     }
@@ -188,7 +192,7 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                         
                         if (is != null) {
                             
-    	                    //System.out.println("loading from classloader " + clazzName);
+    	                    //log.debug("loading from classloader " + clazzName);
                             final byte[] buffer = new byte[8192];
                             ByteArrayOutputStream baos = new ByteArrayOutputStream(buffer.length);
                             int count;
@@ -208,7 +212,7 @@ public final class EclipseJavaCompiler implements JavaCompiler {
     	                }
                     }
                 }
-                //System.out.println("not found " + clazzName);
+                //log.debug("not found " + clazzName);
                 return null;    	                    
             }
 
@@ -217,7 +221,7 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                 final String resourceName = clazzName.replace('.', '/') + ".class";
                 final InputStream is = this.getClass().getClassLoader().getResourceAsStream(resourceName);
                 boolean result = (is == null);
-                //System.out.println("NameEnvironment.isPackage " + resourceName + " = " + result);
+                //log.debug("NameEnvironment.isPackage " + resourceName + " = " + result);
                 return result;
             }
 
@@ -318,7 +322,7 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                 problemHandler
                 );
         
-        System.out.println(
+        log.debug(
                 problemHandler.getErrorCount() + " errors, " +
                 problemHandler.getWarningCount() + " warnings"
                 );

@@ -18,6 +18,9 @@ package org.apache.jci.stores;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /**
  * @author tcurdt
@@ -25,20 +28,22 @@ import java.util.Map;
  */
 public final class MemoryResourceStore implements ResourceStore {
 
+    private final static Log log = LogFactory.getLog(MemoryResourceStore.class);
+
 	private final Map store = new HashMap();
 	
 	public byte[] read( final String resourceName ) {
-		//System.out.println("looking up class " + resourceName);
+		//log.debug("looking up class " + resourceName);
 		return (byte[]) store.get(resourceName);
 	}
 
 	public void write( final String resourceName, final byte[] clazzData ) {
-		System.out.println("storing class " + resourceName);
+		log.debug("storing class " + resourceName);
 		store.put(resourceName, clazzData);
 	}
 	
     public void remove( final String resourceName ) {
-        System.out.println("removing resource " + resourceName);
+        log.debug("removing resource " + resourceName);
         store.remove(resourceName);
     }
 

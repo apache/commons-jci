@@ -21,12 +21,17 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /**
  * @author tcurdt
  *
  */
 public final class AlterationMonitor implements Runnable {
+    
+    private final static Log log = LogFactory.getLog(AlterationMonitor.class);
     
     public class Entry {
         private final File file;
@@ -155,14 +160,14 @@ public final class AlterationMonitor implements Runnable {
     private void onCreate( final Entry entry ) {
         
         if (entry.isDirectory()) {
-            System.out.println("* created dir " + entry);
+            log.debug("* created dir " + entry);
             for (Iterator it = listeners.iterator(); it.hasNext();) {
                 final AlterationListener listener = (AlterationListener) it.next();
                 listener.onCreateDirectory(entry.getFile());
             }
         }
         else {
-            System.out.println("* created file " + entry);
+            log.debug("* created file " + entry);
             for (Iterator it = listeners.iterator(); it.hasNext();) {
                 final AlterationListener listener = (AlterationListener) it.next();
                 listener.onCreateFile(entry.getFile());
@@ -173,14 +178,14 @@ public final class AlterationMonitor implements Runnable {
     }
     private void onChange( final Entry entry ) {
         if (entry.isDirectory()) {
-            System.out.println("* changed dir " + entry);
+            log.debug("* changed dir " + entry);
             for (Iterator it = listeners.iterator(); it.hasNext();) {
                 final AlterationListener listener = (AlterationListener) it.next();
                 listener.onChangeDirectory(entry.getFile());
             }
         }
         else {
-            System.out.println("* changed file " + entry);            
+            log.debug("* changed file " + entry);            
             for (Iterator it = listeners.iterator(); it.hasNext();) {
                 final AlterationListener listener = (AlterationListener) it.next();
                 listener.onChangeFile(entry.getFile());
@@ -190,14 +195,14 @@ public final class AlterationMonitor implements Runnable {
     }
     private void onDelete( final Entry entry ) {
         if (entry.isDirectory()) {
-            System.out.println("* deleted dir " + entry);
+            log.debug("* deleted dir " + entry);
             for (Iterator it = listeners.iterator(); it.hasNext();) {
                 final AlterationListener listener = (AlterationListener) it.next();
                 listener.onDeleteDirectory(entry.getFile());
             }
         }
         else {
-            System.out.println("* deleted file " + entry);            
+            log.debug("* deleted file " + entry);            
             for (Iterator it = listeners.iterator(); it.hasNext();) {
                 final AlterationListener listener = (AlterationListener) it.next();
                 listener.onDeleteFile(entry.getFile());
@@ -268,7 +273,7 @@ public final class AlterationMonitor implements Runnable {
     
     public void run() {
         while(running) {
-	        //System.out.println("*");
+	        //log.debug("*");
 
 	        if (!root.isDelected()) {
 		        onStart();
