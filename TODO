@@ -1,5 +1,6 @@
 o integrate just4log into the build system
-o use jakarta commons-logging
+o proper package names
+o subscribing to compiler events
 o monitor multiple repositories
 o compiler factory
 o compiler implementations

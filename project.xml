@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
+  <!--
+  -->
   <extend>../commons-build/sandbox-project.xml</extend>
+
   <name>Commons JCI</name>
   <id>commons-jci</id>
   <logo>/images/jci-logo-white.png</logo>
@@ -10,10 +13,8 @@
   <description>Commons JCI (java compiler interface)</description>
 
   <currentVersion>0.1-dev</currentVersion>
-  <versions>
-  </versions>
-  <branches>
-  </branches>
+  <versions></versions>
+  <branches></branches>
 
   <!-- Note "commons" package is missing -->
   <package>org.apache.jci.*</package>
@@ -29,6 +30,15 @@
 
   </developers>
 
+  <build>
+    <sourceDirectory>src/java</sourceDirectory>
+    <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
+    <unitTest>
+      <includes>
+        <include>**/*TestCase.java</include>
+      </includes>
+    </unitTest>
+  </build>
 
   <dependencies>
 
