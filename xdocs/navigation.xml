@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE org.apache.commons.menus SYSTEM '../../../jakarta-commons/commons-build/menus/menus.dtd'>
+<project name="Commons&#xA0;JCI">
+    <title>Commons&#xA0;JCI</title>
+    <body>
+        <menu name="Commons&#xA0;JCI">
+            <item name="Overview"                      href="/index.html" />
+            <item name="API&#xA0;Documentation"        href="/apidocs/index.html"/>
+            <item name="Downloads"                     href="/downloads.html"/>
+        </menu>
+        &common-menus;
+    </body>
+</project>

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<document>
+
+ <properties>
+  <title>Overview</title>
+  <author email="commons-dev@jakarta.apache.org">Commons Documentation Team</author>
+ </properties>
+
+ <body>
+
+<section name="The JCI Component">
+
+<p>JCI is a java compiler interface featuring a compiling classloader.</p>
+
+<p>The current implementation includes a EclipseJavaCompiler and GroovyJavaCompiler.</p>
+
+</section>
+
+<section name="Releases">
+    <p>
+       See the <a href="downloads.html">downloads</a> page for information on obtaining releases.
+    </p>
+</section>
+
+<section name="Documentation">
+  <p>
+     The <a href="apidocs/index.html">JavaDoc API documents</a> are available online.
+  </p>
+</section>
+
+</body>
+</document>
