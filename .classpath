@@ -10,5 +10,6 @@
 	<classpathentry kind="var" path="MAVEN_REPO/commons-logging/jars/commons-logging-1.0.4.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/commons-logging/jars/commons-logging-api-1.0.4.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/commons-collections/jars/commons-collections-3.1.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/janino/jars/janino-2.3.0.jar"/>
 	<classpathentry kind="output" path="eclipse"/>
 </classpath>
