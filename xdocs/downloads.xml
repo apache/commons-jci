@@ -3,7 +3,7 @@
    <properties>
       <title>Downloads</title>
       <author email="commons-dev@jakarta.apache.org">Commons Documentation Team</author>
-      <revision>$Id: downloads.xml,v 1.1 2005/01/16 20:01:59 dirkv Exp $</revision>
+      <revision>$Id$</revision>
    </properties>
 
    <body>
@@ -38,7 +38,7 @@
 -->
          <p>
             Access to the source tree to see the latest and greatest code is possible
-            through <a href="cvs-usage.html">anonymous CVS access</a>.
+            through <a href="cvs-usage.html">anonymous SVN access</a>.
          </p>
       </section>
 
