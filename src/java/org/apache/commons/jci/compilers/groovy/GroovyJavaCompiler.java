@@ -1,14 +1,14 @@
-package org.apache.jci.compilers.groovy;
+package org.apache.commons.jci.compilers.groovy;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.jci.compilers.JavaCompiler;
-import org.apache.jci.problems.CompilationProblemHandler;
-import org.apache.jci.problems.ConsoleCompilationProblemHandler;
-import org.apache.jci.readers.FileResourceReader;
-import org.apache.jci.readers.ResourceReader;
-import org.apache.jci.stores.MemoryResourceStore;
-import org.apache.jci.stores.ResourceStore;
+import org.apache.commons.jci.compilers.JavaCompiler;
+import org.apache.commons.jci.problems.CompilationProblemHandler;
+import org.apache.commons.jci.problems.ConsoleCompilationProblemHandler;
+import org.apache.commons.jci.readers.FileResourceReader;
+import org.apache.commons.jci.readers.ResourceReader;
+import org.apache.commons.jci.stores.MemoryResourceStore;
+import org.apache.commons.jci.stores.ResourceStore;
 
 public final class GroovyJavaCompiler implements JavaCompiler {
 

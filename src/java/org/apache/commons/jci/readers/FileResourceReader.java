@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.jci.readers;
+package org.apache.commons.jci.readers;
 
 import java.io.File;
 

@@ -13,22 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.jci.compilers;
-
-import org.apache.jci.problems.CompilationProblemHandler;
-import org.apache.jci.readers.ResourceReader;
-import org.apache.jci.stores.ResourceStore;
-
+package org.apache.commons.jci.readers;
 
 /**
  * @author tcurdt
  *
  */
-public interface JavaCompiler {
-	void compile(
-	        final String[] classes,
-	        final ResourceReader in,
-	        final ResourceStore store,
-	        final CompilationProblemHandler problemHandler
-	        );
+public interface ResourceReader {
+    boolean isAvailable( final String filename );
+    char[] getContent( final String fileName );
+
 }

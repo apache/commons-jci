@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.jci.monitor;
+package org.apache.commons.jci.monitor;
 
 import java.io.File;
 

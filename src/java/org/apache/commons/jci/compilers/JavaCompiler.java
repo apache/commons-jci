@@ -13,17 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.jci.stores;
+package org.apache.commons.jci.compilers;
+
+import org.apache.commons.jci.problems.CompilationProblemHandler;
+import org.apache.commons.jci.readers.ResourceReader;
+import org.apache.commons.jci.stores.ResourceStore;
+
 
 /**
  * @author tcurdt
  *
  */
-public interface ResourceStore {
-
-    void write( final String resourceName, final byte[] resourceData );
-	
-	byte[] read( final String resourceName );
-	
-	void remove( final String resourceName );
+public interface JavaCompiler {
+	void compile(
+	        final String[] classes,
+	        final ResourceReader in,
+	        final ResourceStore store,
+	        final CompilationProblemHandler problemHandler
+	        );
 }

@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.jci.readers;
+package org.apache.commons.jci.problems;
+
 
 /**
  * @author tcurdt
  *
  */
-public interface ResourceReader {
-    boolean isAvailable( final String filename );
-    char[] getContent( final String fileName );
-
+public interface CompilationProblemHandler {
+    void handle( final CompilationProblem pProblem );    
+    int getErrorCount();    
+    int getWarningCount();
 }

@@ -1,5 +1,4 @@
 o integrate just4log into the build system
-o proper package names
 o subscribing to compiler events
 o monitor multiple repositories
 o compiler factory

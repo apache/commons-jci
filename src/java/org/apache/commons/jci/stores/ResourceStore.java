@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.jci.problems;
-
+package org.apache.commons.jci.stores;
 
 /**
  * @author tcurdt
  *
  */
-public interface CompilationProblemHandler {
-    void handle( final CompilationProblem pProblem );    
-    int getErrorCount();    
-    int getWarningCount();
+public interface ResourceStore {
+
+    void write( final String resourceName, final byte[] resourceData );
+	
+	byte[] read( final String resourceName );
+	
+	void remove( final String resourceName );
 }

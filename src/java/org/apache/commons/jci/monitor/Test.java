@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.jci.monitor;
+package org.apache.commons.jci.monitor;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,13 +22,13 @@ import java.util.Iterator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.jci.compilers.JavaCompiler;
-import org.apache.jci.compilers.eclipse.EclipseJavaCompiler;
-import org.apache.jci.problems.ConsoleCompilationProblemHandler;
-import org.apache.jci.readers.FileResourceReader;
-import org.apache.jci.readers.ResourceReader;
-import org.apache.jci.stores.MemoryResourceStore;
-import org.apache.jci.stores.ResourceStore;
+import org.apache.commons.jci.compilers.JavaCompiler;
+import org.apache.commons.jci.compilers.eclipse.EclipseJavaCompiler;
+import org.apache.commons.jci.problems.ConsoleCompilationProblemHandler;
+import org.apache.commons.jci.readers.FileResourceReader;
+import org.apache.commons.jci.readers.ResourceReader;
+import org.apache.commons.jci.stores.MemoryResourceStore;
+import org.apache.commons.jci.stores.ResourceStore;
 
 
 /**

@@ -16,8 +16,7 @@
   <versions></versions>
   <branches></branches>
 
-  <!-- Note "commons" package is missing -->
-  <package>org.apache.jci.*</package>
+  <package>org.apache.commons.jci.*</package>
 
 
   <developers>
