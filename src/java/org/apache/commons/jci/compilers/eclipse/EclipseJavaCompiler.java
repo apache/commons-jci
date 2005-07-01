@@ -174,7 +174,7 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                     final char[] fileName = clazzName.toCharArray();
                     try {
                         ClassFileReader classFileReader = new ClassFileReader(clazzBytes, fileName, true);
-                        return new NameEnvironmentAnswer(classFileReader);
+                        return new NameEnvironmentAnswer(classFileReader, null);
                     } catch (ClassFormatException e) {
                         e.printStackTrace();
                     }                    
@@ -185,7 +185,7 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                     if (reader.isAvailable(clazzName.replace('.', '/') + ".java")) {
 	                    log.debug("compile " + clazzName);
 	                    ICompilationUnit compilationUnit = new CompilationUnit(reader, clazzName);
-	                    return new NameEnvironmentAnswer(compilationUnit);                                            
+	                    return new NameEnvironmentAnswer(compilationUnit, null);                                            
                     }
                     else {
                         final String resourceName = clazzName.replace('.', '/') + ".class";
@@ -205,7 +205,7 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                                 clazzBytes = baos.toByteArray();
                                 final char[] fileName = clazzName.toCharArray();
                                 ClassFileReader classFileReader = new ClassFileReader(clazzBytes, fileName, true);
-                                return new NameEnvironmentAnswer(classFileReader);
+                                return new NameEnvironmentAnswer(classFileReader, null);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
