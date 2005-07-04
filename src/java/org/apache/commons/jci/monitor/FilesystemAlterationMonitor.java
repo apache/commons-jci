@@ -146,12 +146,15 @@ public final class FilesystemAlterationMonitor implements Runnable {
     private final Object mutex = new Object();
     
     private long delay = 3000;
-    private boolean running = true;
-
+    private volatile boolean running = true;
+    
     public FilesystemAlterationMonitor() {
     }
 
-
+    public void stop() {
+        running = false;
+    }
+    
     public void setInterval( final long pDelay ) {
         delay = pDelay;
     }
@@ -358,7 +361,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
 
     public void run() {
-        
+        System.out.println("fam running");
         while (running) {
             Map directories;
             
@@ -390,5 +393,6 @@ public final class FilesystemAlterationMonitor implements Runnable {
             } catch (InterruptedException e) {
             }
         }
+        System.out.println("fam exiting");
     }
 }
