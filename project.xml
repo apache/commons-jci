@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
   <!--
-  -->
   <extend>../commons-build/sandbox-project.xml</extend>
+  -->
   <pomVersion>1</pomVersion>
   <artifactId>commons-jci</artifactId>
   <name>Commons JCI</name>
@@ -15,6 +15,35 @@
   <description>Commons JCI (java compiler interface)</description>
   <currentVersion>0.1-dev</currentVersion>
   <package>org.apache.commons.jci.*</package>
+
+  <gumpRepositoryId>jakarta</gumpRepositoryId>
+  <issueTrackingUrl>http://issues.apache.org/bugzilla/</issueTrackingUrl>
+  <siteAddress>minotaur.apache.org</siteAddress>
+  <siteDirectory>/www/jakarta.apache.org/commons/sandbox/${pom.artifactId.substring(8)}/</siteDirectory>
+  <!--
+  <distributionDirectory>/www/jakarta.apache.org/builds/jakarta-commons/${pom.artifactId.substring(8)}/</distributionDirectory>
+  -->
+
+  <repository>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/sandbox/${pom.artifactId.substring(8)}/trunk</connection>
+    <url>http://svn.apache.org/repos/asf/jakarta/commons/sandbox/${pom.artifactId.substring(8)}/trunk</url>
+  </repository>
+
+  <mailingLists>
+    <mailingList>
+      <name>Commons Dev List</name>
+      <subscribe>commons-dev-subscribe@jakarta.apache.org</subscribe>
+      <unsubscribe>commons-dev-unsubscribe@jakarta.apache.org</unsubscribe>
+      <archive>http://mail-archives.apache.org/eyebrowse/SummarizeList?listName=commons-dev@jakarta.apache.org</archive>
+    </mailingList>
+    <mailingList>
+      <name>Commons User List</name>
+      <subscribe>commons-user-subscribe@jakarta.apache.org</subscribe>
+      <unsubscribe>commons-user-unsubscribe@jakarta.apache.org</unsubscribe>
+      <archive>http://mail-archives.apache.org/eyebrowse/SummarizeList?listName=commons-user@jakarta.apache.org</archive>
+    </mailingList>
+  </mailingLists>                                                                                                                                        
+
   <developers>
     <developer>
       <name>Torsten Curdt</name>
@@ -22,6 +51,7 @@
       <email>tcurdt at apache.org</email>
     </developer>
   </developers>
+
   <build>
     <sourceDirectory>src/java</sourceDirectory>
     <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
@@ -31,6 +61,7 @@
       </includes>
     </unitTest>
   </build>
+
   <dependencies>
     <dependency>
       <groupId>bcel</groupId>
@@ -43,37 +74,31 @@
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>1.0</version>
-      <type>jar</type>
     </dependency>
     <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
       <version>2.0</version>
-      <type>jar</type>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.0.4</version>
-      <type>jar</type>
     </dependency>
     <dependency>
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
       <version>3.1</version>
-      <type>jar</type>
     </dependency>
     <dependency>
       <groupId>eclipse</groupId>
       <artifactId>jdtcore</artifactId>
       <version>3.1.0</version>
-      <type>jar</type>
     </dependency>
     <dependency>
       <groupId>janino</groupId>
       <artifactId>janino</artifactId>
       <version>2.3.0</version>
-      <type>jar</type>
     </dependency>
   </dependencies>
 </project>
