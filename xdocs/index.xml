@@ -13,7 +13,7 @@
 
 <p>JCI is a java compiler interface featuring a compiling classloader.</p>
 
-<p>The current implementation includes a EclipseJavaCompiler and GroovyJavaCompiler.</p>
+<p>The current implementation includes a EclipseJavaCompiler and JaninoJavaCompiler.</p>
 
 </section>
 
