@@ -1,20 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
-  <!--
-  <extend>../commons-build/sandbox-project.xml</extend>
-  -->
-  <pomVersion>1</pomVersion>
-  <artifactId>commons-jci</artifactId>
+  <pomVersion>3</pomVersion>
   <name>Commons JCI</name>
-  <groupId>commons-jci</groupId>
   <id>commons-jci</id>
+  <currentVersion>trunk</currentVersion>
+  <package>org.apache.commons.jci.*</package>
+
   <logo>/images/jci-logo-white.png</logo>
   <url>http://jakarta.apache.org/commons/sandbox/jci/</url>
   <inceptionYear>2004</inceptionYear>
+
+  <organization>
+    <name>The Apache Software Foundation</name>  
+    <url>http://jakarta.apache.org</url>
+    <logo>http://jakarta.apache.org/images/jakarta-logo.gif</logo>    
+  </organization>
+
   <shortDescription>Commons JCI</shortDescription>
   <description>Commons JCI (java compiler interface)</description>
-  <currentVersion>0.1-dev</currentVersion>
-  <package>org.apache.commons.jci.*</package>
+
+  <licenses>
+        <license>
+        <name>The Apache Software License, Version 2.0</name>
+        <url>/LICENSE.txt</url>
+        <distribution>repo</distribution>
+        </license>
+  </licenses>
 
   <gumpRepositoryId>jakarta</gumpRepositoryId>
   <issueTrackingUrl>http://issues.apache.org/bugzilla/</issueTrackingUrl>
@@ -52,17 +63,8 @@
     </developer>
   </developers>
 
-  <build>
-    <sourceDirectory>src/java</sourceDirectory>
-    <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
-    <unitTest>
-      <includes>
-        <include>**/*TestCase.java</include>
-      </includes>
-    </unitTest>
-  </build>
-
   <dependencies>
+
     <dependency>
       <groupId>bcel</groupId>
       <artifactId>bcel</artifactId>
@@ -101,5 +103,33 @@
       <version>2.3.0</version>
     </dependency>
   </dependencies>
+
+
+  <build>
+    <nagEmailAddress>commons-dev@jakarta.apache.org</nagEmailAddress>
+    <sourceDirectory>src/java</sourceDirectory>
+    <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
+    <unitTest>
+      <includes>
+        <include>**/*TestCase.java</include>
+      </includes>
+    </unitTest>
+  </build>
+
+  <reports>
+    <report>maven-license-plugin</report>
+    <report>maven-changelog-plugin</report>
+    <report>maven-changes-plugin</report>
+    <report>maven-developer-activity-plugin</report>
+    <report>maven-file-activity-plugin</report>
+    <report>maven-javadoc-plugin</report>
+    <report>maven-junit-report-plugin</report>
+    <!--
+    <report>maven-jcoverage-plugin</report>
+    -->
+    <report>maven-jxr-plugin</report>
+    <report>maven-linkcheck-plugin</report>
+  </reports>
+
 </project>
 
