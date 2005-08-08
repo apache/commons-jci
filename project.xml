@@ -63,6 +63,14 @@
     </developer>
   </developers>
 
+  <developers>
+    <developer>
+      <name>Don Brown</name>
+      <id>mrdon</id>
+      <email>mrdon at apache.org</email>
+    </developer>
+  </developers>
+
   <dependencies>
 
     <dependency>

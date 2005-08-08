@@ -51,24 +51,34 @@ public class CompilingClassLoader extends ClassLoader {
     private final FilesystemAlterationMonitor fam;
 
     public CompilingClassLoader(final ClassLoader pParent, final File pRepository) {
+        this(pParent, pRepository, new EclipseJavaCompiler());
+    }    
+ 
+    public CompilingClassLoader(final ClassLoader pParent, final File pRepository, final JavaCompiler compiler) {
         this(pParent, pRepository,
                 new TransactionalResourceStore(new MemoryResourceStore()) {
                     public void onStart() {
                         };
                     public void onStop() {
                         };
-                }
+                },
+                compiler
         );
     }
     
     public CompilingClassLoader(final ClassLoader pParent, final File pRepository, final TransactionalResourceStore pStore) {
+        this(pParent, pRepository, pStore, new EclipseJavaCompiler());
+    }
+    
+    public CompilingClassLoader(final ClassLoader pParent, final File pRepository, final TransactionalResourceStore pStore,
+            final JavaCompiler compiler) {
         super(pParent);
         parent = pParent;        
         repository = pRepository;
         
         reader = new FileResourceReader(repository);
         store = pStore;
-        compiler = new EclipseJavaCompiler();
+        this.compiler = compiler;
                 
         fam = new FilesystemAlterationMonitor(); 
 
