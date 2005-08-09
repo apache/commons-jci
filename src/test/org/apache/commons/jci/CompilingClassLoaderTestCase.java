@@ -35,13 +35,7 @@ public final class CompilingClassLoaderTestCase extends TestCase {
         cl.addListener(listener);
         cl.start();
         
-        // FIXME
-        log.debug("waiting for reload");
-        while(true) {
-            if (reloaded) break;
-            Thread.sleep(200);
-        }
-        log.debug("reloaded");
+        Thread.sleep(1000);
 
         reloaded = false;
     }
@@ -68,13 +62,7 @@ public final class CompilingClassLoaderTestCase extends TestCase {
               + "} \n"
               );
         
-        // FIXME
-        log.debug("waiting for reload");
-        while(true) {
-            if (reloaded) break;
-            Thread.sleep(200);
-        }
-        log.debug("reloaded");
+        Thread.sleep(4000);
         
         Object o;
         

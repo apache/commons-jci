@@ -10,6 +10,6 @@
 	<classpathentry kind="var" path="MAVEN_REPO/commons-collections/jars/commons-collections-3.1.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/janino/jars/janino-2.3.0.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/junit/jars/junit-3.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/jdtcore-3.1.0.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/eclipse/jars/jdtcore-3.1.0.jar"/>
 	<classpathentry kind="output" path="eclipse"/>
 </classpath>
