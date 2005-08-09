@@ -16,53 +16,37 @@
 package org.apache.commons.jci;
 
 import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.jci.compilers.JavaCompiler;
 import org.apache.commons.jci.compilers.eclipse.EclipseJavaCompiler;
 import org.apache.commons.jci.monitor.FilesystemAlterationListener;
-import org.apache.commons.jci.monitor.FilesystemAlterationMonitor;
 import org.apache.commons.jci.problems.ConsoleCompilationProblemHandler;
-import org.apache.commons.jci.readers.FileResourceReader;
-import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.MemoryResourceStore;
 import org.apache.commons.jci.stores.TransactionalResourceStore;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * @author tcurdt
  *
  */
-public class CompilingClassLoader extends ClassLoader {
+public class CompilingClassLoader extends ReloadingClassLoader {
     
     private final static Log log = LogFactory.getLog(CompilingClassLoader.class);
     
-    private final ClassLoader parent;
-    private final File repository;
-    private ClassLoader delegate;
-    private final TransactionalResourceStore store;
-    private final ResourceReader reader;
+    private final TransactionalResourceStore transactionalStore;
     private final JavaCompiler compiler; 
-    private final FilesystemAlterationMonitor fam;
-
+    
     public CompilingClassLoader(final ClassLoader pParent, final File pRepository) {
-        this(pParent, pRepository, new EclipseJavaCompiler());
-    }    
- 
-    public CompilingClassLoader(final ClassLoader pParent, final File pRepository, final JavaCompiler compiler) {
-        this(pParent, pRepository,
-                new TransactionalResourceStore(new MemoryResourceStore()) {
+        this(pParent, pRepository, new TransactionalResourceStore(
+                new MemoryResourceStore()) {
                     public void onStart() {
                         };
                     public void onStop() {
                         };
-                },
-                compiler
+                }
         );
     }
     
@@ -70,44 +54,38 @@ public class CompilingClassLoader extends ClassLoader {
         this(pParent, pRepository, pStore, new EclipseJavaCompiler());
     }
     
-    public CompilingClassLoader(final ClassLoader pParent, final File pRepository, final TransactionalResourceStore pStore,
-            final JavaCompiler compiler) {
-        super(pParent);
-        parent = pParent;        
-        repository = pRepository;
-        
-        reader = new FileResourceReader(repository);
-        store = pStore;
-        this.compiler = compiler;
-                
-        fam = new FilesystemAlterationMonitor(); 
+    public CompilingClassLoader(final ClassLoader pParent, final File pRepository, final TransactionalResourceStore pStore, final JavaCompiler pCompiler) {
+        super(pParent, pRepository, pStore);
 
-        fam.addListener(new FilesystemAlterationListener() {
+        transactionalStore = pStore;
+        compiler = pCompiler;                
+    }
 
-            private Collection created = new ArrayList();
-            private Collection changed = new ArrayList();
-            private Collection deleted = new ArrayList();
+    protected FilesystemAlterationListener createListener( final File pRepository ) {
+
+        return new FilesystemAlterationListener() {
+            private final Collection created = new ArrayList();
+            private final Collection changed = new ArrayList();
+            private final Collection deleted = new ArrayList();
             
             public void onStart() {
                 created.clear();
                 changed.clear();
                 deleted.clear();
-                store.onStart();
+                transactionalStore.onStart();
             }
             public void onStop() {
-                /*
                 log.debug("resources " +
                         created.size() + " created, " + 
                         changed.size() + " changed, " + 
                         deleted.size() + " deleted");
-                        */
-
+    
                 boolean reload = false;
                 
                 if (deleted.size() > 0) {
                     for (Iterator it = deleted.iterator(); it.hasNext();) {
                         final File file = (File) it.next();
-                        store.remove(clazzName(repository, file));
+                        transactionalStore.remove(clazzName(repository, file));
                     }
                     reload = true;
                 }
@@ -115,7 +93,7 @@ public class CompilingClassLoader extends ClassLoader {
                 final Collection compileables = new ArrayList();
                 compileables.addAll(created);
                 compileables.addAll(changed);
-
+    
                 final String[] clazzes = new String[compileables.size()];
                 
                 if (compileables.size() > 0) {
@@ -129,11 +107,11 @@ public class CompilingClassLoader extends ClassLoader {
                     }
                     
                     final ConsoleCompilationProblemHandler problemHandler = new ConsoleCompilationProblemHandler();
-
+    
                     compiler.compile(
                             clazzes,
                             reader,
-                            store,
+                            transactionalStore,
                             problemHandler
                             );
                     
@@ -145,23 +123,21 @@ public class CompilingClassLoader extends ClassLoader {
                 
                     if (problemHandler.getErrorCount() > 0) {
                         for (int j = 0; j < clazzes.length; j++) {
-                            store.remove(clazzes[j]);
+                            transactionalStore.remove(clazzes[j]);
                         }
                     }
                     
                     reload = true;                    
-
+    
                 }
-
-                store.onStop();
-
-                //log.debug(store);
-                
+    
+                transactionalStore.onStop();
+    
                 if (reload) {
                     reload();
                 }                
             }
-
+    
             public void onCreateFile( final File file ) {
                 if (file.getName().endsWith(".java")) {
                     created.add(file);
@@ -177,58 +153,13 @@ public class CompilingClassLoader extends ClassLoader {
                     deleted.add(file);
                 }
             }
-
+    
             public void onCreateDirectory( final File file ) {                
             }
             public void onChangeDirectory( final File file ) {                
             }
             public void onDeleteDirectory( final File file ) {
             }
-            }, repository);
-        
-        delegate = new ResourceStoreClassLoader(parent, store);
-
-        Thread myThread = new Thread(fam); 
-        myThread.start();        
-    }
-
-    private void reload() {
-        log.debug("reloading");
-        delegate = new ResourceStoreClassLoader(parent, store );
-        
-    }
-    
-    public static String clazzName( final File base, final File file ) {
-        final int rootLength = base.getAbsolutePath().length();
-        final String absFileName = file.getAbsolutePath();
-        final String relFileName = absFileName.substring(
-                rootLength + 1,
-                absFileName.length() - ".java".length()
-                );
-        final String clazzName = relFileName.replace(File.separatorChar,'.');
-        return clazzName;
-    }
-
-
-    public void clearAssertionStatus() {
-        delegate.clearAssertionStatus();
-    }
-    public URL getResource(String name) {
-        return delegate.getResource(name);
-    }
-    public InputStream getResourceAsStream(String name) {
-        return delegate.getResourceAsStream(name);
-    }
-    public Class loadClass(String name) throws ClassNotFoundException {
-        return delegate.loadClass(name);
-    }
-    public void setClassAssertionStatus(String className, boolean enabled) {
-        delegate.setClassAssertionStatus(className, enabled);
-    }
-    public void setDefaultAssertionStatus(boolean enabled) {
-        delegate.setDefaultAssertionStatus(enabled);
-    }
-    public void setPackageAssertionStatus(String packageName, boolean enabled) {
-        delegate.setPackageAssertionStatus(packageName, enabled);
+        };
     }
 }

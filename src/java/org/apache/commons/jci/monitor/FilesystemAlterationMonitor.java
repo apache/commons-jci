@@ -196,7 +196,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
     }
 
     private void onStart( final File root ) {
-        log.debug("* start checking " + root);
+        log.debug("start checking " + root);
 
         Map directories;
         synchronized(mutex) {
@@ -213,7 +213,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
 
     private void onStop( final File root ) {
-        log.debug("* stop checking " + root);
+        log.debug("stop checking " + root);
                 
         Map directories;
         synchronized(mutex) {
@@ -231,7 +231,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
     private void onCreate( final File root, final Entry entry ) {
         
-        log.debug("* created " + ((entry.isDirectory())?"dir ":"file ") + entry);
+        log.debug("created " + ((entry.isDirectory())?"dir ":"file ") + entry);
         
         Map directories;
         synchronized(mutex) {
@@ -259,7 +259,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
     private void onChange( final File root, final Entry entry ) {
         
-        log.debug("* changed " + ((entry.isDirectory())?"dir ":"file ") + entry);
+        log.debug("changed " + ((entry.isDirectory())?"dir ":"file ") + entry);
         
         Map directories;
         synchronized(mutex) {
@@ -287,7 +287,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
     private void onDelete( final File root, final Entry entry ) {
         
-        log.debug("* deleted " + ((entry.isDirectory())?"dir ":"file ") + entry);
+        log.debug("deleted " + ((entry.isDirectory())?"dir ":"file ") + entry);
         
         Map directories;
         synchronized(mutex) {
@@ -361,7 +361,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
 
     public void run() {
-        System.out.println("fam running");
+        log.info("fam running");
         while (running) {
             Map directories;
             
@@ -393,6 +393,6 @@ public final class FilesystemAlterationMonitor implements Runnable {
             } catch (InterruptedException e) {
             }
         }
-        System.out.println("fam exiting");
+        log.info("fam exiting");
     }
 }

@@ -13,22 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.jci.compilers;
-
-import org.apache.commons.jci.problems.CompilationProblemHandler;
-import org.apache.commons.jci.readers.ResourceReader;
-import org.apache.commons.jci.stores.ResourceStore;
+package org.apache.commons.jci;
 
 
 /**
  * @author tcurdt
- *
  */
-public interface JavaCompiler {
-    void compile(
-            final String[] pClazzNames,
-            final ResourceReader pReader,
-            final ResourceStore pStore,
-            final CompilationProblemHandler pProblemHandler
-    );
+public interface ReloadingListener {
+    void reload();
 }

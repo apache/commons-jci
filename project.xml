@@ -74,42 +74,41 @@
   <dependencies>
 
     <dependency>
-      <groupId>bcel</groupId>
-      <artifactId>bcel</artifactId>
-      <version>20040329</version>
-      <jar>${basedir}/lib/jakarta-bcel-20040329.jar</jar>
-      <type>jar</type>
-    </dependency>
-    <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>1.0</version>
     </dependency>
+
     <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
       <version>2.0</version>
     </dependency>
+
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.0.4</version>
     </dependency>
+
     <dependency>
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
       <version>3.1</version>
     </dependency>
+
     <dependency>
       <groupId>eclipse</groupId>
       <artifactId>jdtcore</artifactId>
       <version>3.1.0</version>
     </dependency>
+
     <dependency>
       <groupId>janino</groupId>
       <artifactId>janino</artifactId>
       <version>2.3.0</version>
     </dependency>
+
   </dependencies>
 
 

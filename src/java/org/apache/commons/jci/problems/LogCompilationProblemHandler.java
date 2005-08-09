@@ -24,7 +24,7 @@ import org.apache.commons.logging.LogFactory;
  * @author tcurdt
  *
  */
-public class ConsoleCompilationProblemHandler implements CompilationProblemHandler {
+public class LogCompilationProblemHandler implements CompilationProblemHandler {
     
     private final static Log log = LogFactory.getLog(ConsoleCompilationProblemHandler.class);
 
@@ -34,10 +34,10 @@ public class ConsoleCompilationProblemHandler implements CompilationProblemHandl
     public void handle( final CompilationProblem pProblem ) {
         if (pProblem.isFatal()) {
             errors++;
-            System.err.println("error(" + errors + "):" + pProblem);
+            log.debug("error(" + errors + "):" + pProblem);
         } else {
             warnings++;
-            System.err.println("warning(" + warnings + "):" + pProblem);
+            log.debug("warning(" + warnings + "):" + pProblem);
         }        
     }
     

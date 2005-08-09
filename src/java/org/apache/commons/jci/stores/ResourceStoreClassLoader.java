@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.jci;
+package org.apache.commons.jci.stores;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -58,7 +58,7 @@ public final class ResourceStoreClassLoader extends ClassLoader {
                 final ClassLoader parent = getParent();
                 if (parent != null) {
                     clazz = parent.loadClass(name);
-                    //log.debug("loaded from parent: " + name);
+                    log.debug("loaded from parent: " + name);
                 } else {
                     throw new ClassNotFoundException(name);
                 }

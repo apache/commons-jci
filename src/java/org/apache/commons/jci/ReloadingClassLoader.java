@@ -21,8 +21,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.jci.monitor.FilesystemAlterationListener;
 import org.apache.commons.jci.monitor.FilesystemAlterationMonitor;
@@ -30,6 +30,7 @@ import org.apache.commons.jci.readers.FileResourceReader;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.MemoryResourceStore;
 import org.apache.commons.jci.stores.ResourceStore;
+import org.apache.commons.jci.stores.ResourceStoreClassLoader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -42,30 +43,47 @@ public class ReloadingClassLoader extends ClassLoader {
     private final static Log log = LogFactory.getLog(ReloadingClassLoader.class);
     
     private final ClassLoader parent;
-    private final File repository;
-    private ClassLoader delegate;
     private final ResourceStore store;
-    private final ResourceReader reader;
     private final FilesystemAlterationMonitor fam;
+    private final Thread thread;
+    private final Collection reloadingListeners = new HashSet();
+    private ClassLoader delegate;
 
+    protected final ResourceReader reader;
+    protected final File repository;
+
+    
     public ReloadingClassLoader(final ClassLoader pParent, final File pRepository) {
         this(pParent, pRepository, new MemoryResourceStore());
     }
-    
-    public ReloadingClassLoader(final ClassLoader pParent, final File pRepository, final ResourceStore pStore) {
+
+    public ReloadingClassLoader(final ClassLoader pParent, final File pRepository, final ResourceStore pStore) {        
         super(pParent);
+
         parent = pParent;        
         repository = pRepository;        
         reader = new FileResourceReader(repository);
         store = pStore;
                 
         fam = new FilesystemAlterationMonitor(); 
+        fam.addListener(createListener(repository), repository);
 
-        fam.addListener(new FilesystemAlterationListener() {
+        thread = new Thread(fam); 
+        
+        delegate = new ResourceStoreClassLoader(parent, store);
+    }
+    
+    public void start() {
+        thread.start();
+        reload();        
+    }
 
-            private Collection created = new ArrayList();
-            private Collection changed = new ArrayList();
-            private Collection deleted = new ArrayList();
+    protected FilesystemAlterationListener createListener(final File pRepository) {
+        return new FilesystemAlterationListener() {
+
+            private final Collection created = new ArrayList();
+            private final Collection changed = new ArrayList();
+            private final Collection deleted = new ArrayList();
             
             public void onStart() {
                 created.clear();
@@ -127,18 +145,31 @@ public class ReloadingClassLoader extends ClassLoader {
             }
             public void onDeleteDirectory( final File file ) {
             }
-            }, repository);
-        
-        delegate = new ResourceStoreClassLoader(parent, store);
-
-        Thread myThread = new Thread(fam); 
-        myThread.start();        
+            
+        };
     }
 
-    private void reload() {
+    public void addListener(final ReloadingListener pListener) {
+        synchronized (reloadingListeners) {
+            reloadingListeners.add(pListener);
+        }                
+    }
+    
+    public boolean removeListener(final ReloadingListener pListener) {
+        synchronized (reloadingListeners) {
+            return reloadingListeners.remove(pListener);
+        }        
+    }
+    
+    protected void reload() {
         log.debug("reloading");
-        delegate = new ResourceStoreClassLoader(parent, store );
-        
+        delegate = new ResourceStoreClassLoader(parent, store);
+        synchronized (reloadingListeners) {
+            for (final Iterator it = reloadingListeners.iterator(); it.hasNext();) {
+                final ReloadingListener listener = (ReloadingListener) it.next();
+                listener.reload();
+            }            
+        }
     }
     
     public static String clazzName( final File base, final File file ) {

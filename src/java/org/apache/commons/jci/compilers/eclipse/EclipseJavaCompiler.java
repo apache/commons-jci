@@ -17,16 +17,11 @@ package org.apache.commons.jci.compilers.eclipse;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.jci.compilers.JavaCompiler;
 import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.problems.CompilationProblemHandler;
@@ -35,6 +30,9 @@ import org.apache.commons.jci.readers.FileResourceReader;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.MemoryResourceStore;
 import org.apache.commons.jci.stores.ResourceStore;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.internal.compiler.ClassFile;
 import org.eclipse.jdt.internal.compiler.CompilationResult;
@@ -48,13 +46,21 @@ import org.eclipse.jdt.internal.compiler.classfmt.ClassFormatException;
 import org.eclipse.jdt.internal.compiler.env.ICompilationUnit;
 import org.eclipse.jdt.internal.compiler.env.INameEnvironment;
 import org.eclipse.jdt.internal.compiler.env.NameEnvironmentAnswer;
-import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.jdt.internal.compiler.problem.DefaultProblemFactory;
 
 public final class EclipseJavaCompiler implements JavaCompiler {
 
     private final static Log log = LogFactory.getLog(EclipseJavaCompiler.class);
-
+    private final EclipseJavaCompilerSettings settings;
+    
+    public EclipseJavaCompiler() {
+        this(new EclipseJavaCompilerSettings());
+    }
+    
+    public EclipseJavaCompiler(final EclipseJavaCompilerSettings pSettings) {
+        settings = pSettings;
+    }    
+    
     final class CompilationUnit implements ICompilationUnit {
 
         final private String clazzName;
@@ -103,27 +109,19 @@ public final class EclipseJavaCompiler implements JavaCompiler {
     }
 
     public void compile(
-            final String[] clazzNames,
-            final ResourceReader reader,
-            final ResourceStore store,
-            final CompilationProblemHandler problemHandler
+            final String[] pClazzNames,
+            final ResourceReader pReader,
+            final ResourceStore pStore,
+            final CompilationProblemHandler pProblemHandler
             ) {
 
-        final Map settings = new HashMap();
-        settings.put(CompilerOptions.OPTION_LineNumberAttribute, CompilerOptions.GENERATE);
-        settings.put(CompilerOptions.OPTION_SourceFileAttribute, CompilerOptions.GENERATE);
-        settings.put(CompilerOptions.OPTION_ReportDeprecation, CompilerOptions.IGNORE);
-        settings.put(CompilerOptions.OPTION_ReportUnusedImport, CompilerOptions.IGNORE);
-        settings.put(CompilerOptions.OPTION_Encoding, "UTF-8");
-        settings.put(CompilerOptions.OPTION_LocalVariableAttribute, CompilerOptions.GENERATE);
-        settings.put(CompilerOptions.OPTION_Source, CompilerOptions.VERSION_1_4);
-        settings.put(CompilerOptions.OPTION_TargetPlatform, CompilerOptions.VERSION_1_4);
-
+        final Map settingsMap = settings.getMap();
+        
         final Set clazzIndex = new HashSet();
-        ICompilationUnit[] compilationUnits = new ICompilationUnit[clazzNames.length];
+        ICompilationUnit[] compilationUnits = new ICompilationUnit[pClazzNames.length];
         for (int i = 0; i < compilationUnits.length; i++) {
-            final String clazzName = clazzNames[i];
-            compilationUnits[i] = new CompilationUnit(reader, clazzName);
+            final String clazzName = pClazzNames[i];
+            compilationUnits[i] = new CompilationUnit(pReader, clazzName);
             clazzIndex.add(clazzName);
             log.debug("compiling " + clazzName);
         }
@@ -167,7 +165,7 @@ public final class EclipseJavaCompiler implements JavaCompiler {
             private NameEnvironmentAnswer findType(final String clazzName) {
                 //log.debug("NameEnvironment.findType " + clazzName);
 
-                byte[] clazzBytes = store.read(clazzName);
+                byte[] clazzBytes = pStore.read(clazzName);
                 if (clazzBytes != null) {
                     //log.debug("loading from store " + clazzName);
 
@@ -182,9 +180,9 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                 }
                 else {
 
-                    if (reader.isAvailable(clazzName.replace('.', '/') + ".java")) {
+                    if (pReader.isAvailable(clazzName.replace('.', '/') + ".java")) {
 	                    log.debug("compile " + clazzName);
-	                    ICompilationUnit compilationUnit = new CompilationUnit(reader, clazzName);
+	                    ICompilationUnit compilationUnit = new CompilationUnit(pReader, clazzName);
 	                    return new NameEnvironmentAnswer(compilationUnit, null);                                            
                     }
                     else {
@@ -193,7 +191,7 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                         
                         if (is != null) {
                             
-    	                    //log.debug("loading from classloader " + clazzName);
+    	                        //log.debug("loading from classloader " + clazzName);
                             final byte[] buffer = new byte[8192];
                             ByteArrayOutputStream baos = new ByteArrayOutputStream(buffer.length);
                             int count;
@@ -265,11 +263,11 @@ public final class EclipseJavaCompiler implements JavaCompiler {
             public void acceptResult(CompilationResult result) {
                 try {
                     if (result.hasProblems()) {
-                        if (problemHandler != null) {
+                        if (pProblemHandler != null) {
 	                        final IProblem[] problems = result.getProblems();
 	                        for (int i = 0; i < problems.length; i++) {
 	                            final IProblem problem = problems[i];
-	                            problemHandler.handle(
+	                            pProblemHandler.handle(
 	                                    new CompilationProblem(
 	                                            problem.getID(),
 	                                            new String(problem.getOriginatingFileName()),
@@ -280,7 +278,9 @@ public final class EclipseJavaCompiler implements JavaCompiler {
 	                                            ));
 	                        }
                         }
-                    } else {
+                    }
+                    
+                    if (!result.hasErrors()) {
 
                         final ClassFile[] clazzFiles = result.getClassFiles();
                         for (int i = 0; i < clazzFiles.length; i++) {
@@ -295,7 +295,7 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                                 clazzName.append(compoundName[j]);
                             }
 
-                            store.write(clazzName.toString(), clazzFile.getBytes());
+                            pStore.write(clazzName.toString(), clazzFile.getBytes());
                         }
                     }
                 } catch (Exception exc) {
@@ -305,7 +305,7 @@ public final class EclipseJavaCompiler implements JavaCompiler {
 
         };
 
-        final Compiler compiler = new Compiler(nameEnvironment, policy, settings, compilerRequestor, problemFactory);
+        final Compiler compiler = new Compiler(nameEnvironment, policy, settingsMap, compilerRequestor, problemFactory);
 
         compiler.compile(compilationUnits);
 
