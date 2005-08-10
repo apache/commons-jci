@@ -45,8 +45,8 @@ public class ReloadingClassLoader extends ClassLoader {
     private final ClassLoader parent;
     private final ResourceStore store;
     private final FilesystemAlterationMonitor fam;
-    private final Thread thread;
     private final Collection reloadingListeners = new HashSet();
+    private Thread thread;
     private ClassLoader delegate;
 
     protected final ResourceReader reader;
@@ -68,16 +68,23 @@ public class ReloadingClassLoader extends ClassLoader {
         fam = new FilesystemAlterationMonitor(); 
         fam.addListener(createListener(repository), repository);
 
-        thread = new Thread(fam); 
-        
         delegate = new ResourceStoreClassLoader(parent, store);
     }
     
     public void start() {
+        thread = new Thread(fam);         
         thread.start();
         reload();        
     }
 
+    public void stop() {
+        fam.stop();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            ;
+        }
+    }
     protected FilesystemAlterationListener createListener(final File pRepository) {
         return new FilesystemAlterationListener() {
 

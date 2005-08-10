@@ -53,7 +53,8 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
 
         public boolean hasChanged() {
-            return file.lastModified() != lastModified;
+            final long modified = file.lastModified();
+            return modified != lastModified;
         }
 
 
@@ -143,16 +144,19 @@ public final class FilesystemAlterationMonitor implements Runnable {
     private Map directories = new MultiHashMap();
     private Map entries = new HashMap();
 
-    private final Object mutex = new Object();
+    private final Object mutexListeners = new Object();
+    private final Object mutexRunning = new Object();
     
     private long delay = 3000;
-    private volatile boolean running = true;
+    private boolean running = true;
     
     public FilesystemAlterationMonitor() {
     }
 
     public void stop() {
-        running = false;
+        synchronized(mutexRunning) {
+            running = false;
+        }
     }
     
     public void setInterval( final long pDelay ) {
@@ -161,7 +165,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
 
     public void addListener( final FilesystemAlterationListener listener, final File directory ) {
-        synchronized (mutex) {
+        synchronized (mutexListeners) {
             // listerner -> dir1, dir2, dir3
 
             final MultiHashMap newListeners = new MultiHashMap(listeners);
@@ -177,7 +181,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
 
     public void removeListener( final FilesystemAlterationListener listener ) {
-        synchronized (mutex) {
+        synchronized (mutexListeners) {
             // listerner -> dir1, dir2, dir3
             final MultiHashMap newListeners = new MultiHashMap(listeners);
             Collection d = (Collection) newListeners.remove(listener);
@@ -199,7 +203,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
         log.debug("start checking " + root);
 
         Map directories;
-        synchronized(mutex) {
+        synchronized(mutexListeners) {
             directories = this.directories;
         }
         final Collection l = (Collection) directories.get(root);
@@ -216,7 +220,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
         log.debug("stop checking " + root);
                 
         Map directories;
-        synchronized(mutex) {
+        synchronized(mutexListeners) {
             directories = this.directories;
         }
         final Collection l = (Collection) directories.get(root);
@@ -234,7 +238,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
         log.debug("created " + ((entry.isDirectory())?"dir ":"file ") + entry);
         
         Map directories;
-        synchronized(mutex) {
+        synchronized(mutexListeners) {
             directories = this.directories;
         }
 
@@ -262,7 +266,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
         log.debug("changed " + ((entry.isDirectory())?"dir ":"file ") + entry);
         
         Map directories;
-        synchronized(mutex) {
+        synchronized(mutexListeners) {
             directories = this.directories;
         }
 
@@ -290,7 +294,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
         log.debug("deleted " + ((entry.isDirectory())?"dir ":"file ") + entry);
         
         Map directories;
-        synchronized(mutex) {
+        synchronized(mutexListeners) {
             directories = this.directories;
         }
 
@@ -314,6 +318,8 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
 
     private void check( final File root, final Entry entry, final boolean create ) {
+        log.debug("checking " + entry);
+        
         if (entry.isDirectory()) {
             final Entry[] currentChilds = entry.getChilds();
             if (entry.hasChanged() || create) {
@@ -362,10 +368,18 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
     public void run() {
         log.info("fam running");
-        while (running) {
+        
+        while (true) {
+            
+            synchronized(mutexRunning) {
+                if (!running) {
+                    break;
+                }
+            }
+            
             Map directories;
             
-            synchronized (mutex) {
+            synchronized (mutexListeners) {
                 directories = this.directories;
             }
 
@@ -375,7 +389,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
                     onStart(directory);
                     
                     Entry root;
-                    synchronized (mutex) {
+                    synchronized (mutexListeners) {
                         root = (Entry)entries.get(directory);
                         if (root == null) {
                             root = new Entry(directory, directory);
@@ -393,6 +407,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
             } catch (InterruptedException e) {
             }
         }
+        
         log.info("fam exiting");
     }
 }
