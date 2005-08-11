@@ -1,13 +1,23 @@
 package org.apache.commons.jci.monitor;
 
 import java.io.File;
-import junit.framework.TestCase;
+import org.apache.commons.jci.AbstractTestCase;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 
-public final class FilesystemAlterationMonitorTestCase extends TestCase {
+public final class FilesystemAlterationMonitorTestCase extends AbstractTestCase {
 
-    class MyFilesystemAlterationListener implements FilesystemAlterationListener {
+    private final static Log log = LogFactory.getLog(FilesystemAlterationMonitorTestCase.class);
+
+    private final Signal signal = new Signal();
+
+    private FilesystemAlterationMonitor fam;
+    private MyFilesystemAlterationListener listener;
+    private Thread thread; 
+
+    private class MyFilesystemAlterationListener implements FilesystemAlterationListener {
         private int started;
         private int stopped;
         private int createdFiles;
@@ -47,6 +57,10 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
         }
         public void onStop() {
             ++stopped;
+            synchronized(signal) {
+                signal.triggered = true;
+                signal.notify();
+            }
         }
         public void onCreateFile( final File file ) {
             ++createdFiles;
@@ -67,26 +81,183 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
             ++deletedDirs;
         }       
     }
+
+    private void start() throws Exception {
+        fam = new FilesystemAlterationMonitor();
+        listener = new MyFilesystemAlterationListener();        
+        fam.addListener(listener, directory);
+        thread = new Thread(fam); 
+        thread.start();
+
+        waitForSignal(signal);
+    }
     
-    public void testCreateDetection() {
-        final File repository = new File("");
-        final FilesystemAlterationMonitor fam = new FilesystemAlterationMonitor(); 
-        final MyFilesystemAlterationListener listener = new MyFilesystemAlterationListener();
-        
-        fam.addListener(listener, repository);
-        
-        Thread myThread = new Thread(fam); 
-        myThread.start();
-        
+    private void stop() throws Exception {
         fam.stop();
+        thread.join();        
     }
-
-    public void testDeleteDetection() {
+    
+    public void testCreateFileDetection() throws Exception {
+        start();
         
-    }
-
-    public void testModifyDetection() {
+        log.debug("creating file");
         
+        final File file = new File(directory, "file");
+        writeFile(file, "file");
+        assertTrue(file.exists());
+        assertTrue(file.isFile());
+        
+        waitForSignal(signal);
+        
+        assertTrue(listener.createdFiles == 1);
+        
+        stop();
     }
 
+    public void testCreateDirectoryDetection() throws Exception {
+        start();
+        
+        log.debug("creating dir");
+
+        final File newDirectory = new File(directory, "directory");
+        assertTrue(newDirectory.mkdir());
+        assertTrue(newDirectory.exists());
+        assertTrue(newDirectory.isDirectory());
+        
+        waitForSignal(signal);
+        
+        assertTrue(listener.createdDirs == 1);
+        
+        stop();
+    }
+
+    public void testDeleteFileDetection() throws Exception {
+        start();
+        
+        log.debug("creating file");
+        
+        final File file = new File(directory, "file");
+        writeFile(file, "file");
+        assertTrue(file.exists());
+        assertTrue(file.isFile());
+        
+        waitForSignal(signal);
+        
+        assertTrue(listener.createdFiles == 1);
+        
+        file.delete();
+        assertTrue(!file.exists());
+
+        waitForSignal(signal);
+        
+        assertTrue(listener.deletedFiles == 1);
+        
+        stop();        
+    }
+
+    public void testDeleteDirectoryDetection() throws Exception {
+        start();
+        
+        log.debug("creating dir");
+
+        final File newDirectory = new File(directory, "directory");
+        assertTrue(newDirectory.mkdir());
+        assertTrue(newDirectory.exists());
+        assertTrue(newDirectory.isDirectory());
+        
+        waitForSignal(signal);
+        
+        assertTrue(listener.createdDirs == 1);
+
+        waitForSignal(signal);
+
+        newDirectory.delete();
+        assertTrue(!newDirectory.exists());
+
+        waitForSignal(signal);
+        
+        assertTrue(listener.deletedDirs == 1);
+
+        stop();
+    }
+
+    public void testModifyFileDetection() throws Exception {
+        start();
+        
+        log.debug("creating file");
+        
+        final File file = new File(directory, "file");
+        writeFile(file, "file");
+        assertTrue(file.exists());
+        assertTrue(file.isFile());
+        
+        waitForSignal(signal);
+        
+        assertTrue(listener.createdFiles == 1);
+
+        waitForSignal(signal);
+
+        writeFile(file, "changed file");
+
+        waitForSignal(signal);
+        
+        assertTrue(listener.changedFiles == 1);
+        
+        stop();
+    }
+
+    public void testCreatingLocalDirectoryChangesLastModified() throws Exception {
+        final long modified = directory.lastModified();
+        
+        final File newDirectory = new File(directory, "directory");
+        assertTrue(newDirectory.mkdir());
+        assertTrue(newDirectory.exists());
+        assertTrue(newDirectory.isDirectory());
+
+        assertTrue(directory.lastModified() != modified);
+    }
+
+    public void testCreatingLocalFileChangesLastModified() throws Exception {
+        final long modified = directory.lastModified();
+        
+        final File file = new File(directory, "file");
+        writeFile(file, "file");
+        assertTrue(file.exists());
+        assertTrue(file.isFile());
+
+        assertTrue(directory.lastModified() != modified);
+    }
+
+    public void testCreatingSubDirectoryChangesLastModified() throws Exception {
+        final File newDirectory = new File(directory, "directory");
+        assertTrue(newDirectory.mkdir());
+        assertTrue(newDirectory.exists());
+        assertTrue(newDirectory.isDirectory());
+
+        final long modified = directory.lastModified();
+        
+        final File newSubDirectory = new File(newDirectory, "sub");
+        assertTrue(newSubDirectory.mkdir());
+        assertTrue(newSubDirectory.exists());
+        assertTrue(newSubDirectory.isDirectory());
+
+        assertTrue(directory.lastModified() != modified);
+    }
+
+    public void testCreatingFileInSubDirectoryChangesLastModified() throws Exception {
+        final File newDirectory = new File(directory, "directory");
+        assertTrue(newDirectory.mkdir());
+        assertTrue(newDirectory.exists());
+        assertTrue(newDirectory.isDirectory());
+
+        final long modified = directory.lastModified();
+        
+        final File file = new File(newDirectory, "file");
+        writeFile(file, "file");
+        assertTrue(file.exists());
+        assertTrue(file.isFile());
+
+        assertTrue(directory.lastModified() != modified);
+    }
+    
 }
