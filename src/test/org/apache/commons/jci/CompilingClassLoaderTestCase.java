@@ -12,12 +12,12 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
     private final Signal reload = new Signal();
 
     private CompilingClassLoader cl;
-    private ReloadingListener listener;
+    private ReloadingClassLoaderListener listener;
     
     protected void setUp() throws Exception {
         super.setUp();
         
-        listener = new ReloadingListener() {
+        listener = new ReloadingClassLoaderListener() {
             public void reload() {
                 synchronized(reload) {
                     reload.triggered = true;

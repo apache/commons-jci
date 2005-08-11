@@ -16,15 +16,12 @@
 package org.apache.commons.jci;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.jci.monitor.FilesystemAlterationListener;
+import org.apache.commons.jci.listeners.ReloadingListener;
 import org.apache.commons.jci.monitor.FilesystemAlterationMonitor;
 import org.apache.commons.jci.readers.FileResourceReader;
 import org.apache.commons.jci.readers.ResourceReader;
@@ -44,14 +41,15 @@ public class ReloadingClassLoader extends ClassLoader {
     
     private final ClassLoader parent;
     private final ResourceStore store;
-    private final FilesystemAlterationMonitor fam;
     private final Collection reloadingListeners = new HashSet();
-    private Thread thread;
+
     private ClassLoader delegate;
 
     protected final ResourceReader reader;
     protected final File repository;
 
+    protected FilesystemAlterationMonitor fam;
+    protected Thread thread;
     
     public ReloadingClassLoader(final ClassLoader pParent, final File pRepository) {
         this(pParent, pRepository, new MemoryResourceStore());
@@ -65,13 +63,16 @@ public class ReloadingClassLoader extends ClassLoader {
         reader = new FileResourceReader(repository);
         store = pStore;
                 
-        fam = new FilesystemAlterationMonitor(); 
-        fam.addListener(createListener(repository), repository);
-
         delegate = new ResourceStoreClassLoader(parent, store);
     }
     
     public void start() {
+        fam = new FilesystemAlterationMonitor(); 
+        fam.addListener(new ReloadingListener(store) {
+            public void reload() {
+                ReloadingClassLoader.this.reload();
+            }            
+        }, repository);
         thread = new Thread(fam);         
         thread.start();
         reload();        
@@ -85,84 +86,14 @@ public class ReloadingClassLoader extends ClassLoader {
             ;
         }
     }
-    protected FilesystemAlterationListener createListener(final File pRepository) {
-        return new FilesystemAlterationListener() {
 
-            private final Collection created = new ArrayList();
-            private final Collection changed = new ArrayList();
-            private final Collection deleted = new ArrayList();
-            
-            public void onStart() {
-                created.clear();
-                changed.clear();
-                deleted.clear();
-            }
-            public void onStop() {
-
-                boolean reload = false;
-                
-                if (deleted.size() > 0) {
-                    for (Iterator it = deleted.iterator(); it.hasNext();) {
-                        final File file = (File) it.next();
-                        store.remove(clazzName(repository, file));
-                    }
-                    reload = true;
-                }
-
-                if (created.size() > 0) {
-                    for (Iterator it = created.iterator(); it.hasNext();) {
-                        final File file = (File) it.next();
-                        try {
-                            final byte[] bytes = IOUtils.toByteArray(new FileReader(file));
-                            store.write(clazzName(repository, file), bytes);
-                        } catch(final Exception e) {
-                            log.error("could not load " + file, e);
-                        }
-                    }
-                }
-
-                if (changed.size() > 0) {
-                    reload = true;
-                }
-
-                if (reload) {
-                    reload();
-                }                
-            }
-
-            public void onCreateFile( final File file ) {
-                if (file.getName().endsWith(".class")) {
-                    created.add(file);
-                }
-            }
-            public void onChangeFile( final File file ) {                
-                if (file.getName().endsWith(".class")) {
-                    changed.add(file);
-                }
-            }
-            public void onDeleteFile( final File file ) {
-                if (file.getName().endsWith(".class")) {
-                    deleted.add(file);
-                }
-            }
-
-            public void onCreateDirectory( final File file ) {                
-            }
-            public void onChangeDirectory( final File file ) {                
-            }
-            public void onDeleteDirectory( final File file ) {
-            }
-            
-        };
-    }
-
-    public void addListener(final ReloadingListener pListener) {
+    public void addListener(final ReloadingClassLoaderListener pListener) {
         synchronized (reloadingListeners) {
             reloadingListeners.add(pListener);
         }                
     }
     
-    public boolean removeListener(final ReloadingListener pListener) {
+    public boolean removeListener(final ReloadingClassLoaderListener pListener) {
         synchronized (reloadingListeners) {
             return reloadingListeners.remove(pListener);
         }        
@@ -173,7 +104,7 @@ public class ReloadingClassLoader extends ClassLoader {
         delegate = new ResourceStoreClassLoader(parent, store);
         synchronized (reloadingListeners) {
             for (final Iterator it = reloadingListeners.iterator(); it.hasNext();) {
-                final ReloadingListener listener = (ReloadingListener) it.next();
+                final ReloadingClassLoaderListener listener = (ReloadingClassLoaderListener) it.next();
                 listener.reload();
             }            
         }

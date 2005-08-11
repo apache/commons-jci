@@ -210,7 +210,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
         if (l != null) {
             for (Iterator it = l.iterator(); it.hasNext();) {
                 final FilesystemAlterationListener listener = (FilesystemAlterationListener) it.next();
-                listener.onStart();
+                listener.onStart(root);
             }            
         }
     }
@@ -227,7 +227,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
         if (l != null) {
             for (Iterator it = l.iterator(); it.hasNext();) {
                 final FilesystemAlterationListener listener = (FilesystemAlterationListener) it.next();
-                listener.onStop();
+                listener.onStop(root);
             }            
         }
     }

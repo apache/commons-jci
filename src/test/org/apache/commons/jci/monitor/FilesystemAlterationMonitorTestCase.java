@@ -52,10 +52,10 @@ public final class FilesystemAlterationMonitorTestCase extends AbstractTestCase 
             return stopped;
         }
                  
-        public void onStart() {
+        public void onStart(final File repository) {
             ++started;
         }
-        public void onStop() {
+        public void onStop(final File repository) {
             ++stopped;
             synchronized(signal) {
                 signal.triggered = true;
@@ -213,7 +213,13 @@ public final class FilesystemAlterationMonitorTestCase extends AbstractTestCase 
         assertTrue(newDirectory.mkdir());
         assertTrue(newDirectory.exists());
         assertTrue(newDirectory.isDirectory());
-
+        
+        while(directory.lastModified() == modified) {
+            Thread.sleep(100);
+            System.out.print('.');
+        }
+        
+        
         assertTrue(directory.lastModified() != modified);
     }
 

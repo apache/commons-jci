@@ -22,12 +22,12 @@ import java.io.File;
  *
  */
 public interface FilesystemAlterationListener {
-    void onStart();
+    void onStart( final File repository );
     void onCreateFile( final File file );
     void onChangeFile( final File file );
     void onDeleteFile( final File file );
     void onCreateDirectory( final File dir );
     void onChangeDirectory( final File dir );
     void onDeleteDirectory( final File dir );
-    void onStop();
+    void onStop( final File repository );
 }
