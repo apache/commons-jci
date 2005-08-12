@@ -32,10 +32,11 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
     }
 
     private void initialCompile() throws Exception {
-
+        delay();
+        
         waitForSignal(reload);
 
-        writeFile(new File(directory, "jci/Simple.java"),
+        writeFile("jci/Simple.java",
                 "package jci;\n"
                 + "public class Simple { \n"
                 + "  public String toString() { \n"
@@ -44,7 +45,7 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
                 + "} \n"
         );
         
-        writeFile(new File(directory, "jci/Extended.java"),
+        writeFile("jci/Extended.java",
                 "package jci;\n"
                 + "public class Extended extends Simple { \n"
                 + "  public String toString() { \n"
@@ -80,7 +81,7 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
         o = cl.loadClass("jci.Extended").newInstance();        
         assertTrue("Extended:Simple".equals(o.toString()));
 
-        writeFile(new File(directory, "jci/Simple.java"),
+        writeFile("jci/Simple.java",
                 "package jci;\n"
                 + "public class Simple { \n"
                 + "  public String toString() { \n"

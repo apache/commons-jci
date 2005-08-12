@@ -63,18 +63,38 @@ public abstract class AbstractTestCase extends TestCase {
     }
     
     
-    protected void writeFile( final File pFile, final String pText ) throws IOException {
-        final File parent = pFile.getParentFile();
+    protected File createDirectory( final String pName ) throws Exception {
+        final File newDirectory = new File(directory, pName);
+        assertTrue(newDirectory.mkdir());
+        assertTrue(newDirectory.exists());
+        assertTrue(newDirectory.isDirectory());
+        return newDirectory;
+    }
+    
+    protected File writeFile( final String pName, final String pText ) throws Exception {
+        final File file = new File(directory, pName);
+        final File parent = file.getParentFile();
         if (!parent.exists()) {
             if (!parent.mkdirs()) {
                 throw new IOException("could not create" + parent);
             }
         }
-        final FileWriter writer = new FileWriter(pFile);
+        final FileWriter writer = new FileWriter(file);
         writer.write(pText);
         writer.close();
         
-        assertTrue(pFile.exists());
+        assertTrue(file.exists());
+        assertTrue(file.isFile());
+        
+        return file;
+    }
+    
+    protected void delay() {
+        try {
+            Thread.sleep(1000);
+        } catch (final InterruptedException e) {
+            ;
+        }
     }
     
     protected File createTempDirectory() throws IOException {
