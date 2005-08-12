@@ -214,12 +214,6 @@ public final class FilesystemAlterationMonitorTestCase extends AbstractTestCase 
         assertTrue(newDirectory.exists());
         assertTrue(newDirectory.isDirectory());
         
-        while(directory.lastModified() == modified) {
-            Thread.sleep(100);
-            System.out.print('.');
-        }
-        
-        
         assertTrue(directory.lastModified() != modified);
     }
 
