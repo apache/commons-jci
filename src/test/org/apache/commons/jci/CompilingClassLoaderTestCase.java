@@ -58,6 +58,25 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
     }
     
     
+    public void testCompileProblems() throws Exception {
+        delay();
+        
+        waitForSignal(reload);
+
+        writeFile("jci/Simple.java",
+                "package jci;\n"
+                + "public class Simple { \n"
+                + "  public String toString() { \n"
+                + "    return 1; \n"
+                + "  } \n"
+                + "} \n"
+        );
+
+        waitForSignal(reload);
+        
+        
+    }
+    
     public void testCreate() throws Exception {
         initialCompile();
         

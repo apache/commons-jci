@@ -20,6 +20,7 @@ import org.apache.commons.jci.compilers.JavaCompiler;
 import org.apache.commons.jci.compilers.eclipse.EclipseJavaCompiler;
 import org.apache.commons.jci.listeners.CompilingListener;
 import org.apache.commons.jci.monitor.FilesystemAlterationMonitor;
+import org.apache.commons.jci.problems.ConsoleCompilationProblemHandler;
 import org.apache.commons.jci.stores.MemoryResourceStore;
 import org.apache.commons.jci.stores.TransactionalResourceStore;
 import org.apache.commons.logging.Log;
@@ -60,7 +61,12 @@ public class CompilingClassLoader extends ReloadingClassLoader {
 
     public void start() {
         fam = new FilesystemAlterationMonitor(); 
-        fam.addListener(new CompilingListener(reader,compiler,transactionalStore) {
+        fam.addListener(new CompilingListener(
+                reader,
+                compiler,
+                transactionalStore,
+                new ConsoleCompilationProblemHandler()
+                ) {
             public void reload() {
                 CompilingClassLoader.this.reload();
             }

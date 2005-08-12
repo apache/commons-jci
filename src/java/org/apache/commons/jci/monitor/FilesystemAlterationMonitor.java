@@ -124,11 +124,11 @@ public final class FilesystemAlterationMonitor implements Runnable {
             return file;
         }
 
-
+/*
         public File getRoot() {
             return root;
         }
-
+*/
 
         public void markNotChanged() {
             lastModified = file.lastModified();
