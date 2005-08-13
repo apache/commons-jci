@@ -21,14 +21,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
 import org.apache.commons.jci.compilers.JavaCompiler;
 import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.problems.CompilationProblemHandler;
-import org.apache.commons.jci.problems.ConsoleCompilationProblemHandler;
-import org.apache.commons.jci.readers.FileResourceReader;
 import org.apache.commons.jci.readers.ResourceReader;
-import org.apache.commons.jci.stores.MemoryResourceStore;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -146,23 +142,4 @@ public class JaninoJavaCompiler implements JavaCompiler {
             store.write(name,bytes);
         }
     }
-    
-    public static void main(String[] args) throws Exception {
-        final JavaCompiler compiler = new JaninoJavaCompiler();
-        final ConsoleCompilationProblemHandler problemHandler = new ConsoleCompilationProblemHandler();
-        
-        compiler.compile(
-                args,
-                new FileResourceReader("classes"),
-                new MemoryResourceStore(),
-                problemHandler
-                );
-        
-        log.debug(
-                problemHandler.getErrorCount() + " errors, " +
-                problemHandler.getWarningCount() + " warnings"
-                );
-    }
-
-
 }

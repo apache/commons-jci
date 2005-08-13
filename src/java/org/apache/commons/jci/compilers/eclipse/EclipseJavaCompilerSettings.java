@@ -12,7 +12,7 @@ public class EclipseJavaCompilerSettings implements JavaCompilerSettings {
     public EclipseJavaCompilerSettings() {
         map.put(CompilerOptions.OPTION_LineNumberAttribute, CompilerOptions.GENERATE);
         map.put(CompilerOptions.OPTION_SourceFileAttribute, CompilerOptions.GENERATE);
-        map.put(CompilerOptions.OPTION_ReportDeprecation, CompilerOptions.IGNORE);
+        map.put(CompilerOptions.OPTION_ReportDeprecation, CompilerOptions.GENERATE);
         map.put(CompilerOptions.OPTION_ReportUnusedImport, CompilerOptions.IGNORE);
         map.put(CompilerOptions.OPTION_Encoding, "UTF-8");
         map.put(CompilerOptions.OPTION_LocalVariableAttribute, CompilerOptions.GENERATE);

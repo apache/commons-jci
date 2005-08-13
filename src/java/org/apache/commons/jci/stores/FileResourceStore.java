@@ -15,6 +15,15 @@
  */
 package org.apache.commons.jci.stores;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import org.apache.commons.io.IOUtils;
+
 
 /**
  * @author tcurdt
@@ -22,13 +31,50 @@ package org.apache.commons.jci.stores;
  */
 public final class FileResourceStore implements ResourceStore {
 
-    public byte[] read( final String resourceName ) {
-        throw new RuntimeException("NYI");
+    private final File root;
+    
+    public FileResourceStore(final File pFile) {
+        root = pFile;
     }
+    public byte[] read( final String resourceName ) {
+        InputStream is = null;
+        try {
+            is = new FileInputStream(new File(root, resourceName));
+            final byte[] data = IOUtils.toByteArray(is);
+            return data;
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+        
+        return null;
+    }
+
     public void write( final String resourceName, final byte[] clazzData ) {
-        throw new RuntimeException("NYI");
+        OutputStream os = null;
+        try {
+            os = new FileOutputStream(new File(root, resourceName));
+            os.write(clazzData);
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        } finally {
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                }
+            }
+        }
     }    
+
     public void remove( final String resourceName ) {
-        throw new RuntimeException("NYI");
+        final File file = new File(root, resourceName);
+        file.delete();
     }
 }

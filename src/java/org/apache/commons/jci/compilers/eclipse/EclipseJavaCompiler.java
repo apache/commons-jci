@@ -25,10 +25,7 @@ import java.util.StringTokenizer;
 import org.apache.commons.jci.compilers.JavaCompiler;
 import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.problems.CompilationProblemHandler;
-import org.apache.commons.jci.problems.ConsoleCompilationProblemHandler;
-import org.apache.commons.jci.readers.FileResourceReader;
 import org.apache.commons.jci.readers.ResourceReader;
-import org.apache.commons.jci.stores.MemoryResourceStore;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -261,45 +258,41 @@ public final class EclipseJavaCompiler implements JavaCompiler {
         final ICompilerRequestor compilerRequestor = new ICompilerRequestor() {
 
             public void acceptResult(CompilationResult result) {
-                try {
-                    if (result.hasProblems()) {
-                        if (pProblemHandler != null) {
-	                        final IProblem[] problems = result.getProblems();
-	                        for (int i = 0; i < problems.length; i++) {
-	                            final IProblem problem = problems[i];
-	                            pProblemHandler.handle(
-	                                    new CompilationProblem(
-	                                            problem.getID(),
-	                                            new String(problem.getOriginatingFileName()),
-	                                            problem.getMessage(),
-	                                            problem.getSourceLineNumber(),
-	                                            problem.getSourceLineNumber(),
-	                                            problem.isError()
-	                                            ));
-	                        }
+                if (result.hasProblems()) {
+                    if (pProblemHandler != null) {
+                        final IProblem[] problems = result.getProblems();
+                        for (int i = 0; i < problems.length; i++) {
+                            final IProblem problem = problems[i];
+                            pProblemHandler.handle(
+                                    new CompilationProblem(
+                                            problem.getID(),
+                                            new String(problem.getOriginatingFileName()),
+                                            problem.getMessage(),
+                                            problem.getSourceLineNumber(),
+                                            problem.getSourceLineNumber(),
+                                            problem.isError()
+                                            ));
                         }
                     }
-                    
-                    if (!result.hasErrors()) {
+                }
+                
+                if (!result.hasErrors()) {
 
-                        final ClassFile[] clazzFiles = result.getClassFiles();
-                        for (int i = 0; i < clazzFiles.length; i++) {
-                            final ClassFile clazzFile = clazzFiles[i];
+                    final ClassFile[] clazzFiles = result.getClassFiles();
+                    for (int i = 0; i < clazzFiles.length; i++) {
+                        final ClassFile clazzFile = clazzFiles[i];
 
-                            final char[][] compoundName = clazzFile.getCompoundName();
-                            final StringBuffer clazzName = new StringBuffer();
-                            for (int j = 0; j < compoundName.length; j++) {
-                                if (j != 0) {
-                                    clazzName.append('.');
-                                }
-                                clazzName.append(compoundName[j]);
+                        final char[][] compoundName = clazzFile.getCompoundName();
+                        final StringBuffer clazzName = new StringBuffer();
+                        for (int j = 0; j < compoundName.length; j++) {
+                            if (j != 0) {
+                                clazzName.append('.');
                             }
-
-                            pStore.write(clazzName.toString(), clazzFile.getBytes());
+                            clazzName.append(compoundName[j]);
                         }
+
+                        pStore.write(clazzName.toString(), clazzFile.getBytes());
                     }
-                } catch (Exception exc) {
-                    exc.printStackTrace();
                 }
             }
 
@@ -309,23 +302,5 @@ public final class EclipseJavaCompiler implements JavaCompiler {
 
         compiler.compile(compilationUnits);
 
-    }
-
-    public static void main(String[] args) throws Exception {
-
-        final JavaCompiler compiler = new EclipseJavaCompiler();
-        final ConsoleCompilationProblemHandler problemHandler = new ConsoleCompilationProblemHandler();
-        
-        compiler.compile(
-                args,
-                new FileResourceReader("classes"),
-                new MemoryResourceStore(),
-                problemHandler
-                );
-        
-        log.debug(
-                problemHandler.getErrorCount() + " errors, " +
-                problemHandler.getWarningCount() + " warnings"
-                );
     }
 }

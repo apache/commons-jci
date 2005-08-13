@@ -33,7 +33,6 @@ public final class MemoryResourceStore implements ResourceStore {
 	private final Map store = new HashMap();
 	
 	public byte[] read( final String resourceName ) {
-		//log.debug("looking up class " + resourceName);
 		return (byte[]) store.get(resourceName);
 	}
 

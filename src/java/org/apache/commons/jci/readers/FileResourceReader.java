@@ -26,10 +26,6 @@ import org.apache.commons.io.FileUtils;
 public final class FileResourceReader implements ResourceReader {
 
     private final File base;
-    
-    public FileResourceReader( final String pBase ) {
-        base = new File(pBase);        
-    }
 
     public FileResourceReader( final File pBase ) {
         base = pBase;        
@@ -44,7 +40,6 @@ public final class FileResourceReader implements ResourceReader {
             return FileUtils.readFileToString(
                     new File(base,fileName), "UTF-8").toCharArray();
         } catch(Exception e) {
-            e.printStackTrace();
         }
         return null;
     }

@@ -68,6 +68,7 @@ public class CompilingClassLoader extends ReloadingClassLoader {
                 new ConsoleCompilationProblemHandler()
                 ) {
             public void reload() {
+                super.reload();
                 CompilingClassLoader.this.reload();
             }
         }, repository);

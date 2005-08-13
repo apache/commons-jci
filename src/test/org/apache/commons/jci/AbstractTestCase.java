@@ -106,7 +106,7 @@ public abstract class AbstractTestCase extends TestCase {
     
     protected void delay() {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(1500);
         } catch (final InterruptedException e) {
             ;
         }

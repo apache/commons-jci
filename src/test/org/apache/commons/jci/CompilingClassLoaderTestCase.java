@@ -1,11 +1,13 @@
 package org.apache.commons.jci;
 
 import java.io.File;
+import org.apache.commons.jci.compilers.AbstractCompilerTestCase;
+import org.apache.commons.jci.compilers.Programs;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
-public final class CompilingClassLoaderTestCase extends AbstractTestCase {
+public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase {
 
     private final static Log log = LogFactory.getLog(CompilingClassLoaderTestCase.class);
     
@@ -37,21 +39,11 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
         waitForSignal(reload);
 
         writeFile("jci/Simple.java",
-                "package jci;\n"
-                + "public class Simple { \n"
-                + "  public String toString() { \n"
-                + "    return \"Simple\"; \n"
-                + "  } \n"
-                + "} \n"
+                Programs.simple
         );
         
         writeFile("jci/Extended.java",
-                "package jci;\n"
-                + "public class Extended extends Simple { \n"
-                + "  public String toString() { \n"
-                + "    return \"Extended:\" + super.toString(); \n"
-                + "  } \n"
-                + "} \n"
+                Programs.extended
         );
         
         waitForSignal(reload);
@@ -64,17 +56,12 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
         waitForSignal(reload);
 
         writeFile("jci/Simple.java",
-                "package jci;\n"
-                + "public class Simple { \n"
-                + "  public String toString() { \n"
-                + "    return 1; \n"
-                + "  } \n"
-                + "} \n"
+                Programs.error
         );
 
         waitForSignal(reload);
         
-        
+        // FIXME
     }
     
     public void testCreate() throws Exception {
@@ -101,12 +88,7 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
         assertTrue("Extended:Simple".equals(o.toString()));
 
         writeFile("jci/Simple.java",
-                "package jci;\n"
-                + "public class Simple { \n"
-                + "  public String toString() { \n"
-                + "    return \"SIMPLE\"; \n"
-                + "  } \n"
-                + "} \n"
+                Programs.SIMPLE
         );
 
         waitForSignal(reload);

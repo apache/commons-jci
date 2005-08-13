@@ -146,5 +146,6 @@ public class CompilingListener implements FilesystemAlterationListener {
     }
 
     protected void reload() {
+        log.debug("reload");
     }
 }
