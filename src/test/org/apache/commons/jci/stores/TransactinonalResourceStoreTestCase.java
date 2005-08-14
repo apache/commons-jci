@@ -17,18 +17,26 @@ package org.apache.commons.jci.stores;
 
 
 
-public final class FileResourceStoreTestCase extends AbstractStoreTestCase {
+public final class TransactinonalResourceStoreTestCase extends AbstractStoreTestCase {
 
     public void testStore() {
-        final ResourceStore store = new FileResourceStore(directory);
+        final TransactionalResourceStore store = new TransactionalResourceStore(new MemoryResourceStore()) {
+            public void onStart() {
+            }
+            public void onStop() {
+            }
+        };
         super.testStore(store);
-    }
-
-    public void testFailedStore() {
+        assertTrue("[key]".equals(store.toString()));
     }
     
     public void testRemove() {
-        final ResourceStore store = new FileResourceStore(directory);
+        final TransactionalResourceStore store = new TransactionalResourceStore(new MemoryResourceStore()) {
+            public void onStart() {
+            }
+            public void onStop() {
+            }
+        };
         super.testRemove(store);
     }
 }

@@ -254,4 +254,16 @@ public final class FilesystemAlterationMonitorTestCase extends AbstractTestCase 
         assertTrue(directory.lastModified() == modified);
     }
     
+    public void testInterval() throws Exception {
+        start();
+        fam.setInterval(1000);
+        stop();
+    }
+    
+    public void testListener() throws Exception {
+        start();
+        fam.removeListener(listener);
+        stop();
+    }
+    
 }

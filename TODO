@@ -1,8 +1,10 @@
 o integrate just4log into the build system
-o subscribing to compiler events
-o monitor multiple repositories
 o compiler factory
 o compiler implementations
   o groovy
   o embedded java compiler
   o javac 
+  o jikes
+o transformation "pipelines"
+o make suffixes matching (*.java, *.class) configurable
+o documentation

@@ -152,6 +152,7 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
     }
 
     protected void tearDown() throws Exception {
+        cl.removeListener(listener);
         cl.stop();
         super.tearDown();
     }
