@@ -87,7 +87,7 @@ public class CompilingListener implements FilesystemAlterationListener {
             int i = 0;
             for (Iterator it = compileables.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
-                clazzes[i] = ReloadingClassLoader.clazzName(pRepository,file);
+                clazzes[i] = ReloadingClassLoader.clazzName(pRepository, file);
                 //log.debug(clazzes[i]);
                 i++;
             }

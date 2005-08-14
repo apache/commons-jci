@@ -1,6 +1,7 @@
 package org.apache.commons.jci;
 
 import java.io.File;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.jci.compilers.AbstractCompilerTestCase;
 import org.apache.commons.jci.compilers.Programs;
 import org.apache.commons.logging.Log;
@@ -20,7 +21,7 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
         super.setUp();
         
         listener = new ReloadingClassLoaderListener() {
-            public void reload() {
+            public void hasReloaded() {
                 synchronized(reload) {
                     reload.triggered = true;
                     reload.notify();
@@ -38,13 +39,9 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
         
         waitForSignal(reload);
 
-        writeFile("jci/Simple.java",
-                Programs.simple
-        );
+        writeFile("jci/Simple.java", Programs.simple);
         
-        writeFile("jci/Extended.java",
-                Programs.extended
-        );
+        writeFile("jci/Extended.java", Programs.extended);
         
         waitForSignal(reload);
     }
@@ -55,9 +52,7 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
         
         waitForSignal(reload);
 
-        writeFile("jci/Simple.java",
-                Programs.error
-        );
+        writeFile("jci/Simple.java", Programs.error);
 
         waitForSignal(reload);
         
@@ -67,83 +62,86 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
     public void testCreate() throws Exception {
         initialCompile();
         
-        Object o;
+        final Object simple = cl.loadClass("jci.Simple").newInstance();        
+        assertTrue("Simple".equals(simple.toString()));
         
-        o = cl.loadClass("jci.Simple").newInstance();        
-        assertTrue("Simple".equals(o.toString()));
-        
-        o = cl.loadClass("jci.Extended").newInstance();        
-        assertTrue("Extended:Simple".equals(o.toString()));
+        final Object extended = cl.loadClass("jci.Extended").newInstance();        
+        assertTrue("Extended:Simple".equals(extended.toString()));
     }
 
     public void testChange() throws Exception {        
         initialCompile();
 
-        Object o;
+        final Object simple = cl.loadClass("jci.Simple").newInstance();        
+        assertTrue("Simple".equals(simple.toString()));
         
-        o = cl.loadClass("jci.Simple").newInstance();        
-        assertTrue("Simple".equals(o.toString()));
-        
-        o = cl.loadClass("jci.Extended").newInstance();        
-        assertTrue("Extended:Simple".equals(o.toString()));
+        final Object extended = cl.loadClass("jci.Extended").newInstance();        
+        assertTrue("Extended:Simple".equals(extended.toString()));
 
-        writeFile("jci/Simple.java",
-                Programs.SIMPLE
-        );
+        writeFile("jci/Simple.java", Programs.SIMPLE);
 
         waitForSignal(reload);
     
-        o = cl.loadClass("jci.Simple").newInstance();        
-        assertTrue("SIMPLE".equals(o.toString()));
+        final Object SIMPLE = cl.loadClass("jci.Simple").newInstance();        
+        assertTrue("SIMPLE".equals(SIMPLE.toString()));
         
-        o = cl.loadClass("jci.Extended").newInstance();        
-        assertTrue("Extended:SIMPLE".equals(o.toString()));
+        final Object newExtended = cl.loadClass("jci.Extended").newInstance();        
+        assertTrue("Extended:SIMPLE".equals(newExtended.toString()));
     }
 
     public void testDelete() throws Exception {
         initialCompile();
 
-        Object o;
+        final Object simple = cl.loadClass("jci.Simple").newInstance();        
+        assertTrue("Simple".equals(simple.toString()));
         
-        o = cl.loadClass("jci.Simple").newInstance();        
-        assertTrue("Simple".equals(o.toString()));
-        
-        o = cl.loadClass("jci.Extended").newInstance();        
-        assertTrue("Extended:Simple".equals(o.toString()));
+        final Object extended = cl.loadClass("jci.Extended").newInstance();        
+        assertTrue("Extended:Simple".equals(extended.toString()));
         
         assertTrue(new File(directory, "jci/Extended.java").delete());
         
         waitForSignal(reload);
 
-        o = cl.loadClass("jci.Simple").newInstance();        
-        assertTrue("Simple".equals(o.toString()));
+        final Object oldSimple = cl.loadClass("jci.Simple").newInstance();        
+        assertTrue("Simple".equals(oldSimple.toString()));
 
         try {
-            o = cl.loadClass("jci.Extended").newInstance();
+            cl.loadClass("jci.Extended").newInstance();
             fail();
         } catch(final ClassNotFoundException e) {
             assertTrue("jci.Extended".equals(e.getMessage()));
         }
         
+        delay();
+        
+        FileUtils.deleteDirectory(new File(directory, "jci"));
+
+        waitForSignal(reload);
+
+        try {
+            cl.loadClass("jci.Simple").newInstance();
+            fail();
+        } catch(final ClassNotFoundException e) {
+            assertTrue("jci.Simple".equals(e.getMessage()));
+        }
+
     }
 
     public void testDeleteDependency() throws Exception {        
         initialCompile();
 
-        Object o;
+        final Object simple = cl.loadClass("jci.Simple").newInstance();        
+        assertTrue("Simple".equals(simple.toString()));
         
-        o = cl.loadClass("jci.Simple").newInstance();        
-        assertTrue("Simple".equals(o.toString()));
-        
-        o = cl.loadClass("jci.Extended").newInstance();        
-        assertTrue("Extended:Simple".equals(o.toString()));
+        final Object extended = cl.loadClass("jci.Extended").newInstance();        
+        assertTrue("Extended:Simple".equals(extended.toString()));
         
         assertTrue(new File(directory, "jci/Simple.java").delete());
         
         waitForSignal(reload);
 
         try {
-            o = cl.loadClass("jci.Extended").newInstance();
+            cl.loadClass("jci.Extended").newInstance();
             fail();
         } catch(final NoClassDefFoundError e) {
             assertTrue("jci/Simple".equals(e.getMessage()));

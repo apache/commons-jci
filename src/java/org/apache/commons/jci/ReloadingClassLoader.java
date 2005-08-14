@@ -70,6 +70,7 @@ public class ReloadingClassLoader extends ClassLoader {
         fam = new FilesystemAlterationMonitor(); 
         fam.addListener(new ReloadingListener(store) {
             public void reload() {
+                super.reload();
                 ReloadingClassLoader.this.reload();
             }            
         }, repository);
@@ -102,10 +103,11 @@ public class ReloadingClassLoader extends ClassLoader {
     protected void reload() {
         log.debug("reloading");
         delegate = new ResourceStoreClassLoader(parent, store);
+
         synchronized (reloadingListeners) {
             for (final Iterator it = reloadingListeners.iterator(); it.hasNext();) {
                 final ReloadingClassLoaderListener listener = (ReloadingClassLoaderListener) it.next();
-                listener.reload();
+                listener.hasReloaded();
             }            
         }
     }
@@ -113,9 +115,10 @@ public class ReloadingClassLoader extends ClassLoader {
     public static String clazzName( final File base, final File file ) {
         final int rootLength = base.getAbsolutePath().length();
         final String absFileName = file.getAbsolutePath();
+        final int p = absFileName.lastIndexOf('.');
         final String relFileName = absFileName.substring(
                 rootLength + 1,
-                absFileName.length() - ".java".length()
+                p
                 );
         final String clazzName = relFileName.replace(File.separatorChar,'.');
         return clazzName;

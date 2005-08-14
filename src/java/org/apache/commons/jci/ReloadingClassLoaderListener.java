@@ -20,5 +20,5 @@ package org.apache.commons.jci;
  * @author tcurdt
  */
 public interface ReloadingClassLoaderListener {
-    void reload();
+    void hasReloaded();
 }

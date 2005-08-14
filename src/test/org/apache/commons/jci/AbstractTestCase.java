@@ -16,6 +16,7 @@
 package org.apache.commons.jci;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import junit.framework.TestCase;
@@ -57,6 +58,7 @@ public abstract class AbstractTestCase extends TestCase {
                         ;
                     }
                     if (++i > 7) {
+                        log.error("timeout");
                         fail("timeout");
                     }
                 } else {
@@ -86,6 +88,27 @@ public abstract class AbstractTestCase extends TestCase {
         return newDirectory;
     }
     
+    protected File writeFile( final String pName, final byte[] pData ) throws Exception {
+        final File file = new File(directory, pName);
+        final File parent = file.getParentFile();
+        if (!parent.exists()) {
+            if (!parent.mkdirs()) {
+                throw new IOException("could not create" + parent);
+            }
+        }
+        
+        log.debug("writing file " + pName + " (" + pData.length + " bytes)");
+        
+        final FileOutputStream os = new FileOutputStream(file);
+        os.write(pData);
+        os.close();
+        
+        assertTrue(file.exists());
+        assertTrue(file.isFile());
+        
+        return file;
+    }
+
     protected File writeFile( final String pName, final String pText ) throws Exception {
         final File file = new File(directory, pName);
         final File parent = file.getParentFile();

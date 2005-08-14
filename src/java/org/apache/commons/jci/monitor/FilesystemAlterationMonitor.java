@@ -312,12 +312,12 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
 
     private void check( final File root, final Entry entry, final boolean create ) {
-        log.debug("checking " + entry);
+        //log.debug("checking " + entry);
         
         if (entry.isDirectory()) {
             final Entry[] currentChilds = entry.getChilds();
             if (entry.hasChanged() || create) {
-                log.debug(entry + " has changed");
+                //log.debug(entry + " has changed");
                 if (!create) {
                     onChange(root, entry);
                     for (int i = 0; i < currentChilds.length; i++) {
@@ -346,7 +346,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
                     check(root, child, true);
                 }
             } else {
-                log.debug(entry + " has not changed");
+                //log.debug(entry + " has not changed");
                 for (int i = 0; i < currentChilds.length; i++) {
                     final Entry child = currentChilds[i];
                     check(root, child, false);

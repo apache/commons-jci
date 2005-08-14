@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 
 public final class CompilationProblemTestCase extends TestCase {
 
-    public void testToString() {
+    public void testLocation() {
         CompilationProblem problem;
         
         problem = new CompilationProblem(
@@ -29,4 +29,26 @@ public final class CompilationProblemTestCase extends TestCase {
         assertTrue("filename (1) : message".equals(problem.toString()));
     }
 
+    public void testErrorHandling() {
+        final CompilationProblemHandler handler = new ConsoleCompilationProblemHandler();
+        final CompilationProblem error = new CompilationProblem(
+                0,
+                "filename",
+                "message",
+                1,
+                1,
+                true
+                );
+        handler.handle(error);
+
+        final CompilationProblem warning = new CompilationProblem(
+                0,
+                "filename",
+                "message",
+                1,
+                1,
+                false
+                );
+        handler.handle(warning);
+    }
 }

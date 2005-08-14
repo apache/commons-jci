@@ -69,9 +69,21 @@ public class ReloadingListener implements FilesystemAlterationListener{
                     log.error("could not load " + file, e);
                 }
             }
+            // FIXME only required to make the wait in the testcases
+            // work. should be replace with a wait inside the fam
+            reload = true;
         }
 
         if (changed.size() > 0) {
+            for (Iterator it = changed.iterator(); it.hasNext();) {
+                final File file = (File) it.next();
+                try {
+                    final byte[] bytes = IOUtils.toByteArray(new FileReader(file));
+                    store.write(ReloadingClassLoader.clazzName(pRepository, file), bytes);
+                } catch(final Exception e) {
+                    log.error("could not load " + file, e);
+                }
+            }
             reload = true;
         }
 
@@ -103,6 +115,7 @@ public class ReloadingListener implements FilesystemAlterationListener{
     public void onDeleteDirectory( final File file ) {
     }
 
-    public void reload() {        
+    protected void reload() {        
+        log.debug("reload");
     }
 }

@@ -37,7 +37,7 @@ public final class MemoryResourceStore implements ResourceStore {
 	}
 
 	public void write( final String resourceName, final byte[] clazzData ) {
-		log.debug("storing class " + resourceName);
+		log.debug("storing resource " + resourceName + "(" + clazzData.length + ")");
 		store.put(resourceName, clazzData);
 	}
 	

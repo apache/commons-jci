@@ -29,12 +29,28 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
 
     private ReloadingClassLoader cl;
     private ReloadingClassLoaderListener listener;
+
+    private final byte[] clazzSimple;
+    private final byte[] clazzSIMPLE;
+    private final byte[] clazzExtended;
+    
+    public ReloadingClassLoaderTestCase() {
+        clazzSimple = CompilerUtils.compile("jci.Simple", Programs.simple);
+        clazzSIMPLE = CompilerUtils.compile("jci.Simple", Programs.SIMPLE);
+        clazzExtended = CompilerUtils.compile(
+                new String[] { "jci.Extended", "jci.Simple" },
+                new String[] { Programs.extended, Programs.simple }
+                );
+        assertTrue(clazzSimple.length > 0);
+        assertTrue(clazzSIMPLE.length > 0);
+        //assertTrue(clazzExtended.length > 0);
+    }
     
     protected void setUp() throws Exception {
         super.setUp();
         
         listener = new ReloadingClassLoaderListener() {
-            public void reload() {
+            public void hasReloaded() {
                 synchronized(reload) {
                     reload.triggered = true;
                     reload.notify();
@@ -47,96 +63,100 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         cl.start();
     }
 
-    private void initialCompile() throws Exception {
-        delay();
-        
-        // writeFile
-        // compile file
-        
+    public void testCreate() throws Exception {
         waitForSignal(reload);
 
-        writeFile("jci/Simple.class",
-                Programs.simple
-        );
+        log.debug("creating class");
         
+        delay();
+        writeFile("jci/Simple.class", clazzSimple);
         waitForSignal(reload);
-    }
-    
-    
-    public void testCreate() throws Exception {
-        initialCompile();
         
-        Object o;
-        
-        o = cl.loadClass("jci.Simple").newInstance();        
-        assertTrue("Simple".equals(o.toString()));        
+        final Object simple = cl.loadClass("jci.Simple").newInstance();        
+        assertTrue("Simple".equals(simple.toString()));        
     }
 
     public void testChange() throws Exception {        
-        initialCompile();
+        waitForSignal(reload);
 
-        Object o;
-        
-        o = cl.loadClass("jci.Simple").newInstance();        
-        assertTrue("Simple".equals(o.toString()));
-        
-        writeFile("jci/Simple.java",
-                Programs.SIMPLE
-        );
+        log.debug("creating class");
 
+        delay();        
+        writeFile("jci/Simple.class", clazzSimple);
+        waitForSignal(reload);
+
+        final Object simple = cl.loadClass("jci.Simple").newInstance();        
+        assertTrue("Simple".equals(simple.toString()));
+        
+        log.debug("changing class");
+        
+        delay();        
+        writeFile("jci/Simple.class", clazzSIMPLE);
         waitForSignal(reload);
     
-        o = cl.loadClass("jci.Simple").newInstance();        
-        assertTrue("SIMPLE".equals(o.toString()));        
+        final Object SIMPLE = cl.loadClass("jci.Simple").newInstance();        
+        assertTrue("SIMPLE".equals(SIMPLE.toString()));        
     }
 
     public void testDelete() throws Exception {
-        initialCompile();
-
-        Object o;
-        
-        o = cl.loadClass("jci.Simple").newInstance();        
-        assertTrue("Simple".equals(o.toString()));
-        
-        assertTrue(new File(directory, "jci/Simple.java").delete());
-        
         waitForSignal(reload);
 
-        try {
-            o = cl.loadClass("jci.Simple").newInstance();        
-            fail();
-        } catch(final ClassNotFoundException e) {
-        }
-        
-    }
+        log.debug("creating class");
 
-    public void testDeleteDependency() throws Exception {        
-        initialCompile();
+        delay();        
+        writeFile("jci/Simple.class", clazzSimple);
+        waitForSignal(reload);
 
-        Object o;
-        
-        o = cl.loadClass("jci.Simple").newInstance();        
-        assertTrue("Simple".equals(o.toString()));
-        
-        o = cl.loadClass("jci.Extended").newInstance();        
-        assertTrue("Extended:Simple".equals(o.toString()));
+        final Object simple = cl.loadClass("jci.Simple").newInstance();        
+        assertTrue("Simple".equals(simple.toString()));
+
+        log.debug("deleting class");
         
         assertTrue(new File(directory, "jci/Simple.class").delete());
         
         waitForSignal(reload);
 
         try {
-            o = cl.loadClass("jci.Extended").newInstance();
+            cl.loadClass("jci.Simple").newInstance();        
             fail();
-        } catch(final NoClassDefFoundError e) {
-            assertTrue("jci/Simple".equals(e.getMessage()));
-        }
-        
+        } catch(final ClassNotFoundException e) {
+            assertTrue("jci.Simple".equals(e.getMessage()));
+        }        
+    }
+
+    public void testDeleteDependency() throws Exception {        
+//        waitForSignal(reload);
+//
+//        log.debug("creating classes");
+//
+//        delay();        
+//        writeFile("jci/Simple.class", clazzSimple);
+//        writeFile("jci/Extended.class", clazzExtended);
+//        waitForSignal(reload);
+//
+//        final Object simple = cl.loadClass("jci.Simple").newInstance();        
+//        assertTrue("Simple".equals(simple.toString()));
+//        
+//        final Object extended = cl.loadClass("jci.Extended").newInstance();        
+//        assertTrue("Extended:Simple".equals(extended.toString()));
+//
+//        log.debug("deleting class dependency");
+//        
+//        assertTrue(new File(directory, "jci/Simple.class").delete());
+//        
+//        waitForSignal(reload);
+//
+//        try {
+//            cl.loadClass("jci.Extended").newInstance();
+//            fail();
+//        } catch(final NoClassDefFoundError e) {
+//            assertTrue("jci/Simple".equals(e.getMessage()));
+//        }
     }
 
     public void testClassNotFound() {
         try {
-            Object o = cl.loadClass("bla");
+            cl.loadClass("bla");
             fail();
         } catch(final ClassNotFoundException e) {
             log.info(e.getMessage());

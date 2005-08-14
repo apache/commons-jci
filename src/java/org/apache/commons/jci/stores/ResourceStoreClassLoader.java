@@ -41,6 +41,7 @@ public final class ResourceStoreClassLoader extends ClassLoader {
         final byte[] clazzBytes = store.read(name);
         
         if (clazzBytes != null) {
+            log.debug("found class " + name  + " (" + clazzBytes.length + " bytes)");
             return defineClass(name, clazzBytes, 0, clazzBytes.length);
         }
         
