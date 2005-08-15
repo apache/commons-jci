@@ -5,6 +5,7 @@ o compiler implementations
   o embedded java compiler
   o javac 
   o jikes
-o transformation "pipelines"
+o transformation "pipelines" (more than just one transformation)
 o make suffixes matching (*.java, *.class) configurable
 o documentation
+o turn the CompilationProblem into an interface
