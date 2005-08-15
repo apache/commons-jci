@@ -74,7 +74,5 @@ public class CompilingClassLoader extends ReloadingClassLoader {
         }, repository);
         thread = new Thread(fam);         
         thread.start();
-        reload();        
-        
     }
 }

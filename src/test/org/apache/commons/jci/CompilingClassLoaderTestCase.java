@@ -35,25 +35,16 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
     }
 
     private void initialCompile() throws Exception {
-        delay();
-        
-        waitForSignal(reload);
-
-        writeFile("jci/Simple.java", Programs.simple);
-        
-        writeFile("jci/Extended.java", Programs.extended);
-        
+        delay();        
+        writeFile("jci/Simple.java", Programs.simple);        
+        writeFile("jci/Extended.java", Programs.extended);        
         waitForSignal(reload);
     }
     
     
     public void testCompileProblems() throws Exception {
-        delay();
-        
-        waitForSignal(reload);
-
+        delay();        
         writeFile("jci/Simple.java", Programs.error);
-
         waitForSignal(reload);
         
         // FIXME
@@ -78,8 +69,8 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
         final Object extended = cl.loadClass("jci.Extended").newInstance();        
         assertTrue("Extended:Simple".equals(extended.toString()));
 
+        delay();
         writeFile("jci/Simple.java", Programs.SIMPLE);
-
         waitForSignal(reload);
     
         final Object SIMPLE = cl.loadClass("jci.Simple").newInstance();        
@@ -98,8 +89,8 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
         final Object extended = cl.loadClass("jci.Extended").newInstance();        
         assertTrue("Extended:Simple".equals(extended.toString()));
         
+        delay();
         assertTrue(new File(directory, "jci/Extended.java").delete());
-        
         waitForSignal(reload);
 
         final Object oldSimple = cl.loadClass("jci.Simple").newInstance();        
@@ -113,9 +104,7 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
         }
         
         delay();
-        
         FileUtils.deleteDirectory(new File(directory, "jci"));
-
         waitForSignal(reload);
 
         try {
@@ -136,8 +125,8 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
         final Object extended = cl.loadClass("jci.Extended").newInstance();        
         assertTrue("Extended:Simple".equals(extended.toString()));
         
+        delay();
         assertTrue(new File(directory, "jci/Simple.java").delete());
-        
         waitForSignal(reload);
 
         try {
