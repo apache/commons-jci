@@ -18,6 +18,7 @@ package org.apache.commons.jci.compilers.eclipse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
@@ -50,15 +51,15 @@ public final class EclipseJavaCompiler implements JavaCompiler {
 
     private final static Log log = LogFactory.getLog(EclipseJavaCompiler.class);
     private final EclipseJavaCompilerSettings settings;
-    
+
     public EclipseJavaCompiler() {
         this(new EclipseJavaCompilerSettings());
     }
-    
+
     public EclipseJavaCompiler(final EclipseJavaCompilerSettings pSettings) {
         settings = pSettings;
-    }    
-    
+    }
+
     final class CompilationUnit implements ICompilationUnit {
 
         final private String clazzName;
@@ -69,18 +70,14 @@ public final class EclipseJavaCompiler implements JavaCompiler {
 
         CompilationUnit(final ResourceReader pReader, final String pClazzName) {
             reader = pReader;
-
             clazzName = pClazzName;
-
             fileName = StringUtils.replaceChars(clazzName, '.', '/') + ".java";
-
             int dot = clazzName.lastIndexOf('.');
             if (dot > 0) {
                 typeName = clazzName.substring(dot + 1).toCharArray();
             } else {
                 typeName = clazzName.toCharArray();
             }
-
             final StringTokenizer izer = new StringTokenizer(clazzName, ".");
             packageName = new char[izer.countTokens() - 1][];
             for (int i = 0; i < packageName.length; i++) {
@@ -103,18 +100,12 @@ public final class EclipseJavaCompiler implements JavaCompiler {
         public char[][] getPackageName() {
             return packageName;
         }
-
     }
 
-    public void compile(
-            final String[] pClazzNames,
-            final ResourceReader pReader,
-            final ResourceStore pStore,
-            final CompilationProblemHandler pProblemHandler
-            ) {
+    public void compile( final String[] pClazzNames, final ResourceReader pReader,
+            final ResourceStore pStore, final CompilationProblemHandler pProblemHandler ) {
 
         final Map settingsMap = settings.getMap();
-        
         final Set clazzIndex = new HashSet();
         ICompilationUnit[] compilationUnits = new ICompilationUnit[pClazzNames.length];
         for (int i = 0; i < compilationUnits.length; i++) {
@@ -123,14 +114,12 @@ public final class EclipseJavaCompiler implements JavaCompiler {
             clazzIndex.add(clazzName);
             log.debug("compiling " + clazzName);
         }
-        
+
         final IErrorHandlingPolicy policy = DefaultErrorHandlingPolicies.proceedWithAllProblems();
         final IProblemFactory problemFactory = new DefaultProblemFactory(Locale.getDefault());
         final INameEnvironment nameEnvironment = new INameEnvironment() {
 
             public NameEnvironmentAnswer findType( final char[][] compoundTypeName ) {
-                //log.debug("NameEnvironment.findType compound");
-
                 final StringBuffer result = new StringBuffer();
                 for (int i = 0; i < compoundTypeName.length; i++) {
                     if (i != 0) {
@@ -138,13 +127,10 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                     }
                     result.append(compoundTypeName[i]);
                 }
-
                 return findType(result.toString());
             }
 
             public NameEnvironmentAnswer findType( final char[] typeName, final char[][] packageName ) {
-                //log.debug("NameEnvironment.findType");
-
                 final StringBuffer result = new StringBuffer();
                 for (int i = 0; i < packageName.length; i++) {
                     if (i != 0) {
@@ -152,44 +138,32 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                     }
                     result.append(packageName[i]);
                 }
-
                 result.append('.');
                 result.append(typeName);
-
                 return findType(result.toString());
-
             }
 
-            private NameEnvironmentAnswer findType(final String clazzName) {
-                //log.debug("NameEnvironment.findType " + clazzName);
-
+            private NameEnvironmentAnswer findType( final String clazzName ) {
                 byte[] clazzBytes = pStore.read(clazzName);
                 if (clazzBytes != null) {
-                    //log.debug("loading from store " + clazzName);
-
+                    // log.debug("loading from store " + clazzName);
                     final char[] fileName = clazzName.toCharArray();
                     try {
-                        ClassFileReader classFileReader = new ClassFileReader(clazzBytes, fileName, true);
+                        final ClassFileReader classFileReader = new ClassFileReader(clazzBytes, fileName, true);
                         return new NameEnvironmentAnswer(classFileReader, null);
                     } catch (final ClassFormatException e) {
                         log.error("wrong class format", e);
-                    }                    
-
-                }
-                else {
-
-                    if (pReader.isAvailable(clazzName.replace('.', '/') + ".java")) {
-	                    log.debug("compile " + clazzName);
-	                    ICompilationUnit compilationUnit = new CompilationUnit(pReader, clazzName);
-	                    return new NameEnvironmentAnswer(compilationUnit, null);                                            
                     }
-                    else {
+                } else {
+                    if (pReader.isAvailable(clazzName.replace('.', '/') + ".java")) {
+                        log.debug("compile " + clazzName);
+                        ICompilationUnit compilationUnit = new CompilationUnit(pReader, clazzName);
+                        return new NameEnvironmentAnswer(compilationUnit, null);
+                    } else {
                         final String resourceName = clazzName.replace('.', '/') + ".class";
-                        final InputStream is = this.getClass().getClassLoader().getResourceAsStream(resourceName);
-                        
+                        final InputStream is = this.getClass().getClassLoader()
+                                .getResourceAsStream(resourceName);
                         if (is != null) {
-                            
-    	                        //log.debug("loading from classloader " + clazzName);
                             final byte[] buffer = new byte[8192];
                             final ByteArrayOutputStream baos = new ByteArrayOutputStream(buffer.length);
                             int count;
@@ -200,7 +174,8 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                                 baos.flush();
                                 clazzBytes = baos.toByteArray();
                                 final char[] fileName = clazzName.toCharArray();
-                                ClassFileReader classFileReader = new ClassFileReader(clazzBytes, fileName, true);
+                                ClassFileReader classFileReader =
+                                    new ClassFileReader(clazzBytes, fileName, true);
                                 return new NameEnvironmentAnswer(classFileReader, null);
                             } catch (final IOException e) {
                                 log.error("could not read class", e);
@@ -209,10 +184,9 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                             } finally {
                                 try {
                                     baos.close();
-                                } catch (IOException oe) {
+                                } catch (final IOException oe) {
                                     log.error("could not close output stream", oe);
                                 }
-                                
                                 if (is != null) {
                                     try {
                                         is.close();
@@ -221,29 +195,21 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                                     }
                                 }
                             }
-
-    	                }
+                        }
                     }
                 }
-                //log.debug("not found " + clazzName);
-                return null;    	                    
+                return null;
             }
 
             private boolean isPackage( final String clazzName ) {
-
                 final String resourceName = clazzName.replace('.', '/') + ".class";
-                final InputStream is = this.getClass().getClassLoader().getResourceAsStream(resourceName);
-                boolean result = (is == null);
-                //log.debug("NameEnvironment.isPackage " + resourceName + " = " + result);
-                return result;
+                final URL resource = this.getClass().getClassLoader().getResource(resourceName);
+                return resource == null;
             }
 
-            public boolean isPackage(char[][] parentPackageName, char[] packageName) {
-
+            public boolean isPackage( char[][] parentPackageName, char[] packageName ) {
                 final StringBuffer result = new StringBuffer();
-
                 if (parentPackageName != null) {
-
                     for (int i = 0; i < parentPackageName.length; i++) {
                         if (i != 0) {
                             result.append('.');
@@ -251,54 +217,38 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                         result.append(parentPackageName[i]);
                     }
                 }
-
                 if (Character.isUpperCase(packageName[0])) {
                     return false;
-                    /*
-                    if (!isPackage(result.toString())) {
-                        return false;
-                    }*/
                 }
-
                 if (parentPackageName != null && parentPackageName.length > 0) {
                     result.append('.');
                 }
                 result.append(packageName);
-
                 return isPackage(result.toString());
             }
 
             public void cleanup() {
             }
-
         };
-        final ICompilerRequestor compilerRequestor = new ICompilerRequestor() {
 
-            public void acceptResult(CompilationResult result) {
+        final ICompilerRequestor compilerRequestor = new ICompilerRequestor() {
+            public void acceptResult( CompilationResult result ) {
                 if (result.hasProblems()) {
                     if (pProblemHandler != null) {
                         final IProblem[] problems = result.getProblems();
                         for (int i = 0; i < problems.length; i++) {
                             final IProblem problem = problems[i];
-                            pProblemHandler.handle(
-                                    new CompilationProblem(
-                                            problem.getID(),
-                                            new String(problem.getOriginatingFileName()),
-                                            problem.getMessage(),
-                                            problem.getSourceLineNumber(),
-                                            problem.getSourceLineNumber(),
-                                            problem.isError()
-                                            ));
+                            pProblemHandler.handle(new CompilationProblem(problem.getID(),
+                                    new String(problem.getOriginatingFileName()), problem
+                                            .getMessage(), problem.getSourceLineNumber(), problem
+                                            .getSourceLineNumber(), problem.isError()));
                         }
                     }
                 }
-                
                 if (!result.hasErrors()) {
-
                     final ClassFile[] clazzFiles = result.getClassFiles();
                     for (int i = 0; i < clazzFiles.length; i++) {
                         final ClassFile clazzFile = clazzFiles[i];
-
                         final char[][] compoundName = clazzFile.getCompoundName();
                         final StringBuffer clazzName = new StringBuffer();
                         for (int j = 0; j < compoundName.length; j++) {
@@ -307,17 +257,15 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                             }
                             clazzName.append(compoundName[j]);
                         }
-
                         pStore.write(clazzName.toString(), clazzFile.getBytes());
                     }
                 }
             }
-
         };
-
-        final Compiler compiler = new Compiler(nameEnvironment, policy, settingsMap, compilerRequestor, problemFactory);
-
+        
+        final Compiler compiler =
+            new Compiler(nameEnvironment, policy, settingsMap, compilerRequestor, problemFactory);
+        
         compiler.compile(compilationUnits);
-
     }
 }
