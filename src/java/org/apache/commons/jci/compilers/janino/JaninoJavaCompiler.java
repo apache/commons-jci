@@ -42,20 +42,20 @@ import org.codehaus.janino.Scanner.ScanException;
 import org.codehaus.janino.util.ClassFile;
 
 /**
- * 
+ *
  * @author art@gramlich-net.com
  */
 public class JaninoJavaCompiler implements JavaCompiler {
-    
+
     private final static Log log = LogFactory.getLog(JaninoJavaCompiler.class);
 
     private class CompilingIClassLoader extends IClassLoader {
-        
+
         private ResourceReader resourceReader;
         private CompilationProblemHandler problemHandler;
         private Map classes,types;
         private ClassLoaderIClassLoader loader;
-        
+
         private CompilingIClassLoader(ResourceReader resourceReader, CompilationProblemHandler problemHandler, Map classes) {
             super(null);
             this.resourceReader = resourceReader;
@@ -76,59 +76,55 @@ public class JaninoJavaCompiler implements JavaCompiler {
                     ) {
                     //Quickly hand these off
                     return loader.loadIClass(type);
-             }
-            //log.debug("Looking for "+className);
+            }
             if (types.containsKey(type)) {
                 return (IClass) types.get(type);
             }
-            String fileNameForClass = className.replace('.', File.separatorChar)+".java";
-            //log.debug("Using resource reader to find "+fileNameForClass);
+            String fileNameForClass = className.replace('.', File.separatorChar) + ".java";
             if (!resourceReader.isAvailable(fileNameForClass)) {
                 return loader.loadIClass(type);
-            } else {
-                ByteArrayInputStream instream = new ByteArrayInputStream(new String(resourceReader.getContent(fileNameForClass)).getBytes());
-                Scanner scanner = null;
-                try {
-                    scanner = new Scanner(fileNameForClass, instream,"UTF-8");  
-                    Java.CompilationUnit unit = new Parser(scanner).parseCompilationUnit();
-                    log.debug("compile "+className);
-                    ClassFile[] classFiles = unit.compile(this,DebuggingInformation.ALL);
-                    for (int i=0; i<classFiles.length; i++) {
-                        log.debug("compiled "+classFiles[i].getThisClassName());
-                        classes.put(classFiles[i].getThisClassName(),classFiles[i].toByteArray());
-                    }
-                    IClass ic = unit.findClass(className);
-                    if (null != ic) {
-                        types.put(type,ic);
-                    }
-                    return ic; 
-                } catch (ScanException e) {
-                    problemHandler.handle(new CompilationProblem(0, e.getLocation().getFileName(), e.getMessage(), e.getLocation().getLineNumber(), e.getLocation().getLineNumber(), true));
-                } catch (ParseException e) {
-                    problemHandler.handle(new CompilationProblem(0, e.getLocation().getFileName(), e.getMessage(), e.getLocation().getLineNumber(), e.getLocation().getLineNumber(), true));
-                } catch (IOException e) {
-                    problemHandler.handle(new CompilationProblem(0, fileNameForClass, "IO:" + e.getMessage(), 0, 0, true));
-                } catch (CompileException e) {
-                    e.printStackTrace();
-                    problemHandler.handle(new CompilationProblem(0, e.getLocation().getFileName(), e.getMessage(), e.getLocation().getLineNumber(), e.getLocation().getLineNumber(), true));
-                } finally {
-                    if (scanner != null) {
-                        try {
-                            scanner.close();
-                        } catch (IOException e1) {
-                            log.error(e1);
-                        }   
+            }
+
+            ByteArrayInputStream instream = new ByteArrayInputStream(new String(resourceReader.getContent(fileNameForClass)).getBytes());
+            Scanner scanner = null;
+            try {
+                scanner = new Scanner(fileNameForClass, instream, "UTF-8");
+                Java.CompilationUnit unit = new Parser(scanner).parseCompilationUnit();
+                log.debug("compile " + className);
+                ClassFile[] classFiles = unit.compile(this, DebuggingInformation.ALL);
+                for (int i = 0; i < classFiles.length; i++) {
+                    log.debug("compiled " + classFiles[i].getThisClassName());
+                    classes.put(classFiles[i].getThisClassName(), classFiles[i].toByteArray());
+                }
+                IClass ic = unit.findClass(className);
+                if (null != ic) {
+                    types.put(type, ic);
+                }
+                return ic;
+            } catch (ScanException e) {
+                problemHandler.handle(new CompilationProblem(0, e.getLocation().getFileName(), e.getMessage(), e.getLocation().getLineNumber(), e.getLocation().getLineNumber(), true));
+            } catch (ParseException e) {
+                problemHandler.handle(new CompilationProblem(0, e.getLocation().getFileName(), e.getMessage(), e.getLocation().getLineNumber(), e.getLocation().getLineNumber(), true));
+            } catch (IOException e) {
+                problemHandler.handle(new CompilationProblem(0, fileNameForClass, "IO:" + e.getMessage(), 0, 0, true));
+            } catch (CompileException e) {
+                e.printStackTrace();
+                problemHandler.handle(new CompilationProblem(0, e.getLocation().getFileName(), e.getMessage(), e.getLocation().getLineNumber(), e.getLocation().getLineNumber(), true));
+            } finally {
+                if (scanner != null) {
+                    try {
+                        scanner.close();
+                    } catch (IOException e) {
+                        log.error("IOException occured while compiling " + className, e);
                     }
                 }
-                return null;
             }
+            return null;
         }
-        
     }
 
     public void compile(String[] classes, ResourceReader in,
             ResourceStore store, CompilationProblemHandler problemHandler) {
-        //log.debug("compile called "+Arrays.asList(classes));
         Map classFilesByName = new HashMap();
         IClassLoader icl = new CompilingIClassLoader(in, problemHandler, classFilesByName);
         for (int i = 0; i < classes.length; i++) {
