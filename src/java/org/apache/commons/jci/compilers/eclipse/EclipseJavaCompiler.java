@@ -16,6 +16,7 @@
 package org.apache.commons.jci.compilers.eclipse;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Locale;
@@ -170,8 +171,8 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                     try {
                         ClassFileReader classFileReader = new ClassFileReader(clazzBytes, fileName, true);
                         return new NameEnvironmentAnswer(classFileReader, null);
-                    } catch (ClassFormatException e) {
-                        e.printStackTrace();
+                    } catch (final ClassFormatException e) {
+                        log.error("wrong class format", e);
                     }                    
 
                 }
@@ -190,7 +191,7 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                             
     	                        //log.debug("loading from classloader " + clazzName);
                             final byte[] buffer = new byte[8192];
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream(buffer.length);
+                            final ByteArrayOutputStream baos = new ByteArrayOutputStream(buffer.length);
                             int count;
                             try {
                                 while ((count = is.read(buffer, 0, buffer.length)) > 0) {
@@ -201,8 +202,24 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                                 final char[] fileName = clazzName.toCharArray();
                                 ClassFileReader classFileReader = new ClassFileReader(clazzBytes, fileName, true);
                                 return new NameEnvironmentAnswer(classFileReader, null);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                            } catch (final IOException e) {
+                                log.error("could not read class", e);
+                            } catch (final ClassFormatException e) {
+                                log.error("wrong class format", e);
+                            } finally {
+                                try {
+                                    baos.close();
+                                } catch (IOException oe) {
+                                    log.error("could not close output stream", oe);
+                                }
+                                
+                                if (is != null) {
+                                    try {
+                                        is.close();
+                                    } catch (final IOException ie) {
+                                        log.error("could not close input stream", ie);
+                                    }
+                                }
                             }
 
     	                }
