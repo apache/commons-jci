@@ -68,22 +68,25 @@ public class ReloadingClassLoader extends ClassLoader {
     
     public void start() {
         fam = new FilesystemAlterationMonitor(); 
-        fam.addListener(new ReloadingListener(store) {
-            public void reload() {
-                super.reload();
-                ReloadingClassLoader.this.reload();
-            }            
+        fam.addListener(new ReloadingListener(store) {  
+            protected void notifyAboutCheck( boolean pReload ) {
+                super.notifyAboutCheck(pReload);
+                if (pReload) {
+                    ReloadingClassLoader.this.reload();                    
+                } else {
+                    ReloadingClassLoader.this.notifyReloadingListeners(false);                    
+                }
+            }
         }, repository);
         thread = new Thread(fam);         
         thread.start();
-        reload();        
     }
 
     public void stop() {
         fam.stop();
         try {
             thread.join();
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
             ;
         }
     }
@@ -102,12 +105,17 @@ public class ReloadingClassLoader extends ClassLoader {
     
     protected void reload() {
         log.debug("reloading");
-        delegate = new ResourceStoreClassLoader(parent, store);
 
+        delegate = new ResourceStoreClassLoader(parent, store);
+        
+        notifyReloadingListeners(true);
+    }
+    
+    private void notifyReloadingListeners(final boolean pReload) { 
         synchronized (reloadingListeners) {
             for (final Iterator it = reloadingListeners.iterator(); it.hasNext();) {
                 final ReloadingClassLoaderListener listener = (ReloadingClassLoaderListener) it.next();
-                listener.hasReloaded();
+                listener.hasReloaded(pReload);
             }            
         }
     }
@@ -116,11 +124,8 @@ public class ReloadingClassLoader extends ClassLoader {
         final int rootLength = base.getAbsolutePath().length();
         final String absFileName = file.getAbsolutePath();
         final int p = absFileName.lastIndexOf('.');
-        final String relFileName = absFileName.substring(
-                rootLength + 1,
-                p
-                );
-        final String clazzName = relFileName.replace(File.separatorChar,'.');
+        final String relFileName = absFileName.substring(rootLength + 1, p);
+        final String clazzName = relFileName.replace(File.separatorChar, '.');
         return clazzName;
     }
 

@@ -48,8 +48,11 @@ public class ReloadingListener implements FilesystemAlterationListener{
         deleted.clear();
     }
     public void onStop(final File pRepository) {
-
         boolean reload = false;
+        
+        log.debug("created:" + created.size()
+               + " changed:" + changed.size()
+               + " deleted:" + deleted.size());
         
         if (deleted.size() > 0) {
             for (Iterator it = deleted.iterator(); it.hasNext();) {
@@ -69,9 +72,6 @@ public class ReloadingListener implements FilesystemAlterationListener{
                     log.error("could not load " + file, e);
                 }
             }
-            // FIXME only required to make the wait in the testcases
-            // work. should be replace with a wait inside the fam
-            reload = true;
         }
 
         if (changed.size() > 0) {
@@ -87,9 +87,7 @@ public class ReloadingListener implements FilesystemAlterationListener{
             reload = true;
         }
 
-        if (reload) {
-            reload();
-        }                
+        notifyAboutCheck(reload);
     }
 
     public void onCreateFile( final File file ) {
@@ -115,7 +113,11 @@ public class ReloadingListener implements FilesystemAlterationListener{
     public void onDeleteDirectory( final File file ) {
     }
 
-    protected void reload() {        
-        log.debug("reload");
+    protected void notifyAboutCheck(final boolean pReload) {
+        if (pReload) {
+            log.debug("reload required");
+        } else {
+            log.debug("no reload required");            
+        }
     }
 }
