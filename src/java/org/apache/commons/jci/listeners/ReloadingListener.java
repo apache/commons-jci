@@ -87,7 +87,7 @@ public class ReloadingListener implements FilesystemAlterationListener{
             reload = true;
         }
 
-        notifyAboutCheck(reload);
+        notifyOfCheck(reload);
     }
 
     public void onCreateFile( final File file ) {
@@ -113,7 +113,7 @@ public class ReloadingListener implements FilesystemAlterationListener{
     public void onDeleteDirectory( final File file ) {
     }
 
-    protected void notifyAboutCheck(final boolean pReload) {
+    protected void notifyOfCheck(final boolean pReload) {
         if (pReload) {
             log.debug("reload required");
         } else {

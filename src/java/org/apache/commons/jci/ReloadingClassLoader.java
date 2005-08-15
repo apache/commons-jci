@@ -69,8 +69,8 @@ public class ReloadingClassLoader extends ClassLoader {
     public void start() {
         fam = new FilesystemAlterationMonitor(); 
         fam.addListener(new ReloadingListener(store) {  
-            protected void notifyAboutCheck( boolean pReload ) {
-                super.notifyAboutCheck(pReload);
+            protected void notifyOfCheck( boolean pReload ) {
+                super.notifyOfCheck(pReload);
                 if (pReload) {
                     ReloadingClassLoader.this.reload();                    
                 } else {
