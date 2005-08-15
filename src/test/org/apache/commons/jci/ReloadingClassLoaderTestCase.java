@@ -44,7 +44,7 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
                 );
         assertTrue(clazzSimple.length > 0);
         assertTrue(clazzSIMPLE.length > 0);
-        //assertTrue(clazzExtended.length > 0);
+        assertTrue(clazzExtended.length > 0);
     }
     
     protected void setUp() throws Exception {
@@ -134,33 +134,33 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
     }
 
     public void testDeleteDependency() throws Exception {        
-//        waitForSignal(reload);
-//
-//        log.debug("creating classes");
-//
-//        delay();        
-//        writeFile("jci/Simple.class", clazzSimple);
-//        writeFile("jci/Extended.class", clazzExtended);
-//        waitForSignal(reload);
-//
-//        final Object simple = cl.loadClass("jci.Simple").newInstance();        
-//        assertTrue("Simple".equals(simple.toString()));
-//        
-//        final Object extended = cl.loadClass("jci.Extended").newInstance();        
-//        assertTrue("Extended:Simple".equals(extended.toString()));
-//
-//        log.debug("deleting class dependency");
-//        
-//        assertTrue(new File(directory, "jci/Simple.class").delete());
-//        
-//        waitForSignal(reload);
-//
-//        try {
-//            cl.loadClass("jci.Extended").newInstance();
-//            fail();
-//        } catch(final NoClassDefFoundError e) {
-//            assertTrue("jci/Simple".equals(e.getMessage()));
-//        }
+        waitForSignal(checkedSignal);
+
+        log.debug("creating classes");
+
+        delay();        
+        writeFile("jci/Simple.class", clazzSimple);
+        writeFile("jci/Extended.class", clazzExtended);
+        waitForSignal(checkedSignal);
+
+        final Object simple = cl.loadClass("jci.Simple").newInstance();        
+        assertTrue("Simple".equals(simple.toString()));
+        
+        final Object extended = cl.loadClass("jci.Extended").newInstance();        
+        assertTrue("Extended:Simple".equals(extended.toString()));
+
+        log.debug("deleting class dependency");
+        
+        assertTrue(new File(directory, "jci/Simple.class").delete());
+        
+        waitForSignal(reloadSignal);
+
+        try {
+            cl.loadClass("jci.Extended").newInstance();
+            fail();
+        } catch(final NoClassDefFoundError e) {
+            assertTrue("jci/Simple".equals(e.getMessage()));
+        }
     }
 
     public void testClassNotFound() {

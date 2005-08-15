@@ -25,7 +25,7 @@ public final class CompilerUtils {
                 new ResourceReader() {
                     public char[] getContent( String pFileName ) {
                         for (int i = 0; i < pPrograms.length; i++) {
-                            final String clazzName = pClazzes[i].replace('.', '/') + ".class";
+                            final String clazzName = pClazzes[i].replace('.', '/') + ".java";
                             if (clazzName.equals(pFileName)) {
                                 return pPrograms[i].toCharArray();
                             }
