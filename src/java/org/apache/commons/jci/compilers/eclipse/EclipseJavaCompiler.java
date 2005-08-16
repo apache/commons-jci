@@ -133,12 +133,9 @@ public final class EclipseJavaCompiler implements JavaCompiler {
             public NameEnvironmentAnswer findType( final char[] typeName, final char[][] packageName ) {
                 final StringBuffer result = new StringBuffer();
                 for (int i = 0; i < packageName.length; i++) {
-                    if (i != 0) {
-                        result.append('.');
-                    }
                     result.append(packageName[i]);
+                    result.append('.');
                 }
-                result.append('.');
                 result.append(typeName);
                 return findType(result.toString());
             }
