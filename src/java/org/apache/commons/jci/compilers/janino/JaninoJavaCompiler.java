@@ -36,7 +36,8 @@ import org.codehaus.janino.IClassLoader;
 import org.codehaus.janino.Java;
 import org.codehaus.janino.Parser;
 import org.codehaus.janino.Scanner;
-import org.codehaus.janino.Java.CompileException;
+import org.codehaus.janino.CompileException;
+import org.codehaus.janino.UnitCompiler;
 import org.codehaus.janino.Parser.ParseException;
 import org.codehaus.janino.Scanner.ScanException;
 import org.codehaus.janino.util.ClassFile;
@@ -90,13 +91,14 @@ public class JaninoJavaCompiler implements JavaCompiler {
             try {
                 scanner = new Scanner(fileNameForClass, instream, "UTF-8");
                 Java.CompilationUnit unit = new Parser(scanner).parseCompilationUnit();
+                UnitCompiler uc = new UnitCompiler(unit, loader);
                 log.debug("compile " + className);
-                ClassFile[] classFiles = unit.compile(this, DebuggingInformation.ALL);
+                ClassFile[] classFiles = uc.compileUnit(DebuggingInformation.ALL);
                 for (int i = 0; i < classFiles.length; i++) {
                     log.debug("compiled " + classFiles[i].getThisClassName());
                     classes.put(classFiles[i].getThisClassName(), classFiles[i].toByteArray());
                 }
-                IClass ic = unit.findClass(className);
+                IClass ic = uc.findClass(className);
                 if (null != ic) {
                     types.put(type, ic);
                 }

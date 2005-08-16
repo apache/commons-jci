@@ -159,41 +159,38 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                         log.debug("compile " + clazzName);
                         ICompilationUnit compilationUnit = new CompilationUnit(pReader, clazzName);
                         return new NameEnvironmentAnswer(compilationUnit, null);
-                    } else {
-                        final String resourceName = clazzName.replace('.', '/') + ".class";
-                        final InputStream is = this.getClass().getClassLoader()
-                                .getResourceAsStream(resourceName);
-                        if (is != null) {
-                            final byte[] buffer = new byte[8192];
-                            final ByteArrayOutputStream baos = new ByteArrayOutputStream(buffer.length);
-                            int count;
+                    }
+
+                    final String resourceName = clazzName.replace('.', '/') + ".class";
+                    final InputStream is = this.getClass().getClassLoader().getResourceAsStream(resourceName);
+                    if (is != null) {
+                        final byte[] buffer = new byte[8192];
+                        final ByteArrayOutputStream baos = new ByteArrayOutputStream(buffer.length);
+                        int count;
+                        try {
+                            while ((count = is.read(buffer, 0, buffer.length)) > 0) {
+                                baos.write(buffer, 0, count);
+                            }
+                            baos.flush();
+                            clazzBytes = baos.toByteArray();
+                            final char[] fileName = clazzName.toCharArray();
+                            ClassFileReader classFileReader =
+                                new ClassFileReader(clazzBytes, fileName, true);
+                            return new NameEnvironmentAnswer(classFileReader, null);
+                        } catch (final IOException e) {
+                            log.error("could not read class", e);
+                        } catch (final ClassFormatException e) {
+                            log.error("wrong class format", e);
+                        } finally {
                             try {
-                                while ((count = is.read(buffer, 0, buffer.length)) > 0) {
-                                    baos.write(buffer, 0, count);
-                                }
-                                baos.flush();
-                                clazzBytes = baos.toByteArray();
-                                final char[] fileName = clazzName.toCharArray();
-                                ClassFileReader classFileReader =
-                                    new ClassFileReader(clazzBytes, fileName, true);
-                                return new NameEnvironmentAnswer(classFileReader, null);
-                            } catch (final IOException e) {
-                                log.error("could not read class", e);
-                            } catch (final ClassFormatException e) {
-                                log.error("wrong class format", e);
-                            } finally {
-                                try {
-                                    baos.close();
-                                } catch (final IOException oe) {
-                                    log.error("could not close output stream", oe);
-                                }
-                                if (is != null) {
-                                    try {
-                                        is.close();
-                                    } catch (final IOException ie) {
-                                        log.error("could not close input stream", ie);
-                                    }
-                                }
+                                baos.close();
+                            } catch (final IOException oe) {
+                                log.error("could not close output stream", oe);
+                            }
+                            try {
+                                is.close();
+                            } catch (final IOException ie) {
+                                log.error("could not close input stream", ie);
                             }
                         }
                     }
@@ -262,10 +259,10 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                 }
             }
         };
-        
+
         final Compiler compiler =
             new Compiler(nameEnvironment, policy, settingsMap, compilerRequestor, problemFactory);
-        
+
         compiler.compile(compilationUnits);
     }
 }
