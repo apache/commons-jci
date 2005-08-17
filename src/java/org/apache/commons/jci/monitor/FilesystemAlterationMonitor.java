@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.collections.MultiHashMap;
+import org.apache.commons.jci.utils.ThreadUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -398,10 +399,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
                 }
             }
 
-            try {
-                Thread.sleep(delay);
-            } catch (InterruptedException e) {
-            }
+            ThreadUtils.sleep(delay);
         }
         
         log.info("fam exiting");

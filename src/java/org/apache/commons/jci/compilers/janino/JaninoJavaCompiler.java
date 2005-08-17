@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import org.apache.commons.jci.compilers.JavaCompiler;
-import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.problems.CompilationProblemHandler;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
@@ -36,10 +35,8 @@ import org.codehaus.janino.IClassLoader;
 import org.codehaus.janino.Java;
 import org.codehaus.janino.Parser;
 import org.codehaus.janino.Scanner;
-import org.codehaus.janino.CompileException;
 import org.codehaus.janino.UnitCompiler;
-import org.codehaus.janino.Parser.ParseException;
-import org.codehaus.janino.Scanner.ScanException;
+import org.codehaus.janino.Scanner.LocatedException;
 import org.codehaus.janino.util.ClassFile;
 
 /**
@@ -103,15 +100,10 @@ public class JaninoJavaCompiler implements JavaCompiler {
                     types.put(type, ic);
                 }
                 return ic;
-            } catch (ScanException e) {
-                problemHandler.handle(new CompilationProblem(0, e.getLocation().getFileName(), e.getMessage(), e.getLocation().getLineNumber(), e.getLocation().getLineNumber(), true));
-            } catch (ParseException e) {
-                problemHandler.handle(new CompilationProblem(0, e.getLocation().getFileName(), e.getMessage(), e.getLocation().getLineNumber(), e.getLocation().getLineNumber(), true));
+            } catch (LocatedException e) {
+                problemHandler.handle(new JaninoCompilationProblem(e));
             } catch (IOException e) {
-                problemHandler.handle(new CompilationProblem(0, fileNameForClass, "IO:" + e.getMessage(), 0, 0, true));
-            } catch (CompileException e) {
-                e.printStackTrace();
-                problemHandler.handle(new CompilationProblem(0, e.getLocation().getFileName(), e.getMessage(), e.getLocation().getLineNumber(), e.getLocation().getLineNumber(), true));
+                problemHandler.handle(new JaninoCompilationProblem(fileNameForClass, "IO:" + e.getMessage(), true));
             } finally {
                 if (scanner != null) {
                     try {

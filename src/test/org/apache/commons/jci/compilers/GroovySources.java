@@ -1,7 +1,7 @@
 package org.apache.commons.jci.compilers;
 
 
-public interface Programs {
+public interface GroovySources {
     
     String simple =
         "package jci;\n"
@@ -11,7 +11,8 @@ public interface Programs {
         + "  } \n"
         + "} \n";
 
-    String SIMPLE = "package jci;\n"
+    String SIMPLE =
+        "package jci;\n"
         + "public class Simple { \n"
         + "  public String toString() { \n"
         + "    return \"SIMPLE\"; \n"

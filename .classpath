@@ -12,5 +12,12 @@
 	<classpathentry kind="var" path="MAVEN_REPO/eclipse/jars/jdtcore-3.1.0.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/groovy/jars/groovy-1.0-jsr-02.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/janino/jars/janino-2.3.7.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/asm/jars/asm-util-2.0.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/asm/jars/asm-tree-2.0.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/asm/jars/asm-attrs-2.0.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/asm/jars/asm-analysis-2.0.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/asm/jars/asm-2.0.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/asm/jars/asm-commons-2.0.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/antlr/jars/antlr-2.7.5.jar"/>
 	<classpathentry kind="output" path="eclipse"/>
 </classpath>

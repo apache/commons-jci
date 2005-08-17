@@ -3,7 +3,7 @@ package org.apache.commons.jci;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.jci.compilers.AbstractCompilerTestCase;
-import org.apache.commons.jci.compilers.Programs;
+import org.apache.commons.jci.compilers.JavaSources;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -38,15 +38,15 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
 
     private void initialCompile() throws Exception {
         delay();        
-        writeFile("jci/Simple.java", Programs.simple);        
-        writeFile("jci/Extended.java", Programs.extended);        
+        writeFile("jci/Simple.java", JavaSources.simple);        
+        writeFile("jci/Extended.java", JavaSources.extended);        
         waitForSignal(reloadSignal);
     }
     
     
     public void testCompileProblems() throws Exception {
         delay();        
-        writeFile("jci/Simple.java", Programs.error);
+        writeFile("jci/Simple.java", JavaSources.error);
         waitForSignal(reloadSignal);
         
         // FIXME
@@ -72,7 +72,7 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
         assertTrue("Extended:Simple".equals(extended.toString()));
 
         delay();
-        writeFile("jci/Simple.java", Programs.SIMPLE);
+        writeFile("jci/Simple.java", JavaSources.SIMPLE);
         waitForSignal(reloadSignal);
     
         final Object SIMPLE = cl.loadClass("jci.Simple").newInstance();        

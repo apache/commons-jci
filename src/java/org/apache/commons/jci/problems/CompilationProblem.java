@@ -15,50 +15,20 @@
  */
 package org.apache.commons.jci.problems;
 
-/**
- * @author tcurdt
- *
- */
-public class CompilationProblem {
+public interface CompilationProblem {
 
-    private final int id;
-    private final String filename;
-    private final String message;
-    private final int lineStart;
-    private final int lineStop;
-    private final boolean fatal;
-    
-    public CompilationProblem(
-            final int pId,
-            final String pFilename,
-            final String pMessage,
-            final int pLineStart,
-            final int pLineStop,
-            final boolean pFatal
-            ) {
-        id = pId;
-        filename = pFilename;
-        message = pMessage;
-        lineStart = pLineStart;
-        lineStop = pLineStop;
-        fatal = pFatal;
-    }
-    
-    public boolean isFatal() {
-        return fatal;
-    }
-    
-    public String toString() {
-        final StringBuffer sb = new StringBuffer();
-        sb.append(filename).append(" (");
-        if (lineStart == lineStop) {
-            sb.append(lineStart);            
-        } else {
-            sb.append(lineStart).append('-').append(lineStop);
-        }
-        sb.append(") : ");
-        sb.append(message);
-        
-        return sb.toString();
-    }
+  boolean isError();
+
+  String getFileName();
+
+  int getStartLine();
+
+  int getStartColumn();
+
+  int getEndLine();
+
+  int getEndColumn();
+
+  String getMessage();
+
 }

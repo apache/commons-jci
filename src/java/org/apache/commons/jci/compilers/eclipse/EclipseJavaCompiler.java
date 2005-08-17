@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import org.apache.commons.jci.compilers.JavaCompiler;
-import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.problems.CompilationProblemHandler;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
@@ -232,10 +231,7 @@ public final class EclipseJavaCompiler implements JavaCompiler {
                         final IProblem[] problems = result.getProblems();
                         for (int i = 0; i < problems.length; i++) {
                             final IProblem problem = problems[i];
-                            pProblemHandler.handle(new CompilationProblem(problem.getID(),
-                                    new String(problem.getOriginatingFileName()), problem
-                                            .getMessage(), problem.getSourceLineNumber(), problem
-                                            .getSourceLineNumber(), problem.isError()));
+                            pProblemHandler.handle(new EclipseCompilationProblem(problem));
                         }
                     }
                 }

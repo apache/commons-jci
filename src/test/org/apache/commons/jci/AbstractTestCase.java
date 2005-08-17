@@ -21,6 +21,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.jci.utils.ThreadUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -128,11 +129,7 @@ public abstract class AbstractTestCase extends TestCase {
     }
     
     protected void delay() {
-        try {
-            Thread.sleep(1500);
-        } catch (final InterruptedException e) {
-            ;
-        }
+        ThreadUtils.sleep(1500);
     }
     
     protected File createTempDirectory() throws IOException {

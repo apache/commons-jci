@@ -18,33 +18,31 @@ package org.apache.commons.jci.problems;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
-
 /**
  * @author tcurdt
  *
  */
 public class LogCompilationProblemHandler implements CompilationProblemHandler {
-    
+
     private final static Log log = LogFactory.getLog(ConsoleCompilationProblemHandler.class);
 
     private int errors;
     private int warnings;
-    
+
     public void handle( final CompilationProblem pProblem ) {
-        if (pProblem.isFatal()) {
+        if (pProblem.isError()) {
             errors++;
             log.debug("error(" + errors + "):" + pProblem);
         } else {
             warnings++;
             log.debug("warning(" + warnings + "):" + pProblem);
-        }        
+        }
     }
-    
-    
+
     public int getErrorCount() {
         return errors;
     }
+
     public int getWarningCount() {
         return warnings;
     }

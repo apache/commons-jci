@@ -16,7 +16,7 @@
 package org.apache.commons.jci;
 
 import java.io.File;
-import org.apache.commons.jci.compilers.Programs;
+import org.apache.commons.jci.compilers.JavaSources;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -36,11 +36,11 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
     private final byte[] clazzExtended;
     
     public ReloadingClassLoaderTestCase() {
-        clazzSimple = CompilerUtils.compile("jci.Simple", Programs.simple);
-        clazzSIMPLE = CompilerUtils.compile("jci.Simple", Programs.SIMPLE);
+        clazzSimple = CompilerUtils.compile("jci.Simple", JavaSources.simple);
+        clazzSIMPLE = CompilerUtils.compile("jci.Simple", JavaSources.SIMPLE);
         clazzExtended = CompilerUtils.compile(
                 new String[] { "jci.Extended", "jci.Simple" },
-                new String[] { Programs.extended, Programs.simple }
+                new String[] { JavaSources.extended, JavaSources.simple }
                 );
         assertTrue(clazzSimple.length > 0);
         assertTrue(clazzSIMPLE.length > 0);
@@ -170,6 +170,14 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         } catch(final ClassNotFoundException e) {
             log.info(e.getMessage());
         }
+    }
+    
+    public void testDelegation() {
+        cl.clearAssertionStatus();
+        cl.setClassAssertionStatus("org.apache.commons.jci.ReloadingClassLoader",true);
+        cl.setDefaultAssertionStatus(false);
+        cl.setPackageAssertionStatus("org.apache.commons.jci", true);
+        // FIXME: compare with delegation
     }
     
     protected void tearDown() throws Exception {
