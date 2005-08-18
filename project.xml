@@ -61,15 +61,20 @@
       <id>tcurdt</id>
       <email>tcurdt at apache.org</email>
     </developer>
-  </developers>
-
-  <developers>
     <developer>
       <name>Don Brown</name>
       <id>mrdon</id>
       <email>mrdon at apache.org</email>
     </developer>
   </developers>
+
+  <contributers>
+    <contributer>
+      <name>Joerk Heinicke</name>
+      <id>jheinicke</id>
+      <email>joerg.heinicke at gmx.de</email>
+    </contributer>
+  </contributers>
 
   <dependencies>
 

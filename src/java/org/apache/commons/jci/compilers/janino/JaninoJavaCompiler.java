@@ -47,62 +47,52 @@ public class JaninoJavaCompiler implements JavaCompiler {
 
     private final static Log log = LogFactory.getLog(JaninoJavaCompiler.class);
 
-    private class CompilingIClassLoader extends IClassLoader {
+    private static class CompilingIClassLoader extends IClassLoader {
 
-        private ResourceReader resourceReader;
-        private CompilationProblemHandler problemHandler;
-        private Map classes,types;
-        private ClassLoaderIClassLoader loader;
+        private final Map types = new HashMap();
+        private final ResourceReader resourceReader;
+        private final CompilationProblemHandler problemHandler;
+        private final Map classes;
 
         private CompilingIClassLoader(ResourceReader resourceReader, CompilationProblemHandler problemHandler, Map classes) {
-            super(null);
+            super(new ClassLoaderIClassLoader());
             this.resourceReader = resourceReader;
             this.problemHandler = problemHandler;
             this.classes = classes;
-            this.types = new HashMap();
-            this.loader = new ClassLoaderIClassLoader();
             super.postConstruct();
         }
 
-        protected IClass findIClass(String type) {
-            String className = Descriptor.toClassName(type);
-            if (className.startsWith("java.") ||
-                    className.startsWith("javax.") ||
-                    className.startsWith("sun.") ||
-                    className.startsWith("org.xml.") ||
-                    className.startsWith("org.w3c.")
-                    ) {
-                    //Quickly hand these off
-                    return loader.loadIClass(type);
-            }
+        protected IClass findIClass(final String type) {
+            final String className = Descriptor.toClassName(type);
             if (types.containsKey(type)) {
                 return (IClass) types.get(type);
             }
-            String fileNameForClass = className.replace('.', File.separatorChar) + ".java";
-            if (!resourceReader.isAvailable(fileNameForClass)) {
-                return loader.loadIClass(type);
-            }
+            final String fileNameForClass = className.replace('.', File.separatorChar) + ".java";
 
-            ByteArrayInputStream instream = new ByteArrayInputStream(new String(resourceReader.getContent(fileNameForClass)).getBytes());
+            final char[] content = resourceReader.getContent(fileNameForClass);
+            if (content == null) {
+                return null;
+            }
+            final ByteArrayInputStream instream = new ByteArrayInputStream(new String(content).getBytes());
             Scanner scanner = null;
             try {
                 scanner = new Scanner(fileNameForClass, instream, "UTF-8");
-                Java.CompilationUnit unit = new Parser(scanner).parseCompilationUnit();
-                UnitCompiler uc = new UnitCompiler(unit, loader);
+                final Java.CompilationUnit unit = new Parser(scanner).parseCompilationUnit();
+                final UnitCompiler uc = new UnitCompiler(unit, this);
                 log.debug("compile " + className);
-                ClassFile[] classFiles = uc.compileUnit(DebuggingInformation.ALL);
+                final ClassFile[] classFiles = uc.compileUnit(DebuggingInformation.ALL);
                 for (int i = 0; i < classFiles.length; i++) {
                     log.debug("compiled " + classFiles[i].getThisClassName());
                     classes.put(classFiles[i].getThisClassName(), classFiles[i].toByteArray());
                 }
-                IClass ic = uc.findClass(className);
+                final IClass ic = uc.findClass(className);
                 if (null != ic) {
                     types.put(type, ic);
                 }
                 return ic;
-            } catch (LocatedException e) {
+            } catch (final LocatedException e) {
                 problemHandler.handle(new JaninoCompilationProblem(e));
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 problemHandler.handle(new JaninoCompilationProblem(fileNameForClass, "IO:" + e.getMessage(), true));
             } finally {
                 if (scanner != null) {
@@ -117,18 +107,18 @@ public class JaninoJavaCompiler implements JavaCompiler {
         }
     }
 
-    public void compile(String[] classes, ResourceReader in,
-            ResourceStore store, CompilationProblemHandler problemHandler) {
-        Map classFilesByName = new HashMap();
-        IClassLoader icl = new CompilingIClassLoader(in, problemHandler, classFilesByName);
+    public void compile(final String[] classes, final ResourceReader in,
+            final ResourceStore store, final CompilationProblemHandler problemHandler) {
+        final Map classFilesByName = new HashMap();
+        final IClassLoader icl = new CompilingIClassLoader(in, problemHandler, classFilesByName);
         for (int i = 0; i < classes.length; i++) {
             log.debug("compiling " + classes[i]);
             icl.loadIClass(Descriptor.fromClassName(classes[i]));
         }
         // Store all fully compiled classes
         for (Iterator i=classFilesByName.keySet().iterator(); i.hasNext();) {
-            String name = (String)i.next();
-            byte[] bytes = (byte[]) classFilesByName.get(name);
+            final String name = (String)i.next();
+            final byte[] bytes = (byte[]) classFilesByName.get(name);
             store.write(name,bytes);
         }
     }
