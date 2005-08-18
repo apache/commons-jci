@@ -6,4 +6,5 @@ o compiler implementations
   o jikes
 o transformation "pipelines" (more than just one transformation)
 o make suffixes matching (*.java, *.class) configurable
+o turn the JavaCompilerFactory into an interface and maybe provide a simple default impl
 o documentation

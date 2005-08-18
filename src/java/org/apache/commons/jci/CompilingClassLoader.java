@@ -20,23 +20,21 @@ import org.apache.commons.jci.compilers.JavaCompiler;
 import org.apache.commons.jci.compilers.eclipse.EclipseJavaCompiler;
 import org.apache.commons.jci.listeners.CompilingListener;
 import org.apache.commons.jci.monitor.FilesystemAlterationMonitor;
+import org.apache.commons.jci.problems.CompilationProblemHandler;
 import org.apache.commons.jci.problems.ConsoleCompilationProblemHandler;
 import org.apache.commons.jci.stores.MemoryResourceStore;
 import org.apache.commons.jci.stores.TransactionalResourceStore;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author tcurdt
  *
  */
 public class CompilingClassLoader extends ReloadingClassLoader {
-    
-    private final static Log log = LogFactory.getLog(CompilingClassLoader.class);
-    
+
     private final TransactionalResourceStore transactionalStore;
-    private final JavaCompiler compiler; 
-    
+    private final JavaCompiler compiler;
+    private final CompilationProblemHandler problemHandler;
+
     public CompilingClassLoader(final ClassLoader pParent, final File pRepository) {
         this(pParent, pRepository, new TransactionalResourceStore(
                 new MemoryResourceStore()) {
@@ -47,32 +45,34 @@ public class CompilingClassLoader extends ReloadingClassLoader {
                 }
         );
     }
-    
-    public CompilingClassLoader(final ClassLoader pParent, final File pRepository, final TransactionalResourceStore pStore) {
-        this(pParent, pRepository, pStore, new EclipseJavaCompiler());
-    }
-    
-    public CompilingClassLoader(final ClassLoader pParent, final File pRepository, final TransactionalResourceStore pStore, final JavaCompiler pCompiler) {
-        super(pParent, pRepository, pStore);
 
+    public CompilingClassLoader(final ClassLoader pParent, final File pRepository, final TransactionalResourceStore pStore) {
+        this(pParent, pRepository, pStore, new EclipseJavaCompiler(), new ConsoleCompilationProblemHandler());
+    }
+
+    public CompilingClassLoader(final ClassLoader pParent, final File pRepository,
+            final TransactionalResourceStore pStore, final JavaCompiler pCompiler,
+            final CompilationProblemHandler pProblemHandler) {
+        super(pParent, pRepository, pStore);
         transactionalStore = pStore;
-        compiler = pCompiler;                
+        compiler = pCompiler;
+        problemHandler = pProblemHandler;
     }
 
     public void start() {
-        fam = new FilesystemAlterationMonitor(); 
+        fam = new FilesystemAlterationMonitor();
         fam.addListener(new CompilingListener(
                 reader,
                 compiler,
                 transactionalStore,
-                new ConsoleCompilationProblemHandler()
+                problemHandler
                 ) {
             public void reload() {
                 super.reload();
                 CompilingClassLoader.this.reload();
             }
         }, repository);
-        thread = new Thread(fam);         
+        thread = new Thread(fam);
         thread.start();
     }
 }
