@@ -46,6 +46,8 @@ public final class GroovyJavaCompiler implements JavaCompiler {
                     );
             unit.addSource(source[i]);
         }
+        
+        problemHandler.onStart();
         try {
             log.debug("compiling");
             unit.compile();
@@ -77,6 +79,8 @@ public final class GroovyJavaCompiler implements JavaCompiler {
                         new GroovyCompilationProblem(message)
                         );                
             }
+        } finally {
+            problemHandler.onStop();
         }
         
     }

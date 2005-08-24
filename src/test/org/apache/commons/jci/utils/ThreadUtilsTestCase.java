@@ -9,7 +9,7 @@ public final class ThreadUtilsTestCase extends TestCase {
         final long start = System.currentTimeMillis();
         ThreadUtils.sleep(1000);
         final long stop = System.currentTimeMillis();
-        assertTrue( Math.abs( (stop-start) - 1000) < 20 );
+        assertTrue( Math.abs( (stop-start) - 1000) < 200 );
     }
 
     public void testSleepInterruption() throws InterruptedException {

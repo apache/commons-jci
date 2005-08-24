@@ -20,8 +20,6 @@ import org.apache.commons.jci.compilers.JavaCompiler;
 import org.apache.commons.jci.compilers.eclipse.EclipseJavaCompiler;
 import org.apache.commons.jci.listeners.CompilingListener;
 import org.apache.commons.jci.monitor.FilesystemAlterationMonitor;
-import org.apache.commons.jci.problems.CompilationProblemHandler;
-import org.apache.commons.jci.problems.ConsoleCompilationProblemHandler;
 import org.apache.commons.jci.stores.MemoryResourceStore;
 import org.apache.commons.jci.stores.TransactionalResourceStore;
 
@@ -33,7 +31,6 @@ public class CompilingClassLoader extends ReloadingClassLoader {
 
     private final TransactionalResourceStore transactionalStore;
     private final JavaCompiler compiler;
-    private final CompilationProblemHandler problemHandler;
 
     public CompilingClassLoader(final ClassLoader pParent, final File pRepository) {
         this(pParent, pRepository, new TransactionalResourceStore(
@@ -47,25 +44,23 @@ public class CompilingClassLoader extends ReloadingClassLoader {
     }
 
     public CompilingClassLoader(final ClassLoader pParent, final File pRepository, final TransactionalResourceStore pStore) {
-        this(pParent, pRepository, pStore, new EclipseJavaCompiler(), new ConsoleCompilationProblemHandler());
+        this(pParent, pRepository, pStore, new EclipseJavaCompiler());
     }
 
     public CompilingClassLoader(final ClassLoader pParent, final File pRepository,
-            final TransactionalResourceStore pStore, final JavaCompiler pCompiler,
-            final CompilationProblemHandler pProblemHandler) {
+            final TransactionalResourceStore pStore, final JavaCompiler pCompiler ) {
         super(pParent, pRepository, pStore);
         transactionalStore = pStore;
         compiler = pCompiler;
-        problemHandler = pProblemHandler;
     }
 
     public void start() {
         fam = new FilesystemAlterationMonitor();
+        // FIXME keep reference for accessing errors/warnings
         fam.addListener(new CompilingListener(
                 reader,
                 compiler,
-                transactionalStore,
-                problemHandler
+                transactionalStore
                 ) {
             public void reload() {
                 super.reload();

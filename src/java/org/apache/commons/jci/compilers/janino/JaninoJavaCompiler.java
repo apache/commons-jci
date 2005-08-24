@@ -123,6 +123,7 @@ public class JaninoJavaCompiler implements JavaCompiler {
                         final ResourceStore pStore, final CompilationProblemHandler pProblemHandler) {
         final Map classFilesByName = new HashMap();
         final IClassLoader icl = new CompilingIClassLoader(pResourceReader, pProblemHandler, classFilesByName);
+        pProblemHandler.onStart();
         for (int i = 0; i < pClasses.length; i++) {
             log.debug("compiling " + pClasses[i]);
             icl.loadIClass(Descriptor.fromClassName(pClasses[i]));
@@ -132,6 +133,7 @@ public class JaninoJavaCompiler implements JavaCompiler {
             final Map.Entry entry = (Map.Entry)i.next();
             pStore.write((String)entry.getKey(), (byte[])entry.getValue());
         }
+        pProblemHandler.onStop();
     }
 
     private static final class CompilationProblemHandlerAdapter implements ErrorHandler, WarningHandler {

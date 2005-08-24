@@ -253,9 +253,17 @@ public final class EclipseJavaCompiler implements JavaCompiler {
             }
         };
 
-        final Compiler compiler =
-            new Compiler(nameEnvironment, policy, settingsMap, compilerRequestor, problemFactory);
+        pProblemHandler.onStart();
 
-        compiler.compile(compilationUnits);
+        try {
+
+            final Compiler compiler =
+                new Compiler(nameEnvironment, policy, settingsMap, compilerRequestor, problemFactory);
+    
+            compiler.compile(compilationUnits);
+
+        } finally {
+            pProblemHandler.onStop();
+        }
     }
 }

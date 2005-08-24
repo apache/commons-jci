@@ -22,7 +22,8 @@ import java.util.Iterator;
 import org.apache.commons.jci.ReloadingClassLoader;
 import org.apache.commons.jci.compilers.JavaCompiler;
 import org.apache.commons.jci.monitor.FilesystemAlterationListener;
-import org.apache.commons.jci.problems.CompilationProblemHandler;
+import org.apache.commons.jci.problems.CompilationProblem;
+import org.apache.commons.jci.problems.DefaultCompilationProblemHandler;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.TransactionalResourceStore;
 import org.apache.commons.logging.Log;
@@ -40,18 +41,20 @@ public class CompilingListener implements FilesystemAlterationListener {
     private final JavaCompiler compiler;
     private final ResourceReader reader;
     private final TransactionalResourceStore transactionalStore;
-    private final CompilationProblemHandler problemHandler;
+    private final DefaultCompilationProblemHandler problemHandler = new DefaultCompilationProblemHandler();
     
     public CompilingListener(
             final ResourceReader pReader,
             final JavaCompiler pCompiler,
-            final TransactionalResourceStore pTransactionalStore,
-            final CompilationProblemHandler pProblemHandler
+            final TransactionalResourceStore pTransactionalStore
             ) {
         compiler = pCompiler;
         reader = pReader;
         transactionalStore = pTransactionalStore;
-        problemHandler = pProblemHandler;
+    }
+    
+    public DefaultCompilationProblemHandler getCompilationProblemHandler() {
+        return problemHandler;
     }
     
     public void onStart(final File pRepository) {
@@ -99,13 +102,15 @@ public class CompilingListener implements FilesystemAlterationListener {
                     problemHandler
                     );
             
+            final CompilationProblem[] errors = problemHandler.getErrors();
+            final CompilationProblem[] warnings = problemHandler.getWarnings();
             
             log.debug(
-                    problemHandler.getErrorCount() + " errors, " +
-                    problemHandler.getWarningCount() + " warnings"
+                    errors.length + " errors, " +
+                    warnings.length + " warnings"
                     );
         
-            if (problemHandler.getErrorCount() > 0) {
+            if (errors.length > 0) {
                 for (int j = 0; j < clazzes.length; j++) {
                     transactionalStore.remove(clazzes[j]);
                 }

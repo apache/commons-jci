@@ -22,11 +22,9 @@ public interface CompilationProblem {
   String getFileName();
 
   int getStartLine();
-
   int getStartColumn();
 
   int getEndLine();
-
   int getEndColumn();
 
   String getMessage();

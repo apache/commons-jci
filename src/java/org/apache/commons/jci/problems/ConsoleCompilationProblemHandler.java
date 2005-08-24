@@ -19,26 +19,13 @@ package org.apache.commons.jci.problems;
  * @author tcurdt
  *
  */
-public class ConsoleCompilationProblemHandler implements CompilationProblemHandler {
-
-    private int errors;
-    private int warnings;
+public final class ConsoleCompilationProblemHandler extends DefaultCompilationProblemHandler {
 
     public void handle( final CompilationProblem pProblem ) {
         if (pProblem.isError()) {
-            errors++;
-            System.err.println("error(" + errors + "):" + pProblem);
+            System.err.println("error:" + pProblem);
         } else {
-            warnings++;
-            System.err.println("warning(" + warnings + "):" + pProblem);
+            System.err.println("warning:" + pProblem);
         }
-    }
-
-    public int getErrorCount() {
-        return errors;
-    }
-
-    public int getWarningCount() {
-        return warnings;
     }
 }

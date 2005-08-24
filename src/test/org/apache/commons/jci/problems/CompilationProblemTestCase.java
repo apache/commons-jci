@@ -1,5 +1,6 @@
 package org.apache.commons.jci.problems;
 
+import junit.framework.TestCase;
 import org.apache.commons.jci.compilers.eclipse.EclipseCompilationProblem;
 import org.apache.commons.jci.compilers.groovy.GroovyCompilationProblem;
 import org.apache.commons.jci.compilers.janino.JaninoCompilationProblem;
@@ -12,8 +13,6 @@ import org.codehaus.janino.Location;
 import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.internal.compiler.IProblemFactory;
 import org.eclipse.jdt.internal.compiler.problem.DefaultProblemFactory;
-
-import junit.framework.TestCase;
 
 /**
  * TODO: It might be better to actually try to compile some faulty code and
@@ -82,16 +81,16 @@ public final class CompilationProblemTestCase extends TestCase {
     }
 
     public void testErrorHandling() {
-        final CompilationProblemHandler handler = new ConsoleCompilationProblemHandler();
+        final DefaultCompilationProblemHandler handler = new DefaultCompilationProblemHandler();
         final CompilationProblem error = createJaninoCompilationProblem(true);
         handler.handle(error);
-        assertEquals("wrong number of errors", 1, handler.getErrorCount());
-        assertEquals("wrong number of warnings", 0, handler.getWarningCount());
+        assertEquals("wrong number of errors", 1, handler.getErrors().length);
+        assertEquals("wrong number of warnings", 0, handler.getWarnings().length);
 
         final CompilationProblem warning = createJaninoCompilationProblem(false);
         handler.handle(warning);
-        assertEquals("wrong number of errors", 1, handler.getErrorCount());
-        assertEquals("wrong number of warnings", 1, handler.getWarningCount());
+        assertEquals("wrong number of errors", 1, handler.getErrors().length);
+        assertEquals("wrong number of warnings", 1, handler.getWarnings().length);
     }
 
     private static JaninoCompilationProblem createJaninoCompilationProblem(final boolean pError) {

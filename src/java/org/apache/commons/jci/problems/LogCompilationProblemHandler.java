@@ -22,28 +22,15 @@ import org.apache.commons.logging.LogFactory;
  * @author tcurdt
  *
  */
-public class LogCompilationProblemHandler implements CompilationProblemHandler {
+public final class LogCompilationProblemHandler extends DefaultCompilationProblemHandler {
 
     private final static Log log = LogFactory.getLog(ConsoleCompilationProblemHandler.class);
 
-    private int errors;
-    private int warnings;
-
     public void handle( final CompilationProblem pProblem ) {
         if (pProblem.isError()) {
-            errors++;
-            log.debug("error(" + errors + "):" + pProblem);
+            log.debug("error:" + pProblem);
         } else {
-            warnings++;
-            log.debug("warning(" + warnings + "):" + pProblem);
+            log.debug("warning:" + pProblem);
         }
-    }
-
-    public int getErrorCount() {
-        return errors;
-    }
-
-    public int getWarningCount() {
-        return warnings;
     }
 }
