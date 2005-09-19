@@ -1,10 +1,12 @@
 package org.apache.commons.jci.compilers.groovy;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.commons.jci.compilers.CompilationResult;
 import org.apache.commons.jci.compilers.JavaCompiler;
-import org.apache.commons.jci.problems.CompilationProblemHandler;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.logging.Log;
@@ -22,11 +24,10 @@ public final class GroovyJavaCompiler implements JavaCompiler {
 
     private final static Log log = LogFactory.getLog(GroovyJavaCompiler.class);
     
-    public void compile(
+    public CompilationResult compile(
             final String[] clazzNames,
             final ResourceReader reader,
-            final ResourceStore store,
-            final CompilationProblemHandler problemHandler
+            final ResourceStore store
             ) {
      
         final CompilerConfiguration configuration = new CompilerConfiguration();
@@ -47,7 +48,8 @@ public final class GroovyJavaCompiler implements JavaCompiler {
             unit.addSource(source[i]);
         }
         
-        problemHandler.onStart();
+        final Collection problems = new ArrayList();
+
         try {
             log.debug("compiling");
             unit.compile();
@@ -61,27 +63,20 @@ public final class GroovyJavaCompiler implements JavaCompiler {
             }
         } catch (final CompilationFailedException e) {
             final ErrorCollector col = e.getUnit().getErrorCollector();
-            
-            final List warnings = col.getWarnings();
-            log.debug("handling " + warnings.size() + " warnings");
+
+            final Collection warnings = col.getWarnings();
             for (final Iterator it = warnings.iterator(); it.hasNext();) {
                 final WarningMessage warning = (WarningMessage) it.next();
-                problemHandler.handle(
-                        new GroovyCompilationProblem(warning)
-                        );
+                problems.add(new GroovyCompilationProblem(warning));
             }
 
-            final List errors = col.getErrors();
-            log.debug("handling " + errors.size() + " errors");
+            final Collection errors = col.getErrors();
             for (final Iterator it = errors.iterator(); it.hasNext();) {
                 final Message message = (Message) it.next();
-                problemHandler.handle(
-                        new GroovyCompilationProblem(message)
-                        );                
+                problems.add(new GroovyCompilationProblem(message));                
             }
-        } finally {
-            problemHandler.onStop();
         }
         
+        return new CompilationResult(problems);
     }
 }

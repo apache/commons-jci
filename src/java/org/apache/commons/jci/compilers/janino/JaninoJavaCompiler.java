@@ -20,17 +20,18 @@ import java.io.CharArrayReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
+import org.apache.commons.jci.compilers.CompilationResult;
 import org.apache.commons.jci.compilers.JavaCompiler;
 import org.apache.commons.jci.problems.CompilationProblemHandler;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.codehaus.janino.ClassLoaderIClassLoader;
 import org.codehaus.janino.CompileException;
 import org.codehaus.janino.DebuggingInformation;
@@ -43,14 +44,14 @@ import org.codehaus.janino.Parser;
 import org.codehaus.janino.Scanner;
 import org.codehaus.janino.UnitCompiler;
 import org.codehaus.janino.WarningHandler;
-import org.codehaus.janino.UnitCompiler.ErrorHandler;
 import org.codehaus.janino.Scanner.LocatedException;
+import org.codehaus.janino.UnitCompiler.ErrorHandler;
 import org.codehaus.janino.util.ClassFile;
 
 /**
  * @author art@gramlich-net.com
  */
-public class JaninoJavaCompiler implements JavaCompiler {
+public final class JaninoJavaCompiler implements JavaCompiler {
 
     private final static Log log = LogFactory.getLog(JaninoJavaCompiler.class);
 
@@ -58,19 +59,20 @@ public class JaninoJavaCompiler implements JavaCompiler {
 
         private final Map types = new HashMap();
         private final ResourceReader resourceReader;
-        private final CompilationProblemHandler problemHandler;
         private final Map classes;
+        private final Collection problems = new ArrayList();
 
-        private CompilingIClassLoader(final ResourceReader pResourceReader,
-                                      final CompilationProblemHandler pProblemHandler,
-                                      final Map pClasses) {
+        private CompilingIClassLoader(final ResourceReader pResourceReader, final Map pClasses) {
             super(new ClassLoaderIClassLoader());
             resourceReader = pResourceReader;
-            problemHandler = pProblemHandler;
             classes = pClasses;
             super.postConstruct();
         }
 
+        protected Collection getProblems() {
+            return problems;
+        }
+        
         protected IClass findIClass(final String pType) {
             final String className = Descriptor.toClassName(pType);
             if (types.containsKey(pType)) {
@@ -88,9 +90,16 @@ public class JaninoJavaCompiler implements JavaCompiler {
                 scanner = new Scanner(fileNameForClass, reader);
                 final Java.CompilationUnit unit = new Parser(scanner).parseCompilationUnit();
                 final UnitCompiler uc = new UnitCompiler(unit, this);
-                CompilationProblemHandlerAdapter adapter = new CompilationProblemHandlerAdapter(problemHandler);
-                uc.setCompileErrorHandler(adapter);
-                uc.setWarningHandler(adapter);
+                uc.setCompileErrorHandler(new ErrorHandler() {
+                    public void handleError(final String pMessage, final Location pOptionalLocation) throws CompileException {
+                        problems.add(new JaninoCompilationProblem(pOptionalLocation, pMessage, true));
+                    }
+                });
+                uc.setWarningHandler(new WarningHandler() {
+                    public void handleWarning(final String pHandle, final String pMessage, final Location pOptionalLocation) {
+                        problems.add(new JaninoCompilationProblem(pOptionalLocation, pMessage, false));
+                    }
+                });
                 log.debug("compile " + className);
                 final ClassFile[] classFiles = uc.compileUnit(DebuggingInformation.ALL);
                 for (int i = 0; i < classFiles.length; i++) {
@@ -103,9 +112,9 @@ public class JaninoJavaCompiler implements JavaCompiler {
                 }
                 return ic;
             } catch (final LocatedException e) {
-                problemHandler.handle(new JaninoCompilationProblem(e));
+                problems.add(new JaninoCompilationProblem(e));
             } catch (final IOException e) {
-                problemHandler.handle(new JaninoCompilationProblem(fileNameForClass, "IO:" + e.getMessage(), true));
+                problems.add(new JaninoCompilationProblem(fileNameForClass, "IO:" + e.getMessage(), true));
             } finally {
                 if (scanner != null) {
                     try {
@@ -119,11 +128,13 @@ public class JaninoJavaCompiler implements JavaCompiler {
         }
     }
 
-    public void compile(final String[] pClasses, final ResourceReader pResourceReader,
-                        final ResourceStore pStore, final CompilationProblemHandler pProblemHandler) {
+    public CompilationResult compile(
+            final String[] pClasses,
+            final ResourceReader pResourceReader,
+            final ResourceStore pStore
+            ) {
         final Map classFilesByName = new HashMap();
-        final IClassLoader icl = new CompilingIClassLoader(pResourceReader, pProblemHandler, classFilesByName);
-        pProblemHandler.onStart();
+        final CompilingIClassLoader icl = new CompilingIClassLoader(pResourceReader, classFilesByName);
         for (int i = 0; i < pClasses.length; i++) {
             log.debug("compiling " + pClasses[i]);
             icl.loadIClass(Descriptor.fromClassName(pClasses[i]));
@@ -133,7 +144,8 @@ public class JaninoJavaCompiler implements JavaCompiler {
             final Map.Entry entry = (Map.Entry)i.next();
             pStore.write((String)entry.getKey(), (byte[])entry.getValue());
         }
-        pProblemHandler.onStop();
+        
+        return new CompilationResult(icl.getProblems());
     }
 
     private static final class CompilationProblemHandlerAdapter implements ErrorHandler, WarningHandler {

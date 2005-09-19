@@ -91,16 +91,19 @@ public class ReloadingListener implements FilesystemAlterationListener{
     }
 
     public void onCreateFile( final File file ) {
+        // FIXME: for resource reloading remove the filtering
         if (file.getName().endsWith(".class")) {
             created.add(file);
         }
     }
     public void onChangeFile( final File file ) {                
+        // FIXME: for resource reloading remove the filtering
         if (file.getName().endsWith(".class")) {
             changed.add(file);
         }
     }
     public void onDeleteFile( final File file ) {
+        // FIXME: for resource reloading remove the filtering
         if (file.getName().endsWith(".class")) {
             deleted.add(file);
         }

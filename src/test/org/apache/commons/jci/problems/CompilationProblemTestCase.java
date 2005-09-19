@@ -80,19 +80,6 @@ public final class CompilationProblemTestCase extends TestCase {
         assertFalse("wrong error level", problem.isError());
     }
 
-    public void testErrorHandling() {
-        final DefaultCompilationProblemHandler handler = new DefaultCompilationProblemHandler();
-        final CompilationProblem error = createJaninoCompilationProblem(true);
-        handler.handle(error);
-        assertEquals("wrong number of errors", 1, handler.getErrors().length);
-        assertEquals("wrong number of warnings", 0, handler.getWarnings().length);
-
-        final CompilationProblem warning = createJaninoCompilationProblem(false);
-        handler.handle(warning);
-        assertEquals("wrong number of errors", 1, handler.getErrors().length);
-        assertEquals("wrong number of warnings", 1, handler.getWarnings().length);
-    }
-
     private static JaninoCompilationProblem createJaninoCompilationProblem(final boolean pError) {
         Location location = new Location(FILENAME, LINE, COLUMN);
         return new JaninoCompilationProblem(location, MESSAGE, pError);

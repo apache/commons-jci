@@ -2,7 +2,6 @@ package org.apache.commons.jci;
 
 import org.apache.commons.jci.compilers.JavaCompiler;
 import org.apache.commons.jci.compilers.eclipse.EclipseJavaCompiler;
-import org.apache.commons.jci.problems.LogCompilationProblemHandler;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.MemoryResourceStore;
 import org.apache.commons.jci.stores.ResourceStore;
@@ -42,8 +41,7 @@ public final class CompilerUtils {
                         return false;
                     }
                 },
-                store,
-                new LogCompilationProblemHandler()
+                store
                 );
         return store.read(pClazzes[0]);
     }
@@ -61,8 +59,7 @@ public final class CompilerUtils {
                         return false;
                     }
                 },
-                store,
-                new LogCompilationProblemHandler()
+                store
                 );
         return store.read(pClazz);
     }

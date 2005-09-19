@@ -1,28 +1,25 @@
-package org.apache.commons.jci.problems;
+package org.apache.commons.jci.compilers;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import org.apache.commons.jci.problems.CompilationProblem;
 
 
-public class DefaultCompilationProblemHandler implements CompilationProblemHandler {
-
+public final class CompilationResult {
+    
     final Collection errors = new ArrayList();
     final Collection warnings = new ArrayList();
-    
-    public void onStart() {
-        errors.clear();
-        warnings.clear();
-    }
-    
-    public void handle( final CompilationProblem pProblem ) {
-        if (pProblem.isError()) {
-            errors.add(pProblem);
-        } else {
-            warnings.add(pProblem);
+
+    public CompilationResult( final Collection pProblems ) {
+        for (final Iterator it = pProblems.iterator(); it.hasNext();) {
+            final CompilationProblem problem = (CompilationProblem) it.next();
+            if (problem.isError()) {
+                errors.add(problem);
+            } else {
+                warnings.add(problem);
+            }
         }
-    }
-    
-    public void onStop() {    
     }
     
     public CompilationProblem[] getErrors() {

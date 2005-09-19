@@ -20,10 +20,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import org.apache.commons.jci.ReloadingClassLoader;
+import org.apache.commons.jci.compilers.CompilationResult;
 import org.apache.commons.jci.compilers.JavaCompiler;
 import org.apache.commons.jci.monitor.FilesystemAlterationListener;
 import org.apache.commons.jci.problems.CompilationProblem;
-import org.apache.commons.jci.problems.DefaultCompilationProblemHandler;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.TransactionalResourceStore;
 import org.apache.commons.logging.Log;
@@ -41,7 +41,7 @@ public class CompilingListener implements FilesystemAlterationListener {
     private final JavaCompiler compiler;
     private final ResourceReader reader;
     private final TransactionalResourceStore transactionalStore;
-    private final DefaultCompilationProblemHandler problemHandler = new DefaultCompilationProblemHandler();
+    private CompilationResult lastResult;
     
     public CompilingListener(
             final ResourceReader pReader,
@@ -51,10 +51,11 @@ public class CompilingListener implements FilesystemAlterationListener {
         compiler = pCompiler;
         reader = pReader;
         transactionalStore = pTransactionalStore;
+        lastResult = null;
     }
     
-    public DefaultCompilationProblemHandler getCompilationProblemHandler() {
-        return problemHandler;
+    public synchronized CompilationResult getCompilationResult() {
+        return lastResult;
     }
     
     public void onStart(final File pRepository) {
@@ -80,6 +81,7 @@ public class CompilingListener implements FilesystemAlterationListener {
         }
                         
         final Collection compileables = new ArrayList();
+        // FIXME: only compile ".java" resources to support resource reloading
         compileables.addAll(created);
         compileables.addAll(changed);
 
@@ -91,19 +93,22 @@ public class CompilingListener implements FilesystemAlterationListener {
             for (Iterator it = compileables.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
                 clazzes[i] = ReloadingClassLoader.clazzName(pRepository, file);
-                //log.debug(clazzes[i]);
                 i++;
             }
             
-            compiler.compile(
+            final CompilationResult result =
+                compiler.compile(
                     clazzes,
                     reader,
-                    transactionalStore,
-                    problemHandler
+                    transactionalStore
                     );
             
-            final CompilationProblem[] errors = problemHandler.getErrors();
-            final CompilationProblem[] warnings = problemHandler.getWarnings();
+            synchronized(this) {
+                lastResult = result;
+            }
+            
+            final CompilationProblem[] errors = result.getErrors();
+            final CompilationProblem[] warnings = result.getWarnings();
             
             log.debug(
                     errors.length + " errors, " +
@@ -116,8 +121,7 @@ public class CompilingListener implements FilesystemAlterationListener {
                 }
             }
             
-            reload = true;                    
-
+            reload = true;
         }
 
         transactionalStore.onStop();
@@ -128,16 +132,19 @@ public class CompilingListener implements FilesystemAlterationListener {
     }
 
     public void onCreateFile( final File file ) {
+        // FIXME: to support resource reloading do the suffix filtering in onStop
         if (file.getName().endsWith(".java")) {
             created.add(file);
         }
     }
     public void onChangeFile( final File file ) {                
+        // FIXME: to support resource reloading do the suffix filtering in onStop
         if (file.getName().endsWith(".java")) {
             changed.add(file);
         }
     }
     public void onDeleteFile( final File file ) {
+        // FIXME: to support resource reloading do the suffix filtering in onStop
         if (file.getName().endsWith(".java")) {
             deleted.add(file);
         }

@@ -20,7 +20,7 @@ package org.apache.commons.jci.stores;
  * @author tcurdt
  *
  */
-public abstract class TransactionalResourceStore implements ResourceStore {
+public class TransactionalResourceStore implements ResourceStore, Transactional {
 
     private final ResourceStore store;
     
@@ -28,18 +28,20 @@ public abstract class TransactionalResourceStore implements ResourceStore {
         store = pStore;
     }
     
-    public abstract void onStart();
-    
-    public abstract void onStop();
-    
-    public byte[] read(String resourceName) {
-        return store.read(resourceName);
+    public void onStart() {
     }
-    public void remove(String resourceName) {
-        store.remove(resourceName);
+    
+    public void onStop() {
     }
-    public void write(String resourceName, byte[] resourceData) {
-        store.write(resourceName, resourceData);
+    
+    public byte[] read(final String pResourceName) {
+        return store.read(pResourceName);
+    }
+    public void remove(final String pResourceName) {
+        store.remove(pResourceName);
+    }
+    public void write(final String pResourceName, final byte[] pResourceData) {
+        store.write(pResourceName, pResourceData);
     }
     
     public String toString() {

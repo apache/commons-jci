@@ -31,16 +31,10 @@ public class CompilingClassLoader extends ReloadingClassLoader {
 
     private final TransactionalResourceStore transactionalStore;
     private final JavaCompiler compiler;
-
+    private CompilingListener listener;
+    
     public CompilingClassLoader(final ClassLoader pParent, final File pRepository) {
-        this(pParent, pRepository, new TransactionalResourceStore(
-                new MemoryResourceStore()) {
-                    public void onStart() {
-                        };
-                    public void onStop() {
-                        };
-                }
-        );
+        this(pParent, pRepository, new TransactionalResourceStore(new MemoryResourceStore()));
     }
 
     public CompilingClassLoader(final ClassLoader pParent, final File pRepository, final TransactionalResourceStore pStore) {
@@ -56,8 +50,7 @@ public class CompilingClassLoader extends ReloadingClassLoader {
 
     public void start() {
         fam = new FilesystemAlterationMonitor();
-        // FIXME keep reference for accessing errors/warnings
-        fam.addListener(new CompilingListener(
+        listener = new CompilingListener(
                 reader,
                 compiler,
                 transactionalStore
@@ -66,7 +59,9 @@ public class CompilingClassLoader extends ReloadingClassLoader {
                 super.reload();
                 CompilingClassLoader.this.reload();
             }
-        }, repository);
+        };
+        
+        fam.addListener(listener, repository);
         thread = new Thread(fam);
         thread.start();
     }

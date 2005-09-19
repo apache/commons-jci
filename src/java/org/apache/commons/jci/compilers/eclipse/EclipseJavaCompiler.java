@@ -19,13 +19,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import org.apache.commons.jci.compilers.JavaCompiler;
-import org.apache.commons.jci.problems.CompilationProblemHandler;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.lang.StringUtils;
@@ -101,8 +102,11 @@ public final class EclipseJavaCompiler implements JavaCompiler {
         }
     }
 
-    public void compile( final String[] pClazzNames, final ResourceReader pReader,
-            final ResourceStore pStore, final CompilationProblemHandler pProblemHandler ) {
+    public org.apache.commons.jci.compilers.CompilationResult compile(
+            final String[] pClazzNames,
+            final ResourceReader pReader,
+            final ResourceStore pStore
+            ) {
 
         final Map settingsMap = settings.getMap();
         final Set clazzIndex = new HashSet();
@@ -224,15 +228,15 @@ public final class EclipseJavaCompiler implements JavaCompiler {
             }
         };
 
+        final Collection problems = new ArrayList();
         final ICompilerRequestor compilerRequestor = new ICompilerRequestor() {
             public void acceptResult( CompilationResult result ) {
                 if (result.hasProblems()) {
-                    if (pProblemHandler != null) {
-                        final IProblem[] problems = result.getProblems();
-                        for (int i = 0; i < problems.length; i++) {
-                            final IProblem problem = problems[i];
-                            pProblemHandler.handle(new EclipseCompilationProblem(problem));
-                        }
+                    final IProblem[] iproblems = result.getProblems();
+                    for (int i = 0; i < iproblems.length; i++) {
+                        final IProblem iproblem = iproblems[i];
+                        // call handler
+                        problems.add(new EclipseCompilationProblem(iproblem));
                     }
                 }
                 if (!result.hasErrors()) {
@@ -253,17 +257,11 @@ public final class EclipseJavaCompiler implements JavaCompiler {
             }
         };
 
-        pProblemHandler.onStart();
+        final Compiler compiler =
+            new Compiler(nameEnvironment, policy, settingsMap, compilerRequestor, problemFactory);
 
-        try {
+        compiler.compile(compilationUnits);
 
-            final Compiler compiler =
-                new Compiler(nameEnvironment, policy, settingsMap, compilerRequestor, problemFactory);
-    
-            compiler.compile(compilationUnits);
-
-        } finally {
-            pProblemHandler.onStop();
-        }
+        return new org.apache.commons.jci.compilers.CompilationResult(problems);
     }
 }
