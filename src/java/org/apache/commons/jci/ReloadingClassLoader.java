@@ -18,14 +18,7 @@ package org.apache.commons.jci;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import org.apache.commons.jci.listeners.ReloadingListener;
-import org.apache.commons.jci.monitor.FilesystemAlterationMonitor;
-import org.apache.commons.jci.readers.FileResourceReader;
-import org.apache.commons.jci.readers.ResourceReader;
-import org.apache.commons.jci.stores.MemoryResourceStore;
+import org.apache.commons.jci.listeners.AbstractListener;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.jci.stores.ResourceStoreClassLoader;
 import org.apache.commons.logging.Log;
@@ -40,37 +33,46 @@ public class ReloadingClassLoader extends ClassLoader {
     private final static Log log = LogFactory.getLog(ReloadingClassLoader.class);
     
     private final ClassLoader parent;
-    private final ResourceStore store;
-    private final Collection reloadingListeners = new HashSet();
-
+    //private final Collection reloadingListeners = new HashSet();
+    private ResourceStore[] stores = new ResourceStore[0];
     private ClassLoader delegate;
-
-    protected final ResourceReader reader;
-    protected final File repository;
-
-    protected FilesystemAlterationMonitor fam;
-    protected Thread thread;
     
-    public ReloadingClassLoader(final ClassLoader pParent, final File pRepository) {
-        this(pParent, pRepository, new MemoryResourceStore());
-    }
-
-    public ReloadingClassLoader(final ClassLoader pParent, final File pRepository, final ResourceStore pStore) {        
+    public ReloadingClassLoader(final ClassLoader pParent) {        
         super(pParent);
-
         parent = pParent;        
-        repository = pRepository;        
-        reader = new FileResourceReader(repository);
-        store = pStore;
-                
-        delegate = new ResourceStoreClassLoader(parent, store);
+
+        delegate = new ResourceStoreClassLoader(parent, stores);
+    }
+
+    public void addListener(final AbstractListener pListener) {
+        pListener.setReloadingClassLoader(this);
+        addResourceStore(pListener.getStore());
     }
     
+    public void removeListener(final AbstractListener pListener) {
+        removeResourceStore(pListener.getStore());
+        pListener.setReloadingClassLoader(null);
+    }
+    
+    private void addResourceStore(final ResourceStore pStore) {
+        final int n = stores.length;
+        final ResourceStore[] newStores = new ResourceStore[n + 1];
+        System.arraycopy(stores, 0, newStores, 0, n);
+        newStores[n] = pStore;
+        stores = newStores;
+        delegate = new ResourceStoreClassLoader(parent, stores);
+    }
+
+    private void removeResourceStore(final ResourceStore pStore) {
+        //FIXME
+    }
+    
+    /*
     public void start() {
         fam = new FilesystemAlterationMonitor(); 
         fam.addListener(new ReloadingListener(store) {  
-            protected void notifyOfCheck( boolean pReload ) {
-                super.notifyOfCheck(pReload);
+            protected void needsReload( boolean pReload ) {
+                super.needsReload(pReload);
                 if (pReload) {
                     ReloadingClassLoader.this.reload();                    
                 } else {
@@ -78,19 +80,14 @@ public class ReloadingClassLoader extends ClassLoader {
                 }
             }
         }, repository);
-        thread = new Thread(fam);         
-        thread.start();
+        fam.start();
     }
-
+    
     public void stop() {
         fam.stop();
-        try {
-            thread.join();
-        } catch (final InterruptedException e) {
-            ;
-        }
     }
-
+    */
+    /*
     public void addListener(final ReloadingClassLoaderListener pListener) {
         synchronized (reloadingListeners) {
             reloadingListeners.add(pListener);
@@ -102,15 +99,18 @@ public class ReloadingClassLoader extends ClassLoader {
             return reloadingListeners.remove(pListener);
         }        
     }
-    
-    protected void reload() {
-        log.debug("reloading");
-
-        delegate = new ResourceStoreClassLoader(parent, store);
-        
-        notifyReloadingListeners(true);
+    */
+    public void reload(final boolean pReload) {
+        if (pReload) {
+            log.debug("reloading");
+            delegate = new ResourceStoreClassLoader(parent, stores);
+            //notifyReloadingListeners(true);
+        } else {
+            log.debug("not reloading");
+            //notifyReloadingListeners(false);            
+        }
     }
-    
+    /*
     private void notifyReloadingListeners(final boolean pReload) { 
         synchronized (reloadingListeners) {
             for (final Iterator it = reloadingListeners.iterator(); it.hasNext();) {
@@ -119,7 +119,7 @@ public class ReloadingClassLoader extends ClassLoader {
             }            
         }
     }
-    
+    */
     public static String clazzName( final File base, final File file ) {
         final int rootLength = base.getAbsolutePath().length();
         final String absFileName = file.getAbsolutePath();

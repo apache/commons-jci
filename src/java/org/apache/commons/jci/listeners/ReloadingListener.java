@@ -22,13 +22,13 @@ import java.util.Collection;
 import java.util.Iterator;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.jci.ReloadingClassLoader;
-import org.apache.commons.jci.monitor.FilesystemAlterationListener;
+import org.apache.commons.jci.stores.MemoryResourceStore;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
-public class ReloadingListener implements FilesystemAlterationListener{
+public class ReloadingListener extends AbstractListener{
 
     private final static Log log = LogFactory.getLog(ReloadingListener.class);
 
@@ -38,16 +38,25 @@ public class ReloadingListener implements FilesystemAlterationListener{
 
     private final ResourceStore store;
     
-    public ReloadingListener(final ResourceStore pStore) {
-        store = pStore;        
+    public ReloadingListener(final File pRepository) {
+        this(pRepository, new MemoryResourceStore());
+    }
+
+    public ReloadingListener(final File pRepository, final ResourceStore pStore) {
+        super(pRepository);
+        store = pStore;
+    }
+
+    public ResourceStore getStore() {
+        return store;
     }
     
-    public void onStart(final File repository) {
+    public void onStart() {
         created.clear();
         changed.clear();
         deleted.clear();
     }
-    public void onStop(final File pRepository) {
+    public void onStop() {
         boolean reload = false;
         
         log.debug("created:" + created.size()
@@ -57,7 +66,7 @@ public class ReloadingListener implements FilesystemAlterationListener{
         if (deleted.size() > 0) {
             for (Iterator it = deleted.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
-                store.remove(ReloadingClassLoader.clazzName(pRepository, file));
+                store.remove(ReloadingClassLoader.clazzName(repository, file));
             }
             reload = true;
         }
@@ -67,11 +76,13 @@ public class ReloadingListener implements FilesystemAlterationListener{
                 final File file = (File) it.next();
                 try {
                     final byte[] bytes = IOUtils.toByteArray(new FileReader(file));
-                    store.write(ReloadingClassLoader.clazzName(pRepository, file), bytes);
+                    store.write(ReloadingClassLoader.clazzName(repository, file), bytes);
                 } catch(final Exception e) {
                     log.error("could not load " + file, e);
                 }
             }
+            // FIXME: not necessary
+            //reload = true;
         }
 
         if (changed.size() > 0) {
@@ -79,7 +90,7 @@ public class ReloadingListener implements FilesystemAlterationListener{
                 final File file = (File) it.next();
                 try {
                     final byte[] bytes = IOUtils.toByteArray(new FileReader(file));
-                    store.write(ReloadingClassLoader.clazzName(pRepository, file), bytes);
+                    store.write(ReloadingClassLoader.clazzName(repository, file), bytes);
                 } catch(final Exception e) {
                     log.error("could not load " + file, e);
                 }
@@ -87,7 +98,7 @@ public class ReloadingListener implements FilesystemAlterationListener{
             reload = true;
         }
 
-        notifyOfCheck(reload);
+        needsReload(reload);
     }
 
     public void onCreateFile( final File file ) {
@@ -116,11 +127,4 @@ public class ReloadingListener implements FilesystemAlterationListener{
     public void onDeleteDirectory( final File file ) {
     }
 
-    protected void notifyOfCheck(final boolean pReload) {
-        if (pReload) {
-            log.debug("reload required");
-        } else {
-            log.debug("no reload required");            
-        }
-    }
 }

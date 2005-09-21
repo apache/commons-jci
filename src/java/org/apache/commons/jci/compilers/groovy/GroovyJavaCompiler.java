@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.commons.jci.compilers.AbstractJavaCompiler;
 import org.apache.commons.jci.compilers.CompilationResult;
-import org.apache.commons.jci.compilers.JavaCompiler;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.logging.Log;
@@ -20,7 +20,7 @@ import org.codehaus.groovy.control.messages.Message;
 import org.codehaus.groovy.control.messages.WarningMessage;
 import org.codehaus.groovy.tools.GroovyClass;
 
-public final class GroovyJavaCompiler implements JavaCompiler {
+public final class GroovyJavaCompiler extends AbstractJavaCompiler {
 
     private final static Log log = LogFactory.getLog(GroovyJavaCompiler.class);
     

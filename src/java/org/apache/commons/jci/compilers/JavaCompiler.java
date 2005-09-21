@@ -15,6 +15,7 @@
  */
 package org.apache.commons.jci.compilers;
 
+import org.apache.commons.jci.problems.CompilationProblemHandler;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
 
@@ -24,7 +25,8 @@ import org.apache.commons.jci.stores.ResourceStore;
  *
  */
 public interface JavaCompiler {
-    // setCompilationProblemHandler( CompilationProblemHandler pHandler );
+    
+    void setCompilationProblemHandler( final CompilationProblemHandler pHandler );
 
     // addCompilationProblemHandler( CompilationProblemHandler pHandler );
     // removeCompilationProblemHandler( CompilationProblemHandler pHandler );

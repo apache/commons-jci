@@ -25,8 +25,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import org.apache.commons.jci.compilers.AbstractJavaCompiler;
 import org.apache.commons.jci.compilers.CompilationResult;
-import org.apache.commons.jci.compilers.JavaCompiler;
 import org.apache.commons.jci.problems.CompilationProblemHandler;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
@@ -51,7 +51,7 @@ import org.codehaus.janino.util.ClassFile;
 /**
  * @author art@gramlich-net.com
  */
-public final class JaninoJavaCompiler implements JavaCompiler {
+public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 
     private final static Log log = LogFactory.getLog(JaninoJavaCompiler.class);
 

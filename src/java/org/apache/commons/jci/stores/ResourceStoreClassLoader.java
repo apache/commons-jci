@@ -28,27 +28,35 @@ public final class ResourceStoreClassLoader extends ClassLoader {
 
     private final static Log log = LogFactory.getLog(ResourceStoreClassLoader.class);
 
-    private final ResourceStore store;
+    private final ResourceStore[] stores;
     private final ClassLoader parent;
 
-    public ResourceStoreClassLoader( final ClassLoader pParent, final ResourceStore pStore ) {
+    public ResourceStoreClassLoader( final ClassLoader pParent, final ResourceStore[] pStores ) {
         super(pParent);
         parent = pParent;
-        store = pStore;
+        stores = pStores;
     }
 
     private Class fastFindClass(final String name) {
-        final byte[] clazzBytes = store.read(name);
         
-        if (clazzBytes != null) {
-            log.debug("found class " + name  + " (" + clazzBytes.length + " bytes)");
-            return defineClass(name, clazzBytes, 0, clazzBytes.length);
+        if (stores != null) {
+            for (int i = 0; i < stores.length; i++) {
+                final ResourceStore store = stores[i];
+                final byte[] clazzBytes = store.read(name);
+                if (clazzBytes != null) {
+                    log.debug("found class " + name  + " (" + clazzBytes.length + " bytes)");
+                    return defineClass(name, clazzBytes, 0, clazzBytes.length);
+                }            
+            }
         }
+        
+        log.debug("did not find class " + name);
         
         return null;            
     }
     
     protected synchronized Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
+        log.debug("looking for " + name);
         Class clazz = findLoadedClass(name);
 
         if (clazz == null) {

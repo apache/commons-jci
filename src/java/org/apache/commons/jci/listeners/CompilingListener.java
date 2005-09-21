@@ -22,15 +22,18 @@ import java.util.Iterator;
 import org.apache.commons.jci.ReloadingClassLoader;
 import org.apache.commons.jci.compilers.CompilationResult;
 import org.apache.commons.jci.compilers.JavaCompiler;
-import org.apache.commons.jci.monitor.FilesystemAlterationListener;
+import org.apache.commons.jci.compilers.eclipse.EclipseJavaCompiler;
 import org.apache.commons.jci.problems.CompilationProblem;
+import org.apache.commons.jci.readers.FileResourceReader;
 import org.apache.commons.jci.readers.ResourceReader;
+import org.apache.commons.jci.stores.MemoryResourceStore;
+import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.jci.stores.TransactionalResourceStore;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
-public class CompilingListener implements FilesystemAlterationListener {
+public class CompilingListener extends AbstractListener {
 
     private final static Log log = LogFactory.getLog(CompilingListener.class);
     
@@ -43,29 +46,42 @@ public class CompilingListener implements FilesystemAlterationListener {
     private final TransactionalResourceStore transactionalStore;
     private CompilationResult lastResult;
     
+    public CompilingListener( final File pRepository ) {
+        this(pRepository,
+             new EclipseJavaCompiler(),
+             new TransactionalResourceStore(new MemoryResourceStore())
+             );
+    }
+    
     public CompilingListener(
-            final ResourceReader pReader,
+            final File pRepository,
             final JavaCompiler pCompiler,
             final TransactionalResourceStore pTransactionalStore
             ) {
+        super(pRepository);
         compiler = pCompiler;
-        reader = pReader;
         transactionalStore = pTransactionalStore;
+
+        reader = new FileResourceReader(pRepository);
         lastResult = null;
     }
     
+    public ResourceStore getStore() {
+        return transactionalStore;
+    }
+
     public synchronized CompilationResult getCompilationResult() {
         return lastResult;
     }
     
-    public void onStart(final File pRepository) {
+    public void onStart() {
         created.clear();
         changed.clear();
         deleted.clear();
         transactionalStore.onStart();
     }
-    public void onStop(final File pRepository) {
-        log.debug("resources " +
+    public void onStop() {
+        log.debug(
                 created.size() + " created, " + 
                 changed.size() + " changed, " + 
                 deleted.size() + " deleted");
@@ -75,7 +91,7 @@ public class CompilingListener implements FilesystemAlterationListener {
         if (deleted.size() > 0) {
             for (Iterator it = deleted.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
-                transactionalStore.remove(ReloadingClassLoader.clazzName(pRepository, file));
+                transactionalStore.remove(ReloadingClassLoader.clazzName(repository, file));
             }
             reload = true;
         }
@@ -92,7 +108,7 @@ public class CompilingListener implements FilesystemAlterationListener {
             int i = 0;
             for (Iterator it = compileables.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
-                clazzes[i] = ReloadingClassLoader.clazzName(pRepository, file);
+                clazzes[i] = ReloadingClassLoader.clazzName(repository, file);
                 i++;
             }
             
@@ -116,6 +132,7 @@ public class CompilingListener implements FilesystemAlterationListener {
                     );
         
             if (errors.length > 0) {
+                // FIXME: they need to be marked for re-compilation
                 for (int j = 0; j < clazzes.length; j++) {
                     transactionalStore.remove(clazzes[j]);
                 }
@@ -126,9 +143,7 @@ public class CompilingListener implements FilesystemAlterationListener {
 
         transactionalStore.onStop();
 
-        if (reload) {
-            reload();
-        }                
+        needsReload(reload);
     }
 
     public void onCreateFile( final File file ) {
@@ -155,9 +170,5 @@ public class CompilingListener implements FilesystemAlterationListener {
     public void onChangeDirectory( final File file ) {                
     }
     public void onDeleteDirectory( final File file ) {
-    }
-
-    protected void reload() {
-        log.debug("reload");
     }
 }

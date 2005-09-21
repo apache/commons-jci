@@ -18,6 +18,8 @@ package org.apache.commons.jci.monitor;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.jci.AbstractTestCase;
+import org.apache.commons.jci.listeners.AbstractListener;
+import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -31,9 +33,8 @@ public final class FilesystemAlterationMonitorTestCase extends AbstractTestCase 
 
     private FilesystemAlterationMonitor fam;
     private MyFilesystemAlterationListener listener;
-    private Thread thread; 
 
-    private class MyFilesystemAlterationListener implements FilesystemAlterationListener {
+    private class MyFilesystemAlterationListener extends AbstractListener {
         private int started;
         private int stopped;
         private int createdFiles;
@@ -43,6 +44,18 @@ public final class FilesystemAlterationMonitorTestCase extends AbstractTestCase 
         private int changedDirs;
         private int deletedDirs;
  
+        public MyFilesystemAlterationListener(final File pRepository) {
+            super(pRepository);
+        }
+        
+        public ResourceStore getStore() {
+            return null;
+        }
+
+        protected void needsReload( boolean pReload ) {
+            // prevent NPE
+        }
+
         public int getChangedDirs() {
             return changedDirs;
         }
@@ -68,10 +81,10 @@ public final class FilesystemAlterationMonitorTestCase extends AbstractTestCase 
             return stopped;
         }
                  
-        public void onStart(final File repository) {
+        public void onStart() {
             ++started;
         }
-        public void onStop(final File repository) {
+        public void onStop() {
             ++stopped;
             synchronized(signal) {
                 signal.triggered = true;
@@ -98,19 +111,16 @@ public final class FilesystemAlterationMonitorTestCase extends AbstractTestCase 
         }       
     }
 
-    private void start() throws Exception {
+    private void start() {
         fam = new FilesystemAlterationMonitor();
-        listener = new MyFilesystemAlterationListener();        
-        fam.addListener(listener, directory);
-        thread = new Thread(fam); 
-        thread.start();
-
+        listener = new MyFilesystemAlterationListener(directory);
+        fam.addListener(listener);
+        fam.start();
         waitForSignal(signal);
     }
     
-    private void stop() throws Exception {
+    private void stop() {
         fam.stop();
-        thread.join();        
     }
     
     public void testCreateFileDetection() throws Exception {

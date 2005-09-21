@@ -21,7 +21,5 @@ package org.apache.commons.jci.problems;
  *
  */
 public interface CompilationProblemHandler {
-    void onStart();
     void handle( final CompilationProblem pProblem );
-    void onStop();
 }

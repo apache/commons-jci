@@ -26,7 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-import org.apache.commons.jci.compilers.JavaCompiler;
+import org.apache.commons.jci.compilers.AbstractJavaCompiler;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.lang.StringUtils;
@@ -47,7 +47,7 @@ import org.eclipse.jdt.internal.compiler.env.INameEnvironment;
 import org.eclipse.jdt.internal.compiler.env.NameEnvironmentAnswer;
 import org.eclipse.jdt.internal.compiler.problem.DefaultProblemFactory;
 
-public final class EclipseJavaCompiler implements JavaCompiler {
+public final class EclipseJavaCompiler extends AbstractJavaCompiler {
 
     private final static Log log = LogFactory.getLog(EclipseJavaCompiler.class);
     private final EclipseJavaCompilerSettings settings;
