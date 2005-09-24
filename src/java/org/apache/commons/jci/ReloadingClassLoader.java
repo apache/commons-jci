@@ -18,7 +18,8 @@ package org.apache.commons.jci;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
-import org.apache.commons.jci.listeners.AbstractListener;
+import org.apache.commons.jci.listeners.NotificationListener;
+import org.apache.commons.jci.listeners.ReloadingListener;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.jci.stores.ResourceStoreClassLoader;
 import org.apache.commons.logging.Log;
@@ -28,7 +29,7 @@ import org.apache.commons.logging.LogFactory;
  * @author tcurdt
  *
  */
-public class ReloadingClassLoader extends ClassLoader {
+public class ReloadingClassLoader extends ClassLoader implements NotificationListener {
     
     private final static Log log = LogFactory.getLog(ReloadingClassLoader.class);
     
@@ -44,14 +45,14 @@ public class ReloadingClassLoader extends ClassLoader {
         delegate = new ResourceStoreClassLoader(parent, stores);
     }
 
-    public void addListener(final AbstractListener pListener) {
-        pListener.setReloadingClassLoader(this);
+    public void addListener(final ReloadingListener pListener) {
+        pListener.setNotificationListener(this);
         addResourceStore(pListener.getStore());
     }
     
-    public void removeListener(final AbstractListener pListener) {
+    public void removeListener(final ReloadingListener pListener) {
         removeResourceStore(pListener.getStore());
-        pListener.setReloadingClassLoader(null);
+        pListener.setNotificationListener(null);
     }
     
     private void addResourceStore(final ResourceStore pStore) {
@@ -100,22 +101,17 @@ public class ReloadingClassLoader extends ClassLoader {
         }        
     }
     */
-    public void reload(final boolean pReload) {
-        if (pReload) {
-            log.debug("reloading");
-            delegate = new ResourceStoreClassLoader(parent, stores);
-            //notifyReloadingListeners(true);
-        } else {
-            log.debug("not reloading");
-            //notifyReloadingListeners(false);            
-        }
+    public void handleNotification() {
+        log.debug("reloading");
+        delegate = new ResourceStoreClassLoader(parent, stores);
+        //notifyReloadingListeners();
     }
     /*
-    private void notifyReloadingListeners(final boolean pReload) { 
+    private void notifyReloadingListeners() { 
         synchronized (reloadingListeners) {
             for (final Iterator it = reloadingListeners.iterator(); it.hasNext();) {
                 final ReloadingClassLoaderListener listener = (ReloadingClassLoaderListener) it.next();
-                listener.hasReloaded(pReload);
+                listener.hasReloaded();
             }            
         }
     }

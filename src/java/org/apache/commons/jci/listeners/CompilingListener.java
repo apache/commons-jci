@@ -33,13 +33,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
-public class CompilingListener extends AbstractListener {
+public class CompilingListener extends ReloadingListener {
 
     private final static Log log = LogFactory.getLog(CompilingListener.class);
-    
-    private final Collection created = new ArrayList();
-    private final Collection changed = new ArrayList();
-    private final Collection deleted = new ArrayList();
     
     private final JavaCompiler compiler;
     private final ResourceReader reader;
@@ -75,18 +71,18 @@ public class CompilingListener extends AbstractListener {
     }
     
     public void onStart() {
-        created.clear();
-        changed.clear();
-        deleted.clear();
+        super.onStart();
         transactionalStore.onStart();
     }
-    public void onStop() {
-        log.debug(
-                created.size() + " created, " + 
-                changed.size() + " changed, " + 
-                deleted.size() + " deleted");
 
+    public void onStop() {
         boolean reload = false;
+
+        log.debug("created:" + created.size()
+                + " changed:" + changed.size()
+                + " deleted:" + deleted.size()
+                + " resources");
+
         
         if (deleted.size() > 0) {
             for (Iterator it = deleted.iterator(); it.hasNext();) {
@@ -97,15 +93,29 @@ public class CompilingListener extends AbstractListener {
         }
                         
         final Collection compileables = new ArrayList();
-        // FIXME: only compile ".java" resources to support resource reloading
-        compileables.addAll(created);
-        compileables.addAll(changed);
-
-        final String[] clazzes = new String[compileables.size()];
         
+        for (final Iterator it = created.iterator(); it.hasNext();) {
+            final File createdFile = (File) it.next();
+            if (createdFile.getName().endsWith(".java")) {
+                compileables.add(createdFile);
+            }
+        }
+        
+        for (final Iterator it = changed.iterator(); it.hasNext();) {
+            final File changedFile = (File) it.next();
+            if (changedFile.getName().endsWith(".java")) {
+                compileables.add(changedFile);
+            }
+        }
+
         if (compileables.size() > 0) {
-            
+
+            log.debug(compileables.size()
+                    + " classes to compile"
+                    );
+
             int i = 0;
+            final String[] clazzes = new String[compileables.size()];            
             for (Iterator it = compileables.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
                 clazzes[i] = ReloadingClassLoader.clazzName(repository, file);
@@ -133,6 +143,7 @@ public class CompilingListener extends AbstractListener {
         
             if (errors.length > 0) {
                 // FIXME: they need to be marked for re-compilation
+                // and then added as compileables again
                 for (int j = 0; j < clazzes.length; j++) {
                     transactionalStore.remove(clazzes[j]);
                 }
@@ -143,32 +154,6 @@ public class CompilingListener extends AbstractListener {
 
         transactionalStore.onStop();
 
-        needsReload(reload);
-    }
-
-    public void onCreateFile( final File file ) {
-        // FIXME: to support resource reloading do the suffix filtering in onStop
-        if (file.getName().endsWith(".java")) {
-            created.add(file);
-        }
-    }
-    public void onChangeFile( final File file ) {                
-        // FIXME: to support resource reloading do the suffix filtering in onStop
-        if (file.getName().endsWith(".java")) {
-            changed.add(file);
-        }
-    }
-    public void onDeleteFile( final File file ) {
-        // FIXME: to support resource reloading do the suffix filtering in onStop
-        if (file.getName().endsWith(".java")) {
-            deleted.add(file);
-        }
-    }
-
-    public void onCreateDirectory( final File file ) {                
-    }
-    public void onChangeDirectory( final File file ) {                
-    }
-    public void onDeleteDirectory( final File file ) {
+        checked(reload);
     }
 }

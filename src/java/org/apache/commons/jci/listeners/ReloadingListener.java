@@ -28,15 +28,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
-public class ReloadingListener extends AbstractListener{
+public class ReloadingListener extends ResourceStoringListener {
 
     private final static Log log = LogFactory.getLog(ReloadingListener.class);
 
-    private final Collection created = new ArrayList();
-    private final Collection changed = new ArrayList();
-    private final Collection deleted = new ArrayList();
+    protected final Collection created = new ArrayList();
+    protected final Collection changed = new ArrayList();
+    protected final Collection deleted = new ArrayList();
 
     private final ResourceStore store;
+
+    protected ReloadingClassLoader reloader;
     
     public ReloadingListener(final File pRepository) {
         this(pRepository, new MemoryResourceStore());
@@ -46,27 +48,32 @@ public class ReloadingListener extends AbstractListener{
         super(pRepository);
         store = pStore;
     }
-
+    
     public ResourceStore getStore() {
         return store;
     }
-    
+        
     public void onStart() {
         created.clear();
         changed.clear();
         deleted.clear();
     }
+
     public void onStop() {
         boolean reload = false;
         
         log.debug("created:" + created.size()
-               + " changed:" + changed.size()
-               + " deleted:" + deleted.size());
+                + " changed:" + changed.size()
+                + " deleted:" + deleted.size()
+                + " resources");
         
         if (deleted.size() > 0) {
             for (Iterator it = deleted.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
-                store.remove(ReloadingClassLoader.clazzName(repository, file));
+                final String resourceName = ReloadingClassLoader.clazzName(repository, file);
+                //if (resourceName.endsWith(".class")) {
+                    store.remove(resourceName);
+                //}
             }
             reload = true;
         }
@@ -76,7 +83,10 @@ public class ReloadingListener extends AbstractListener{
                 final File file = (File) it.next();
                 try {
                     final byte[] bytes = IOUtils.toByteArray(new FileReader(file));
-                    store.write(ReloadingClassLoader.clazzName(repository, file), bytes);
+                    final String resourceName = ReloadingClassLoader.clazzName(repository, file); 
+                    //if (resourceName.endsWith(".class")) {
+                        store.write(resourceName, bytes);
+                    //}
                 } catch(final Exception e) {
                     log.error("could not load " + file, e);
                 }
@@ -90,7 +100,10 @@ public class ReloadingListener extends AbstractListener{
                 final File file = (File) it.next();
                 try {
                     final byte[] bytes = IOUtils.toByteArray(new FileReader(file));
-                    store.write(ReloadingClassLoader.clazzName(repository, file), bytes);
+                    final String resourceName = ReloadingClassLoader.clazzName(repository, file); 
+                    //if (resourceName.endsWith(".class")) {
+                        store.write(resourceName, bytes);
+                    //}
                 } catch(final Exception e) {
                     log.error("could not load " + file, e);
                 }
@@ -98,26 +111,17 @@ public class ReloadingListener extends AbstractListener{
             reload = true;
         }
 
-        needsReload(reload);
+        checked(reload);
     }
 
     public void onCreateFile( final File file ) {
-        // FIXME: for resource reloading remove the filtering
-        if (file.getName().endsWith(".class")) {
-            created.add(file);
-        }
+        created.add(file);
     }
     public void onChangeFile( final File file ) {                
-        // FIXME: for resource reloading remove the filtering
-        if (file.getName().endsWith(".class")) {
-            changed.add(file);
-        }
+        changed.add(file);
     }
     public void onDeleteFile( final File file ) {
-        // FIXME: for resource reloading remove the filtering
-        if (file.getName().endsWith(".class")) {
-            deleted.add(file);
-        }
+        deleted.add(file);
     }
 
     public void onCreateDirectory( final File file ) {                
@@ -126,5 +130,4 @@ public class ReloadingListener extends AbstractListener{
     }
     public void onDeleteDirectory( final File file ) {
     }
-
 }

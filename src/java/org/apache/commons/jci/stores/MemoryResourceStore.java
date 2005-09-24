@@ -47,6 +47,6 @@ public final class MemoryResourceStore implements ResourceStore {
     }
 
     public String toString() {
-        return store.keySet().toString();
+        return this.getClass().getName() + store.toString();
     }
 }

@@ -22,7 +22,7 @@ import java.io.File;
  *
  */
 public interface FilesystemAlterationListener {
-    File getRepository();
+    File getRepository(); // FIXME: ugly!!!!
     void onStart();
     void onCreateFile( final File file );
     void onChangeFile( final File file );

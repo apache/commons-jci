@@ -62,6 +62,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
                 store.write(name, bytes);
             }
         } catch (final CompilationFailedException e) {
+            e.printStackTrace();
             final ErrorCollector col = e.getUnit().getErrorCollector();
 
             final Collection warnings = col.getWarnings();

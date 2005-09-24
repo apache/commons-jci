@@ -14,8 +14,6 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
 
     private final static Log log = LogFactory.getLog(CompilingClassLoaderTestCase.class);
     
-    private final Signal reloadSignal = new Signal();
-
     private ReloadingClassLoader classloader;
     private CompilingListener listener;
     private FilesystemAlterationMonitor fam;
@@ -24,17 +22,7 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
         super.setUp();
         
         classloader = new ReloadingClassLoader(this.getClass().getClassLoader());
-        listener = new CompilingListener(directory) {
-            protected void needsReload(final boolean pReload) {
-                super.needsReload(pReload);
-                if (pReload) {
-                    synchronized(reloadSignal) {
-                        reloadSignal.triggered = true;
-                        reloadSignal.notify();
-                    }
-                }
-            }  
-        };        
+        listener = new CompilingListener(directory);   
         classloader.addListener(listener);
         
         fam = new FilesystemAlterationMonitor();
@@ -46,14 +34,14 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
         delay();        
         writeFile("jci/Simple.java", JavaSources.simple);        
         writeFile("jci/Extended.java", JavaSources.extended);        
-        waitForSignal(reloadSignal);
+        listener.waitForNotification();
     }
     
     
     public void testCompileProblems() throws Exception {
         delay();        
         writeFile("jci/Simple.java", JavaSources.error);
-        waitForSignal(reloadSignal);
+        listener.waitForNotification();
         
         // FIXME
     }
@@ -79,7 +67,7 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
 
         delay();
         writeFile("jci/Simple.java", JavaSources.SIMPLE);
-        waitForSignal(reloadSignal);
+        listener.waitForNotification();
     
         final Object SIMPLE = classloader.loadClass("jci.Simple").newInstance();        
         assertTrue("SIMPLE".equals(SIMPLE.toString()));
@@ -99,7 +87,7 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
         
         delay();
         assertTrue(new File(directory, "jci/Extended.java").delete());
-        waitForSignal(reloadSignal);
+        listener.waitForNotification();
 
         final Object oldSimple = classloader.loadClass("jci.Simple").newInstance();        
         assertTrue("Simple".equals(oldSimple.toString()));
@@ -113,7 +101,7 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
         
         delay();
         FileUtils.deleteDirectory(new File(directory, "jci"));
-        waitForSignal(reloadSignal);
+        listener.waitForNotification();
 
         try {
             classloader.loadClass("jci.Simple").newInstance();
@@ -135,7 +123,7 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
         
         delay();
         assertTrue(new File(directory, "jci/Simple.java").delete());
-        waitForSignal(reloadSignal);
+        listener.waitForNotification();
 
         try {
             classloader.loadClass("jci.Extended").newInstance();

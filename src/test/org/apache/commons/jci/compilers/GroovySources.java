@@ -40,7 +40,7 @@ public interface GroovySources {
 
     String error =
         "package jci;\n"
-        + "public class Simple { \n"
+        + "public clss Simple { \n"
         + "  public String toString() { \n"
         + "    return 1; \n"
         + "  } \n"

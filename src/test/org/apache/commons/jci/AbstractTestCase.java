@@ -32,10 +32,6 @@ public abstract class AbstractTestCase extends TestCase {
 
     protected File directory;
 
-    public final class Signal {
-        public boolean triggered;
-    }
-
     /*
     public void runBare() throws Throwable {
         try {
@@ -46,33 +42,6 @@ public abstract class AbstractTestCase extends TestCase {
         }
     }
     */
-    
-    protected void waitForSignal(final Signal pSignal) {
-        log.debug("waiting for signal");
-        int i = 0;
-        while(true) {
-            synchronized(pSignal) {
-                if (!pSignal.triggered) {
-                    try {
-                        pSignal.wait(1000);
-                    } catch (InterruptedException e) {
-                        ;
-                    }
-                    if (++i > 7) {
-                        log.error("timeout");
-                        fail("timeout");
-                    }
-                } else {
-                    pSignal.triggered = false;
-                    break;
-                }
-            }
-        }
-        
-        log.debug("caught signal");
-    }
-    
-
     
     protected void setUp() throws Exception {
         directory = createTempDirectory();
@@ -118,6 +87,7 @@ public abstract class AbstractTestCase extends TestCase {
                 throw new IOException("could not create" + parent);
             }
         }
+        log.debug("writing " + file);
         final FileWriter writer = new FileWriter(file);
         writer.write(pText);
         writer.close();

@@ -27,9 +27,6 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
 
     private final static Log log = LogFactory.getLog(ReloadingClassLoaderTestCase.class);
     
-    private final Signal reloadSignal = new Signal();
-    private final Signal checkedSignal = new Signal();
-
     private ReloadingClassLoader classloader;
     private ReloadingListener listener;
     private FilesystemAlterationMonitor fam;
@@ -54,22 +51,9 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         super.setUp();
         
         classloader = new ReloadingClassLoader(this.getClass().getClassLoader());
-        listener = new ReloadingListener(directory) {
-            protected void needsReload(final boolean pReload) {
-                super.needsReload(pReload);
-                if (pReload) {
-                    synchronized(reloadSignal) {
-                        reloadSignal.triggered = true;
-                        reloadSignal.notify();
-                    }
-                } else {
-                    synchronized(checkedSignal) {
-                        checkedSignal.triggered = true;
-                        checkedSignal.notify();
-                    }
-                }
-            }  
-        };
+        listener = new ReloadingListener(directory);
+        
+        // listener.addListener(classloader);
         classloader.addListener(listener);
         
         fam = new FilesystemAlterationMonitor();
@@ -78,26 +62,26 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
     }
 
     public void testCreate() throws Exception {
-        waitForSignal(checkedSignal);
+        listener.waitForCheck();
 
         log.debug("creating class");
         
         delay();
         writeFile("jci/Simple.class", clazzSimple);
-        waitForSignal(checkedSignal);
+        listener.waitForCheck();
         
         final Object simple = classloader.loadClass("jci.Simple").newInstance();        
         assertTrue("Simple".equals(simple.toString()));        
     }
 
     public void testChange() throws Exception {        
-        waitForSignal(checkedSignal);
+        listener.waitForCheck();
 
         log.debug("creating class");
 
         delay();        
         writeFile("jci/Simple.class", clazzSimple);
-        waitForSignal(checkedSignal);
+        listener.waitForCheck();
 
         final Object simple = classloader.loadClass("jci.Simple").newInstance();        
         assertTrue("Simple".equals(simple.toString()));
@@ -106,20 +90,20 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         
         delay();        
         writeFile("jci/Simple.class", clazzSIMPLE);
-        waitForSignal(reloadSignal);
+        listener.waitForNotification();
     
         final Object SIMPLE = classloader.loadClass("jci.Simple").newInstance();        
         assertTrue("SIMPLE".equals(SIMPLE.toString()));        
     }
 
     public void testDelete() throws Exception {
-        waitForSignal(checkedSignal);
+        listener.waitForCheck();
 
         log.debug("creating class");
 
         delay();        
         writeFile("jci/Simple.class", clazzSimple);
-        waitForSignal(checkedSignal);
+        listener.waitForCheck();
 
         final Object simple = classloader.loadClass("jci.Simple").newInstance();        
         assertTrue("Simple".equals(simple.toString()));
@@ -128,7 +112,7 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         
         assertTrue(new File(directory, "jci/Simple.class").delete());
         
-        waitForSignal(reloadSignal);
+        listener.waitForNotification();
 
         try {
             classloader.loadClass("jci.Simple").newInstance();        
@@ -139,14 +123,14 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
     }
 
     public void testDeleteDependency() throws Exception {        
-        waitForSignal(checkedSignal);
+        listener.waitForCheck();
 
         log.debug("creating classes");
 
         delay();        
         writeFile("jci/Simple.class", clazzSimple);
         writeFile("jci/Extended.class", clazzExtended);
-        waitForSignal(checkedSignal);
+        listener.waitForCheck();
 
         final Object simple = classloader.loadClass("jci.Simple").newInstance();        
         assertTrue("Simple".equals(simple.toString()));
@@ -158,7 +142,7 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         
         assertTrue(new File(directory, "jci/Simple.class").delete());
         
-        waitForSignal(reloadSignal);
+        listener.waitForNotification();
 
         try {
             classloader.loadClass("jci.Extended").newInstance();

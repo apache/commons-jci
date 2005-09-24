@@ -18,7 +18,7 @@ package org.apache.commons.jci.monitor;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.jci.AbstractTestCase;
-import org.apache.commons.jci.listeners.AbstractListener;
+import org.apache.commons.jci.listeners.NotifyingListener;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,12 +29,10 @@ public final class FilesystemAlterationMonitorTestCase extends AbstractTestCase 
 
     private final static Log log = LogFactory.getLog(FilesystemAlterationMonitorTestCase.class);
 
-    private final Signal signal = new Signal();
-
     private FilesystemAlterationMonitor fam;
     private MyFilesystemAlterationListener listener;
 
-    private class MyFilesystemAlterationListener extends AbstractListener {
+    private class MyFilesystemAlterationListener extends NotifyingListener {
         private int started;
         private int stopped;
         private int createdFiles;
@@ -43,6 +41,7 @@ public final class FilesystemAlterationMonitorTestCase extends AbstractTestCase 
         private int createdDirs;
         private int changedDirs;
         private int deletedDirs;
+        private boolean changed;
  
         public MyFilesystemAlterationListener(final File pRepository) {
             super(pRepository);
@@ -50,10 +49,6 @@ public final class FilesystemAlterationMonitorTestCase extends AbstractTestCase 
         
         public ResourceStore getStore() {
             return null;
-        }
-
-        protected void needsReload( boolean pReload ) {
-            // prevent NPE
         }
 
         public int getChangedDirs() {
@@ -82,47 +77,93 @@ public final class FilesystemAlterationMonitorTestCase extends AbstractTestCase 
         }
                  
         public void onStart() {
+            changed = false;
             ++started;
+            log.debug("onStart");
         }
         public void onStop() {
             ++stopped;
-            synchronized(signal) {
-                signal.triggered = true;
-                signal.notify();
-            }
+            log.debug("onStop");
+            
+            checked(changed);
         }
         public void onCreateFile( final File file ) {
             ++createdFiles;
+            changed = true;
+            log.debug("onCreateFile " + file);
         }
         public void onChangeFile( final File file ) {                
             ++changedFiles;
+            changed = true;
+            log.debug("onChangeFile " + file);
         }
         public void onDeleteFile( final File file ) {
             ++deletedFiles;
+            changed = true;
+            log.debug("onDeleteFile " + file);
         }
         public void onCreateDirectory( final File file ) {                
             ++createdDirs;
+            changed = true;
+            log.debug("onCreateDirectory " + file);
         }
         public void onChangeDirectory( final File file ) {                
             ++changedDirs;
+            changed = true;
+            log.debug("onChangeDirectory " + file);
         }
         public void onDeleteDirectory( final File file ) {
             ++deletedDirs;
-        }       
+            changed = true;
+            log.debug("onDeleteDirectory " + file);
+        }
     }
 
-    private void start() {
+    private void start() throws Exception {
         fam = new FilesystemAlterationMonitor();
         listener = new MyFilesystemAlterationListener(directory);
         fam.addListener(listener);
         fam.start();
-        waitForSignal(signal);
+        listener.waitForFirstCheck();
     }
     
     private void stop() {
         fam.stop();
     }
     
+    public void testListenerDoublication() throws Exception {
+        fam = new FilesystemAlterationMonitor();
+        listener = new MyFilesystemAlterationListener(directory);
+        
+        fam.addListener(listener);
+        log.debug(fam);
+        assertTrue(fam.getListeners().size() == 1);
+        
+        fam.addListener(listener); 
+        log.debug(fam);        
+        assertTrue(fam.getListeners().size() == 1);
+    }
+
+    public void testDirectoryDoublication() throws Exception {
+        fam = new FilesystemAlterationMonitor();
+
+        fam.addListener(new MyFilesystemAlterationListener(directory)); 
+        log.debug(fam);
+        assertTrue(fam.getListenersFor(directory).size() == 1);
+        
+        fam.addListener(new MyFilesystemAlterationListener(directory)); 
+        log.debug(fam);        
+        assertTrue(fam.getListenersFor(directory).size() == 2);
+    }
+
+    public void testListener() throws Exception {
+        start();
+        log.debug(fam);
+        fam.removeListener(listener);
+        log.debug(fam);
+        stop();
+    }
+
     public void testCreateFileDetection() throws Exception {
         start();
         
@@ -130,7 +171,7 @@ public final class FilesystemAlterationMonitorTestCase extends AbstractTestCase 
         
         writeFile("file", "file");
         
-        waitForSignal(signal);
+        listener.waitForNotification();
         
         assertTrue(listener.createdFiles == 1);
         
@@ -144,7 +185,7 @@ public final class FilesystemAlterationMonitorTestCase extends AbstractTestCase 
 
         createDirectory("dir");
         
-        waitForSignal(signal);
+        listener.waitForNotification();
         
         assertTrue(listener.createdDirs == 1);
         
@@ -158,14 +199,14 @@ public final class FilesystemAlterationMonitorTestCase extends AbstractTestCase 
         
         final File file = writeFile("file", "file");
         
-        waitForSignal(signal);
+        listener.waitForNotification();
         
         assertTrue(listener.createdFiles == 1);
         
         file.delete();
         assertTrue(!file.exists());
 
-        waitForSignal(signal);
+        listener.waitForNotification();
         
         assertTrue(listener.deletedFiles == 1);
         
@@ -180,18 +221,16 @@ public final class FilesystemAlterationMonitorTestCase extends AbstractTestCase 
         final File dir = createDirectory("dir");
         createDirectory("dir/sub");
         
-        waitForSignal(signal);
+        listener.waitForNotification();
         
         assertTrue(listener.createdDirs == 2);
-
-        waitForSignal(signal);
 
         delay();
         
         FileUtils.deleteDirectory(dir);
         assertTrue(!dir.exists());
 
-        waitForSignal(signal);
+        listener.waitForNotification();
         
         assertTrue(listener.deletedDirs == 2);
 
@@ -205,15 +244,15 @@ public final class FilesystemAlterationMonitorTestCase extends AbstractTestCase 
         
         writeFile("file", "file");
         
-        waitForSignal(signal);
+        listener.waitForNotification();
         
         assertTrue(listener.createdFiles == 1);
 
-        waitForSignal(signal);
+        delay();
 
         writeFile("file", "changed file");
 
-        waitForSignal(signal);
+        listener.waitForNotification();
         
         assertTrue(listener.changedFiles == 1);
         
@@ -266,14 +305,7 @@ public final class FilesystemAlterationMonitorTestCase extends AbstractTestCase 
     
     public void testInterval() throws Exception {
         start();
-        fam.setInterval(1000);
+        fam.setInterval(100);
         stop();
-    }
-    
-    public void testListener() throws Exception {
-        start();
-        fam.removeListener(listener);
-        stop();
-    }
-    
+    }    
 }

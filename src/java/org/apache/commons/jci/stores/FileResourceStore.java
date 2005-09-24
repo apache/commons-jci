@@ -87,5 +87,10 @@ public final class FileResourceStore implements ResourceStore {
         final String fileName = pResourceName.replace('.', File.separatorChar) + ".class";
         return new File(root, fileName);
     }
+    
+    public String toString() {
+        return this.getClass().getName() + root.toString();
+    }
 
+    
 }

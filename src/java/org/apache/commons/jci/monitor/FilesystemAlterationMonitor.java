@@ -129,8 +129,27 @@ public final class FilesystemAlterationMonitor implements Runnable {
         }
     }
 
-    private Map listeners = new MultiHashMap();
-    private Map directories = new MultiHashMap();
+    public static class UniqueMultiHashMap extends MultiHashMap {
+
+        public UniqueMultiHashMap() {
+            super();
+        }
+
+        public UniqueMultiHashMap(Map copy) {
+            super(copy);
+        }
+
+        protected Collection createCollection( Collection copy ) {
+            if (copy != null) {
+                return new HashSet(copy);
+            }
+            return new HashSet();
+        }
+        
+    }
+    
+    private Map listeners = new UniqueMultiHashMap();
+    private Map directories = new UniqueMultiHashMap();
     private Map entries = new HashMap();
     private final Object mutexListeners = new Object();
     private final Object mutexRunning = new Object();
@@ -169,26 +188,37 @@ public final class FilesystemAlterationMonitor implements Runnable {
         final File directory = pListener.getRepository();
         synchronized (mutexListeners) {
             // listerner -> dir1, dir2, dir3
-            final MultiHashMap newListeners = new MultiHashMap(listeners);
+            final UniqueMultiHashMap newListeners = new UniqueMultiHashMap(listeners);
             newListeners.put(pListener, directory);
             listeners = newListeners;
             // directory -> listener1, listener2, listener3
-            final MultiHashMap newDirectories = new MultiHashMap(directories);
+            final UniqueMultiHashMap newDirectories = new UniqueMultiHashMap(directories);
             newDirectories.put(directory, pListener);
             directories = newDirectories;
         }
     }
 
+    public Collection getListeners() {
+        synchronized (mutexListeners) {
+            return listeners.keySet();
+        }
+    }
+
+    public Collection getListenersFor( final File pRepository ) {
+        synchronized (mutexListeners) {
+            return (Collection) directories.get(pRepository);
+        }
+    }
 
     public void removeListener( final FilesystemAlterationListener listener ) {
         synchronized (mutexListeners) {
             // listerner -> dir1, dir2, dir3
-            final MultiHashMap newListeners = new MultiHashMap(listeners);
+            final UniqueMultiHashMap newListeners = new UniqueMultiHashMap(listeners);
             Collection d = (Collection) newListeners.remove(listener);
             listeners = newListeners;
             if (d != null) {
                 // directory -> listener1, listener2, listener3
-                final MultiHashMap newDirectories = new MultiHashMap(directories);
+                final UniqueMultiHashMap newDirectories = new UniqueMultiHashMap(directories);
                 for (Iterator it = d.iterator(); it.hasNext();) {
                     newDirectories.remove(it.next());
                     entries.remove(d);
@@ -393,4 +423,12 @@ public final class FilesystemAlterationMonitor implements Runnable {
         }
         log.info("fam exiting");
     }
+
+
+
+    public String toString() {
+        return listeners.toString() + directories.toString();
+    }
+
+    
 }
