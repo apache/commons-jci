@@ -23,7 +23,7 @@ public final class JaninoJavaCompilerTestCase extends AbstractCompilerTestCase {
 
     public void testCompilationWarning() throws Exception {
         final JavaCompiler compiler = new JaninoJavaCompiler();
-        final CompilationResult result = compileWith(compiler, JavaSources.warning);
+        final CompilationResult result = compileWith(compiler, JavaSources.warning2);
         assertTrue(result.getWarnings().length == 1);
         assertTrue(result.getErrors().length == 0);
     }

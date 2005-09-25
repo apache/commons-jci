@@ -23,7 +23,7 @@ public final class EclipseJavaCompilerTestCase extends AbstractCompilerTestCase 
 
     public void testCompilationWarning() throws Exception {
         final JavaCompiler compiler = new EclipseJavaCompiler();
-        final CompilationResult result = compileWith(compiler, JavaSources.warning);
+        final CompilationResult result = compileWith(compiler, JavaSources.warning1);
         assertTrue(result.getWarnings().length == 1);
         assertTrue(result.getErrors().length == 0);
    }    

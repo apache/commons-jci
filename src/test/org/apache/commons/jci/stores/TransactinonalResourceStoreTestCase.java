@@ -20,23 +20,12 @@ package org.apache.commons.jci.stores;
 public final class TransactinonalResourceStoreTestCase extends AbstractStoreTestCase {
 
     public void testStore() {
-        final TransactionalResourceStore store = new TransactionalResourceStore(new MemoryResourceStore()) {
-            public void onStart() {
-            }
-            public void onStop() {
-            }
-        };
+        final TransactionalResourceStore store = new TransactionalResourceStore(new MemoryResourceStore());
         super.testStore(store);
-        assertTrue("[key]".equals(store.toString()));
     }
     
     public void testRemove() {
-        final TransactionalResourceStore store = new TransactionalResourceStore(new MemoryResourceStore()) {
-            public void onStart() {
-            }
-            public void onStop() {
-            }
-        };
+        final TransactionalResourceStore store = new TransactionalResourceStore(new MemoryResourceStore());
         super.testRemove(store);
     }
 }

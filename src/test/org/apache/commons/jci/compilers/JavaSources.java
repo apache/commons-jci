@@ -26,11 +26,24 @@ public interface JavaSources {
         + "  } \n"
         + "} \n";
 
-    String warning =
+    String warning1 =
         "package jci;\n"
         + "public class Simple { \n"
         + "  public int generateWarning() { \n"
         + "    return new java.util.Date().getHours(); \n"
+        + "  }\n"
+        + "  public String toString() { \n"
+        + "    return \"Simple\"; \n"
+        + "  } \n"
+        + "} \n";
+
+    String warning2 =
+        "package jci;\n"
+        + "public class Simple { \n"
+        + "  public static void generate() { \n"
+        + "  }\n"
+        + "  public static void generate2() { \n"
+        + "    generate();\n"
         + "  }\n"
         + "  public String toString() { \n"
         + "    return \"Simple\"; \n"

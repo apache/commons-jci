@@ -21,9 +21,11 @@ public final class GroovyJavaCompilerTestCase extends AbstractCompilerTestCase {
         assertTrue(result.getErrors().length == 1);
     }
 
-    public void testCompilationWarning() throws Exception {
-        final JavaCompiler compiler = new GroovyJavaCompiler();
-        final CompilationResult result = compileWith(compiler, GroovySources.warning);
-        assertTrue(result.getWarnings().length == 1);
-        assertTrue(result.getErrors().length == 0);
-    }}
+// as for now Groovy does not support any warnings at all
+//    public void testCompilationWarning() throws Exception {
+//        final JavaCompiler compiler = new GroovyJavaCompiler();
+//        final CompilationResult result = compileWith(compiler, GroovySources.warning);
+//        assertTrue(result.getWarnings().length == 1);
+//        assertTrue(result.getErrors().length == 0);
+//    }
+}

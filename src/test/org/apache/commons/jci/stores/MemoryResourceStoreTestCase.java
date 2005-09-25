@@ -22,7 +22,6 @@ public final class MemoryResourceStoreTestCase extends AbstractStoreTestCase {
     public void testStore() {
         final ResourceStore store = new MemoryResourceStore();
         super.testStore(store);
-        assertTrue("[key]".equals(store.toString()));
     }
     
     public void testRemove() {

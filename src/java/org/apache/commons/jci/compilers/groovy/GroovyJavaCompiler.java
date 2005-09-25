@@ -15,6 +15,7 @@ import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.CompilationUnit;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.ErrorCollector;
+import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 import org.codehaus.groovy.control.SourceUnit;
 import org.codehaus.groovy.control.messages.Message;
 import org.codehaus.groovy.control.messages.WarningMessage;
@@ -61,21 +62,27 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
                 final byte[] bytes = clazz.getBytes();
                 store.write(name, bytes);
             }
-        } catch (final CompilationFailedException e) {
-            e.printStackTrace();
-            final ErrorCollector col = e.getUnit().getErrorCollector();
+        } catch (final MultipleCompilationErrorsException e) {
+            final ErrorCollector col = e.getErrorCollector();
 
             final Collection warnings = col.getWarnings();
-            for (final Iterator it = warnings.iterator(); it.hasNext();) {
-                final WarningMessage warning = (WarningMessage) it.next();
-                problems.add(new GroovyCompilationProblem(warning));
+            if (warnings != null) {
+                for (final Iterator it = warnings.iterator(); it.hasNext();) {
+                    final WarningMessage warning = (WarningMessage) it.next();
+                    problems.add(new GroovyCompilationProblem(warning));
+                }
             }
 
             final Collection errors = col.getErrors();
-            for (final Iterator it = errors.iterator(); it.hasNext();) {
-                final Message message = (Message) it.next();
-                problems.add(new GroovyCompilationProblem(message));                
+            if (errors != null) {
+                for (final Iterator it = errors.iterator(); it.hasNext();) {
+                    final Message message = (Message) it.next();
+                    problems.add(new GroovyCompilationProblem(message));                
+                }
             }
+        } catch (CompilationFailedException e) {
+            e.printStackTrace();
+            throw new RuntimeException("no expected");
         }
         
         return new CompilationResult(problems);
