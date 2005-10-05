@@ -24,6 +24,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.jci.ReloadingClassLoader;
 import org.apache.commons.jci.stores.MemoryResourceStore;
 import org.apache.commons.jci.stores.ResourceStore;
+import org.apache.commons.jci.stores.Transactional;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -67,6 +68,10 @@ public class ReloadingListener extends ResourceStoringListener {
                 + " deleted:" + deleted.size()
                 + " resources");
         
+        if (store instanceof Transactional) {
+            ((Transactional)store).onStart();
+        }
+        
         if (deleted.size() > 0) {
             for (Iterator it = deleted.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
@@ -109,6 +114,10 @@ public class ReloadingListener extends ResourceStoringListener {
                 }
             }
             reload = true;
+        }
+
+        if (store instanceof Transactional) {
+            ((Transactional)store).onStop();
         }
 
         checked(reload);
