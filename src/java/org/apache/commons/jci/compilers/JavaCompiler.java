@@ -28,12 +28,6 @@ public interface JavaCompiler {
     
     void setCompilationProblemHandler( final CompilationProblemHandler pHandler );
 
-    // addCompilationProblemHandler( CompilationProblemHandler pHandler );
-    // removeCompilationProblemHandler( CompilationProblemHandler pHandler );
-
-    // addCompilationProblemListener( CompilationProblemListener pListener );
-    // removeCompilationProblemListener( CompilationProblemListener pListener );
-
     CompilationResult compile(
             final String[] pClazzNames,
             final ResourceReader pReader,

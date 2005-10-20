@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.Map;
 import org.apache.commons.jci.compilers.AbstractJavaCompiler;
 import org.apache.commons.jci.compilers.CompilationResult;
+import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.problems.CompilationProblemHandler;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
@@ -55,7 +56,7 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 
     private final static Log log = LogFactory.getLog(JaninoJavaCompiler.class);
 
-    private static class CompilingIClassLoader extends IClassLoader {
+    private class CompilingIClassLoader extends IClassLoader {
 
         private final Map types = new HashMap();
         private final ResourceReader resourceReader;
@@ -92,12 +93,20 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
                 final UnitCompiler uc = new UnitCompiler(unit, this);
                 uc.setCompileErrorHandler(new ErrorHandler() {
                     public void handleError(final String pMessage, final Location pOptionalLocation) throws CompileException {
-                        problems.add(new JaninoCompilationProblem(pOptionalLocation, pMessage, true));
+                        final CompilationProblem problem = new JaninoCompilationProblem(pOptionalLocation, pMessage, true);
+                        if (problemHandler != null) {
+                            problemHandler.handle(problem);
+                        }
+                        problems.add(problem);
                     }
                 });
                 uc.setWarningHandler(new WarningHandler() {
                     public void handleWarning(final String pHandle, final String pMessage, final Location pOptionalLocation) {
-                        problems.add(new JaninoCompilationProblem(pOptionalLocation, pMessage, false));
+                        final CompilationProblem problem = new JaninoCompilationProblem(pOptionalLocation, pMessage, false);
+                        if (problemHandler != null) {
+                            problemHandler.handle(problem);
+                        }
+                        problems.add(problem);
                     }
                 });
                 log.debug("compile " + className);

@@ -17,9 +17,19 @@ package org.apache.commons.jci.problems;
 
 
 /**
+ * A CompilationProblemHandler gets access to a problem
+ * as soon as the problem is available while the
+ * CompilationResult only represents a summary at the
+ * end.
+ * The handler can be used to asynchronously update a
+ * GUI or stop compilation by returning false (e.g.
+ * when a maximum number of erros has been reached)
+ * 
+ * NOTE:
+ * has to be supported by the compiler implementation!!
+ * 
  * @author tcurdt
- *
  */
 public interface CompilationProblemHandler {
-    void handle( final CompilationProblem pProblem );
+    boolean handle( final CompilationProblem pProblem );
 }

@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.jci.compilers.AbstractJavaCompiler;
 import org.apache.commons.jci.compilers.CompilationResult;
+import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.logging.Log;
@@ -69,7 +70,11 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
             if (warnings != null) {
                 for (final Iterator it = warnings.iterator(); it.hasNext();) {
                     final WarningMessage warning = (WarningMessage) it.next();
-                    problems.add(new GroovyCompilationProblem(warning));
+                    final CompilationProblem problem = new GroovyCompilationProblem(warning); 
+                    if (problemHandler != null) {
+                        problemHandler.handle(problem);
+                    }
+                    problems.add(problem);
                 }
             }
 
@@ -77,7 +82,11 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
             if (errors != null) {
                 for (final Iterator it = errors.iterator(); it.hasNext();) {
                     final Message message = (Message) it.next();
-                    problems.add(new GroovyCompilationProblem(message));                
+                    final CompilationProblem problem = new GroovyCompilationProblem(message); 
+                    if (problemHandler != null) {
+                        problemHandler.handle(problem);
+                    }
+                    problems.add(problem);
                 }
             }
         } catch (CompilationFailedException e) {
