@@ -87,6 +87,7 @@ public class CompilingListener extends ReloadingListener {
         if (deleted.size() > 0) {
             for (Iterator it = deleted.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
+                // FIXME: does not remove nested classes
                 transactionalStore.remove(ReloadingClassLoader.clazzName(repository, file));
             }
             reload = true;

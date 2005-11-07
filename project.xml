@@ -68,13 +68,13 @@
     </developer>
   </developers>
 
-  <contributers>
-    <contributer>
+  <contributors>
+    <contributor>
       <name>Joerk Heinicke</name>
       <id>jheinicke</id>
       <email>joerg.heinicke at gmx.de</email>
-    </contributer>
-  </contributers>
+    </contributor>
+  </contributors>
 
   <dependencies>
 

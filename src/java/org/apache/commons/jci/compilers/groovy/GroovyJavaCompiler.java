@@ -38,7 +38,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
         final CompilationUnit unit = new CompilationUnit(configuration);
         final SourceUnit[] source = new SourceUnit[clazzNames.length];
         for (int i = 0; i < source.length; i++) {
-            final String filename = clazzNames[i].replace('.','/') + ".java";
+            final String filename = clazzNames[i].replace('.','/') + ".groovy";
             log.debug("adding source unit " + filename);
             source[i] = new SourceUnit(
                     filename,
