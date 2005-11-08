@@ -55,17 +55,56 @@ public class ReloadingClassLoader extends ClassLoader implements NotificationLis
         pListener.setNotificationListener(null);
     }
     
-    private void addResourceStore(final ResourceStore pStore) {
-        final int n = stores.length;
-        final ResourceStore[] newStores = new ResourceStore[n + 1];
-        System.arraycopy(stores, 0, newStores, 0, n);
-        newStores[n] = pStore;
-        stores = newStores;
-        delegate = new ResourceStoreClassLoader(parent, stores);
+    private boolean addResourceStore(final ResourceStore pStore) {
+        try {        
+            final int n = stores.length;
+            final ResourceStore[] newStores = new ResourceStore[n + 1];
+            System.arraycopy(stores, 0, newStores, 0, n);
+            newStores[n] = pStore;
+            stores = newStores;
+            delegate = new ResourceStoreClassLoader(parent, stores);
+            return true;
+        } catch ( final Exception e ) {
+            // FIXME: rethrow?
+        }
+        return false;
     }
 
-    private void removeResourceStore(final ResourceStore pStore) {
-        //FIXME
+    private boolean removeResourceStore(final ResourceStore pStore) {
+        try {
+            final int n = stores.length;
+            int i = 0;
+                        
+            //find the pStore and index position with var i
+            while ( ( i <= n )  && ( stores[i] != pStore ) ) {
+                i++;
+            }
+            
+            
+            //pStore was not found
+            if ( i == n ) {
+                throw new Exception( "pStore was not found" );
+            }
+            
+            // if stores length > 1 then array copy old values, else create new empty store 
+            if (n > 1) {            
+                final ResourceStore[] newStores = new ResourceStore[n - 1];
+                
+                System.arraycopy(stores, 0, newStores, 0, i-1);
+                System.arraycopy(stores, i, newStores, i, newStores.length - 1);
+                
+                stores = newStores;
+                delegate = new ResourceStoreClassLoader(parent, stores);
+            } else {
+                stores = new ResourceStore[0];
+            }
+            return true;
+            
+        } catch ( final Exception e ) {
+            // FIXME: re-throw?
+        }
+                
+        return false;
     }
     
     /*
