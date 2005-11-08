@@ -106,9 +106,10 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
     public org.apache.commons.jci.compilers.CompilationResult compile(
             final String[] pClazzNames,
             final ResourceReader pReader,
-            final ResourceStore pStore
+            final ResourceStore pStore,
+            final ClassLoader classLoader
             ) {
-
+        
         final Map settingsMap = settings.getMap();
         final Set clazzIndex = new HashSet();
         ICompilationUnit[] compilationUnits = new ICompilationUnit[pClazzNames.length];
@@ -163,7 +164,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                     }
 
                     final String resourceName = clazzName.replace('.', '/') + ".class";
-                    final InputStream is = this.getClass().getClassLoader().getResourceAsStream(resourceName);
+                    final InputStream is = classLoader.getResourceAsStream(resourceName);
                     if (is != null) {
                         final byte[] buffer = new byte[8192];
                         final ByteArrayOutputStream baos = new ByteArrayOutputStream(buffer.length);
@@ -201,7 +202,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
 
             private boolean isPackage( final String clazzName ) {
                 final String resourceName = clazzName.replace('.', '/') + ".class";
-                final URL resource = this.getClass().getClassLoader().getResource(resourceName);
+                final URL resource = classLoader.getResource(resourceName);
                 return resource == null;
             }
 

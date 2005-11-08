@@ -1,6 +1,8 @@
 package org.apache.commons.jci.compilers;
 
 import org.apache.commons.jci.problems.CompilationProblemHandler;
+import org.apache.commons.jci.readers.ResourceReader;
+import org.apache.commons.jci.stores.ResourceStore;
 
 
 public abstract class AbstractJavaCompiler implements JavaCompiler {
@@ -9,6 +11,24 @@ public abstract class AbstractJavaCompiler implements JavaCompiler {
     
     public void setCompilationProblemHandler( final CompilationProblemHandler pHandler ) {
         problemHandler = pHandler;
+    }
+    
+    public CompilationResult compile(
+                              final String[] pClazzNames,
+                              final ResourceReader pReader,
+                              final ResourceStore pStore
+                              ) {
+        
+        ClassLoader classLoader = null;
+
+        classLoader = Thread.currentThread().getContextClassLoader();
+        
+        if ( classLoader == null ) {
+            classLoader = this.getClass().getClassLoader();
+        }
+
+        
+        return compile( pClazzNames, pReader, pStore, classLoader );               
     }
     
 }

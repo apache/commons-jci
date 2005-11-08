@@ -63,8 +63,8 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
         private final Map classes;
         private final Collection problems = new ArrayList();
 
-        private CompilingIClassLoader(final ResourceReader pResourceReader, final Map pClasses) {
-            super(new ClassLoaderIClassLoader());
+        private CompilingIClassLoader(final ResourceReader pResourceReader, final Map pClasses, final ClassLoader classLoader) {
+            super( new ClassLoaderIClassLoader( classLoader ) );
             resourceReader = pResourceReader;
             classes = pClasses;
             super.postConstruct();
@@ -140,10 +140,12 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
     public CompilationResult compile(
             final String[] pClasses,
             final ResourceReader pResourceReader,
-            final ResourceStore pStore
+            final ResourceStore pStore,
+            final ClassLoader classLoader
             ) {
-        final Map classFilesByName = new HashMap();
-        final CompilingIClassLoader icl = new CompilingIClassLoader(pResourceReader, classFilesByName);
+        final Map classFilesByName = new HashMap();       
+        
+        final CompilingIClassLoader icl = new CompilingIClassLoader(pResourceReader, classFilesByName, classLoader);
         for (int i = 0; i < pClasses.length; i++) {
             log.debug("compiling " + pClasses[i]);
             icl.loadIClass(Descriptor.fromClassName(pClasses[i]));

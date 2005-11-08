@@ -29,11 +29,11 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
     public CompilationResult compile(
             final String[] clazzNames,
             final ResourceReader reader,
-            final ResourceStore store
+            final ResourceStore store,
+            final ClassLoader classLoader
             ) {
      
         final CompilerConfiguration configuration = new CompilerConfiguration();
-        final ClassLoader classloader = this.getClass().getClassLoader();
         final ErrorCollector collector = new ErrorCollector(configuration);
         final CompilationUnit unit = new CompilationUnit(configuration);
         final SourceUnit[] source = new SourceUnit[clazzNames.length];
@@ -44,7 +44,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
                     filename,
                     new String(reader.getContent(filename)), // FIXME delay the read
                     configuration,
-                    classloader,
+                    classLoader,
                     collector
                     );
             unit.addSource(source[i]);
