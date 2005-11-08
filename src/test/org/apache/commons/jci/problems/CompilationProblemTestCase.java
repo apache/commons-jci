@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import org.apache.commons.jci.compilers.eclipse.EclipseCompilationProblem;
 import org.apache.commons.jci.compilers.groovy.GroovyCompilationProblem;
 import org.apache.commons.jci.compilers.janino.JaninoCompilationProblem;
+import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.SourceUnit;
 import org.codehaus.groovy.control.messages.Message;
 import org.codehaus.groovy.control.messages.SyntaxErrorMessage;
@@ -104,7 +105,7 @@ public final class CompilationProblemTestCase extends TestCase {
         if (pError) {
             message =
                 new SyntaxErrorMessage(new SyntaxException(MESSAGE, LINE, COLUMN),
-                                       new SourceUnit(FILENAME, "", null, null, null));
+                                       new SourceUnit(FILENAME, "", new CompilerConfiguration() , null, null));
         } else {
             message =
                 new WarningMessage(WarningMessage.NONE, MESSAGE, null, null);
