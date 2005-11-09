@@ -1,6 +1,5 @@
 package org.apache.commons.jci.compilers.groovy;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -35,7 +34,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
      
         final CompilerConfiguration configuration = new CompilerConfiguration();
         final ErrorCollector collector = new ErrorCollector(configuration);
-        final CompilationUnit unit = new CompilationUnit(configuration);
+        final CompilationUnit unit = new CompilationUnit(configuration, null, classLoader);
         final SourceUnit[] source = new SourceUnit[clazzNames.length];
         for (int i = 0; i < source.length; i++) {
             final String filename = clazzNames[i].replace('.','/') + ".groovy";
@@ -59,9 +58,8 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
             final List classes = unit.getClasses();
             for (final Iterator it = classes.iterator(); it.hasNext();) {
                 final GroovyClass clazz = (GroovyClass) it.next();
-                final String name = clazz.getName().replace('.', File.separatorChar) + ".class";
                 final byte[] bytes = clazz.getBytes();
-                store.write(name, bytes);
+                store.write(clazz.getName(), bytes);
             }
         } catch (final MultipleCompilationErrorsException e) {
             final ErrorCollector col = e.getErrorCollector();

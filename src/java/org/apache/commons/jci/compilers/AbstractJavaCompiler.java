@@ -19,16 +19,13 @@ public abstract class AbstractJavaCompiler implements JavaCompiler {
                               final ResourceStore pStore
                               ) {
         
-        ClassLoader classLoader = null;
-
-        classLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         
-        if ( classLoader == null ) {
+        if (classLoader == null) {
             classLoader = this.getClass().getClassLoader();
         }
-
         
-        return compile( pClazzNames, pReader, pStore, classLoader );               
+        return compile(pClazzNames, pReader, pStore, classLoader);
     }
     
 }
