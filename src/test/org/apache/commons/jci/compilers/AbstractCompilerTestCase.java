@@ -8,6 +8,9 @@ import org.apache.commons.jci.stores.FileResourceStore;
 
 public abstract class AbstractCompilerTestCase extends AbstractTestCase {
 
+    protected void setUp() throws Exception {
+        super.setUp();
+    }
         
     protected CompilationResult compileWith( final JavaCompiler pCompiler, final String pSource ) throws Exception {
         final File srcDir = new File(directory, "src");
@@ -19,7 +22,7 @@ public abstract class AbstractCompilerTestCase extends AbstractTestCase {
         final FileResourceReader src = new FileResourceReader(srcDir);
         final FileResourceStore dst = new FileResourceStore(dstDir);
         
-        writeFile("src/jci/Simple.java", pSource);
+        writeFile("src/jci/Simple." + extension, pSource);
         
         return pCompiler.compile(
                 new String[] { "jci.Simple"},

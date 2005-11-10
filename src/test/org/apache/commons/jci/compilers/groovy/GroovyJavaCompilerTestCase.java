@@ -7,6 +7,12 @@ import org.apache.commons.jci.compilers.JavaCompiler;
 
 
 public final class GroovyJavaCompilerTestCase extends AbstractCompilerTestCase {
+    
+    protected void setUp() throws Exception {
+        super.setUp();
+        extension = "groovy";
+    }   
+    
     public void testSimpleCompilation() throws Exception {
         final JavaCompiler compiler = new GroovyJavaCompiler();
         final CompilationResult result = compileWith(compiler, GroovySources.simple);

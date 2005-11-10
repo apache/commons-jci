@@ -7,6 +7,12 @@ import org.apache.commons.jci.compilers.JavaSources;
 
 
 public final class JaninoJavaCompilerTestCase extends AbstractCompilerTestCase {
+    
+    protected void setUp() throws Exception {
+        super.setUp();
+        extension = "java";
+    }   
+    
     public void testSimpleCompilation() throws Exception {
         final JavaCompiler compiler = new JaninoJavaCompiler();
         final CompilationResult result = compileWith(compiler, JavaSources.simple);

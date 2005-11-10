@@ -29,6 +29,8 @@ import org.apache.commons.logging.LogFactory;
 public abstract class AbstractTestCase extends TestCase {
 
     private final static Log log = LogFactory.getLog(AbstractTestCase.class);
+    
+    protected String extension = "java";
 
     protected File directory;
 

@@ -30,7 +30,6 @@ import org.apache.commons.jci.compilers.AbstractJavaCompiler;
 import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jdt.core.compiler.IProblem;
@@ -72,7 +71,8 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         CompilationUnit(final ResourceReader pReader, final String pClazzName) {
             reader = pReader;
             clazzName = pClazzName;
-            fileName = StringUtils.replaceChars(clazzName, '.', '/') + ".java";
+            clazzName.replace('.', '/');
+            fileName = clazzName.replace('.', '/') + ".java";
             int dot = clazzName.lastIndexOf('.');
             if (dot > 0) {
                 typeName = clazzName.substring(dot + 1).toCharArray();
