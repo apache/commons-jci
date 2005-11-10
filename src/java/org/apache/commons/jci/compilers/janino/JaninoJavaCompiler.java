@@ -28,7 +28,6 @@ import java.util.Map;
 import org.apache.commons.jci.compilers.AbstractJavaCompiler;
 import org.apache.commons.jci.compilers.CompilationResult;
 import org.apache.commons.jci.problems.CompilationProblem;
-import org.apache.commons.jci.problems.CompilationProblemHandler;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.logging.Log;
@@ -158,22 +157,5 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
         
         return new CompilationResult(icl.getProblems());
     }
-
-    private static final class CompilationProblemHandlerAdapter implements ErrorHandler, WarningHandler {
-        private final CompilationProblemHandler problemHandler;
-
-        public CompilationProblemHandlerAdapter(final CompilationProblemHandler pProblemHandler) {
-            problemHandler = pProblemHandler;
-        }
-
-        public void handleError(final String pMessage, final Location pOptionalLocation) throws CompileException {
-            problemHandler.handle(new JaninoCompilationProblem(pOptionalLocation, pMessage, true));
-        }
-
-        public void handleWarning(final String pHandle, final String pMessage, final Location pOptionalLocation) {
-            problemHandler.handle(new JaninoCompilationProblem(pOptionalLocation, pMessage, false));
-        }
-
-    }
-
+    
 }
