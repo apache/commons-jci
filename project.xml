@@ -71,12 +71,10 @@
   <contributors>
     <contributor>
       <name>Joerk Heinicke</name>
-      <id>jheinicke</id>
       <email>joerg.heinicke at gmx.de</email>
     </contributor>
     <contributor>
       <name>Mark Proctor</name>
-      <id>mprotor</id>
       <email>mproctor at codehaus.org</email>
     </contributor>
   </contributors>
