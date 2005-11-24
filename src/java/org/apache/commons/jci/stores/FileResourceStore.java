@@ -22,6 +22,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.io.IOUtils;
 
 
@@ -87,10 +89,26 @@ public final class FileResourceStore implements ResourceStore {
         final String fileName = pResourceName.replace('.', File.separatorChar) + ".class";
         return new File(root, fileName);
     }
+
+    public String[] list() {
+        final List files = new ArrayList();
+        list(root, files);
+        return (String[]) files.toArray(new String[files.size()]);
+    }
+
+    private void list(final File pFile, final List pFiles) {
+        if (pFile.isDirectory()) {
+            final File[] directoryFiles = pFile.listFiles();
+            for (int i=0; i < directoryFiles.length; i++) {
+                list(directoryFiles[i], pFiles);
+            }
+        } else {
+            pFiles.add(pFile.getAbsolutePath().substring(root.getAbsolutePath().length()+1));
+        }
+    }
     
     public String toString() {
         return this.getClass().getName() + root.toString();
     }
 
-    
 }

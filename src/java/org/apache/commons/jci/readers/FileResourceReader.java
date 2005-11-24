@@ -16,6 +16,8 @@
 package org.apache.commons.jci.readers;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
@@ -25,22 +27,39 @@ import org.apache.commons.io.FileUtils;
  */
 public final class FileResourceReader implements ResourceReader {
 
-    private final File base;
+    private final File root;
 
-    public FileResourceReader( final File pBase ) {
-        base = pBase;        
+    public FileResourceReader( final File pRoot ) {
+        root = pRoot;        
     }
     
     public boolean isAvailable(String filename) {
-        return new File(base,filename).exists();
+        return new File(root,filename).exists();
     }
 
     public char[] getContent( final String fileName ) {
         try {
             return FileUtils.readFileToString(
-                    new File(base,fileName), "UTF-8").toCharArray();
+                    new File(root,fileName), "UTF-8").toCharArray();
         } catch(Exception e) {
         }
         return null;
     }
+    
+    public String[] list() {
+        final List files = new ArrayList();
+        list(root, files);
+        return (String[]) files.toArray(new String[files.size()]);
+    }
+
+    private void list(final File pFile, final List pFiles) {
+        if (pFile.isDirectory()) {
+            final File[] directoryFiles = pFile.listFiles();
+            for (int i=0; i < directoryFiles.length; i++) {
+                list(directoryFiles[i], pFiles);
+            }
+        } else {
+            pFiles.add(pFile.getAbsolutePath().substring(root.getAbsolutePath().length()+1));
+        }
+    }   
 }

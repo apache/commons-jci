@@ -10,5 +10,4 @@ o make suffixes matching (*.java, *.class) configurable
 o turn the JavaCompilerFactory into an interface and maybe provide a simple default impl
 o documentation
 o dependency analysis for proper re-try after errors
-o store resources as org/apache/my.class instead of org.apache.my
 o removing of anonymous classes if parent class is being removed

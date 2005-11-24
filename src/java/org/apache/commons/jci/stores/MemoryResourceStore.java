@@ -15,9 +15,11 @@
  */
 package org.apache.commons.jci.stores;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -33,19 +35,33 @@ public final class MemoryResourceStore implements ResourceStore {
 	private final Map store = new HashMap();
 	
 	public byte[] read( final String resourceName ) {
-		return (byte[]) store.get(resourceName);
+		return (byte[]) store.get(resourceName.replace('.', '/') + ".class");
 	}
 
 	public void write( final String resourceName, final byte[] clazzData ) {
 		log.debug("storing resource " + resourceName + "(" + clazzData.length + ")");
-		store.put(resourceName, clazzData);
+		store.put(resourceName.replace('.', '/') + ".class", clazzData);
 	}
 	
     public void remove( final String resourceName ) {
         log.debug("removing resource " + resourceName);
-        store.remove(resourceName);
+        store.remove(resourceName.replace('.', '/') + ".class");
     }
 
+    public String[] list() {
+        if (store == null) {
+            return new String[0];
+        }
+        final List names = new ArrayList();
+        
+        for (final Iterator it = store.keySet().iterator(); it.hasNext();) {
+            final String name = (String) it.next();
+            names.add(name.replace('/', '.').substring(0, name.length()-6));
+        }
+
+        return (String[]) names.toArray(new String[store.size()]);
+    }
+    
     public String toString() {
         return this.getClass().getName() + store.toString();
     }
