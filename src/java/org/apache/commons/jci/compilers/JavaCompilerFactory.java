@@ -16,6 +16,7 @@
 package org.apache.commons.jci.compilers;
 
 import org.apache.commons.jci.compilers.eclipse.EclipseJavaCompiler;
+import org.apache.commons.jci.compilers.eclipse.EclipseJavaCompilerSettings;
 import org.apache.commons.jci.compilers.groovy.GroovyJavaCompiler;
 import org.apache.commons.jci.compilers.janino.JaninoJavaCompiler;
 
@@ -32,6 +33,16 @@ public final class JavaCompilerFactory {
     }
     
     private JavaCompilerFactory() {
+    }
+    
+    public JavaCompiler createCompiler(final JavaCompilerSettings pSettings) {
+        if (pSettings instanceof EclipseJavaCompilerSettings) {
+            return new EclipseJavaCompiler((EclipseJavaCompilerSettings) pSettings);
+        }
+        
+        // FIXME create settings for the other compilers and add here
+        
+        return null;
     }
     
     /**

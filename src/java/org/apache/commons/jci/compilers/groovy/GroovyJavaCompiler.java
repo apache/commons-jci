@@ -1,5 +1,6 @@
 package org.apache.commons.jci.compilers.groovy;
 
+import groovy.lang.GroovyClassLoader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -16,6 +17,7 @@ import org.codehaus.groovy.control.CompilationUnit;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.ErrorCollector;
 import org.codehaus.groovy.control.MultipleCompilationErrorsException;
+import org.codehaus.groovy.control.Phases;
 import org.codehaus.groovy.control.SourceUnit;
 import org.codehaus.groovy.control.messages.Message;
 import org.codehaus.groovy.control.messages.WarningMessage;
@@ -31,19 +33,18 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
             final ResourceStore store,
             final ClassLoader classLoader
             ) {
-     
         final CompilerConfiguration configuration = new CompilerConfiguration();
         final ErrorCollector collector = new ErrorCollector(configuration);
-        final CompilationUnit unit = new CompilationUnit(configuration, null, classLoader);
+        final GroovyClassLoader groovyClassLoader = new GroovyClassLoader(classLoader);
+        final CompilationUnit unit = new CompilationUnit(configuration, null, groovyClassLoader);
         final SourceUnit[] source = new SourceUnit[clazzNames.length];
         for (int i = 0; i < source.length; i++) {
             final String filename = clazzNames[i].replace('.','/') + ".groovy";
-            log.debug("adding source unit " + filename);
             source[i] = new SourceUnit(
                     filename,
                     new String(reader.getContent(filename)), // FIXME delay the read
                     configuration,
-                    classLoader,
+                    groovyClassLoader,
                     collector
                     );
             unit.addSource(source[i]);
@@ -53,7 +54,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
 
         try {
             log.debug("compiling");
-            unit.compile();
+            unit.compile(Phases.CLASS_GENERATION);
             
             final List classes = unit.getClasses();
             for (final Iterator it = classes.iterator(); it.hasNext();) {
@@ -63,7 +64,6 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
             }
         } catch (final MultipleCompilationErrorsException e) {
             final ErrorCollector col = e.getErrorCollector();
-
             final Collection warnings = col.getWarnings();
             if (warnings != null) {
                 for (final Iterator it = warnings.iterator(); it.hasNext();) {
@@ -88,7 +88,6 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
                 }
             }
         } catch (CompilationFailedException e) {
-            e.printStackTrace();
             throw new RuntimeException("no expected");
         }
         
