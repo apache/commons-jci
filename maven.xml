@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<project
+  xmlns:j="jelly:core"
+  xmlns:util="jelly:util"
+  xmlns:ant="jelly:ant"
+  >
+
+<goal name="jar:minimal-dependency-jars">
+  <ant:echo>dep: ${maven.dependency.classpath}</ant:echo> 
+  <ant:echo>build: ${maven.build.dir}</ant:echo> 
+</goal>
+
+<goal name="jar:embeddable-jar">
+  <j:set var="embeddable.jar.dir" value="${maven.build.dir}/embeddable/jar"/>
+  <j:set var="embeddable.src.dir" value="${maven.build.dir}/embeddable/src"/>
+  <j:set var="embeddable.dst.dir" value="${maven.build.dir}/embeddable/dst"/>
+
+  <delete dir="${embeddable.jar.dir}"/>
+  <delete dir="${embeddable.src.dir}"/>
+  <delete dir="${embeddable.dst.dir}"/>
+
+  <mkdir dir="${embeddable.jar.dir}"/>
+  <mkdir dir="${embeddable.src.dir}"/>
+  <mkdir dir="${embeddable.dst.dir}"/>
+
+  <j:forEach var="lib" items="${pom.artifacts}">
+    <j:set var="dep" value="${lib.dependency}"/>
+    <ant:copy todir="${embeddable.jar.dir}" file="${lib.path}"/>
+  </j:forEach>
+
+  <unzip dest="${embeddable.src.dir}">
+    <fileset dir="${embeddable.jar.dir}">
+      <include name="*.jar"/>
+    </fileset>
+  </unzip>
+
+<!--
+  <copy toDir="${embeddable.dir}/META-INF">
+    <fileset dir="${basedir}">
+      <include name="ASM-LICENSE.txt"/>
+    </fileset>
+  </copy>
+-->
+
+  <taskdef name="jarjar"
+           classname="com.tonicsystems.jarjar.JarJarTask"
+           classpath="${pom.getDependencyPath('com.tonicsystems:jarjar')}"/>
+  <jarjar jarfile="${maven.build.dir}/${pom.artifactId}-${pom.currentVersion}-embeddable.jar" 
+          manifest="${embeddable.src.dir}/META-INF/MANIFEST.MF">
+    <fileset dir="${embeddable.src.dir}">
+      <exclude name="com/tonicsystems/jarjar/**"/>       
+      <exclude name="junit/**"/>       
+      <exclude name="net/sf/maven_plugins/cobertura/**"/>       
+      <exclude name="org/apache/commons/logging/**"/>
+    </fileset>
+    <rule pattern="org.apache.commons.io.**" result="jarjar.orgapachecommonsio.@1"/>
+    <rule pattern="org.apache.commons.lang.**" result="jarjar.orgapachecommonslang.@1"/>
+    <rule pattern="org.apache.commons.collections.**" result="jarjar.orgapachecommonscollections.@1"/>
+    <rule pattern="org.codehaus.groovy.**" result="jarjar.orgcodehausgroovy.@1"/>
+    <rule pattern="groovyjarjarantlr.**" result="jarjar.groovyantlr.@1"/>
+    <rule pattern="groovyjarjarasm.**" result="jarjar.groovyasm.@1"/>
+    <rule pattern="groovy.**" result="jarjar.groovy.@1"/>
+    <rule pattern="org.codehaus.janino.**" result="jarjar.orgcodehausjanino.@1"/>
+    <rule pattern="org.eclipse.jdt.**" result="jarjar.orgeclipsejdt.@1"/>
+    <rule pattern="uk.co.wilson.**" result="jarjar.ukcowilson.@1"/>
+  </jarjar>
+
+</goal>
+
+</project>
