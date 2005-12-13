@@ -11,6 +11,8 @@
 </goal>
 
 <goal name="jar:embeddable-jar">
+  <attainGoal name="jar:jar"/>
+
   <j:set var="embeddable.jar.dir" value="${maven.build.dir}/embeddable/jar"/>
   <j:set var="embeddable.src.dir" value="${maven.build.dir}/embeddable/src"/>
   <j:set var="embeddable.dst.dir" value="${maven.build.dir}/embeddable/dst"/>
@@ -27,6 +29,8 @@
     <j:set var="dep" value="${lib.dependency}"/>
     <ant:copy todir="${embeddable.jar.dir}" file="${lib.path}"/>
   </j:forEach>
+
+  <copy file="${maven.build.dir}/${maven.final.name}.jar" toDir="${embeddable.jar.dir}"/>
 
   <unzip dest="${embeddable.src.dir}">
     <fileset dir="${embeddable.jar.dir}">
@@ -52,17 +56,27 @@
       <exclude name="junit/**"/>       
       <exclude name="net/sf/maven_plugins/cobertura/**"/>       
       <exclude name="org/apache/commons/logging/**"/>
+      <exclude name="org.codehaus.groovy/**"/>
+      <exclude name="groovyjarjarantlr/**"/>
+      <exclude name="groovyjarjarasm/**"/>
+      <exclude name="groovy/**"/>
+      <exclude name="org/codehaus/janino/**"/>
+      <exclude name="org/codehaus/groovy/**"/>
+      <exclude name="org/eclipse/jdt/**"/>
+      <exclude name="uk/org/xml/sax/**"/>
+      <exclude name="uk/co/wilson/**"/>
+      <exclude name="plugin-resources/**"/>
+      <exclude name="plugin**"/>
+      <exclude name="project**"/>
+      <exclude name="*.css"/>
+      <exclude name="*.html"/>
+      <exclude name="*.jar"/>
+      <exclude name=".*"/>
+      <exclude name="META-INF/**"/>
     </fileset>
     <rule pattern="org.apache.commons.io.**" result="jarjar.orgapachecommonsio.@1"/>
     <rule pattern="org.apache.commons.lang.**" result="jarjar.orgapachecommonslang.@1"/>
     <rule pattern="org.apache.commons.collections.**" result="jarjar.orgapachecommonscollections.@1"/>
-    <rule pattern="org.codehaus.groovy.**" result="jarjar.orgcodehausgroovy.@1"/>
-    <rule pattern="groovyjarjarantlr.**" result="jarjar.groovyantlr.@1"/>
-    <rule pattern="groovyjarjarasm.**" result="jarjar.groovyasm.@1"/>
-    <rule pattern="groovy.**" result="jarjar.groovy.@1"/>
-    <rule pattern="org.codehaus.janino.**" result="jarjar.orgcodehausjanino.@1"/>
-    <rule pattern="org.eclipse.jdt.**" result="jarjar.orgeclipsejdt.@1"/>
-    <rule pattern="uk.co.wilson.**" result="jarjar.ukcowilson.@1"/>
   </jarjar>
 
 </goal>
