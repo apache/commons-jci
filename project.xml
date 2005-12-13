@@ -85,7 +85,7 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>1.0</version>
+      <version>1.1</version>
     </dependency>
 
     <!-- needed by the core -->
@@ -98,18 +98,9 @@
     <!-- needed by the core -->
     <dependency>
       <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-      <version>1.0.4</version>
-    </dependency>
-
-    <!-- needed by the core -->
-    <!--
-    <dependency>
-      <groupId>commons-logging</groupId>
       <artifactId>commons-logging-api</artifactId>
       <version>1.0.4</version>
     </dependency>
-    -->
 
     <!-- needed by the core -->
     <dependency>
@@ -136,56 +127,7 @@
     <dependency>
       <groupId>groovy</groupId>
       <artifactId>groovy</artifactId>
-      <version>1.0-jsr-02</version>
-    </dependency>
-
-    <!-- needed for groovy and dependency analysis -->
-    <dependency>
-      <groupId>asm</groupId>
-      <artifactId>asm</artifactId>
-      <version>2.0</version>
-    </dependency>
-
-    <!-- needed for groovy and dependency analysis -->
-    <dependency>
-      <groupId>asm</groupId>
-      <artifactId>asm-util</artifactId>
-      <version>2.0</version>
-    </dependency>
-
-    <!-- needed for groovy and dependency analysis -->
-    <dependency>
-      <groupId>asm</groupId>
-      <artifactId>asm-attrs</artifactId>
-      <version>2.0</version>
-    </dependency>
-
-    <!-- needed for groovy and dependency analysis -->
-    <dependency>
-      <groupId>asm</groupId>
-      <artifactId>asm-analysis</artifactId>
-      <version>2.0</version>
-    </dependency>
-
-    <!-- needed for groovy and dependency analysis -->
-    <dependency>
-      <groupId>asm</groupId>
-      <artifactId>asm-tree</artifactId>
-      <version>2.0</version>
-    </dependency>
-
-    <!-- needed for groovy and dependency analysis -->
-    <dependency>
-      <groupId>asm</groupId>
-      <artifactId>asm-commons</artifactId>
-      <version>2.0</version>
-    </dependency>
-
-    <!-- needed for groovy -->
-    <dependency>
-      <groupId>antlr</groupId>
-      <artifactId>antlr</artifactId>
-      <version>2.7.5</version>
+      <version>all-1.0-jsr-04</version>
     </dependency>
 
     <!-- only for reports -->
@@ -208,6 +150,13 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
+    </dependency>
+
+    <!-- needed by the junit plugin -->
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.0.4</version>
     </dependency>
 
   </dependencies>
