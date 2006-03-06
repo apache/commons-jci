@@ -1,22 +1,22 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>jakarta-commons</groupId>
-  <artifactId>jakarta-commons-jci</artifactId>
+  <parent>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-sandbox-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>commons-jci</artifactId>
   <version>1.0-SNAPSHOT</version>
   <description></description>
+  <url>http://jakarta.apache.org/commons/sandbox/jci/</url>
+  <name>Commons JCI</name>
 
- <repositories>
-  <repository>
-    <id>Maven Snapshots</id>
-    <url>http://snapshots.maven.codehaus.org/maven2/</url>
-    <snapshots>
-      <enabled>true</enabled>
-    </snapshots>
-    <releases>
-      <enabled>false</enabled>
-    </releases>
-  </repository>
- </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>Maven Snapshots</id>
+      <url>http://snapshots.maven.codehaus.org/maven2/</url>
+    </pluginRepository>
+  </pluginRepositories>
 
   <build>
     <sourceDirectory>src/java</sourceDirectory>
@@ -25,7 +25,6 @@
         <plugin>
           <groupId>org.codehaus.mojo.minijar</groupId>
           <artifactId>maven-minijar-plugin</artifactId>
-          <configuration></configuration>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -67,4 +66,17 @@
       <version>2.3.7</version>
     </dependency>
   </dependencies>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk</developerConnection>
+    <url>http://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk</url>
+  </scm>
+  <distributionManagement>
+    <site>
+      <id>website</id>
+      <name>Apache Website</name>
+      <url>scp://minotaur.apache.org/www/jakarta.apache.org/commons/sandbox/jci/</url>
+    </site>
+  </distributionManagement>
 </project>
+
