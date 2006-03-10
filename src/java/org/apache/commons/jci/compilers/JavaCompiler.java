@@ -29,15 +29,14 @@ public interface JavaCompiler {
     void setCompilationProblemHandler( final CompilationProblemHandler pHandler );
     
     CompilationResult compile(
-                              final String[] pClazzNames,
-                              final ResourceReader pReader,
-                              final ResourceStore pStore
-                              );    
+            final String[] pClazzNames,
+            final ResourceReader pReader,
+            final ResourceStore pStore );
+
 
     CompilationResult compile(
             final String[] pClazzNames,
             final ResourceReader pReader,
             final ResourceStore pStore,
-            final ClassLoader classLoader
-            );
+            final ClassLoader classLoader );
 }
