@@ -1,34 +1,110 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
+  <packaging>jar</packaging>
+
+  <!--
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-sandbox-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
+  -->
+
+  <groupId>org.apache.commons</groupId>
   <artifactId>commons-jci</artifactId>
   <version>1.0-SNAPSHOT</version>
+
+  <name>Commons JCI</name>
   <description></description>
   <url>http://jakarta.apache.org/commons/sandbox/jci/</url>
-  <name>Commons JCI</name>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
-  <pluginRepositories>
-    <pluginRepository>
-      <id>Maven Snapshots</id>
-      <url>http://snapshots.maven.codehaus.org/maven2/</url>
-    </pluginRepository>
-  </pluginRepositories>
+  <organization>
+    <name>The Apache Software Foundation</name>
+    <url>http://www.apache.org/</url>
+  </organization>
+  <developers>
+    <developer>
+      <id>tcurdt</id>
+      <name>Torsten Curdt</name>
+      <email>tcurdt at apache.org</email>
+      <organization>ASF</organization>
+      <organizationUrl>http://www.apache.org/</organizationUrl>
+      <roles>
+        <role>Committer</role>
+      </roles>
+      <timezone>+10</timezone>
+    </developer>
+  </developers>
+  <mailingLists>
+    <mailingList>
+      <name>Commons Dev</name>
+      <subscribe>commons-dev-subscribe@jakarta.apache.org</subscribe>
+      <unsubscribe>commons-dev-unsubscribe@jakarta.apache.org</unsubscribe>
+      <post>commons-dev@jakarta.apache.org</post>
+      <archive>http://mail-archives.apache.org/mod_mbox/jakarta-commons-dev</archive>
+      <otherArchives>
+        <otherArchive>http://www.mail-archive.com/commons-dev@jakarta.apache.org/</otherArchive>
+        <otherArchive>http://marc.theaimsgroup.com/?l=java-commons-dev</otherArchive>
+        <otherArchive>http://news.gmane.org/gmane.text.java.commons.dev</otherArchive>
+      </otherArchives>
+    </mailingList> 
+  </mailingLists>
+  <issueManagement>
+    <system>bugzilla</system>
+    <url>https://issues.apache.org/bugzilla</url>
+  </issueManagement>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk</developerConnection>
+    <url>http://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk</url>
+  </scm>
+
+  <distributionManagement>
+    <site>
+      <id>website</id>
+      <name>Apache Website</name>
+      <url>scp://minotaur.apache.org/www/jakarta.apache.org/commons/sandbox/jci/</url>
+    </site>
+  </distributionManagement>
+
+  <!--
+  <modules>
+    <module>compilers/commons-jci-eclipse</module>
+  </modules>
+  -->
 
   <build>
     <sourceDirectory>src/java</sourceDirectory>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.codehaus.mojo.minijar</groupId>
-          <artifactId>maven-minijar-plugin</artifactId>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>dependencies</report>
+              <report>project-team</report>
+              <report>mailing-list</report>
+              <report>issue-tracking</report>
+              <report>license</report>
+              <report>scm</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+
   <dependencies>
     <dependency>
       <groupId>commons-io</groupId>
@@ -51,11 +127,6 @@
       <version>3.1</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jdt</groupId>
-      <artifactId>core</artifactId>
-      <version>3.1.0</version>
-    </dependency>
-    <dependency>
       <groupId>groovy</groupId>
       <artifactId>groovy-all-1.0-jsr</artifactId>
       <version>03</version>
@@ -65,18 +136,11 @@
       <artifactId>janino</artifactId>
       <version>2.3.7</version>
     </dependency>
+    <dependency>
+      <groupId>org.eclipse.jdt</groupId>
+      <artifactId>core</artifactId>
+      <version>3.1.0</version>
+    </dependency>
   </dependencies>
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk</developerConnection>
-    <url>http://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk</url>
-  </scm>
-  <distributionManagement>
-    <site>
-      <id>website</id>
-      <name>Apache Website</name>
-      <url>scp://minotaur.apache.org/www/jakarta.apache.org/commons/sandbox/jci/</url>
-    </site>
-  </distributionManagement>
 </project>
 
