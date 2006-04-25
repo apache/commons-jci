@@ -120,7 +120,9 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
             } catch (final LocatedException e) {
                 problems.add(new JaninoCompilationProblem(e));
             } catch (final IOException e) {
-                problems.add(new JaninoCompilationProblem(fileNameForClass, "IO:" + e.getMessage(), true));
+                problems.add(new JaninoCompilationProblem(fileNameForClass, "IOException:" + e.getMessage(), true));
+            } catch (final Exception e) {
+                problems.add(new JaninoCompilationProblem(fileNameForClass, "Exception:" + e.getMessage(), true));
             } finally {
                 if (scanner != null) {
                     try {
