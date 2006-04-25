@@ -1,22 +1,21 @@
-<project>
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  
   <modelVersion>4.0.0</modelVersion>
-  <packaging>jar</packaging>
-
-  <!--
-  <parent>
-    <groupId>org.apache.commons</groupId>
-    <artifactId>commons-sandbox-parent</artifactId>
-    <version>1.0-SNAPSHOT</version>
-  </parent>
-  -->
-
+  <packaging>pom</packaging>  
+  
   <groupId>org.apache.commons</groupId>
   <artifactId>commons-jci</artifactId>
   <version>1.0-SNAPSHOT</version>
-
-  <name>Commons JCI</name>
-  <description></description>
-  <url>http://jakarta.apache.org/commons/sandbox/jci/</url>
+  
+  <name>Jakarta Commons JCI</name>
+  <url>http://cocoon.apache.org</url>
+  <description>
+    Common java compiler interface
+  </description>
   <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
@@ -24,70 +23,169 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+  <inceptionYear>2004</inceptionYear>
+
+  <modules>
+    <module>core</module>
+    <module>compilers/commons-jci-eclipse</module>
+    <module>compilers/commons-jci-janino</module>
+    <module>compilers/commons-jci-groovy</module>
+    <module>tests</module>
+    <module>examples</module>
+  </modules>
+
+<!--
+  <repositories>
+    <repository>
+      <id>apache-snapshots</id>
+      <name>Apache Maven2 Repository</name>
+      <url>http://cvs.apache.org/maven-snapshot-repository</url>
+    </repository>
+    <repository>
+      <id>apache-maven1</id>
+      <name>Apache CVS Repository</name>
+      <url>http://cvs.apache.org/repository</url>
+      <layout>legacy</layout>
+    </repository>
+    <repository>
+      <id>codehaus-snapshot</id>
+      <name>Maven snapshot Repository</name>
+      <url>http://snapshots.maven.codehaus.org/maven2</url>
+    </repository>
+  </repositories>
+-->
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>codehaus-plugin-snapshots</id>
+      <url>http://snapshots.maven.codehaus.org/maven2</url>
+    </pluginRepository>
+  </pluginRepositories>
 
   <organization>
     <name>The Apache Software Foundation</name>
     <url>http://www.apache.org/</url>
   </organization>
+
   <developers>
     <developer>
       <id>tcurdt</id>
       <name>Torsten Curdt</name>
-      <email>tcurdt at apache.org</email>
+      <email>tcurdt  at apache.org</email>
       <organization>ASF</organization>
       <organizationUrl>http://www.apache.org/</organizationUrl>
-      <roles>
-        <role>Committer</role>
-      </roles>
       <timezone>+10</timezone>
     </developer>
   </developers>
+
+  <contributors>
+    <contributor>
+      <name>Don Brown</name>
+      <email>mrdon at apache.org</email>
+    </contributor>
+    <contributor>
+      <name>Joerk Heinicke</name>
+      <email>joerg.heinicke at gmx.de</email>
+    </contributor>
+    <contributor>
+      <name>Mark Proctor</name>
+      <email>mproctor at codehaus.org</email>
+    </contributor>
+  </contributors>
+
+  <issueManagement>
+    <system>bugzilla</system>
+    <url>https://issues.apache.org/bugzilla</url>
+  </issueManagement>
+
   <mailingLists>
     <mailingList>
-      <name>Commons Dev</name>
+      <name>Jakarta Commons Developer List</name>
       <subscribe>commons-dev-subscribe@jakarta.apache.org</subscribe>
       <unsubscribe>commons-dev-unsubscribe@jakarta.apache.org</unsubscribe>
       <post>commons-dev@jakarta.apache.org</post>
-      <archive>http://mail-archives.apache.org/mod_mbox/jakarta-commons-dev</archive>
+      <archive>http://mail-archives.apache.org/mod_mbox/commons-dev</archive>
       <otherArchives>
         <otherArchive>http://www.mail-archive.com/commons-dev@jakarta.apache.org/</otherArchive>
         <otherArchive>http://marc.theaimsgroup.com/?l=java-commons-dev</otherArchive>
         <otherArchive>http://news.gmane.org/gmane.text.java.commons.dev</otherArchive>
       </otherArchives>
-    </mailingList> 
+    </mailingList>
   </mailingLists>
-  <issueManagement>
-    <system>bugzilla</system>
-    <url>https://issues.apache.org/bugzilla</url>
-  </issueManagement>
+
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk</developerConnection>
-    <url>http://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk</url>
+    <developerConnection>scn:svn:https://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk</developerConnection>
+    <url>http://svn.apache.org/viewcvs/jakarta/commons/sandbox/jci/trunk</url>
   </scm>
 
   <distributionManagement>
+    <repository>
+      <id>apache-maven-snapshot</id>
+      <name>repository</name>
+      <url>scpexe://cvs.apache.org/x1/www/cvs.apache.org/maven-snapshot-repository</url>
+    </repository>
+    <snapshotRepository>
+      <id>apache-maven-snapshot</id>
+      <name>repository</name>
+      <url>scpexe://cvs.apache.org/x1/www/cvs.apache.org/maven-snapshot-repository</url>
+    </snapshotRepository>
     <site>
       <id>website</id>
-      <name>Apache Website</name>
-      <url>scp://minotaur.apache.org/www/jakarta.apache.org/commons/sandbox/jci/</url>
+      <name>website</name>
+      <url>scpexe://minotaur.apache.org/www/jakarta.apache.org/commons/sandbox/commons-jci</url>
     </site>
   </distributionManagement>
 
-  <!--
-  <modules>
-    <module>compilers/commons-jci-eclipse</module>
-  </modules>
-  -->
-
   <build>
     <sourceDirectory>src/java</sourceDirectory>
+    <testSourceDirectory>src/test</testSourceDirectory>
+
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh-external</artifactId>
+        <version>1.0-alpha-6</version>
+      </extension>
+    </extensions>
+
+    <plugins>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <includes>
+            <include>**/*TestCase.java</include>
+          </includes>
+          <excludes>
+            <exclude>**/Abstract*</exclude>
+          </excludes>
+          <testFailureIgnore>true</testFailureIgnore>
+        </configuration>
+      </plugin>
+    </plugins>
+
   </build>
 
   <reporting>
     <plugins>
+
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+       <artifactId>maven-site-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+       <artifactId>maven-pmd-plugin</artifactId>
+      </plugin>
+
+      <plugin>
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <reportSets>
           <reportSet>
@@ -102,45 +200,12 @@
           </reportSet>
         </reportSets>
       </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jxr-maven-plugin</artifactId>
+      </plugin>
+
     </plugins>
   </reporting>
-
-  <dependencies>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>1.1</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.1</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging-api</artifactId>
-      <version>1.0.4</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-collections</groupId>
-      <artifactId>commons-collections</artifactId>
-      <version>3.1</version>
-    </dependency>
-    <dependency>
-      <groupId>groovy</groupId>
-      <artifactId>groovy-all-1.0-jsr</artifactId>
-      <version>03</version>
-    </dependency>
-    <dependency>
-      <groupId>janino</groupId>
-      <artifactId>janino</artifactId>
-      <version>2.3.7</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jdt</groupId>
-      <artifactId>core</artifactId>
-      <version>3.1.0</version>
-    </dependency>
-  </dependencies>
 </project>
-

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Jakarta Commons JCI">
+
+  <bannerLeft>
+    <name>Jakarta Commons JCI</name>
+    <src>http://jakarta.apache.org/images/jakarta-logo.gif</src>
+    <href>http://maven.apache.org/</href>
+  </bannerLeft>
+
+  <bannerRight>
+    <src>images/jci-logo-white.png</src>
+  </bannerRight>
+
+  <body>
+
+    <links>
+      <item name="Jakarta Commons" href="http://jakarta.apache.org/commons/" />
+    </links>
+
+    <menu name="Jakarta Commons JCI">
+      <item name="Home" href="index.html" />
+    </menu>
+
+    ${modules}
+    ${reports}
+
+  </body>
+</project>
