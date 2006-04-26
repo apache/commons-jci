@@ -27,9 +27,9 @@
 
   <modules>
     <module>core</module>
-    <module>compilers/commons-jci-eclipse</module>
-    <module>compilers/commons-jci-janino</module>
-    <module>compilers/commons-jci-groovy</module>
+    <module>compilers/eclipse</module>
+    <module>compilers/janino</module>
+    <module>compilers/groovy</module>
     <module>tests</module>
     <module>examples</module>
   </modules>
