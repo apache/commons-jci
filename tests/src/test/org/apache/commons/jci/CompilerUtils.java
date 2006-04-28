@@ -5,13 +5,9 @@ import org.apache.commons.jci.compilers.JavaCompilerFactory;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.MemoryResourceStore;
 import org.apache.commons.jci.stores.ResourceStore;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 
 public final class CompilerUtils {
-    
-    private final static Log log = LogFactory.getLog(CompilerUtils.class);
     
     private CompilerUtils() {       
     }

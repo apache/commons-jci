@@ -130,7 +130,9 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
     public static class UniqueMultiHashMap extends MultiHashMap {
 
-        public UniqueMultiHashMap() {
+		private static final long serialVersionUID = 1L;
+
+		public UniqueMultiHashMap() {
             super();
         }
 

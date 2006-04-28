@@ -3,19 +3,16 @@ package org.apache.commons.jci;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.jci.compilers.AbstractCompilerTestCase;
 import org.apache.commons.jci.compilers.JavaSources;
 import org.apache.commons.jci.listeners.CompilingListener;
 import org.apache.commons.jci.monitor.FilesystemAlterationMonitor;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 
 public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase {
 
-    private final static Log log = LogFactory.getLog(CompilingClassLoaderTestCase.class);
-    
     private ReloadingClassLoader classloader;
     private CompilingListener listener;
     private FilesystemAlterationMonitor fam;

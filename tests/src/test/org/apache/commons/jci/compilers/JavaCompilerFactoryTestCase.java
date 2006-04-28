@@ -20,9 +20,15 @@ import junit.framework.TestCase;
 
 public final class JavaCompilerFactoryTestCase extends TestCase {
     public void testEclipseCompilerCreation() {
+    	final JavaCompiler compiler = JavaCompilerFactory.getInstance().createCompiler("eclipse");
+    	assertNotNull(compiler);
     }
     public void testJaninoCompilerCreation() {
+    	final JavaCompiler compiler = JavaCompilerFactory.getInstance().createCompiler("janino");
+    	assertNotNull(compiler);
     }
     public void testGroovyCompilerCreation() {
+    	final JavaCompiler compiler = JavaCompilerFactory.getInstance().createCompiler("groovy");
+    	assertNotNull(compiler);
     }
 }

@@ -29,8 +29,8 @@
 
     <dependency>
       <groupId>groovy</groupId>
-      <artifactId>groovy-all-1.0-jsr</artifactId>
-      <version>03</version>
+      <artifactId>groovy-all</artifactId>
+      <version>1.0-jsr-03</version>
     </dependency>
 
   </dependencies>
