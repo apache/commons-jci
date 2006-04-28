@@ -15,7 +15,7 @@
 
   <groupId>org.apache.commons</groupId>
   <artifactId>commons-jci-eclipse</artifactId>
-  <version>3.1.0</version>
+  <version>3.2.0</version>
 
   <name>Jakarta Commons JCI Compiler - Eclipse</name>
 <!--
@@ -45,7 +45,7 @@
     <dependency>
       <groupId>org.eclipse.jdt</groupId>
       <artifactId>core</artifactId>
-      <version>3.2.0.653</version>
+      <version>3.2.0.658</version>
     </dependency>
 
   </dependencies>

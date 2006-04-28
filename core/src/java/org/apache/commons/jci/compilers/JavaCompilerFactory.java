@@ -75,7 +75,7 @@ public final class JavaCompilerFactory {
     public JavaCompiler createCompiler(final String pHint) {
         
         final String className;
-        if (pHint.charAt('.') < 0) {
+        if (pHint.indexOf('.') < 0) {
             className = "org.apache.commons.jci.compilers." + toJavaCasing(pHint) + "JavaCompiler";
         } else {
             className = pHint;
