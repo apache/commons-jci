@@ -61,12 +61,12 @@ public final class JavaCompilerFactory {
 //    }
     
     private String toJavaCasing(final String pName) {
-        final char[] name = pName.toCharArray();
+        final char[] name = pName.toLowerCase().toCharArray();
         name[0] = Character.toUpperCase(name[0]);
         return new String(name);
     }
     /**
-     * Can accept the following strings "ECLIPSE", "JANINO", "GROOVY" and returns the appropriate
+     * Can accept the following strings "eclipse", "janino", "groovy" and returns the appropriate
      * JavaCompiler. Return null for any other type of string.
      * 
      * @param compiler
