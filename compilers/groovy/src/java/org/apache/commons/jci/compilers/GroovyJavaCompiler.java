@@ -28,21 +28,21 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
     private final static Log log = LogFactory.getLog(GroovyJavaCompiler.class);
     
     public CompilationResult compile(
-            final String[] clazzNames,
-            final ResourceReader reader,
-            final ResourceStore store,
-            final ClassLoader classLoader
+            final String[] pResourceNames,
+            final ResourceReader pReader,
+            final ResourceStore pStore,
+            final ClassLoader pClassLoader
             ) {
         final CompilerConfiguration configuration = new CompilerConfiguration();
         final ErrorCollector collector = new ErrorCollector(configuration);
-        final GroovyClassLoader groovyClassLoader = new GroovyClassLoader(classLoader);
+        final GroovyClassLoader groovyClassLoader = new GroovyClassLoader(pClassLoader);
         final CompilationUnit unit = new CompilationUnit(configuration, null, groovyClassLoader);
-        final SourceUnit[] source = new SourceUnit[clazzNames.length];
+        final SourceUnit[] source = new SourceUnit[pResourceNames.length];
         for (int i = 0; i < source.length; i++) {
-            final String filename = clazzNames[i].replace('.','/') + ".groovy";
+            final String resourceName = pResourceNames[i];
             source[i] = new SourceUnit(
-                    filename,
-                    new String(reader.getContent(filename)), // FIXME delay the read
+                    convertResourceNameToClassName(resourceName),
+                    new String(pReader.getBytes(resourceName)), // FIXME delay the read
                     configuration,
                     groovyClassLoader,
                     collector
@@ -60,7 +60,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
             for (final Iterator it = classes.iterator(); it.hasNext();) {
                 final GroovyClass clazz = (GroovyClass) it.next();
                 final byte[] bytes = clazz.getBytes();
-                store.write(clazz.getName(), bytes);
+                pStore.write(clazz.getName(), bytes);
             }
         } catch (final MultipleCompilationErrorsException e) {
             final ErrorCollector col = e.getErrorCollector();
@@ -90,7 +90,9 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
         } catch (CompilationFailedException e) {
             throw new RuntimeException("no expected");
         }
-        
-        return new CompilationResult(problems);
+
+        final CompilationProblem[] result = new CompilationProblem[problems.size()];
+        problems.toArray(result);
+        return new CompilationResult(result);
     }
 }

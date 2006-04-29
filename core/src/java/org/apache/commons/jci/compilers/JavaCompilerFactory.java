@@ -22,43 +22,16 @@ import java.util.Map;
 
 public final class JavaCompilerFactory {
 
-    private Map classCache = new HashMap();
-    
     private static final JavaCompilerFactory INSTANCE = new JavaCompilerFactory();
     
     public static JavaCompilerFactory getInstance() {
         return JavaCompilerFactory.INSTANCE;
     }
 
+    private final Map classCache = new HashMap();
+    
     private JavaCompilerFactory() {
     }
-    
-
-//    private Map getImplementations() {
-//        final String[] jars = System.getProperty("java.class.path").split(System.getProperty("path.separator"));
-//        final Map implementations = new HashMap(jars.length);        
-//        for (int i = 0; i < jars.length; i++) {
-//            try {
-//                final JarFile jar = new JarFile(jars[i]);
-//                final Manifest manifest = jar.getManifest();
-//                final String revision = (String) manifest.getMainAttributes().getValue("" + JavaCompiler.class);
-//                implementations.put(jars[i], revision);
-//            } catch (IOException e) {                
-//            }
-//        }
-//
-//      return implementations;
-//    }
-    
-//    public JavaCompiler createCompiler(final JavaCompilerSettings pSettings) {
-//        if (pSettings instanceof EclipseJavaCompilerSettings) {
-//            return new EclipseJavaCompiler((EclipseJavaCompilerSettings) pSettings);
-//        }
-        
-        // FIXME create settings for the other compilers and add here
-        
-//        return null;
-//    }
     
     private String toJavaCasing(final String pName) {
         final char[] name = pName.toLowerCase().toCharArray();
@@ -66,11 +39,17 @@ public final class JavaCompilerFactory {
         return new String(name);
     }
     /**
-     * Can accept the following strings "eclipse", "janino", "groovy" and returns the appropriate
-     * JavaCompiler. Return null for any other type of string.
+     * Tries to guess the class name by convention. So for compilers
+     * following the naming convention
      * 
-     * @param compiler
-     * @return
+     *   org.apache.commons.jci.compilers.SomeJavaCompiler
+     *   
+     * you can use the short-hands "some"/"Some"/"SOME". Otherwise
+     * you have to provide the full class name. The compiler is
+     * getting instanciated via (cached) reflection.
+     * 
+     * @param pHint
+     * @return JavaCompiler or null
      */
     public JavaCompiler createCompiler(final String pHint) {
         

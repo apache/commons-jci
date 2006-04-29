@@ -29,7 +29,6 @@ import org.apache.commons.io.IOUtils;
 
 /**
  * @author tcurdt
- *
  */
 public final class FileResourceStore implements ResourceStore {
 
@@ -38,10 +37,10 @@ public final class FileResourceStore implements ResourceStore {
     public FileResourceStore(final File pFile) {
         root = pFile;
     }
-    public byte[] read( final String resourceName ) {
+    public byte[] read( final String pResourceName ) {
         InputStream is = null;
         try {
-            is = new FileInputStream(getFile(resourceName));
+            is = new FileInputStream(getFile(pResourceName));
             final byte[] data = IOUtils.toByteArray(is);
             return data;
         } catch (FileNotFoundException e) {
@@ -57,10 +56,10 @@ public final class FileResourceStore implements ResourceStore {
 
         return null;
     }
-    public void write( final String resourceName, final byte[] clazzData ) {
+    public void write( final String pResourceName, final byte[] pData ) {
         OutputStream os = null;
         try {
-            final File file = getFile(resourceName);
+            final File file = getFile(pResourceName);
             final File parent = file.getParentFile();
             if (!parent.exists()) {
                 if (!parent.mkdirs()) {
@@ -68,7 +67,7 @@ public final class FileResourceStore implements ResourceStore {
                 }
             }
             os = new FileOutputStream(file);
-            os.write(clazzData);
+            os.write(pData);
         } catch (FileNotFoundException e) {
         } catch (IOException e) {
         } finally {
@@ -86,7 +85,7 @@ public final class FileResourceStore implements ResourceStore {
     }
 
     private File getFile(final String pResourceName) {
-        final String fileName = pResourceName.replace('.', File.separatorChar) + ".class";
+        final String fileName = pResourceName.replace('/', File.separatorChar);
         return new File(root, fileName);
     }
 

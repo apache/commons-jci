@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+
 import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
@@ -90,7 +91,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         }
 
         public char[] getContents() {
-            return reader.getContent(fileName);
+            return new String(reader.getBytes(fileName)).toCharArray();
         }
 
         public char[] getMainTypeName() {
@@ -266,6 +267,8 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
 
         compiler.compile(compilationUnits);
 
-        return new org.apache.commons.jci.compilers.CompilationResult(problems);
+        final CompilationProblem[] result = new CompilationProblem[problems.size()];
+        problems.toArray(result);
+        return new org.apache.commons.jci.compilers.CompilationResult(result);
     }
 }

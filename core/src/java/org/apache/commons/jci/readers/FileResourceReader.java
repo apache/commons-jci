@@ -33,14 +33,14 @@ public final class FileResourceReader implements ResourceReader {
         root = pRoot;        
     }
     
-    public boolean isAvailable(String filename) {
-        return new File(root,filename).exists();
+    public boolean isAvailable( final String pResourceName ) {
+        return new File(root, pResourceName).exists();
     }
 
-    public char[] getContent( final String fileName ) {
+    public byte[] getBytes( final String pResourceName ) {
         try {
             return FileUtils.readFileToString(
-                    new File(root,fileName), "UTF-8").toCharArray();
+                    new File(root, pResourceName), "UTF-8").getBytes();
         } catch(Exception e) {
         }
         return null;

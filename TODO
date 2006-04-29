@@ -1,12 +1,10 @@
 o integrate just4log into the build system (or a different logging solution?)
-o compiler factory
 o compiler implementations
   o javac 
   o jikes
   o pizza
   o jruby
   o jpython
-o make suffixes matching (*.java, *.class) configurable
 o turn the JavaCompilerFactory into an interface and maybe provide a simple default impl
 o documentation
 o dependency analysis for proper re-try after errors

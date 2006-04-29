@@ -393,7 +393,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
 
     public void run() {
-        log.info("fam running");
+        log.debug("fam running");
         while (true) {
             synchronized (mutexRunning) {
                 if (!running) {
@@ -425,7 +425,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
             } catch (final InterruptedException e) {
             }
         }
-        log.info("fam exiting");
+        log.debug("fam exiting");
     }
 
 

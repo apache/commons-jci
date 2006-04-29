@@ -9,11 +9,11 @@ public final class FileResourceReaderTestCase extends AbstractTestCase {
         writeFile("test", "test");
 
         assertTrue(reader.isAvailable("test"));
-        final char[] content = reader.getContent("test");
+        final byte[] content = reader.getBytes("test");
         assertTrue(content != null);
         assertTrue("test".equals(new String(content)));        
 
         assertTrue(!reader.isAvailable("bla"));
-        assertTrue(reader.getContent("bla") == null);
+        assertTrue(reader.getBytes("bla") == null);
     }
 }

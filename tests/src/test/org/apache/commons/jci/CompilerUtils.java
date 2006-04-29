@@ -18,11 +18,11 @@ public final class CompilerUtils {
         compiler.compile(
                 pClazzes,
                 new ResourceReader() {
-                    public char[] getContent( String pFileName ) {
+                    public byte[] getBytes( String pResourceName ) {
                         for (int i = 0; i < pPrograms.length; i++) {
                             final String clazzName = pClazzes[i].replace('.', '/') + ".java";
-                            if (clazzName.equals(pFileName)) {
-                                return pPrograms[i].toCharArray();
+                            if (clazzName.equals(pResourceName)) {
+                                return pPrograms[i].getBytes();
                             }
                         }
                         return null;
@@ -48,8 +48,8 @@ public final class CompilerUtils {
         compiler.compile(
                 new String[] { pClazz },
                 new ResourceReader() {
-                    public char[] getContent( String pFileName ) {
-                        return pProgramm.toCharArray();
+                    public byte[] getBytes( String pFileName ) {
+                        return pProgramm.getBytes();
                     }
                     public boolean isAvailable( String pFilename ) {
                         return false;

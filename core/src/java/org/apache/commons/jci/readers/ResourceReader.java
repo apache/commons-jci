@@ -17,10 +17,8 @@ package org.apache.commons.jci.readers;
 
 /**
  * @author tcurdt
- *
  */
 public interface ResourceReader {
-    boolean isAvailable( final String filename );
-    char[] getContent( final String fileName );
-
+    boolean isAvailable( final String pResourceName );
+    byte[] getBytes( final String pResourceName );
 }

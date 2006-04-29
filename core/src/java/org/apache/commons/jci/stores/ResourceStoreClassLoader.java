@@ -28,11 +28,11 @@ public final class ResourceStoreClassLoader extends ClassLoader {
     private final static Log log = LogFactory.getLog(ResourceStoreClassLoader.class);
 
     private final ResourceStore[] stores;
-    private final ClassLoader parent;
+    //private final ClassLoader parent;
 
     public ResourceStoreClassLoader( final ClassLoader pParent, final ResourceStore[] pStores ) {
         super(pParent);
-        parent = pParent;
+        //parent = pParent;
         stores = pStores;
     }
 

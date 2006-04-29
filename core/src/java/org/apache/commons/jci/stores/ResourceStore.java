@@ -21,9 +21,9 @@ package org.apache.commons.jci.stores;
  */
 public interface ResourceStore {
 
-    void write( final String resourceName, final byte[] resourceData );
+    void write( final String pResourceName, final byte[] pResourceData );
 	
-	byte[] read( final String resourceName );
+	byte[] read( final String pResourceName );
 	
-	void remove( final String resourceName );
+	void remove( final String pResourceName );
 }

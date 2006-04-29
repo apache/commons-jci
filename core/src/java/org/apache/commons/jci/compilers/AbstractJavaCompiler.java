@@ -28,4 +28,22 @@ public abstract class AbstractJavaCompiler implements JavaCompiler {
         return compile(pClazzNames, pReader, pStore, classLoader);
     }
     
+    /**
+     * Please do not use - internal
+     * org/my/Class.xxx -> org/my/Class
+     */
+    public static String stripExtension( final String pResourceName ) {
+    	final int i = pResourceName.lastIndexOf('.');
+    	final String withoutExtension = pResourceName.substring(0, i);
+    	return withoutExtension;
+    }
+    
+    /**
+     * Please do not use - internal
+     * org/my/Class.xxx -> org.my.Class
+     */
+    public static String convertResourceNameToClassName( final String pResourceName ) {
+    	return stripExtension(pResourceName).replace('/', '.');
+    }
+
 }

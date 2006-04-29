@@ -8,4 +8,8 @@ public class MyBar {
     public void setFoo( MyFoo foo) {
         this.foo = foo;
     }
+
+    public MyFoo getFoo() {
+        return foo;
+    }
 }

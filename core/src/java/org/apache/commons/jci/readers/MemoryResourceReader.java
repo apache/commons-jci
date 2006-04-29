@@ -5,40 +5,40 @@ import java.util.HashMap;
 
 public class MemoryResourceReader implements ResourceReader {
     
-    private Map files;
+    private Map resources;
 
-    public boolean isAvailable(final String pFileName) {
-        if (files == null) {
+    public boolean isAvailable(final String pResourceName) {
+        if (resources == null) {
             return false;
         }
 
-        return files.containsKey( pFileName );
+        return resources.containsKey( pResourceName );
     }
     
-    public void addFile(final String pFileName, final char[] pFile) {
-        if (files == null) {
-            files = new HashMap();
+    public void add(final String pResourceName, final char[] pContent) {
+        if (resources == null) {
+            resources = new HashMap();
         }
         
-        files.put(pFileName, pFile);
+        resources.put(pResourceName, pContent);
     }
     
-    public void removeFile(final String pFileName) {
-        if (files != null) {
-            files.remove(pFileName);
+    public void remove(final String pResourceName) {
+        if (resources != null) {
+            resources.remove(pResourceName);
         }    
     }    
     
 
-    public char[] getContent(final String pFileName)
+    public byte[] getBytes(final String pResourceName)
     {
-        return (char[]) files.get(pFileName);
+        return (byte[]) resources.get(pResourceName);
     }
 
     public String[] list() {
-        if (files == null) {
+        if (resources == null) {
             return new String[0];
         }
-        return (String[]) files.keySet().toArray(new String[files.size()]);
+        return (String[]) resources.keySet().toArray(new String[resources.size()]);
     }
 }

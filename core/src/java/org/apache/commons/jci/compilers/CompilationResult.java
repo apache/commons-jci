@@ -2,35 +2,39 @@ package org.apache.commons.jci.compilers;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import org.apache.commons.jci.problems.CompilationProblem;
 
 
 public final class CompilationResult {
     
-    final Collection errors = new ArrayList();
-    final Collection warnings = new ArrayList();
-
-    public CompilationResult( final Collection pProblems ) {
-        for (final Iterator it = pProblems.iterator(); it.hasNext();) {
-            final CompilationProblem problem = (CompilationProblem) it.next();
+    private final CompilationProblem[] errors;
+    private final CompilationProblem[] warnings;
+        
+    public CompilationResult( final CompilationProblem[] pProblems ) {
+    	final Collection errorsColl = new ArrayList();
+        final Collection warningsColl = new ArrayList();
+    	
+    	for (int i = 0; i < pProblems.length; i++) {
+    		final CompilationProblem problem = pProblems[i];
             if (problem.isError()) {
-                errors.add(problem);
+                errorsColl.add(problem);
             } else {
-                warnings.add(problem);
-            }
-        }
+                warningsColl.add(problem);
+            }			
+		}
+        
+    	errors = new CompilationProblem[errorsColl.size()];
+        errorsColl.toArray(errors);
+
+        warnings = new CompilationProblem[warningsColl.size()];
+        warningsColl.toArray(warnings);
     }
     
     public CompilationProblem[] getErrors() {
-        final CompilationProblem[] result = new CompilationProblem[errors.size()];
-        errors.toArray(result);
-        return result;
+        return errors;
     }
 
     public CompilationProblem[] getWarnings() {
-        final CompilationProblem[] result = new CompilationProblem[warnings.size()];
-        warnings.toArray(result);
-        return result;
+    	return warnings;
     }
 }

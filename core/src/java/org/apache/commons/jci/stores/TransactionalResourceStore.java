@@ -18,7 +18,6 @@ package org.apache.commons.jci.stores;
 
 /**
  * @author tcurdt
- *
  */
 public class TransactionalResourceStore implements ResourceStore, Transactional {
 

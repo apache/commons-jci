@@ -16,15 +16,15 @@
 package org.apache.commons.jci.compilers;
 
 import java.io.BufferedReader;
-import java.io.CharArrayReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
 import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
@@ -76,16 +76,16 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
             if (types.containsKey(pType)) {
                 return (IClass) types.get(pType);
             }
-            final String fileNameForClass = className.replace('.', File.separatorChar) + ".java";
+            final String resourceNameFromClass = className.replace('.', '/') + ".java";
 
-            final char[] content = resourceReader.getContent(fileNameForClass);
+            final byte[] content = resourceReader.getBytes(resourceNameFromClass);
             if (content == null) {
                 return null;
             }
-            final Reader reader = new BufferedReader(new CharArrayReader(content));
+            final Reader reader = new BufferedReader(new StringReader(new String(content)));
             Scanner scanner = null;
             try {
-                scanner = new Scanner(fileNameForClass, reader);
+                scanner = new Scanner(resourceNameFromClass, reader);
                 final Java.CompilationUnit unit = new Parser(scanner).parseCompilationUnit();
                 final UnitCompiler uc = new UnitCompiler(unit, this);
                 uc.setCompileErrorHandler(new ErrorHandler() {
@@ -120,9 +120,9 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
             } catch (final LocatedException e) {
                 problems.add(new JaninoCompilationProblem(e));
             } catch (final IOException e) {
-                problems.add(new JaninoCompilationProblem(fileNameForClass, "IOException:" + e.getMessage(), true));
+                problems.add(new JaninoCompilationProblem(resourceNameFromClass, "IOException:" + e.getMessage(), true));
             } catch (final Exception e) {
-                problems.add(new JaninoCompilationProblem(fileNameForClass, "Exception:" + e.getMessage(), true));
+                problems.add(new JaninoCompilationProblem(resourceNameFromClass, "Exception:" + e.getMessage(), true));
             } finally {
                 if (scanner != null) {
                     try {
@@ -155,7 +155,10 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
             pStore.write((String)entry.getKey(), (byte[])entry.getValue());
         }
         
-        return new CompilationResult(icl.getProblems());
+        final Collection problems = icl.getProblems();
+        final CompilationProblem[] result = new CompilationProblem[problems.size()];
+        problems.toArray(result);
+        return new CompilationResult(result);
     }
     
 }

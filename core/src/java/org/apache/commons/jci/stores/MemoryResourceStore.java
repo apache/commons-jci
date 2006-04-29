@@ -26,7 +26,6 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * @author tcurdt
- *
  */
 public final class MemoryResourceStore implements ResourceStore {
 
@@ -34,18 +33,18 @@ public final class MemoryResourceStore implements ResourceStore {
 
 	private final Map store = new HashMap();
 	
-	public byte[] read( final String resourceName ) {
-		return (byte[]) store.get(resourceName.replace('.', '/') + ".class");
+	public byte[] read( final String pResourceName ) {
+		return (byte[]) store.get(pResourceName);
 	}
 
-	public void write( final String resourceName, final byte[] clazzData ) {
-		log.debug("storing resource " + resourceName + "(" + clazzData.length + ")");
-		store.put(resourceName.replace('.', '/') + ".class", clazzData);
+	public void write( final String pResourceName, final byte[] pData ) {
+		log.debug("storing resource " + pResourceName + "(" + pData.length + ")");
+		store.put(pResourceName, pData);
 	}
 	
-    public void remove( final String resourceName ) {
-        log.debug("removing resource " + resourceName);
-        store.remove(resourceName.replace('.', '/') + ".class");
+    public void remove( final String pResourceName ) {
+        log.debug("removing resource " + pResourceName);
+        store.remove(pResourceName);
     }
 
     public String[] list() {
@@ -56,7 +55,7 @@ public final class MemoryResourceStore implements ResourceStore {
         
         for (final Iterator it = store.keySet().iterator(); it.hasNext();) {
             final String name = (String) it.next();
-            names.add(name.replace('/', '.').substring(0, name.length()-6));
+            names.add(name);
         }
 
         return (String[]) names.toArray(new String[store.size()]);
