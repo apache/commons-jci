@@ -15,7 +15,7 @@ public class MemoryResourceReader implements ResourceReader {
         return resources.containsKey( pResourceName );
     }
     
-    public void add(final String pResourceName, final char[] pContent) {
+    public void add(final String pResourceName, final byte[] pContent) {
         if (resources == null) {
             resources = new HashMap();
         }
