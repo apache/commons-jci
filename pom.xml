@@ -12,7 +12,7 @@
   <version>1.0-SNAPSHOT</version>
   
   <name>Jakarta Commons JCI</name>
-  <url>http://cocoon.apache.org</url>
+  <url>http://jakarta.apache.org/commons/sandbox/jci</url>
   <description>
     Common java compiler interface
   </description>
@@ -147,64 +147,6 @@
         <version>1.0-alpha-6</version>
       </extension>
     </extensions>
-
-    <plugins>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <includes>
-            <include>**/*TestCase.java</include>
-          </includes>
-          <excludes>
-            <exclude>**/Abstract*</exclude>
-          </excludes>
-          <testFailureIgnore>true</testFailureIgnore>
-        </configuration>
-      </plugin>
-    </plugins>
-
   </build>
 
-  <reporting>
-    <plugins>
-
-      <plugin>
-        <artifactId>maven-javadoc-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-surefire-report-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-       <artifactId>maven-site-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-       <artifactId>maven-pmd-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>dependencies</report>
-              <report>project-team</report>
-              <report>mailing-list</report>
-              <report>issue-tracking</report>
-              <report>license</report>
-              <report>scm</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>jxr-maven-plugin</artifactId>
-      </plugin>
-
-    </plugins>
-  </reporting>
 </project>

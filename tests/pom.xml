@@ -19,6 +19,34 @@
 
   <name>Jakarta Commons JCI Tests</name>
 
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <includes>
+            <include>**/*TestCase.java</include>
+          </includes>
+          <excludes>
+            <exclude>**/Abstract*</exclude>
+          </excludes>
+          <testFailureIgnore>true</testFailureIgnore>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <reporting>
+    <plugins>
+
+      <plugin>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+      </plugin>
+
+    </plugins>
+  </reporting>
+  
   <dependencies>
 
     <dependency>
