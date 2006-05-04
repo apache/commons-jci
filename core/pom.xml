@@ -17,9 +17,7 @@
   <artifactId>commons-jci-core</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>Jakarta Commons JCI Core</name>
-
-
+  <name>Core</name>
 
   <reporting>
     <plugins>
@@ -37,22 +35,6 @@
       </plugin>
       <plugin>
        <artifactId>maven-pmd-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>project-team</report>
-              <report>mailing-list</report>
-              <report>dependencies</report>
-              <report>issue-tracking</report>
-              <report>license</report>
-              <report>scm</report>
-            </reports>
-          </reportSet>
-        </reportSets>
       </plugin>
 
     </plugins>

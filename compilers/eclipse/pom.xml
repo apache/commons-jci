@@ -17,23 +17,8 @@
   <artifactId>commons-jci-eclipse</artifactId>
   <version>3.2.0.658</version>
 
-  <name>Jakarta Commons JCI Compiler - Eclipse</name>
-<!--
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifestEntries>
-              <org.apache.commons.jci.compilers.JavaCompiler>org.apache.commons.jci.compilers.EclipseJavaCompiler</org.apache.commons.jci.compilers.JavaCompiler>
-            </manifestEntries>
-          </archive>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
--->
+  <name>Compiler Eclipse</name>
+
   <dependencies>
 
     <dependency>

@@ -17,8 +17,7 @@
   <artifactId>commons-jci-tests</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>Jakarta Commons JCI Tests</name>
-
+  <name>Tests</name>
 
   <build>
     <plugins>

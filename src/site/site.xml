@@ -26,12 +26,23 @@
       <item name="Library Homepage" href="http://www.library.jhu.edu"/> 
     </breadcrumbs>
 -->
+
     <links>
       <item name="Apache" href="http://www.apache.org/" />
       <item name="Jakarta Commons" href="http://jakarta.apache.org/commons/" />
     </links>
 
-    ${parentProject}
+    <menu name="Jakarta Commons JCI">
+      <item name="About" href="about.html"/> 
+      <item name="Downloads" href="downloads.html"/> 
+    </menu>
+
+<!--
+    <menu ref="modules"/>
+-->
+
+    ${modules}
+
     ${reports}
 
   </body>

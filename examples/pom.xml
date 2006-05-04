@@ -8,7 +8,7 @@
   <artifactId>commons-jci-examples</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>Jakarta Commons JCI Examples</name>
+  <name>Examples</name>
 
   <dependencies>
 
