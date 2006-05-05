@@ -40,6 +40,11 @@
       <name>Apache Maven2 Repository</name>
       <url>http://cvs.apache.org/maven-snapshot-repository</url>
     </repository>
+    <repository>
+      <id>codehaus-snapshot</id>
+      <name>Maven snapshot Repository</name>
+      <url>http://snapshots.maven.codehaus.org/maven2</url>
+    </repository>
   </repositories>
 <!--
     <repository>
@@ -47,11 +52,6 @@
       <name>Apache CVS Repository</name>
       <url>http://cvs.apache.org/repository</url>
       <layout>legacy</layout>
-    </repository>
-    <repository>
-      <id>codehaus-snapshot</id>
-      <name>Maven snapshot Repository</name>
-      <url>http://snapshots.maven.codehaus.org/maven2</url>
     </repository>
   </repositories>
 
@@ -160,6 +160,37 @@
 
   <reporting>
     <plugins>
+
+<!--
+      <plugin> 
+        <groupId>org.codehaus.mojo</groupId> 
+        <artifactId>taglist-maven-plugin</artifactId> 
+        <configuration> 
+          <tags>TODO, @todo, FIXME, @deprecated</tags>
+        </configuration> 
+      </plugin> 
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jxr-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+       <artifactId>maven-pmd-plugin</artifactId>
+      </plugin>
+
+      <plugin>     
+        <artifactId>maven-surefire-report-plugin</artifactId>
+      </plugin>
+-->
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.0-SNAPSHOT</version>
+        <configuration>
+          <aggregate>true</aggregate>
+        </configuration>
+      </plugin>
+
       <plugin>
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <reportSets>

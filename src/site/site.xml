@@ -33,7 +33,7 @@
     </links>
 
     <menu name="Jakarta Commons JCI">
-      <item name="About" href="about.html"/> 
+      <item name="About" href="index.html"/> 
       <item name="Downloads" href="downloads.html"/> 
     </menu>
 
