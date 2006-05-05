@@ -161,28 +161,36 @@
   <reporting>
     <plugins>
 
-<!--
       <plugin> 
         <groupId>org.codehaus.mojo</groupId> 
         <artifactId>taglist-maven-plugin</artifactId> 
+        <version>2.0-SNAPSHOT</version>
         <configuration> 
-          <tags>TODO, @todo, FIXME, @deprecated</tags>
+          <tags>
+            <tag>TODO</tag>
+            <tag>@todo</tag>
+            <tag>FIXME</tag>
+            <tag>@deprecated</tag>
+          </tags>
         </configuration> 
       </plugin> 
 
+<!--
+      <plugin>     
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <version>2.0-SNAPSHOT</version>
+      </plugin>
+-->
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>jxr-maven-plugin</artifactId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <version>2.0-SNAPSHOT</version>
       </plugin>
 
       <plugin>
        <artifactId>maven-pmd-plugin</artifactId>
+        <version>2.0-SNAPSHOT</version>
       </plugin>
 
-      <plugin>     
-        <artifactId>maven-surefire-report-plugin</artifactId>
-      </plugin>
--->
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>2.0-SNAPSHOT</version>
