@@ -10,6 +10,8 @@
   <packaging>jar</packaging>
   <name>Examples</name>
 
+  <reporting><excludeDefaults>true</excludeDefaults></reporting>
+
   <dependencies>
 
     <dependency>

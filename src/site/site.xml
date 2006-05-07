@@ -15,7 +15,7 @@
 
   <skin>
     <groupId>org.apache.maven.skins</groupId>
-    <artifactId>maven-stylus-skin</artifactId>
+    <artifactId>maven-default-skin</artifactId>
     <version>1.0-SNAPSHOT</version>
   </skin>
 
@@ -26,10 +26,10 @@
       <item name="Library Homepage" href="http://www.library.jhu.edu"/> 
     </breadcrumbs>
 -->
-
     <links>
       <item name="Apache" href="http://www.apache.org/" />
-      <item name="Jakarta Commons" href="http://jakarta.apache.org/commons/" />
+      <item name="Jakarta" href="http://jakarta.apache.org/" />
+      <item name="Commons" href="http://jakarta.apache.org/commons/" />
     </links>
 
     <menu name="Jakarta Commons JCI">
@@ -39,9 +39,8 @@
 
 <!--
     <menu ref="modules"/>
--->
-
     ${modules}
+-->
 
     ${reports}
 

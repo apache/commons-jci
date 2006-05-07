@@ -19,12 +19,6 @@
 
   <name>Core</name>
 
-  <reporting>
-    <plugins>
-    </plugins>
-  </reporting>
-
-
   <dependencies>
   
     <dependency>
