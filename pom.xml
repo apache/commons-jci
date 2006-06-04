@@ -30,6 +30,7 @@
     <module>compilers/eclipse</module>
     <module>compilers/janino</module>
     <module>compilers/groovy</module>
+    <module>compilers/javac</module>
     <module>tests</module>
     <module>examples</module>
   </modules>
@@ -131,7 +132,7 @@
       <plugin>
         <artifactId>maven-site-plugin</artifactId>
         <groupId>org.apache.maven.plugins</groupId>
-        <version>2.0-SNAPSHOT</version>
+        <version>2.0-beta-5</version>
       </plugin>
     </plugins>
 
