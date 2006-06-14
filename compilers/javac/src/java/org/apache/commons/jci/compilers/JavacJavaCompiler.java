@@ -28,7 +28,7 @@ public class JavacJavaCompiler extends AbstractJavaCompiler
 			{
 				urls = (URL[]) ArrayUtils.add(
 						((URLClassLoader) baseClassLoader).getURLs(), toolsJar
-								.toURL());
+								.toURI().toURL());
 			}
 			else
 			{

@@ -33,6 +33,7 @@
     <module>compilers/javac</module>
     <module>tests</module>
     <module>examples</module>
+    <module>maven-jci-plugin</module>
   </modules>
 
   <repositories>
