@@ -69,7 +69,7 @@ public abstract class AbstractJCIMojo extends AbstractMojo
 				new File((String) getCompileSourceRoots().get(0)));
 		FileResourceStore fileResourceStore = new FileResourceStore(
 				getOutputDirectory());
-		compiler.compile(new String[] { "TestCompile0" },
+		compiler.compile(new String[] { "TestCompile0.java" },
 				fileResourceReader, fileResourceStore);
 	}
 }
