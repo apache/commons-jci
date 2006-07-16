@@ -40,7 +40,7 @@
     <repository>
       <id>apache-snapshots</id>
       <name>Apache Maven2 Repository</name>
-      <url>http://cvs.apache.org/maven-snapshot-repository</url>
+      <url>http://people.apache.org/maven-snapshot-repository</url>
     </repository>
     <repository>
       <id>codehaus-snapshot</id>
@@ -112,12 +112,12 @@
     <repository>
       <id>apache-maven-snapshot</id>
       <name>repository</name>
-      <url>scpexe://cvs.apache.org/x1/www/cvs.apache.org/maven-snapshot-repository</url>
+      <url>scpexe://people.apache.org/x1/www/people.apache.org/maven-snapshot-repository</url>
     </repository>
     <snapshotRepository>
       <id>apache-maven-snapshot</id>
       <name>repository</name>
-      <url>scpexe://cvs.apache.org/x1/www/cvs.apache.org/maven-snapshot-repository</url>
+      <url>scpexe://people.apache.org/x1/www/people.apache.org/maven-snapshot-repository</url>
     </snapshotRepository>
     <site>
       <id>website</id>
