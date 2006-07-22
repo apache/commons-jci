@@ -1,14 +1,14 @@
 package org.apache.commons.jci.compilers;
 
 import java.io.FileInputStream;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.io.FileOutputStream;
+import javassist.ClassMap;
 import javassist.ClassPool;
 import javassist.CtClass;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
 
-public class JavacClassLoader extends URLClassLoader
+public class JavacClassLoader extends ClassLoader
 {
 	private ClassPool classPool;
 
@@ -17,9 +17,9 @@ public class JavacClassLoader extends URLClassLoader
 	private ResourceStore store;
 
 	public JavacClassLoader(ClassPool classPool, ResourceReader reader,
-			ResourceStore store, URL[] urls, ClassLoader parent)
+			ResourceStore store, ClassLoader parent)
 	{
-		super(urls, parent);
+		super(parent);
 		this.classPool = classPool;
 		this.reader = reader;
 		this.store = store;
@@ -27,24 +27,25 @@ public class JavacClassLoader extends URLClassLoader
 
 	protected Class findClass(String name) throws ClassNotFoundException
 	{
-		// System.out.println(name);
-		if (name.equals(JavacClassLoader.class.getName()))
-		{
-			return JavacClassLoader.class;
-		}
-		if (name.equals(ResourceReader.class.getName()))
-		{
-			return ResourceReader.class;
-		}
 		try
 		{
-			// if (!name.equals(FileInputStreamProxy.class.getName()))
-			if (name.equals("com.sun.tools.javac.main.JavaCompiler"))
+			CtClass jc = classPool.get(name);
+			if (jc != null)
 			{
-				CtClass jc = classPool.get(name);
-				jc.replaceClassName(FileInputStream.class.getName(),
-						FileInputStreamProxy.class.getName());
+				if (name.startsWith("com.sun.tools.javac"))
+				{
+					ClassMap classMap = new ClassMap();
+					classMap.put(FileOutputStream.class.getName(),
+							FileOutputStreamProxy.class.getName());
+					classMap.put(FileInputStream.class.getName(),
+							FileInputStreamProxy.class.getName());
+					jc.replaceClassName(classMap);
+				}
 				return jc.toClass();
+			}
+			else
+			{
+				return getParent().loadClass(name);
 			}
 		}
 		catch (Exception e)

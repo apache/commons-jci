@@ -64,6 +64,7 @@ public class FileInputStreamProxy extends InputStream
 
 	public FileChannel getChannel()
 	{
+		// TODO
 		throw new RuntimeException(":(");
 	}
 
