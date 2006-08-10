@@ -105,7 +105,7 @@
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk</connection>
     <developerConnection>scn:svn:https://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk</developerConnection>
-    <url>http://svn.apache.org/viewcvs/jakarta/commons/sandbox/jci/trunk</url>
+    <url>http://svn.apache.org/viewvc/jakarta/commons/sandbox/jci/trunk</url>
   </scm>
 
   <distributionManagement>
