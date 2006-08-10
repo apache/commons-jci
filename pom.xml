@@ -121,7 +121,7 @@
     </snapshotRepository>
     <site>
       <id>website</id>
-      <url>scpexe://minotaur.apache.org/www/jakarta.apache.org/commons/sandbox/jci</url>
+      <url>scpexe://people.apache.org/www/jakarta.apache.org/commons/sandbox/jci</url>
     </site>
   </distributionManagement>
 
