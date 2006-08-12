@@ -17,7 +17,7 @@
   <artifactId>commons-jci-groovy</artifactId>
   <version>1.0-jsr-03</version>
 
-  <name>Compiler Groovy</name>
+  <name>compiler-groovy</name>
 
   <dependencies>
 

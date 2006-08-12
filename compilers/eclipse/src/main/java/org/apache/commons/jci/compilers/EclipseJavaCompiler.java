@@ -50,14 +50,18 @@ import org.eclipse.jdt.internal.compiler.problem.DefaultProblemFactory;
 public final class EclipseJavaCompiler extends AbstractJavaCompiler {
 
     private final static Log log = LogFactory.getLog(EclipseJavaCompiler.class);
-    private final EclipseJavaCompilerSettings settings;
+    private final Map settings;
 
     public EclipseJavaCompiler() {
         this(new EclipseJavaCompilerSettings());
     }
 
-    public EclipseJavaCompiler(final EclipseJavaCompilerSettings pSettings) {
+    public EclipseJavaCompiler(final Map pSettings) {
         settings = pSettings;
+    }
+
+    public EclipseJavaCompiler(final EclipseJavaCompilerSettings pSettings) {
+        settings = pSettings.getMap();
     }
 
     final class CompilationUnit implements ICompilationUnit {
@@ -110,7 +114,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             final ClassLoader classLoader
             ) {
         
-        final Map settingsMap = settings.getMap();
+        final Map settingsMap = settings;
         final Set clazzIndex = new HashSet();
         ICompilationUnit[] compilationUnits = new ICompilationUnit[pClazzNames.length];
         for (int i = 0; i < compilationUnits.length; i++) {

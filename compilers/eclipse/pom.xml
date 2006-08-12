@@ -17,7 +17,7 @@
   <artifactId>commons-jci-eclipse</artifactId>
   <version>3.2.0.658</version>
 
-  <name>Compiler Eclipse</name>
+  <name>compiler-eclipse</name>
 
   <dependencies>
 

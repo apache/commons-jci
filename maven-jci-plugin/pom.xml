@@ -16,7 +16,7 @@
 	<artifactId>maven-jci-plugin</artifactId>
 	<version>1.0-SNAPSHOT</version>
 
-	<name>Maven JCI Plugin</name>
+	<name>maven-jci-plugin</name>
 
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>

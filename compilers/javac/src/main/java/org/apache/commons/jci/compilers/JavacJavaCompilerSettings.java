@@ -2,7 +2,7 @@ package org.apache.commons.jci.compilers;
 
 import java.util.List;
 
-public class JavacJavaCompilerSettings implements JavaCompilerSettings
+public class JavacJavaCompilerSettings extends JavaCompilerSettings
 {
 	private boolean optimize;
 

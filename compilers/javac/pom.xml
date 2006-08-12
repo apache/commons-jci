@@ -16,7 +16,7 @@
 	<artifactId>commons-jci-javac</artifactId>
 	<version>1.0-SNAPSHOT</version>
 
-	<name>Compiler Javac</name>
+	<name>compiler-javac</name>
 
 	<dependencies>
 		<dependency>
