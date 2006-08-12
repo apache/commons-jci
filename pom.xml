@@ -11,7 +11,7 @@
   <artifactId>commons-jci</artifactId>
   <version>1.0-SNAPSHOT</version>
   
-  <name>Jakarta Commons JCI</name>
+  <name>jci</name>
   <url>http://jakarta.apache.org/commons/sandbox/jci</url>
   <description>
     Common java compiler interface
@@ -27,6 +27,7 @@
 
   <modules>
     <module>core</module>
+    <module>fam</module>
     <module>compilers/eclipse</module>
     <module>compilers/janino</module>
     <module>compilers/groovy</module>
@@ -37,6 +38,7 @@
   </modules>
 
   <repositories>
+<!--
     <repository>
       <id>apache-snapshots</id>
       <name>Apache Maven2 Repository</name>
@@ -47,7 +49,27 @@
       <name>Maven snapshot Repository</name>
       <url>http://snapshots.maven.codehaus.org/maven2</url>
     </repository>
+-->
   </repositories>
+
+  <distributionManagement>
+<!--
+    <repository>
+      <id>apache-maven-snapshot</id>
+      <name>repository</name>
+      <url>scpexe://people.apache.org/x1/www/people.apache.org/maven-snapshot-repository</url>
+    </repository>
+    <snapshotRepository>
+      <id>apache-maven-snapshot</id>
+      <name>repository</name>
+      <url>scpexe://people.apache.org/x1/www/people.apache.org/maven-snapshot-repository</url>
+    </snapshotRepository>
+-->
+    <site>
+      <id>website</id>
+      <url>scpexe://people.apache.org/www/jakarta.apache.org/commons/sandbox/jci</url>
+    </site>
+  </distributionManagement>
 
   <organization>
     <name>The Apache Software Foundation</name>
@@ -58,7 +80,7 @@
     <developer>
       <id>tcurdt</id>
       <name>Torsten Curdt</name>
-      <email>tcurdt  at apache.org</email>
+      <email>tcurdt at apache.org</email>
       <organization>ASF</organization>
       <organizationUrl>http://www.apache.org/</organizationUrl>
       <timezone>+10</timezone>
@@ -108,27 +130,7 @@
     <url>http://svn.apache.org/viewvc/jakarta/commons/sandbox/jci/trunk</url>
   </scm>
 
-  <distributionManagement>
-    <repository>
-      <id>apache-maven-snapshot</id>
-      <name>repository</name>
-      <url>scpexe://people.apache.org/x1/www/people.apache.org/maven-snapshot-repository</url>
-    </repository>
-    <snapshotRepository>
-      <id>apache-maven-snapshot</id>
-      <name>repository</name>
-      <url>scpexe://people.apache.org/x1/www/people.apache.org/maven-snapshot-repository</url>
-    </snapshotRepository>
-    <site>
-      <id>website</id>
-      <url>scpexe://people.apache.org/www/jakarta.apache.org/commons/sandbox/jci</url>
-    </site>
-  </distributionManagement>
-
   <build>
-    <sourceDirectory>src/java</sourceDirectory>
-    <testSourceDirectory>src/test</testSourceDirectory>
-
     <plugins>
       <plugin>
         <artifactId>maven-site-plugin</artifactId>
@@ -148,7 +150,7 @@
 
   <reporting>
     <excludeDefaults>true</excludeDefaults>
-
+<!--
     <plugins>
 
       <plugin> 
@@ -166,12 +168,11 @@
         </configuration> 
       </plugin> 
 
-<!--
       <plugin>     
         <artifactId>maven-surefire-report-plugin</artifactId>
         <version>2.0</version>
       </plugin>
--->
+
       <plugin>
        <artifactId>maven-pmd-plugin</artifactId>
         <version>2.0</version>
@@ -204,9 +205,7 @@
             <reports>
               <report>project-team</report>
               <report>mailing-list</report>
-<!--
               <report>dependencies</report>
--->
               <report>issue-tracking</report>
               <report>license</report>
               <report>scm</report>
@@ -215,5 +214,6 @@
         </reportSets>
       </plugin>
     </plugins>
+  -->
   </reporting>
 </project>

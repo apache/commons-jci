@@ -16,5 +16,31 @@
 package org.apache.commons.jci.compilers;
 
 
-public interface JavaCompilerSettings {
+
+public class JavaCompilerSettings {
+	
+	public void setTargetVersion( final String pTargetVersion ) {
+		
+	}
+	
+	public void setSourceVersion( final String pSourceVersion ) {
+		
+	}
+	
+	public void setSourceEncoding( final String pSourceEncoding ) {
+		
+	}
+	
+	public void setWarnings( final boolean pWarnings ) {
+		
+	}
+	
+	public void setDeprecations( final boolean pDeprecations )  {
+		
+	}
+	
+	public void setVerbose( final boolean pVerbose ) {
+		
+	}
+
 }
