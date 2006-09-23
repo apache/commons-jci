@@ -16,10 +16,11 @@
 package org.apache.commons.jci.listeners;
 
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.jci.ReloadingClassLoader;
 import org.apache.commons.jci.stores.MemoryResourceStore;
@@ -87,7 +88,7 @@ public class ReloadingListener extends ResourceStoringListener {
             for (Iterator it = created.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
                 try {
-                    final byte[] bytes = IOUtils.toByteArray(new FileReader(file));
+                    final byte[] bytes = IOUtils.toByteArray(new FileInputStream(file));
                     final String resourceName = ReloadingClassLoader.clazzName(repository, file); 
                     //if (resourceName.endsWith(".class")) {
                         store.write(resourceName, bytes);
@@ -104,7 +105,7 @@ public class ReloadingListener extends ResourceStoringListener {
             for (Iterator it = changed.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
                 try {
-                    final byte[] bytes = IOUtils.toByteArray(new FileReader(file));
+                    final byte[] bytes = IOUtils.toByteArray(new FileInputStream(file));
                     final String resourceName = ReloadingClassLoader.clazzName(repository, file); 
                     //if (resourceName.endsWith(".class")) {
                         store.write(resourceName, bytes);
