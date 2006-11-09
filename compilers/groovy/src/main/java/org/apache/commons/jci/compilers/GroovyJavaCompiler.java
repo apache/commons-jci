@@ -10,6 +10,7 @@ import org.apache.commons.jci.compilers.CompilationResult;
 import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
+import org.apache.commons.jci.utils.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.groovy.control.CompilationFailedException;
@@ -41,7 +42,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
         for (int i = 0; i < source.length; i++) {
             final String resourceName = pResourceNames[i];
             source[i] = new SourceUnit(
-                    convertResourceNameToClassName(resourceName),
+                    ClassUtils.convertResourceNameToClassName(resourceName),
                     new String(pReader.getBytes(resourceName)), // FIXME delay the read
                     configuration,
                     groovyClassLoader,

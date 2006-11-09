@@ -33,13 +33,13 @@ public class TransactionalResourceStore implements ResourceStore, Transactional 
     public void onStop() {
     }
     
-    public byte[] read(final String pResourceName) {
+    public byte[] read( final String pResourceName ) {
         return store.read(pResourceName);
     }
-    public void remove(final String pResourceName) {
+    public void remove( final String pResourceName ) {
         store.remove(pResourceName);
     }
-    public void write(final String pResourceName, final byte[] pResourceData) {
+    public void write( final String pResourceName, final byte[] pResourceData ) {
         store.write(pResourceName, pResourceData);
     }
     

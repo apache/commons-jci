@@ -49,7 +49,7 @@ import org.eclipse.jdt.internal.compiler.problem.DefaultProblemFactory;
 
 public final class EclipseJavaCompiler extends AbstractJavaCompiler {
 
-    private final static Log log = LogFactory.getLog(EclipseJavaCompiler.class);
+    private final Log log = LogFactory.getLog(EclipseJavaCompiler.class);
     private final Map settings;
 
     public EclipseJavaCompiler() {

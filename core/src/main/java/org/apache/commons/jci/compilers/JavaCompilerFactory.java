@@ -18,26 +18,26 @@ package org.apache.commons.jci.compilers;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.jci.utils.ClassUtils;
+
 
 
 public final class JavaCompilerFactory {
 
-    private static final JavaCompilerFactory INSTANCE = new JavaCompilerFactory();
+    /**
+     * @deprecated
+     */
+	private static final JavaCompilerFactory INSTANCE = new JavaCompilerFactory();
     
+    /**
+     * @deprecated
+     */
     public static JavaCompilerFactory getInstance() {
         return JavaCompilerFactory.INSTANCE;
     }
 
     private final Map classCache = new HashMap();
     
-    private JavaCompilerFactory() {
-    }
-    
-    private String toJavaCasing(final String pName) {
-        final char[] name = pName.toLowerCase().toCharArray();
-        name[0] = Character.toUpperCase(name[0]);
-        return new String(name);
-    }
     /**
      * Tries to guess the class name by convention. So for compilers
      * following the naming convention
@@ -50,12 +50,14 @@ public final class JavaCompilerFactory {
      * 
      * @param pHint
      * @return JavaCompiler or null
+     * 
+     * TODO use META-INF discovery mechanism
      */
     public JavaCompiler createCompiler(final String pHint) {
         
         final String className;
         if (pHint.indexOf('.') < 0) {
-            className = "org.apache.commons.jci.compilers." + toJavaCasing(pHint) + "JavaCompiler";
+            className = "org.apache.commons.jci.compilers." + ClassUtils.toJavaCasing(pHint) + "JavaCompiler";
         } else {
             className = pHint;
         }

@@ -17,7 +17,6 @@ package org.apache.commons.jci.stores;
 
 /**
  * @author tcurdt
- *
  */
 public interface ResourceStore {
 

@@ -23,7 +23,6 @@ import org.apache.commons.io.FileUtils;
 
 /**
  * @author tcurdt
- *
  */
 public final class FileResourceReader implements ResourceReader {
 
@@ -39,23 +38,29 @@ public final class FileResourceReader implements ResourceReader {
 
     public byte[] getBytes( final String pResourceName ) {
         try {
-            return FileUtils.readFileToString(
-                    new File(root, pResourceName), "UTF-8").getBytes();
+            return FileUtils.readFileToString(new File(root, pResourceName), "UTF-8").getBytes();
         } catch(Exception e) {
+        	// TODO
         }
         return null;
     }
     
+    /**
+     * @deprecated
+     */
     public String[] list() {
         final List files = new ArrayList();
         list(root, files);
         return (String[]) files.toArray(new String[files.size()]);
     }
 
-    private void list(final File pFile, final List pFiles) {
+    /**
+     * @deprecated
+     */
+    private void list( final File pFile, final List pFiles ) {
         if (pFile.isDirectory()) {
             final File[] directoryFiles = pFile.listFiles();
-            for (int i=0; i < directoryFiles.length; i++) {
+            for (int i = 0; i < directoryFiles.length; i++) {
                 list(directoryFiles[i], pFiles);
             }
         } else {

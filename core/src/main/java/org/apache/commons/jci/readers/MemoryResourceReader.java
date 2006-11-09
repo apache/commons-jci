@@ -7,15 +7,15 @@ public class MemoryResourceReader implements ResourceReader {
     
     private Map resources;
 
-    public boolean isAvailable(final String pResourceName) {
+    public boolean isAvailable( final String pResourceName ) {
         if (resources == null) {
             return false;
         }
 
-        return resources.containsKey( pResourceName );
+        return resources.containsKey(pResourceName);
     }
     
-    public void add(final String pResourceName, final byte[] pContent) {
+    public void add( final String pResourceName, final byte[] pContent ) {
         if (resources == null) {
             resources = new HashMap();
         }
@@ -23,18 +23,20 @@ public class MemoryResourceReader implements ResourceReader {
         resources.put(pResourceName, pContent);
     }
     
-    public void remove(final String pResourceName) {
+    public void remove( final String pResourceName ) {
         if (resources != null) {
             resources.remove(pResourceName);
         }    
     }    
     
 
-    public byte[] getBytes(final String pResourceName)
-    {
+    public byte[] getBytes( final String pResourceName ) {
         return (byte[]) resources.get(pResourceName);
     }
 
+    /**
+     * @deprecated
+     */
     public String[] list() {
         if (resources == null) {
             return new String[0];

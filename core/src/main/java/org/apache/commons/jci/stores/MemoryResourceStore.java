@@ -29,7 +29,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class MemoryResourceStore implements ResourceStore {
 
-    private final static Log log = LogFactory.getLog(MemoryResourceStore.class);
+    private final Log log = LogFactory.getLog(MemoryResourceStore.class);
 
 	private final Map store = new HashMap();
 	
@@ -47,6 +47,9 @@ public final class MemoryResourceStore implements ResourceStore {
         store.remove(pResourceName);
     }
 
+    /**
+     * @deprecated
+     */
     public String[] list() {
         if (store == null) {
             return new String[0];

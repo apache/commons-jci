@@ -8,7 +8,7 @@
   <packaging>pom</packaging>  
   
   <groupId>org.apache.commons</groupId>
-  <artifactId>commons-jci</artifactId>
+  <artifactId>jci</artifactId>
   <version>1.0-SNAPSHOT</version>
   
   <name>jci</name>
@@ -59,12 +59,12 @@
       <name>repository</name>
       <url>scpexe://people.apache.org/x1/www/people.apache.org/maven-snapshot-repository</url>
     </repository>
+-->
     <snapshotRepository>
       <id>apache-maven-snapshot</id>
       <name>repository</name>
-      <url>scpexe://people.apache.org/x1/www/people.apache.org/maven-snapshot-repository</url>
+      <url>scpexe://scpexe://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository</url>
     </snapshotRepository>
--->
     <site>
       <id>website</id>
       <url>scpexe://people.apache.org/www/jakarta.apache.org/commons/sandbox/jci</url>

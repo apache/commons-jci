@@ -26,13 +26,14 @@ import org.apache.commons.jci.ReloadingClassLoader;
 import org.apache.commons.jci.stores.MemoryResourceStore;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.jci.stores.Transactional;
+import org.apache.commons.jci.utils.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
 public class ReloadingListener extends ResourceStoringListener {
 
-    private final static Log log = LogFactory.getLog(ReloadingListener.class);
+    private final Log log = LogFactory.getLog(ReloadingListener.class);
 
     protected final Collection created = new ArrayList();
     protected final Collection changed = new ArrayList();
@@ -42,11 +43,11 @@ public class ReloadingListener extends ResourceStoringListener {
 
     protected ReloadingClassLoader reloader;
     
-    public ReloadingListener(final File pRepository) {
+    public ReloadingListener( final File pRepository ) {
         this(pRepository, new MemoryResourceStore());
     }
 
-    public ReloadingListener(final File pRepository, final ResourceStore pStore) {
+    public ReloadingListener( final File pRepository, final ResourceStore pStore ) {
         super(pRepository);
         store = pStore;
     }
@@ -76,7 +77,7 @@ public class ReloadingListener extends ResourceStoringListener {
         if (deleted.size() > 0) {
             for (Iterator it = deleted.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
-                final String resourceName = ReloadingClassLoader.clazzName(repository, file);
+                final String resourceName = ClassUtils.clazzName(repository, file);
                 //if (resourceName.endsWith(".class")) {
                     store.remove(resourceName);
                 //}
@@ -89,7 +90,7 @@ public class ReloadingListener extends ResourceStoringListener {
                 final File file = (File) it.next();
                 try {
                     final byte[] bytes = IOUtils.toByteArray(new FileInputStream(file));
-                    final String resourceName = ReloadingClassLoader.clazzName(repository, file); 
+                    final String resourceName = ClassUtils.clazzName(repository, file); 
                     //if (resourceName.endsWith(".class")) {
                         store.write(resourceName, bytes);
                     //}
@@ -106,7 +107,7 @@ public class ReloadingListener extends ResourceStoringListener {
                 final File file = (File) it.next();
                 try {
                     final byte[] bytes = IOUtils.toByteArray(new FileInputStream(file));
-                    final String resourceName = ReloadingClassLoader.clazzName(repository, file); 
+                    final String resourceName = ClassUtils.clazzName(repository, file); 
                     //if (resourceName.endsWith(".class")) {
                         store.write(resourceName, bytes);
                     //}

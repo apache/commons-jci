@@ -19,7 +19,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import org.apache.commons.jci.ReloadingClassLoader;
 import org.apache.commons.jci.compilers.CompilationResult;
 import org.apache.commons.jci.compilers.JavaCompiler;
 import org.apache.commons.jci.compilers.JavaCompilerFactory;
@@ -29,6 +28,7 @@ import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.MemoryResourceStore;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.jci.stores.TransactionalResourceStore;
+import org.apache.commons.jci.utils.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -88,7 +88,7 @@ public class CompilingListener extends ReloadingListener {
             for (Iterator it = deleted.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
                 // FIXME: does not remove nested classes
-                transactionalStore.remove(ReloadingClassLoader.clazzName(repository, file));
+                transactionalStore.remove(ClassUtils.clazzName(repository, file));
             }
             reload = true;
         }
@@ -119,7 +119,7 @@ public class CompilingListener extends ReloadingListener {
             final String[] clazzes = new String[compileables.size()];            
             for (Iterator it = compileables.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
-                clazzes[i] = ReloadingClassLoader.clazzName(repository, file);
+                clazzes[i] = ClassUtils.clazzName(repository, file);
                 i++;
             }
             

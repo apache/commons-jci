@@ -52,18 +52,11 @@ public interface JavaCompiler {
      * @param pStore
      * @return always a CompilationResult
      */
-    CompilationResult compile(
-            final String[] pResourcePaths,
-            final ResourceReader pReader,
-            final ResourceStore pStore );
+    CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore );
 
     /**
      * As the usual compiler but you can provide the classloader
      * and therefor the classpath you are compiling with.
      */
-    CompilationResult compile(
-            final String[] pResourcePaths,
-            final ResourceReader pReader,
-            final ResourceStore pStore,
-            final ClassLoader classLoader );
+    CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader classLoader );
 }

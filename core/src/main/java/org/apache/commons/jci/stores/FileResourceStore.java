@@ -34,9 +34,10 @@ public final class FileResourceStore implements ResourceStore {
 
     private final File root;
 
-    public FileResourceStore(final File pFile) {
+    public FileResourceStore( final File pFile ) {
         root = pFile;
     }
+    
     public byte[] read( final String pResourceName ) {
         InputStream is = null;
         try {
@@ -44,18 +45,22 @@ public final class FileResourceStore implements ResourceStore {
             final byte[] data = IOUtils.toByteArray(is);
             return data;
         } catch (FileNotFoundException e) {
+        	// TODO
         } catch (IOException e) {
+        	// TODO
         } finally {
             if (is != null) {
                 try {
                     is.close();
                 } catch (IOException e) {
+                	//TODO
                 }
             }
         }
 
         return null;
     }
+    
     public void write( final String pResourceName, final byte[] pData ) {
         OutputStream os = null;
         try {
@@ -69,12 +74,15 @@ public final class FileResourceStore implements ResourceStore {
             os = new FileOutputStream(file);
             os.write(pData);
         } catch (FileNotFoundException e) {
+        	// TODO
         } catch (IOException e) {
+        	// TODO        	
         } finally {
             if (os != null) {
                 try {
                     os.close();
                 } catch (IOException e) {
+                	//TODO
                 }
             }
         }
@@ -84,17 +92,23 @@ public final class FileResourceStore implements ResourceStore {
         getFile(pResourceName).delete();
     }
 
-    private File getFile(final String pResourceName) {
+    private File getFile( final String pResourceName ) {
         final String fileName = pResourceName.replace('/', File.separatorChar);
         return new File(root, fileName);
     }
 
+    /**
+     * @deprecated
+     */
     public String[] list() {
         final List files = new ArrayList();
         list(root, files);
         return (String[]) files.toArray(new String[files.size()]);
     }
 
+    /**
+     * @deprecated
+     */
     private void list(final File pFile, final List pFiles) {
         if (pFile.isDirectory()) {
             final File[] directoryFiles = pFile.listFiles();

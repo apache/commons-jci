@@ -21,11 +21,10 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * @author tcurdt
- *
  */
 public final class ResourceStoreClassLoader extends ClassLoader {
 
-    private final static Log log = LogFactory.getLog(ResourceStoreClassLoader.class);
+    private final Log log = LogFactory.getLog(ResourceStoreClassLoader.class);
 
     private final ResourceStore[] stores;
     //private final ClassLoader parent;

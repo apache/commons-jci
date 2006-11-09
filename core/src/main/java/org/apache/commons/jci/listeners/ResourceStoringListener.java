@@ -6,7 +6,7 @@ import org.apache.commons.jci.stores.ResourceStore;
 
 public abstract class ResourceStoringListener extends NotifyingListener {
     
-    public ResourceStoringListener(final File pRepository) {
+    public ResourceStoringListener( final File pRepository ) {
         super(pRepository);        
     }
     

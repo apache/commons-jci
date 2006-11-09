@@ -15,7 +15,6 @@
  */
 package org.apache.commons.jci;
 
-import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import org.apache.commons.jci.listeners.NotificationListener;
@@ -27,18 +26,17 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * @author tcurdt
- *
  */
 public class ReloadingClassLoader extends ClassLoader implements NotificationListener {
     
-    private final static Log log = LogFactory.getLog(ReloadingClassLoader.class);
+    private final Log log = LogFactory.getLog(ReloadingClassLoader.class);
     
     private final ClassLoader parent;
     //private final Collection reloadingListeners = new HashSet();
     private ResourceStore[] stores = new ResourceStore[0];
     private ClassLoader delegate;
     
-    public ReloadingClassLoader(final ClassLoader pParent) {        
+    public ReloadingClassLoader( final ClassLoader pParent ) {        
         super(pParent);
         parent = pParent;        
 
@@ -55,7 +53,7 @@ public class ReloadingClassLoader extends ClassLoader implements NotificationLis
         pListener.setNotificationListener(null);
     }
     
-    private boolean addResourceStore(final ResourceStore pStore) {
+    private boolean addResourceStore( final ResourceStore pStore ) {
         try {        
             final int n = stores.length;
             final ResourceStore[] newStores = new ResourceStore[n + 1];
@@ -65,12 +63,12 @@ public class ReloadingClassLoader extends ClassLoader implements NotificationLis
             delegate = new ResourceStoreClassLoader(parent, stores);
             return true;
         } catch ( final Exception e ) {
-            // FIXME: rethrow?
+            // TODO: rethrow?
         }
         return false;
     }
 
-    private boolean removeResourceStore(final ResourceStore pStore) {
+    private boolean removeResourceStore( final ResourceStore pStore ) {
         try {
             final int n = stores.length;
             int i = 0;
@@ -101,7 +99,7 @@ public class ReloadingClassLoader extends ClassLoader implements NotificationLis
             return true;
             
         } catch ( final Exception e ) {
-            // FIXME: re-throw?
+            // TODO: re-throw?
         }
                 
         return false;
@@ -155,16 +153,7 @@ public class ReloadingClassLoader extends ClassLoader implements NotificationLis
         }
     }
     */
-    public static String clazzName( final File base, final File file ) {
-        final int rootLength = base.getAbsolutePath().length();
-        final String absFileName = file.getAbsolutePath();
-        final int p = absFileName.lastIndexOf('.');
-        final String relFileName = absFileName.substring(rootLength + 1, p);
-        final String clazzName = relFileName.replace(File.separatorChar, '.');
-        return clazzName;
-    }
-
-
+    
     public void clearAssertionStatus() {
         delegate.clearAssertionStatus();
     }

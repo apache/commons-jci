@@ -19,10 +19,12 @@ import java.io.File;
 
 /**
  * @author tcurdt
- *
  */
 public interface FilesystemAlterationListener {
-    File getRepository(); // FIXME: ugly!!!!
+	/**
+	 * @deprecated
+	 */
+    File getRepository();
     void onStart();
     void onCreateFile( final File file );
     void onChangeFile( final File file );
