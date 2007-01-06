@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="Jakarta Commons JCI">
 
-  <bannerLeft>
-    <name>Jakarta Commons JCI ROOT</name>
-    <src>http://jakarta.apache.org/images/jakarta-logo.gif</src>
-    <href>http://maven.apache.org/</href>
-  </bannerLeft>
-
   <bannerRight>
+    <name>Jakarta Commons JCI ROOT</name>
     <src>jci-logo-white.png</src>
+    <href>http://jakarta.apache.org/commons/sandbox/jci/</href>
   </bannerRight>
-
-  <publishDate format="dd MMM yyyy" />
-
-  <skin>
-    <groupId>org.apache.maven.skins</groupId>
-    <artifactId>maven-stylus-skin</artifactId>
-    <version>1.0-SNAPSHOT</version>
-  </skin>
 
   <body>
 
@@ -26,13 +14,8 @@
       <item name="Library Homepage" href="http://www.library.jhu.edu"/> 
     </breadcrumbs>
 -->
-    <links>
-      <item name="Apache" href="http://www.apache.org/" />
-      <item name="Jakarta Commons" href="http://jakarta.apache.org/commons/" />
-    </links>
 
-    ${parentProject}
-    ${reports}
+    <menu ref="parent" />
 
   </body>
 </project>
