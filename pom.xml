@@ -5,24 +5,20 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-sandbox</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
   <packaging>pom</packaging>  
   
-  <groupId>org.apache.commons</groupId>
   <artifactId>jci</artifactId>
   <version>1.0-SNAPSHOT</version>
-  
   <name>jci</name>
-  <url>http://jakarta.apache.org/commons/sandbox/jci</url>
+  <url>http://jakarta.apache.org/commons/sandbox/jci/</url>
   <description>
     Common java compiler interface
   </description>
-  <licenses>
-    <license>
-      <name>Apache License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
   <inceptionYear>2004</inceptionYear>
 
   <modules>
@@ -63,18 +59,13 @@
     <snapshotRepository>
       <id>apache-maven-snapshot</id>
       <name>repository</name>
-      <url>scpexe://scpexe://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository</url>
+      <url>scpexe://scpexe://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository/</url>
     </snapshotRepository>
     <site>
       <id>website</id>
-      <url>scpexe://people.apache.org/www/jakarta.apache.org/commons/sandbox/jci</url>
+      <url>scpexe://people.apache.org/www/jakarta.apache.org/commons/sandbox/jci/</url>
     </site>
   </distributionManagement>
-
-  <organization>
-    <name>The Apache Software Foundation</name>
-    <url>http://www.apache.org/</url>
-  </organization>
 
   <developers>
     <developer>
@@ -104,41 +95,13 @@
     </contributor>
   </contributors>
 
-  <issueManagement>
-    <system>bugzilla</system>
-    <url>https://issues.apache.org/bugzilla</url>
-  </issueManagement>
-
-  <mailingLists>
-    <mailingList>
-      <name>Jakarta Commons Developer List</name>
-      <subscribe>commons-dev-subscribe@jakarta.apache.org</subscribe>
-      <unsubscribe>commons-dev-unsubscribe@jakarta.apache.org</unsubscribe>
-      <post>commons-dev@jakarta.apache.org</post>
-      <archive>http://mail-archives.apache.org/mod_mbox/commons-dev</archive>
-      <otherArchives>
-        <otherArchive>http://www.mail-archive.com/commons-dev@jakarta.apache.org/</otherArchive>
-        <otherArchive>http://marc.theaimsgroup.com/?l=java-commons-dev</otherArchive>
-        <otherArchive>http://news.gmane.org/gmane.text.java.commons.dev</otherArchive>
-      </otherArchives>
-    </mailingList>
-  </mailingLists>
-
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk</connection>
-    <developerConnection>scn:svn:https://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk</developerConnection>
-    <url>http://svn.apache.org/viewvc/jakarta/commons/sandbox/jci/trunk</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk/</connection>
+    <developerConnection>scn:svn:https://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk/</developerConnection>
+    <url>http://svn.apache.org/viewvc/jakarta/commons/sandbox/jci/trunk/</url>
   </scm>
 
   <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-site-plugin</artifactId>
-        <groupId>org.apache.maven.plugins</groupId>
-        <version>2.0-beta-5</version>
-      </plugin>
-    </plugins>
-
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
