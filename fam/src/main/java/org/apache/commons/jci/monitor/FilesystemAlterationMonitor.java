@@ -33,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class FilesystemAlterationMonitor implements Runnable {
 
-    private final static Log log = LogFactory.getLog(FilesystemAlterationMonitor.class);
+    private final Log log = LogFactory.getLog(FilesystemAlterationMonitor.class);
 
     public class Entry {
 

@@ -8,7 +8,7 @@ import org.apache.commons.logging.LogFactory;
 
 public abstract class NotifyingListener implements FilesystemAlterationListener {
 
-    private final static Log log = LogFactory.getLog(NotifyingListener.class);
+    private final Log log = LogFactory.getLog(NotifyingListener.class);
 
     public final static class Signal {
         public boolean triggered;

@@ -45,7 +45,7 @@ public class CompilingListener extends ReloadingListener {
     
     public CompilingListener( final File pRepository ) {
         this(pRepository,
-             JavaCompilerFactory.getInstance().createCompiler("eclipse"),
+             new JavaCompilerFactory().createCompiler("eclipse"),
              new TransactionalResourceStore(new MemoryResourceStore())
              );
     }

@@ -22,10 +22,13 @@ import java.io.File;
  * @author tcurdt
  */
 public interface FilesystemAlterationListener {
+	
 	/**
 	 * @deprecated
 	 */
     File getRepository();
+    
+    
     void onStart();
     void onCreateFile( final File file );
     void onChangeFile( final File file );
