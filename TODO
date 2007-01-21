@@ -1,11 +1,17 @@
-o integrate just4log into the build system (or a different logging solution?)
 o compiler implementations
-  o javac 
+  o javac
+  o jsr199
   o jikes
   o pizza
-  o jruby
-  o jpython
-o turn the JavaCompilerFactory into an interface and maybe provide a simple default impl
+  o jruby (maybe?)
+  o jpython (maybe?)
+  o javascript
+  o c# (maybe?)
 o documentation
 o dependency analysis for proper re-try after errors
 o removing of anonymous classes if parent class is being removed
+o refactore store interface to provide package information
+o ability to add (contents of) jars to the store ...and be able to remove them again
+o maven plugin to compile with any of the compilers
+o compiler discovery via META-INF
+o common compiler configuration
