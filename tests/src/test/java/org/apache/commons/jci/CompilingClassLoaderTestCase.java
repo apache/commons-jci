@@ -44,14 +44,14 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
         delay();        
         writeFile("jci/Simple.java", JavaSources.simple);        
         writeFile("jci/Extended.java", JavaSources.extended);        
-        listener.waitForNotification();
+        listener.waitForEvent();
     }
     
     
     public void testCompileProblems() throws Exception {
         delay();        
         writeFile("jci/Simple.java", JavaSources.error);
-        listener.waitForNotification();
+        listener.waitForEvent();
         
         // FIXME
     }
@@ -77,7 +77,7 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
 
         delay();
         writeFile("jci/Simple.java", JavaSources.SIMPLE);
-        listener.waitForNotification();
+        listener.waitForEvent();
     
         final Object SIMPLE = classloader.loadClass("jci.Simple").newInstance();        
         assertTrue("SIMPLE".equals(SIMPLE.toString()));
@@ -97,7 +97,7 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
         
         delay();
         assertTrue(new File(directory, "jci/Extended.java").delete());
-        listener.waitForNotification();
+        listener.waitForEvent();
 
         final Object oldSimple = classloader.loadClass("jci.Simple").newInstance();        
         assertTrue("Simple".equals(oldSimple.toString()));
@@ -111,7 +111,7 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
         
         delay();
         FileUtils.deleteDirectory(new File(directory, "jci"));
-        listener.waitForNotification();
+        listener.waitForEvent();
 
         try {
             classloader.loadClass("jci.Simple").newInstance();
@@ -133,7 +133,7 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
         
         delay();
         assertTrue(new File(directory, "jci/Simple.java").delete());
-        listener.waitForNotification();
+        listener.waitForEvent();
 
         try {
             classloader.loadClass("jci.Extended").newInstance();
@@ -172,7 +172,7 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
                 "    }\n" + 
                 "}"
                 );        
-        listener.waitForNotification();
+        listener.waitForEvent();
         
         final Object foo1 = classloader.loadClass("jci.Foo").newInstance();        
         assertTrue("foo1".equals(foo1.toString()));
@@ -192,7 +192,7 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
                 "    }\n" + 
                 "}"
                 );        
-        listener.waitForNotification();
+        listener.waitForEvent();
 
         final Object foo2 = classloader.loadClass("jci.Foo").newInstance();        
         assertTrue("foo2".equals(foo2.toString()));
@@ -217,7 +217,7 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
                 "    }\n" + 
                 "}"
                 );        
-        listener.waitForNotification();
+        listener.waitForEvent();
         
         final MyFoo foo1 = (MyFoo) classloader.loadClass("jci.Foo").newInstance();        
         assertTrue("foo1".equals(foo1.toString()));
@@ -236,7 +236,7 @@ public final class CompilingClassLoaderTestCase extends AbstractCompilerTestCase
                 "    }\n" + 
                 "}"
                 );        
-        listener.waitForNotification();
+        listener.waitForEvent();
 
         final MyFoo foo2 = (MyFoo) classloader.loadClass("jci.Foo").newInstance();        
         assertTrue("foo2".equals(foo2.toString()));

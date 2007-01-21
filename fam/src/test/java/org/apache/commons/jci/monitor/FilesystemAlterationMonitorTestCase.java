@@ -24,6 +24,7 @@ import java.io.IOException;
 import junit.framework.TestCase;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.jci.listeners.AbstractFilesystemAlterationListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

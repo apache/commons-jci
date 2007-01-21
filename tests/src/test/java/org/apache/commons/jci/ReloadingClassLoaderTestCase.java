@@ -26,7 +26,7 @@ import org.apache.commons.logging.LogFactory;
 
 public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
 
-    private final static Log log = LogFactory.getLog(ReloadingClassLoaderTestCase.class);
+    private final Log log = LogFactory.getLog(ReloadingClassLoaderTestCase.class);
     
     private ReloadingClassLoader classloader;
     private ReloadingListener listener;
@@ -72,7 +72,7 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         listener.waitForCheck();
         
         final Object simple = classloader.loadClass("jci.Simple").newInstance();        
-        assertTrue("Simple".equals(simple.toString()));        
+        assertEquals("Simple", simple.toString());        
     }
 
     public void testChange() throws Exception {        
@@ -85,16 +85,16 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         listener.waitForCheck();
 
         final Object simple = classloader.loadClass("jci.Simple").newInstance();        
-        assertTrue("Simple".equals(simple.toString()));
+        assertEquals("Simple", simple.toString());
         
         log.debug("changing class");
         
         delay();        
         writeFile("jci/Simple.class", clazzSIMPLE);
-        listener.waitForNotification();
+        listener.waitForEvent();
     
         final Object SIMPLE = classloader.loadClass("jci.Simple").newInstance();        
-        assertTrue("SIMPLE".equals(SIMPLE.toString()));        
+        assertEquals("SIMPLE", SIMPLE.toString());        
     }
 
     public void testDelete() throws Exception {
@@ -107,19 +107,19 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         listener.waitForCheck();
 
         final Object simple = classloader.loadClass("jci.Simple").newInstance();        
-        assertTrue("Simple".equals(simple.toString()));
+        assertEquals("Simple", simple.toString());
 
         log.debug("deleting class");
         
         assertTrue(new File(directory, "jci/Simple.class").delete());
         
-        listener.waitForNotification();
+        listener.waitForEvent();
 
         try {
             classloader.loadClass("jci.Simple").newInstance();        
             fail();
         } catch(final ClassNotFoundException e) {
-            assertTrue("jci.Simple".equals(e.getMessage()));
+            assertEquals("jci.Simple", e.getMessage());
         }        
     }
 
@@ -134,22 +134,22 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         listener.waitForCheck();
 
         final Object simple = classloader.loadClass("jci.Simple").newInstance();        
-        assertTrue("Simple".equals(simple.toString()));
+        assertEquals("Simple", simple.toString());
         
         final Object extended = classloader.loadClass("jci.Extended").newInstance();        
-        assertTrue("Extended:Simple".equals(extended.toString()));
+        assertEquals("Extended:Simple", extended.toString());
 
         log.debug("deleting class dependency");
         
         assertTrue(new File(directory, "jci/Simple.class").delete());
         
-        listener.waitForNotification();
+        listener.waitForEvent();
 
         try {
             classloader.loadClass("jci.Extended").newInstance();
             fail();
         } catch(final NoClassDefFoundError e) {
-            assertTrue("jci/Simple".equals(e.getMessage()));
+            assertEquals("jci/Simple", e.getMessage());
         }
     }
 

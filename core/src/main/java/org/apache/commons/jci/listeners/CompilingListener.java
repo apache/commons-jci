@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+
 import org.apache.commons.jci.compilers.CompilationResult;
 import org.apache.commons.jci.compilers.JavaCompiler;
 import org.apache.commons.jci.compilers.JavaCompilerFactory;
@@ -156,6 +157,6 @@ public class CompilingListener extends ReloadingListener {
 
         transactionalStore.onStop();
 
-        checked(reload);
+        super.onStop();
     }
 }

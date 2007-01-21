@@ -1,7 +1,8 @@
-package org.apache.commons.jci.monitor;
+package org.apache.commons.jci.listeners;
 
 import java.io.File;
 
+import org.apache.commons.jci.monitor.FilesystemAlterationListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -23,10 +24,16 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
 	private int deletedFiles;
 	private int deletedDirectories;
     
-	
-	
-	
-    public void onChangeDirectory( final File pDir ) {
+	public void onStart() {
+    	createdFiles = 0;
+    	createdDirectories = 0;
+    	changedFiles = 0;
+    	changedDirectories = 0;
+    	deletedFiles = 0;
+    	deletedDirectories = 0;
+    }
+    
+	public void onChangeDirectory( final File pDir ) {
     	changedDirectories++;
 	}
 
@@ -50,33 +57,7 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
 		deletedFiles++;
 	}
 
-	public void onStart() {
-    	createdFiles = 0;
-    	createdDirectories = 0;
-    	changedFiles = 0;
-    	changedDirectories = 0;
-    	deletedFiles = 0;
-    	deletedDirectories = 0;
-    }
-    
-    public void onStop() {
-    	if (createdFiles > 0 || createdDirectories > 0 ||
-    	    changedFiles > 0 || changedDirectories > 0 ||
-    	    deletedFiles > 0 || deletedDirectories >0) {
-
-    		synchronized(eventSignal) {
-                eventSignal.triggered = true;
-                eventSignal.notifyAll();
-            }    	    		
-    	}
-    	
-        synchronized(checkSignal) {
-            checkSignal.triggered = true;
-            checkSignal.notifyAll();
-        }    	
-    }
-    
-    
+	
 	public int getChangedDirectories() {
 		return changedDirectories;
 	}
@@ -101,6 +82,28 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
 		return deletedFiles;
 	}
 
+	
+    public void onStop() {
+    	if (createdFiles > 0 || createdDirectories > 0 ||
+    	    changedFiles > 0 || changedDirectories > 0 ||
+    	    deletedFiles > 0 || deletedDirectories >0) {
+
+    		log.debug("event signal");
+    		
+    		synchronized(eventSignal) {
+                eventSignal.triggered = true;
+                eventSignal.notifyAll();
+            }    	    		
+    	}
+    	
+    	log.debug("check signal");
+    	
+        synchronized(checkSignal) {
+            checkSignal.triggered = true;
+            checkSignal.notifyAll();
+        }    	
+    }
+        
 	public void waitForEvent() throws Exception {
         synchronized(eventSignal) {
             eventSignal.triggered = false;

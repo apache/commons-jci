@@ -16,7 +16,7 @@ public class FileChangeListener extends NotifyingListener {
     }
 
     public void onStop() {
-        checked(changed);
+    	super.onStop();
     }
 
     

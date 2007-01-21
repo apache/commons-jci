@@ -46,6 +46,9 @@ public abstract class AbstractTestCase extends TestCase {
     */
     
     protected void setUp() throws Exception {
+    	
+    	System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
+    	
         directory = createTempDirectory();
         assertTrue(directory.exists());
         assertTrue(directory.isDirectory());

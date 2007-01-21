@@ -123,17 +123,25 @@ public class ReloadingListener extends ResourceStoringListener {
             ((Transactional)store).onStop();
         }
 
-        checked(reload);
+        
+        if (reload && notificationListener != null) {
+        	notificationListener.handleNotification();
+        }
+        
+        super.onStop();
     }
 
-    public void onCreateFile( final File file ) {
-        created.add(file);
+    public void onCreateFile( final File pFile ) {
+        created.add(pFile);
+        super.onCreateFile(pFile);
     }
-    public void onChangeFile( final File file ) {                
-        changed.add(file);
+    public void onChangeFile( final File pFile ) {                
+        changed.add(pFile);
+        super.onChangeFile(pFile);
     }
-    public void onDeleteFile( final File file ) {
-        deleted.add(file);
+    public void onDeleteFile( final File pFile ) {
+        deleted.add(pFile);
+        super.onDeleteFile(pFile);
     }
 
     public void onCreateDirectory( final File file ) {                
