@@ -17,13 +17,11 @@
 package org.apache.commons.jci.monitor;
 
 import java.io.File;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.commons.collections.MultiHashMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -37,31 +35,12 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
     private final Log log = LogFactory.getLog(FilesystemAlterationMonitor.class);
 
-    public static class UniqueMultiValueMap extends MultiHashMap {
-
-		private static final long serialVersionUID = 1L;
-
-		public UniqueMultiValueMap() {
-            super( );
-        }
-
-        public UniqueMultiValueMap(Map copy) {
-            super( copy );
-        }
-
-        protected Collection createCollection( Collection copy ) {
-            if (copy != null) {
-                return new HashSet(copy);
-            }
-            return new HashSet();
-        }
-        
-    }
-    
+    private final Object observersLock = new Object();
+    private Map observers = Collections.unmodifiableMap(new HashMap());    
     private long delay = 3000;
-    private volatile boolean running = true;
     private Thread thread;
-    private Map observers = new HashMap(); 
+
+    private volatile boolean running = true;
         
     public FilesystemAlterationMonitor() {
     }
@@ -92,68 +71,38 @@ public final class FilesystemAlterationMonitor implements Runnable {
     	
     	FilesystemAlterationObserver observer;
     	
-    	synchronized (observers) {
+    	synchronized (observersLock) {
         	observer = (FilesystemAlterationObserver)observers.get(pRoot);
 
         	if (observer == null) {
+    			final Map newObservers = new HashMap(observers);    			
         		observer = new FilesystemAlterationObserverImpl(pRoot);
-        		observers.put(pRoot, observer);
+        		newObservers.put(pRoot, observer);
+        		observers = Collections.unmodifiableMap(newObservers);
         	}			
 		}
     	
     	observer.addListener(pListener);    	
     }
-
-//    public void removeListeners( final File pRoot ) {
-//    	FilesystemAlterationObserver observer;
-//    	
-//    	synchronized (observers) {
-//        	observer = (FilesystemAlterationObserver)observers.get(pRoot);
-//
-//        	if (observer == null) {
-//        		return;
-//        	}			
-//		}
-//    	
-//    	final FilesystemAlterationListener[] listeners = observer.getListeners();
-//    	for (int i = 0; i < listeners.length; i++) {
-//			final  FilesystemAlterationListener listener = listeners[i];
-//	    	observer.removeListener(listener);    				
-//		}
-//    }
-    
+   
     public void removeListener( final FilesystemAlterationListener pListener ) {
-    	synchronized (observers) {
+    	synchronized (observersLock) {
     		for (Iterator it = observers.values().iterator(); it.hasNext();) {
 				final FilesystemAlterationObserver observer = (FilesystemAlterationObserver) it.next();
 				observer.removeListener(pListener);
+				// FIXME: remove observer if there are no listeners?
 			}
     	}
     }
-    
-//    public FilesystemAlterationListener[] getListeners() {
-//    	final Collection listeners = new ArrayList();
-//    	
-//    	synchronized (observers) {
-//    		for (Iterator it = observers.values().iterator(); it.hasNext();) {
-//				final FilesystemAlterationObserver observer = (FilesystemAlterationObserver) it.next();
-//			}
-//    	}
-//    	return null;
-//    }
 
     public FilesystemAlterationListener[] getListenersFor( final File pRoot  ) {
-    	FilesystemAlterationObserver observer;
-    	
-    	synchronized (observers) {
-        	observer = (FilesystemAlterationObserver)observers.get(pRoot);
+    	final FilesystemAlterationObserver observer = (FilesystemAlterationObserver)observers.get(pRoot);
 
-        	if (observer == null) {
-        		return new FilesystemAlterationListener[0];
-        	}			
-		}
+        if (observer == null) {
+        	return new FilesystemAlterationListener[0];
+        }			
 
-    	return observer.getListeners();
+        return observer.getListeners();
     }
 
 
@@ -165,19 +114,13 @@ public final class FilesystemAlterationMonitor implements Runnable {
                 break;
             }
 
-            final FilesystemAlterationObserver[] observerArray;
+            final Map currentObservers = observers;
             
-        	synchronized (observers) {
-        		observerArray = (FilesystemAlterationObserver[])observers.values().toArray(
-        				new FilesystemAlterationObserver[observers.size()]); 
-
-        	}        	
-            
-            for (int i = 0; i < observerArray.length; i++) {
-				final FilesystemAlterationObserver observer = observerArray[i];
-				observer.checkAndNotify();
+        	for (Iterator it = currentObservers.values().iterator(); it.hasNext();) {
+				final FilesystemAlterationObserver observer = (FilesystemAlterationObserver) it.next();
+				observer.checkAndNotify();				
 			}
-            
+        	            
             try {
                 Thread.sleep(delay);
             } catch (final InterruptedException e) {
