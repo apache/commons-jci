@@ -24,6 +24,7 @@ import java.util.Iterator;
 import org.apache.commons.jci.compilers.CompilationResult;
 import org.apache.commons.jci.compilers.JavaCompiler;
 import org.apache.commons.jci.compilers.JavaCompilerFactory;
+import org.apache.commons.jci.monitor.FilesystemAlterationObserver;
 import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.readers.FileResourceReader;
 import org.apache.commons.jci.readers.ResourceReader;
@@ -37,30 +38,25 @@ import org.apache.commons.logging.LogFactory;
 
 public class CompilingListener extends ReloadingListener {
 
-    private final static Log log = LogFactory.getLog(CompilingListener.class);
+    private final Log log = LogFactory.getLog(CompilingListener.class);
     
     private final JavaCompiler compiler;
-    private final ResourceReader reader;
     private final TransactionalResourceStore transactionalStore;
+    private ResourceReader reader;
     private CompilationResult lastResult;
     
-    public CompilingListener( final File pRepository ) {
-        this(pRepository,
-             new JavaCompilerFactory().createCompiler("eclipse"),
-             new TransactionalResourceStore(new MemoryResourceStore())
-             );
+    public CompilingListener() {
+        this(new JavaCompilerFactory().createCompiler("eclipse"));
+    }
+
+    public CompilingListener( final JavaCompiler pCompiler ) {
+        this(pCompiler, new TransactionalResourceStore(new MemoryResourceStore()));
     }
     
-    public CompilingListener(
-            final File pRepository,
-            final JavaCompiler pCompiler,
-            final TransactionalResourceStore pTransactionalStore
-            ) {
-        super(pRepository);
+    public CompilingListener( final JavaCompiler pCompiler, final TransactionalResourceStore pTransactionalStore ) {
+    	super(pTransactionalStore);
         compiler = pCompiler;
         transactionalStore = pTransactionalStore;
-
-        reader = new FileResourceReader(pRepository);
         lastResult = null;
     }
     
@@ -72,25 +68,38 @@ public class CompilingListener extends ReloadingListener {
         return lastResult;
     }
     
-    public void onStart() {
-        super.onStart();
+    public void onStart( final FilesystemAlterationObserver pObserver ) {
+        super.onStart(pObserver);
+
+        reader = new FileResourceReader(pObserver.getRootDirectory());
+
         transactionalStore.onStart();
     }
 
-    public void onStop() {
-        boolean reload = false;
-
-        log.debug("created:" + created.size()
-                + " changed:" + changed.size()
-                + " deleted:" + deleted.size()
-                + " resources");
-
+    public boolean isReloadRequired( final FilesystemAlterationObserver pObserver ) {
+    	boolean reload = false;
+    	
+        final Collection created = getCreatedFiles();
+        final Collection changed = getChangedFiles();
+        final Collection deleted = getDeletedFiles();
         
+        log.debug("created:" + created.size() + " changed:" + changed.size() + " deleted:" + deleted.size() + " resources");
+
         if (deleted.size() > 0) {
             for (Iterator it = deleted.iterator(); it.hasNext();) {
-                final File file = (File) it.next();
+                final File deletedFile = (File) it.next();
+
+                if (deletedFile.getName().endsWith(".java")) {
+                    transactionalStore.remove(
+                    		ClassUtils.stripExtension(
+                    				ClassUtils.relative(pObserver.getRootDirectory(), deletedFile)) + ".class");
+                } else {
+                    transactionalStore.remove(ClassUtils.relative(pObserver.getRootDirectory(), deletedFile));                	
+                }
+
+                
                 // FIXME: does not remove nested classes
-                transactionalStore.remove(ClassUtils.clazzName(repository, file));
+                
             }
             reload = true;
         }
@@ -113,21 +122,19 @@ public class CompilingListener extends ReloadingListener {
 
         if (compileables.size() > 0) {
 
-            log.debug(compileables.size()
-                    + " classes to compile"
-                    );
+            log.debug(compileables.size() + " classes to compile");
 
             int i = 0;
-            final String[] clazzes = new String[compileables.size()];            
+            final String[] sourceFiles = new String[compileables.size()];            
             for (Iterator it = compileables.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
-                clazzes[i] = ClassUtils.clazzName(repository, file);
+                sourceFiles[i] = ClassUtils.relative(pObserver.getRootDirectory(), file);
                 i++;
             }
             
             final CompilationResult result =
                 compiler.compile(
-                    clazzes,
+                    sourceFiles,
                     reader,
                     transactionalStore
                     );
@@ -147,16 +154,14 @@ public class CompilingListener extends ReloadingListener {
             if (errors.length > 0) {
                 // FIXME: they need to be marked for re-compilation
                 // and then added as compileables again
-                for (int j = 0; j < clazzes.length; j++) {
-                    transactionalStore.remove(clazzes[j]);
+                for (int j = 0; j < sourceFiles.length; j++) {
+                    transactionalStore.remove(sourceFiles[j]);
                 }
             }
             
             reload = true;
         }
-
-        transactionalStore.onStop();
-
-        super.onStop();
-    }
+        
+        return reload;
+    }    
 }

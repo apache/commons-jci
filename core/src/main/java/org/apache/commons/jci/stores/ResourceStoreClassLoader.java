@@ -16,6 +16,7 @@
  */
 package org.apache.commons.jci.stores;
 
+import org.apache.commons.jci.utils.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -28,11 +29,9 @@ public final class ResourceStoreClassLoader extends ClassLoader {
     private final Log log = LogFactory.getLog(ResourceStoreClassLoader.class);
 
     private final ResourceStore[] stores;
-    //private final ClassLoader parent;
 
     public ResourceStoreClassLoader( final ClassLoader pParent, final ResourceStore[] pStores ) {
         super(pParent);
-        //parent = pParent;
         stores = pStores;
     }
 
@@ -41,7 +40,7 @@ public final class ResourceStoreClassLoader extends ClassLoader {
         if (stores != null) {
             for (int i = 0; i < stores.length; i++) {
                 final ResourceStore store = stores[i];
-                final byte[] clazzBytes = store.read(name);
+                final byte[] clazzBytes = store.read(ClassUtils.convertClassToResourcePath(name));
                 if (clazzBytes != null) {
                     log.debug("found class " + name  + " (" + clazzBytes.length + " bytes)");
                     return defineClass(name, clazzBytes, 0, clazzBytes.length);
@@ -50,12 +49,12 @@ public final class ResourceStoreClassLoader extends ClassLoader {
         }
         
         log.debug("did not find class " + name);
-        
+
         return null;            
     }
     
     protected synchronized Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
-        log.debug("looking for " + name);
+        //log.debug("looking for " + name);
         Class clazz = findLoadedClass(name);
 
         if (clazz == null) {
@@ -66,13 +65,13 @@ public final class ResourceStoreClassLoader extends ClassLoader {
                 final ClassLoader parent = getParent();
                 if (parent != null) {
                     clazz = parent.loadClass(name);
-                    log.debug("loaded from parent: " + name);
+                    //log.debug("loaded from parent: " + name);
                 } else {
                     throw new ClassNotFoundException(name);
                 }
                 
             } else {
-                log.debug("loaded from store: " + name);
+                //log.debug("loaded from store: " + name);
             }
         }
 

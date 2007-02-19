@@ -17,7 +17,9 @@
 package org.apache.commons.jci;
 
 import java.io.File;
-import org.apache.commons.jci.compilers.JavaSources;
+
+import org.apache.commons.jci.classes.ExtendedDump;
+import org.apache.commons.jci.classes.SimpleDump;
 import org.apache.commons.jci.listeners.ReloadingListener;
 import org.apache.commons.jci.monitor.FilesystemAlterationMonitor;
 import org.apache.commons.logging.Log;
@@ -32,19 +34,16 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
     private ReloadingListener listener;
     private FilesystemAlterationMonitor fam;
 
-    private final byte[] clazzSimple;
-    private final byte[] clazzSIMPLE;
+    private final byte[] clazzSimple1;
+    private final byte[] clazzSimple2;
     private final byte[] clazzExtended;
     
-    public ReloadingClassLoaderTestCase() {
-        clazzSimple = CompilerUtils.compile("jci.Simple", JavaSources.simple);
-        clazzSIMPLE = CompilerUtils.compile("jci.Simple", JavaSources.SIMPLE);
-        clazzExtended = CompilerUtils.compile(
-                new String[] { "jci.Extended", "jci.Simple" },
-                new String[] { JavaSources.extended, JavaSources.simple }
-                );
-        assertTrue(clazzSimple.length > 0);
-        assertTrue(clazzSIMPLE.length > 0);
+    public ReloadingClassLoaderTestCase() throws Exception {
+        clazzSimple1 = SimpleDump.dump("Simple1");
+        clazzSimple2 = SimpleDump.dump("Simple2");
+        clazzExtended = ExtendedDump.dump(); 
+        assertTrue(clazzSimple1.length > 0);
+        assertTrue(clazzSimple2.length > 0);
         assertTrue(clazzExtended.length > 0);
     }
     
@@ -52,67 +51,56 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         super.setUp();
         
         classloader = new ReloadingClassLoader(this.getClass().getClassLoader());
-        listener = new ReloadingListener(directory);
+        listener = new ReloadingListener();
         
-        // listener.addListener(classloader);
-        classloader.addListener(listener);
+        listener.addReloadNotificationListener(classloader);
         
         fam = new FilesystemAlterationMonitor();
-        fam.addListener(listener);
+        fam.addListener(directory, listener);
         fam.start();
     }
 
     public void testCreate() throws Exception {
-        listener.waitForCheck();
+        listener.waitForFirstCheck();
 
-        log.debug("creating class");
-        
-        delay();
-        writeFile("jci/Simple.class", clazzSimple);
+        log.debug("creating class");        
+        writeFile("jci/Simple.class", clazzSimple1);
         listener.waitForCheck();
         
         final Object simple = classloader.loadClass("jci.Simple").newInstance();        
-        assertEquals("Simple", simple.toString());        
+        assertEquals("Simple1", simple.toString());        
     }
 
     public void testChange() throws Exception {        
-        listener.waitForCheck();
+        listener.waitForFirstCheck();
 
         log.debug("creating class");
-
-        delay();        
-        writeFile("jci/Simple.class", clazzSimple);
+        writeFile("jci/Simple.class", clazzSimple1);
         listener.waitForCheck();
 
-        final Object simple = classloader.loadClass("jci.Simple").newInstance();        
-        assertEquals("Simple", simple.toString());
+        final Object simple1 = classloader.loadClass("jci.Simple").newInstance();        
+        assertEquals("Simple1", simple1.toString());
         
-        log.debug("changing class");
-        
-        delay();        
-        writeFile("jci/Simple.class", clazzSIMPLE);
+        log.debug("changing class");        
+        writeFile("jci/Simple.class", clazzSimple2);
         listener.waitForEvent();
     
-        final Object SIMPLE = classloader.loadClass("jci.Simple").newInstance();        
-        assertEquals("SIMPLE", SIMPLE.toString());        
+        final Object simple2 = classloader.loadClass("jci.Simple").newInstance();        
+        assertEquals("Simple2", simple2.toString());        
     }
 
     public void testDelete() throws Exception {
-        listener.waitForCheck();
+        listener.waitForFirstCheck();
 
         log.debug("creating class");
-
-        delay();        
-        writeFile("jci/Simple.class", clazzSimple);
+        writeFile("jci/Simple.class", clazzSimple1);
         listener.waitForCheck();
 
         final Object simple = classloader.loadClass("jci.Simple").newInstance();        
-        assertEquals("Simple", simple.toString());
+        assertEquals("Simple1", simple.toString());
 
-        log.debug("deleting class");
-        
+        log.debug("deleting class");        
         assertTrue(new File(directory, "jci/Simple.class").delete());
-        
         listener.waitForEvent();
 
         try {
@@ -124,25 +112,21 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
     }
 
     public void testDeleteDependency() throws Exception {        
-        listener.waitForCheck();
+        listener.waitForFirstCheck();
 
         log.debug("creating classes");
-
-        delay();        
-        writeFile("jci/Simple.class", clazzSimple);
+        writeFile("jci/Simple.class", clazzSimple1);
         writeFile("jci/Extended.class", clazzExtended);
         listener.waitForCheck();
 
         final Object simple = classloader.loadClass("jci.Simple").newInstance();        
-        assertEquals("Simple", simple.toString());
+        assertEquals("Simple1", simple.toString());
         
         final Object extended = classloader.loadClass("jci.Extended").newInstance();        
-        assertEquals("Extended:Simple", extended.toString());
+        assertEquals("Extended:Simple1", extended.toString());
 
-        log.debug("deleting class dependency");
-        
+        log.debug("deleting class dependency");        
         assertTrue(new File(directory, "jci/Simple.class").delete());
-        
         listener.waitForEvent();
 
         try {
@@ -164,7 +148,7 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
     
     public void testDelegation() {
         classloader.clearAssertionStatus();
-        classloader.setClassAssertionStatus("org.apache.commons.jci.ReloadingClassLoader",true);
+        classloader.setClassAssertionStatus("org.apache.commons.jci.ReloadingClassLoader", true);
         classloader.setDefaultAssertionStatus(false);
         classloader.setPackageAssertionStatus("org.apache.commons.jci", true);
         // FIXME: compare with delegation

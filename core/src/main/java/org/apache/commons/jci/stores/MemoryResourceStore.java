@@ -33,13 +33,14 @@ public final class MemoryResourceStore implements ResourceStore {
     private final Log log = LogFactory.getLog(MemoryResourceStore.class);
 
 	private final Map store = new HashMap();
-	
+		
 	public byte[] read( final String pResourceName ) {
+		log.debug("reading resource " + pResourceName);
 		return (byte[]) store.get(pResourceName);
 	}
 
 	public void write( final String pResourceName, final byte[] pData ) {
-		log.debug("storing resource " + pResourceName + "(" + pData.length + ")");
+		log.debug("writing resource " + pResourceName + "(" + pData.length + ")");
 		store.put(pResourceName, pData);
 	}
 	

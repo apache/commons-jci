@@ -18,8 +18,8 @@ package org.apache.commons.jci;
 
 import java.io.InputStream;
 import java.net.URL;
-import org.apache.commons.jci.listeners.NotificationListener;
-import org.apache.commons.jci.listeners.ReloadingListener;
+
+import org.apache.commons.jci.listeners.ReloadNotificationListener;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.jci.stores.ResourceStoreClassLoader;
 import org.apache.commons.logging.Log;
@@ -28,14 +28,15 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author tcurdt
  */
-public class ReloadingClassLoader extends ClassLoader implements NotificationListener {
+public class ReloadingClassLoader extends ClassLoader implements ReloadNotificationListener {
     
     private final Log log = LogFactory.getLog(ReloadingClassLoader.class);
     
     private final ClassLoader parent;
-    //private final Collection reloadingListeners = new HashSet();
     private ResourceStore[] stores = new ResourceStore[0];
     private ClassLoader delegate;
+
+    //private final Collection reloadingListeners = new HashSet();
     
     public ReloadingClassLoader( final ClassLoader pParent ) {        
         super(pParent);
@@ -44,32 +45,33 @@ public class ReloadingClassLoader extends ClassLoader implements NotificationLis
         delegate = new ResourceStoreClassLoader(parent, stores);
     }
 
-    public void addListener(final ReloadingListener pListener) {
-        pListener.setNotificationListener(this);
-        addResourceStore(pListener.getStore());
-    }
+//    public void addListener(final ReloadingListener pListener) {
+////        pListener.setNotificationListener(this);
+//        addResourceStore(pListener.getStore());
+//    }
     
-    public void removeListener(final ReloadingListener pListener) {
-        removeResourceStore(pListener.getStore());
-        pListener.setNotificationListener(null);
-    }
+//    public void removeListener(final ReloadingListener pListener) {
+//        removeResourceStore(pListener.getStore());
+////        pListener.setNotificationListener(null);
+//    }
     
-    private boolean addResourceStore( final ResourceStore pStore ) {
+    public boolean addResourceStore( final ResourceStore pStore ) {
         try {        
             final int n = stores.length;
             final ResourceStore[] newStores = new ResourceStore[n + 1];
-            System.arraycopy(stores, 0, newStores, 0, n);
-            newStores[n] = pStore;
+            System.arraycopy(stores, 0, newStores, 1, n);
+            newStores[0] = pStore;
             stores = newStores;
-            delegate = new ResourceStoreClassLoader(parent, stores);
+            delegate = new ResourceStoreClassLoader(parent, stores);            
             return true;
         } catch ( final Exception e ) {
+        	e.printStackTrace();
             // TODO: rethrow?
         }
         return false;
     }
 
-    private boolean removeResourceStore( final ResourceStore pStore ) {
+    public boolean removeResourceStore( final ResourceStore pStore ) {
         try {
             final int n = stores.length;
             int i = 0;
@@ -78,8 +80,7 @@ public class ReloadingClassLoader extends ClassLoader implements NotificationLis
             while ( ( i <= n )  && ( stores[i] != pStore ) ) {
                 i++;
             }
-            
-            
+                        
             //pStore was not found
             if ( i == n ) {
                 throw new Exception( "pStore was not found" );

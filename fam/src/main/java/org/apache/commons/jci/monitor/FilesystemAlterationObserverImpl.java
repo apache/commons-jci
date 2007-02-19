@@ -1,401 +1,372 @@
 /*
- * Copyright 1999-2004 The Apache Software Foundation. Licensed under the Apache License, Version
- * 2.0 (the "License"); you may not use this file except in compliance with the License. You may
- * obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
- * applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See
- * the License for the specific language governing permissions and limitations under the License.
+ * Copyright 1999-2004 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.apache.commons.jci.monitor;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections.MultiHashMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
+ * Implementation of a FilesystemAlterationObserver
+ * 
  * @author tcurdt
  */
 public class FilesystemAlterationObserverImpl implements FilesystemAlterationObserver {
 
     private final Log log = LogFactory.getLog(FilesystemAlterationObserverImpl.class);
+    
+    private interface MonitorFile {
 
-    public class Entry {
+    	long lastModified();
+    	MonitorFile[] listFiles();
+    	boolean isDirectory();
+    	boolean exists();
+    	String getName();
 
-        private final File root;
-        private final File file;
-        private long lastModified;
-        private Set paths = new HashSet();
-        private Set childs = new HashSet();
-        private final boolean isDirectory;
+    }
+    
+	private final static class MonitorFileImpl implements MonitorFile {
+		
+		private final File file;
+		
+		public MonitorFileImpl( final File pFile ) {
+			file = pFile;
+		}
 
+		public boolean exists() {
+			return file.exists();
+		}
 
-        public Entry(final File pRoot, final File pFile) {
-            root = pRoot;
+		public MonitorFile[] listFiles() {
+			final File[] childs = file.listFiles();
+			
+			final MonitorFile[] providers = new MonitorFile[childs.length];
+			for (int i = 0; i < providers.length; i++) {
+				providers[i] = new MonitorFileImpl(childs[i]);
+			}
+			return providers;
+		}
+
+		public String getName() {
+			return file.getName();
+		}
+
+		public boolean isDirectory() {
+			return file.isDirectory();
+		}
+
+		public long lastModified() {
+			return file.lastModified();
+		}
+		
+		public String toString() {
+			return file.toString();
+		}
+		
+	}
+	
+	private final class Entry {
+
+    	private final static int TYPE_UNKNOWN = 0;
+    	private final static int TYPE_FILE = 1;
+    	private final static int TYPE_DIRECTORY = 2;
+    	
+        private final MonitorFile file;
+        private long lastModified = -1;
+        private int lastType = TYPE_UNKNOWN;
+        private Map childs = new HashMap();
+
+        public Entry(final MonitorFile pFile) {
             file = pFile;
-            lastModified = -1;
-            isDirectory = file.isDirectory();
+        }
+
+        public String getName() {
+        	return file.getName();
+        }
+        
+        
+		public String toString() {
+            return file.toString();
         }
 
 
-        public boolean hasChanged() {
-            final long modified = file.lastModified();
-            return modified != lastModified;
+		private void compareChilds() {
+			if (!file.isDirectory()) {
+				return;
+			}
+			
+			final MonitorFile[] files = file.listFiles();
+			final Set deleted = new HashSet(childs.values());
+			for (int i = 0; i < files.length; i++) {
+				final MonitorFile f = files[i];
+				final String name = f.getName();
+				final Entry entry = (Entry)childs.get(name);
+				if (entry != null) {
+					// already recognized as child
+					deleted.remove(entry);
+					
+					if(entry.needsToBeDeleted()) {
+						// we have to delete this one
+						childs.remove(name);
+					}
+				} else {
+					// a new child
+					final Entry newChild = new Entry(f);
+					childs.put(name, newChild);
+					newChild.needsToBeDeleted();
+				}
+			}
+			
+			// the ones not found on disk anymore
+			
+			for (Iterator it = deleted.iterator(); it.hasNext();) {
+				final Entry entry = (Entry) it.next();
+				entry.deleteChildsAndNotify();				
+				childs.remove(entry.getName());
+			}
+		}
+
+		
+		private void deleteChildsAndNotify() {
+        	for (Iterator it = childs.values().iterator(); it.hasNext();) {
+				final Entry entry = (Entry) it.next();
+
+				entry.deleteChildsAndNotify();
+			}
+        	childs.clear();			
+
+			if(lastType == TYPE_DIRECTORY) {
+				notifyOnDirectoryDelete(this);
+			} else if (lastType == TYPE_FILE) {
+				notifyOnFileDelete(this);					
+			}
+		}
+		
+        public boolean needsToBeDeleted() {
+        	
+        	if (!file.exists()) {
+        		// deleted or has never existed yet
+        		
+//        		log.debug(file + " does not exist or has been deleted");
+
+        		deleteChildsAndNotify();
+
+        		// mark to be deleted by parent
+        		return true;        		
+        	} else {
+        		// exists
+        		final long currentModified = file.lastModified(); 
+
+        		if (currentModified != lastModified) {
+	        		// last modified has changed
+    				lastModified = currentModified;
+
+//            		log.debug(file + " has new last modified");
+    				
+        			// types only changes when also the last modified changes
+	        		final int newType = (file.isDirectory()?TYPE_DIRECTORY:TYPE_FILE); 
+	
+	        		if (lastType != newType) {
+	        			// the type has changed
+
+//	            		log.debug(file + " has a new type");
+	        			
+	        			deleteChildsAndNotify();
+	        				        			
+	        			lastType = newType;
+
+	        			// and then an add as the new type
+
+	        			if (newType == TYPE_DIRECTORY) {
+	        				notifyOnDirectoryCreate(this);     				
+	        				compareChilds();        				
+		        		} else {	        		
+		    				notifyOnFileCreate(this);     				
+		        		}
+
+	    	    		return false;
+	        		}
+	        		        		
+	        		if (newType == TYPE_DIRECTORY) {
+        				notifyOnDirectoryChange(this);     				
+        				compareChilds();        				
+	        		} else {	        		
+	    				notifyOnFileChange(this);     				
+	        		}
+	        		
+    	    		return false;
+
+        		} else {
+
+        			// so exists and has not changed
+        			
+//            		log.debug(file + " does exist and has not changed");
+
+        			compareChilds();
+
+        			return false;
+	        	}
+        	}    		
         }
-
-
-        public boolean isDelected() {
-            return !file.exists();
-        }
-
-
-        public boolean isDirectory() {
-            return isDirectory;
-        }
-
-
-        public Entry[] getChilds() {
-            final Entry[] r = new Entry[childs.size()];
-            childs.toArray(r);
-            return r;
-        }
-
-
-        private FileFilter getFileFilter() {
-            return new FileFilter() {
-
-                public boolean accept( final File pathname ) {
-                    final String p = pathname.getAbsolutePath();
-                    return !paths.contains(p);
-                }
-            };
-        }
-
-
-        public Entry[] getNonChilds() {
-            final File[] newFiles = file.listFiles(getFileFilter());
-            final Entry[] r = new Entry[newFiles.length];
-            for (int i = 0; i < newFiles.length; i++) {
-                r[i] = new Entry(root, newFiles[i]);
-            }
-            return r;
-        }
-
-
-        public void add( final Entry entry ) {
-            childs.add(entry);
-            paths.add(entry.toString());
-            onCreate(root, entry);
-        }
-
-
-        private void deleteChilds() {
-            final Entry[] childs = this.getChilds();
-            for (int i = 0; i < childs.length; i++) {
-                final Entry child = childs[i];
-                delete(child);
-            }
-        }
-
-
-        public void delete( final Entry entry ) {
-            childs.remove(entry);
-            paths.remove(entry.toString());
-            entry.deleteChilds();
-            onDelete(root, entry);
-        }
-
-
-        public File getFile() {
+        
+        public MonitorFile getFile() {
             return file;
         }
-
 
         public void markNotChanged() {
             lastModified = file.lastModified();
         }
 
-
-        public String toString() {
-            return file.getAbsolutePath();
-        }
     }
 
-    public static class UniqueMultiValueMap extends MultiHashMap {
+	private final File rootDirectory;
+	private final Entry rootEntry;
 
-		private static final long serialVersionUID = 1L;
+	private FilesystemAlterationListener[] listeners = new FilesystemAlterationListener[0];
+	private Set listenersSet = new HashSet();
+	
+	public FilesystemAlterationObserverImpl( final File pRootDirectory ) {
+		rootDirectory = pRootDirectory;
+		rootEntry = new Entry(new MonitorFileImpl(pRootDirectory));
+	}
 
-		public UniqueMultiValueMap() {
-            super( );
-        }
+	
+	
+	private void notifyOnStart() {
+		log.debug("onStart " + rootEntry);
+		for (int i = 0; i < listeners.length; i++) {
+			final FilesystemAlterationListener listener = listeners[i];
+			listener.onStart(this);
+		}
+	}
+	private void notifyOnStop() {
+		log.debug("onStop " + rootEntry);
+		for (int i = 0; i < listeners.length; i++) {
+			final FilesystemAlterationListener listener = listeners[i];
+			listener.onStop(this);
+		}
+	}
 
-        public UniqueMultiValueMap(Map copy) {
-            super( copy );
-        }
+	private void notifyOnFileCreate( final Entry pEntry ) {
+		log.debug("onFileCreate " + pEntry);
+		for (int i = 0; i < listeners.length; i++) {
+			final FilesystemAlterationListener listener = listeners[i];
+			listener.onFileCreate(((MonitorFileImpl)pEntry.getFile()).file );
+		}
+	}
+	private void notifyOnFileChange( final Entry pEntry ) {
+		log.debug("onFileChange " + pEntry);
+		for (int i = 0; i < listeners.length; i++) {
+			final FilesystemAlterationListener listener = listeners[i];
+			listener.onFileChange(((MonitorFileImpl)pEntry.getFile()).file );
+		}
+	}
+	private void notifyOnFileDelete( final Entry pEntry ) {
+		log.debug("onFileDelete " + pEntry);
+		for (int i = 0; i < listeners.length; i++) {
+			final FilesystemAlterationListener listener = listeners[i];
+			listener.onFileDelete(((MonitorFileImpl)pEntry.getFile()).file );
+		}
+	}
 
-        protected Collection createCollection( Collection copy ) {
-            if (copy != null) {
-                return new HashSet(copy);
-            }
-            return new HashSet();
-        }
+	private void notifyOnDirectoryCreate( final Entry pEntry ) {
+		log.debug("onDirectoryCreate " + pEntry);
+		for (int i = 0; i < listeners.length; i++) {
+			final FilesystemAlterationListener listener = listeners[i];
+			listener.onDirectoryCreate(((MonitorFileImpl)pEntry.getFile()).file );
+		}
+	}
+	private void notifyOnDirectoryChange( final Entry pEntry ) {
+		log.debug("onDirectoryChange " + pEntry);
+		for (int i = 0; i < listeners.length; i++) {
+			final FilesystemAlterationListener listener = listeners[i];
+			listener.onDirectoryChange(((MonitorFileImpl)pEntry.getFile()).file );
+		}
+	}
+	private void notifyOnDirectoryDelete( final Entry pEntry ) {
+		log.debug("onDirectoryDelete " + pEntry);
+		for (int i = 0; i < listeners.length; i++) {
+			final FilesystemAlterationListener listener = listeners[i];
+			listener.onDirectoryDelete(((MonitorFileImpl)pEntry.getFile()).file );
+		}
+	}
+	
+
+    private void checkEntries() {
+		if(rootEntry.needsToBeDeleted()) {
+			// root not existing
+			rootEntry.lastType = Entry.TYPE_UNKNOWN;
+		}    	
+    }
+
+    
+    public synchronized void checkAndNotify() {    	
+    	if (listeners.length == 0) {
+    		return;
+    	}
+    	
+    	notifyOnStart();
         
-    }
-    
-    private Map listeners = new UniqueMultiValueMap();
-    private Map directories = new UniqueMultiValueMap();
-    private Map entries = new HashMap();
-    private final Object mutexListeners = new Object();
-    
-
-    public FilesystemAlterationObserverImpl() {
-    }
-
-
-    public void addListener( final FilesystemAlterationListener pListener ) {
-        final File directory = pListener.getRepository();
-        synchronized (mutexListeners) {
-            // listerner -> dir1, dir2, dir3
-            final UniqueMultiValueMap newListeners = new UniqueMultiValueMap(listeners);
-            newListeners.put(pListener, directory);
-            listeners = newListeners;
-            // directory -> listener1, listener2, listener3
-            final UniqueMultiValueMap newDirectories = new UniqueMultiValueMap(directories);
-            newDirectories.put(directory, pListener);
-            directories = newDirectories;
-        }
-    }
-
-    public Collection getListeners() {
-        synchronized (mutexListeners) {
-            return listeners.keySet();
-        }
-    }
-
-    public Collection getListenersFor( final File pRepository ) {
-        synchronized (mutexListeners) {
-            return (Collection) directories.get(pRepository);
-        }
-    }
-
-    public void removeListener( final FilesystemAlterationListener listener ) {
-        synchronized (mutexListeners) {
-            // listerner -> dir1, dir2, dir3
-            final UniqueMultiValueMap newListeners = new UniqueMultiValueMap(listeners);
-            Collection d = (Collection) newListeners.remove(listener);
-            listeners = newListeners;
-            if (d != null) {
-                // directory -> listener1, listener2, listener3
-                final UniqueMultiValueMap newDirectories = new UniqueMultiValueMap(directories);
-                for (Iterator it = d.iterator(); it.hasNext();) {
-                    newDirectories.remove(it.next());
-                    entries.remove(d);
-                }
-                directories = newDirectories;
-            }
-        }
-    }
-
-
-    private void onStart( final File root ) {
-        log.debug("start checking " + root);
-        Map directories;
-        synchronized (mutexListeners) {
-            directories = this.directories;
-        }
-        final Collection l = (Collection) directories.get(root);
-        if (l != null) {
-            for (Iterator it = l.iterator(); it.hasNext();) {
-                final FilesystemAlterationListener listener = (FilesystemAlterationListener) it
-                        .next();
-                listener.onStart();
-            }
-        }
-    }
-
-
-    private void onStop( final File root ) {
-        log.debug("stop checking " + root);
-        Map directories;
-        synchronized (mutexListeners) {
-            directories = this.directories;
-        }
-        final Collection l = (Collection) directories.get(root);
-        if (l != null) {
-            for (Iterator it = l.iterator(); it.hasNext();) {
-                final FilesystemAlterationListener listener = (FilesystemAlterationListener) it
-                        .next();
-                listener.onStop();
-            }
-        }
-    }
-
-
-    private void onCreate( final File root, final Entry entry ) {
-        log.debug("created " + ((entry.isDirectory()) ? "dir " : "file ") + entry);
-        Map directories;
-        synchronized (mutexListeners) {
-            directories = this.directories;
-        }
-        final Collection l = (Collection) directories.get(root);
-        if (l != null) {
-            if (entry.isDirectory()) {
-                for (Iterator it = l.iterator(); it.hasNext();) {
-                    final FilesystemAlterationListener listener = (FilesystemAlterationListener) it
-                            .next();
-                    listener.onCreateDirectory(entry.getFile());
-                }
-            } else {
-                for (Iterator it = l.iterator(); it.hasNext();) {
-                    final FilesystemAlterationListener listener = (FilesystemAlterationListener) it
-                            .next();
-                    listener.onCreateFile(entry.getFile());
-                }
-            }
-        }
-        entry.markNotChanged();
-    }
-
-
-    private void onChange( final File root, final Entry entry ) {
-        log.debug("changed " + ((entry.isDirectory()) ? "dir " : "file ") + entry);
-        Map directories;
-        synchronized (mutexListeners) {
-            directories = this.directories;
-        }
-        final Collection l = (Collection) directories.get(root);
-        if (l != null) {
-            if (entry.isDirectory()) {
-                for (Iterator it = l.iterator(); it.hasNext();) {
-                    final FilesystemAlterationListener listener = (FilesystemAlterationListener) it
-                            .next();
-                    listener.onChangeDirectory(entry.getFile());
-                }
-            } else {
-                for (Iterator it = l.iterator(); it.hasNext();) {
-                    final FilesystemAlterationListener listener = (FilesystemAlterationListener) it
-                            .next();
-                    listener.onChangeFile(entry.getFile());
-                }
-            }
-        }
-        entry.markNotChanged();
-    }
-
-
-    private void onDelete( final File root, final Entry entry ) {
-        log.debug("deleted " + ((entry.isDirectory()) ? "dir " : "file ") + entry);
-        Map directories;
-        synchronized (mutexListeners) {
-            directories = this.directories;
-        }
-        final Collection l = (Collection) directories.get(root);
-        if (l != null) {
-            if (entry.isDirectory()) {
-                for (Iterator it = l.iterator(); it.hasNext();) {
-                    final FilesystemAlterationListener listener = (FilesystemAlterationListener) it
-                            .next();
-                    listener.onDeleteDirectory(entry.getFile());
-                }
-            } else {
-                for (Iterator it = l.iterator(); it.hasNext();) {
-                    final FilesystemAlterationListener listener = (FilesystemAlterationListener) it
-                            .next();
-                    listener.onDeleteFile(entry.getFile());
-                }
-            }
-        }
-        entry.markNotChanged();
-    }
-
-
-    private void check( final File root, final Entry entry, final boolean create ) {
-        // log.debug("checking " + entry);
-        if (entry.isDirectory()) {
-            final Entry[] currentChilds = entry.getChilds();
-            if (entry.hasChanged() || create) {
-                // log.debug(entry + " has changed");
-                if (!create) {
-                    onChange(root, entry);
-                    for (int i = 0; i < currentChilds.length; i++) {
-                        final Entry child = currentChilds[i];
-                        if (child.isDelected()) {
-                            entry.delete(child);
-                            currentChilds[i] = null;
-                        }
-                    }
-                }
-                final Entry[] newChilds = entry.getNonChilds();
-                for (int i = 0; i < newChilds.length; i++) {
-                    final Entry child = newChilds[i];
-                    entry.add(child);
-                }
-                if (!create) {
-                    for (int i = 0; i < currentChilds.length; i++) {
-                        final Entry child = currentChilds[i];
-                        if (child != null) {
-                            check(root, child, false);
-                        }
-                    }
-                }
-                for (int i = 0; i < newChilds.length; i++) {
-                    final Entry child = newChilds[i];
-                    check(root, child, true);
-                }
-            } else {
-                // log.debug(entry + " has not changed");
-                for (int i = 0; i < currentChilds.length; i++) {
-                    final Entry child = currentChilds[i];
-                    check(root, child, false);
-                }
-            }
-        } else {
-            if (entry.isDelected()) {
-                onDelete(root, entry);
-            } else if (entry.hasChanged()) {
-                onChange(root, entry);
-            }
-        }
-    }
-
-
-
-    public void check() {
-        log.debug("observation running");
-        Map directories;
-        synchronized (mutexListeners) {
-            directories = this.directories;
-        }
-        for (Iterator it = directories.keySet().iterator(); it.hasNext();) {
-            final File directory = (File) it.next();
-            if (directory.exists()) {
-                onStart(directory);
-                Entry root;
-                synchronized (mutexListeners) {
-                    root = (Entry) entries.get(directory);
-                    if (root == null) {
-                        root = new Entry(directory, directory);
-                        entries.put(directory, root);
-                    }
-                }
-                check(directory, root, false);
-                onStop(directory);
-            }
-        }
-        log.debug("observation exiting");
-    }
-
-    public String toString() {
-        return listeners.toString() + directories.toString();
+        checkEntries();
+        
+    	notifyOnStop();			
     }
 
     
+    public File getRootDirectory() {
+    	return rootDirectory;
+    }
+
+	public synchronized void addListener( final FilesystemAlterationListener pListener ) {
+		if (listenersSet.add(pListener)) {
+			createArrayFromSet();			
+		}		
+	}
+
+	public synchronized void removeListener( final FilesystemAlterationListener pListener ) {
+		if (listenersSet.remove(pListener)) {
+			createArrayFromSet();			
+		}		
+	}
+
+	private void createArrayFromSet() {
+		final FilesystemAlterationListener[] newListeners = new FilesystemAlterationListener[listenersSet.size()];
+		listenersSet.toArray(newListeners);
+		listeners = newListeners;		
+	}
+	
+	public FilesystemAlterationListener[] getListeners() {
+		return listeners;
+	}
+
+	
+	public static void main( String[] args ) {
+		final FilesystemAlterationObserverImpl observer = new FilesystemAlterationObserverImpl(new File(args[0]));
+		while(true) {
+			observer.checkEntries();
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+			}
+		}
+	}
 }

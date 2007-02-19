@@ -19,22 +19,20 @@ package org.apache.commons.jci.monitor;
 import java.io.File;
 
 /**
+ * A listener that receives events of filesystem modifications.
+ * The observer basically represents the source of the events.
+ * The file root and its state. (see FilesystemAlterationObserver)
+ * 
  * @author tcurdt
  */
 public interface FilesystemAlterationListener {
 	
-	/**
-	 * @deprecated
-	 */
-    File getRepository();
-    
-    
-    void onStart();
-    void onCreateFile( final File file );
-    void onChangeFile( final File file );
-    void onDeleteFile( final File file );
-    void onCreateDirectory( final File dir );
-    void onChangeDirectory( final File dir );
-    void onDeleteDirectory( final File dir );
-    void onStop();
+    void onStart( final FilesystemAlterationObserver pObserver );
+    void onFileCreate( final File pFile );
+    void onFileChange( final File pFile );
+    void onFileDelete( final File pFile );
+    void onDirectoryCreate( final File pDir );
+    void onDirectoryChange( final File pDir );
+    void onDirectoryDelete( final File pDir );
+    void onStop( final FilesystemAlterationObserver pObserver );
 }

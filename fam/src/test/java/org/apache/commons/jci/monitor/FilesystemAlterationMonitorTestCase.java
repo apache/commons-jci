@@ -124,26 +124,14 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
 
     
     private static class MyFilesystemAlterationListener extends AbstractFilesystemAlterationListener {
-    	
-    	final File directory;
-    	
-    	public MyFilesystemAlterationListener( final File pDirectory ) {
-    		directory = pDirectory;
-    	}
-
-		public File getRepository() {
-			return directory;
-		}
-
     }
 
     private void start() throws Exception {
         fam = new FilesystemAlterationMonitor();
-        listener = new MyFilesystemAlterationListener(directory);
-        fam.addListener(listener);
+        listener = new MyFilesystemAlterationListener();
+        fam.addListener(directory, listener);
         fam.start();
         listener.waitForFirstCheck();
-        delay(); // FIXME: really required?
     }
     
     private void stop() {
@@ -152,23 +140,23 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
     
     public void testListenerDoublication() throws Exception {
         fam = new FilesystemAlterationMonitor();
-        listener = new MyFilesystemAlterationListener(directory);
+        listener = new MyFilesystemAlterationListener();
         
-        fam.addListener(listener);
-        assertTrue(fam.getListeners().size() == 1);
+        fam.addListener(directory, listener);
+        assertTrue(fam.getListenersFor(directory).length == 1);
         
-        fam.addListener(listener); 
-        assertTrue(fam.getListeners().size() == 1);
+        fam.addListener(directory, listener); 
+        assertTrue(fam.getListenersFor(directory).length == 1);
     }
 
     public void testDirectoryDoublication() throws Exception {
         fam = new FilesystemAlterationMonitor();
 
-        fam.addListener(new MyFilesystemAlterationListener(directory)); 
-        assertTrue(fam.getListenersFor(directory).size() == 1);
+        fam.addListener(directory, new MyFilesystemAlterationListener()); 
+        assertTrue(fam.getListenersFor(directory).length == 1);
         
-        fam.addListener(new MyFilesystemAlterationListener(directory)); 
-        assertTrue(fam.getListenersFor(directory).size() == 2);
+        fam.addListener(directory, new MyFilesystemAlterationListener()); 
+        assertTrue(fam.getListenersFor(directory).length == 2);
     }
 
     public void testCreateFileDetection() throws Exception {
@@ -176,9 +164,9 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
         
         writeFile("file", "file");
         
-        listener.waitForEvent();
+        listener.waitForCheck();
         
-        assertTrue(listener.getCreatedFiles() == 1);
+        assertTrue(listener.getCreatedFiles().size() == 1);
         
         stop();
     }
@@ -188,9 +176,9 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
 
         createDirectory("dir");
         
-        listener.waitForEvent();
+        listener.waitForCheck();
         
-        assertTrue(listener.getCreatedDirectories() == 1);
+        assertTrue(listener.getCreatedDirectories().size() == 1);
         
         stop();
     }
@@ -200,38 +188,41 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
 
         final File file = writeFile("file", "file");
         
-        listener.waitForEvent();
+        listener.waitForCheck();
         
-        assertTrue(listener.getCreatedFiles() == 1);
+        assertTrue(listener.getCreatedFiles().size() == 1);
         
         file.delete();
         assertTrue(!file.exists());
 
-        listener.waitForEvent();
+        listener.waitForCheck();
         
-        assertTrue(listener.getDeletedFiles() == 1);
+        assertTrue(listener.getDeletedFiles().size() == 1);
         
         stop();        
     }
-
     public void testDeleteDirectoryDetection() throws Exception {
         start();
 
         final File dir = createDirectory("dir");
         createDirectory("dir/sub");
+        final File file = writeFile("dir/sub/file", "file");
+
+        listener.waitForCheck();
         
-        listener.waitForEvent();
-        
-        assertTrue(listener.getCreatedDirectories() == 2);
+        assertEquals(2, listener.getCreatedDirectories().size());
+        assertEquals(1, listener.getCreatedFiles().size());
 
         delay();
         
         FileUtils.deleteDirectory(dir);
         assertTrue(!dir.exists());
+        assertTrue(!file.exists());
 
-        listener.waitForEvent();
+        listener.waitForCheck();
         
-        assertTrue(listener.getDeletedDirectories() == 2);
+        assertEquals(2, listener.getDeletedDirectories().size());
+        assertEquals(1, listener.getDeletedFiles().size());
 
         stop();
     }
@@ -241,17 +232,17 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
 
         writeFile("file", "file");
         
-        listener.waitForEvent();
+        listener.waitForCheck();
         
-        assertTrue(listener.getCreatedFiles() == 1);
+        assertTrue(listener.getCreatedFiles().size() == 1);
 
         delay();
 
         writeFile("file", "changed file");
 
-        listener.waitForEvent();
+        listener.waitForCheck();
         
-        assertTrue(listener.getChangedFiles() == 1);
+        assertTrue(listener.getChangedFiles().size() == 1);
         
         stop();
     }

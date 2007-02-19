@@ -4,9 +4,24 @@ import org.apache.commons.jci.AbstractTestCase;
 import org.apache.commons.lang.ArrayUtils;
 
 
-public abstract class AbstractStoreTestCase extends AbstractTestCase {
+public final class ResourceStoreTestCase extends AbstractTestCase {
 
-    protected void testStore(final ResourceStore pStore) {
+	public void testMemoryResourceStore() {
+		checkReadWrite(new MemoryResourceStore());
+		checkRemove(new MemoryResourceStore());		
+	}
+	
+	public void testFileResourceStore() {
+		checkReadWrite(new FileResourceStore(directory));
+		checkRemove(new FileResourceStore(directory));		
+	}
+
+	public void testTransactionalFileResourceStore() {
+		checkReadWrite(new TransactionalResourceStore(new FileResourceStore(directory)));
+		checkRemove(new TransactionalResourceStore(new FileResourceStore(directory)));		
+	}
+	
+    private void checkReadWrite( final ResourceStore pStore ) {
         final byte[] data = { 1, 2, 3 };
         pStore.write("key", data);
         
@@ -16,7 +31,7 @@ public abstract class AbstractStoreTestCase extends AbstractTestCase {
         assertTrue(ArrayUtils.isEquals(data, read));
     }
 
-    protected void testRemove(final ResourceStore pStore) {
+    private void checkRemove( final ResourceStore pStore ) {
         final byte[] data = { 1, 2, 3 };
         pStore.write("key", data);
         
@@ -31,4 +46,7 @@ public abstract class AbstractStoreTestCase extends AbstractTestCase {
         
         assertTrue(empty == null);
     }
+    
+    
+    
 }

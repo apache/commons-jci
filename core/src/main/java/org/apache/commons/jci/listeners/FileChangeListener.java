@@ -2,46 +2,49 @@ package org.apache.commons.jci.listeners;
 
 import java.io.File;
 
+import org.apache.commons.jci.monitor.FilesystemAlterationObserver;
 
-public class FileChangeListener extends NotifyingListener {
+
+public class FileChangeListener extends AbstractFilesystemAlterationListener {
 
     private boolean changed;
-        
-    public FileChangeListener(final File pRepository) {
-        super(pRepository);
+    
+    public boolean hasChanged() {
+    	return changed;
     }
     
-    public void onStart() {
+    public void onStart( final FilesystemAlterationObserver pObserver ) {
         changed = false;
+    	super.onStart(pObserver);
     }
 
-    public void onStop() {
-    	super.onStop();
+    public void onStop( final FilesystemAlterationObserver pObserver ) {
+    	super.onStop(pObserver);
     }
 
     
-    public void onChangeFile( File pFile ) {
+    public void onFileChange( final File pFile ) {
         changed = true;
     }
 
 
-    public void onCreateFile( File pFile ) {
+    public void onFileCreate( final File pFile ) {
         changed = true;
     }
 
 
-    public void onDeleteFile( File pFile ) {
+    public void onFileDelete( final File pFile ) {
         changed = true;
     }
 
 
-    public void onChangeDirectory( File pDir ) {
+    public void onDirectoryChange( final File pDir ) {
     }
 
-    public void onCreateDirectory( File pDir ) {
+    public void onDirectoryCreate( final File pDir ) {
     }
 
-    public void onDeleteDirectory( File pDir ) {
+    public void onDirectoryDelete( final File pDir ) {
     }
     
 }

@@ -18,12 +18,14 @@ package org.apache.commons.jci.listeners;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.jci.ReloadingClassLoader;
+import org.apache.commons.jci.monitor.FilesystemAlterationObserver;
 import org.apache.commons.jci.stores.MemoryResourceStore;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.jci.stores.Transactional;
@@ -32,53 +34,47 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
-public class ReloadingListener extends ResourceStoringListener {
+public class ReloadingListener extends AbstractFilesystemAlterationListener {
 
     private final Log log = LogFactory.getLog(ReloadingListener.class);
 
-    protected final Collection created = new ArrayList();
-    protected final Collection changed = new ArrayList();
-    protected final Collection deleted = new ArrayList();
-
+    private final Set notificationListeners = new HashSet();
     private final ResourceStore store;
-
-    protected ReloadingClassLoader reloader;
     
-    public ReloadingListener( final File pRepository ) {
-        this(pRepository, new MemoryResourceStore());
+    public ReloadingListener() {
+        this(new MemoryResourceStore());
     }
 
-    public ReloadingListener( final File pRepository, final ResourceStore pStore ) {
-        super(pRepository);
+    public ReloadingListener( final ResourceStore pStore ) {
         store = pStore;
     }
     
     public ResourceStore getStore() {
         return store;
     }
-        
-    public void onStart() {
-        created.clear();
-        changed.clear();
-        deleted.clear();
-    }
 
-    public void onStop() {
-        boolean reload = false;
+    public void addReloadNotificationListener( final ReloadNotificationListener pNotificationListener ) {
+    	notificationListeners.add(pNotificationListener);
+    	
+    	if (pNotificationListener instanceof ReloadingClassLoader) {
+    		((ReloadingClassLoader)pNotificationListener).addResourceStore(store);
+    	}
+    	
+    }
+    
+    public boolean isReloadRequired( final FilesystemAlterationObserver pObserver ) {
+    	boolean reload = false;
+    	
+        final Collection created = getCreatedFiles();
+        final Collection changed = getChangedFiles();
+        final Collection deleted = getDeletedFiles();
         
-        log.debug("created:" + created.size()
-                + " changed:" + changed.size()
-                + " deleted:" + deleted.size()
-                + " resources");
-        
-        if (store instanceof Transactional) {
-            ((Transactional)store).onStart();
-        }
-        
+        log.debug("created:" + created.size() + " changed:" + changed.size() + " deleted:" + deleted.size() + " resources");
+
         if (deleted.size() > 0) {
             for (Iterator it = deleted.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
-                final String resourceName = ClassUtils.clazzName(repository, file);
+                final String resourceName = ClassUtils.relative(pObserver.getRootDirectory(), file);
                 //if (resourceName.endsWith(".class")) {
                     store.remove(resourceName);
                 //}
@@ -91,7 +87,7 @@ public class ReloadingListener extends ResourceStoringListener {
                 final File file = (File) it.next();
                 try {
                     final byte[] bytes = IOUtils.toByteArray(new FileInputStream(file));
-                    final String resourceName = ClassUtils.clazzName(repository, file); 
+                    final String resourceName = ClassUtils.relative(pObserver.getRootDirectory(), file); 
                     //if (resourceName.endsWith(".class")) {
                         store.write(resourceName, bytes);
                     //}
@@ -108,7 +104,7 @@ public class ReloadingListener extends ResourceStoringListener {
                 final File file = (File) it.next();
                 try {
                     final byte[] bytes = IOUtils.toByteArray(new FileInputStream(file));
-                    final String resourceName = ClassUtils.clazzName(repository, file); 
+                    final String resourceName = ClassUtils.relative(pObserver.getRootDirectory(), file); 
                     //if (resourceName.endsWith(".class")) {
                         store.write(resourceName, bytes);
                     //}
@@ -118,36 +114,41 @@ public class ReloadingListener extends ResourceStoringListener {
             }
             reload = true;
         }
+    	
+        return reload;
+    }
+    
+    public void onStop( final FilesystemAlterationObserver pObserver ) {
+        
+        
+        if (store instanceof Transactional) {
+            ((Transactional)store).onStart();
+        }
+
+        final boolean reload = isReloadRequired(pObserver);
 
         if (store instanceof Transactional) {
             ((Transactional)store).onStop();
         }
-
         
-        if (reload && notificationListener != null) {
-        	notificationListener.handleNotification();
+        if (reload) {
+        	notifyReloadNotificationListeners();
         }
         
-        super.onStop();
+        super.onStop(pObserver);
     }
 
-    public void onCreateFile( final File pFile ) {
-        created.add(pFile);
-        super.onCreateFile(pFile);
+    void notifyReloadNotificationListeners() {
+    	for (Iterator it = notificationListeners.iterator(); it.hasNext();) {
+    		final ReloadNotificationListener listener = (ReloadNotificationListener) it.next();
+			listener.handleNotification();
+		}    	
     }
-    public void onChangeFile( final File pFile ) {                
-        changed.add(pFile);
-        super.onChangeFile(pFile);
+    
+    public void onDirectoryCreate( final File pDir ) {                
     }
-    public void onDeleteFile( final File pFile ) {
-        deleted.add(pFile);
-        super.onDeleteFile(pFile);
+    public void onDirectoryChange( final File pDir ) {                
     }
-
-    public void onCreateDirectory( final File file ) {                
-    }
-    public void onChangeDirectory( final File file ) {                
-    }
-    public void onDeleteDirectory( final File file ) {
+    public void onDirectoryDelete( final File pDir ) {
     }
 }
