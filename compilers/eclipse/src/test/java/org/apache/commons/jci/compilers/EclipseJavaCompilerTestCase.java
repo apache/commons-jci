@@ -1,7 +1,9 @@
 package org.apache.commons.jci.compilers;
 
-import junit.framework.TestCase;
+public final class EclipseJavaCompilerTestCase extends AbstractCompilerTestCase {
 
-public class EclipseJavaCompilerTestCase extends TestCase {
+	public JavaCompiler createJavaCompiler() {
+		return new EclipseJavaCompiler();
+	}
 
 }

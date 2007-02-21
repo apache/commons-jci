@@ -29,6 +29,7 @@ import java.util.Map;
 import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
+import org.apache.commons.jci.utils.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.janino.ClassLoaderIClassLoader;
@@ -52,7 +53,7 @@ import org.codehaus.janino.util.ClassFile;
  */
 public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 
-    private final static Log log = LogFactory.getLog(JaninoJavaCompiler.class);
+    private final Log log = LogFactory.getLog(JaninoJavaCompiler.class);
 
     private class CompilingIClassLoader extends IClassLoader {
 
@@ -148,12 +149,13 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
         final CompilingIClassLoader icl = new CompilingIClassLoader(pResourceReader, classFilesByName, classLoader);
         for (int i = 0; i < pClasses.length; i++) {
             log.debug("compiling " + pClasses[i]);
-            icl.loadIClass(Descriptor.fromClassName(pClasses[i]));
+            icl.loadIClass(Descriptor.fromClassName(ClassUtils.convertResourceToClassName(pClasses[i])));
         }
         // Store all fully compiled classes
         for (Iterator i = classFilesByName.entrySet().iterator(); i.hasNext();) {
             final Map.Entry entry = (Map.Entry)i.next();
-            pStore.write((String)entry.getKey(), (byte[])entry.getValue());
+            final String clazzName = (String)entry.getKey(); 
+            pStore.write(ClassUtils.convertClassToResourcePath(clazzName), (byte[])entry.getValue());
         }
         
         final Collection problems = icl.getProblems();
