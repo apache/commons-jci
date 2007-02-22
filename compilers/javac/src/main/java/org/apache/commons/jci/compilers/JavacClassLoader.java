@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.io.IOUtils;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.util.CheckClassAdapter;
@@ -26,22 +25,22 @@ public final class JavacClassLoader extends ClassLoader {
 			return super.findClass(name);
 		}
 		
-		final InputStream classStream = getResourceAsStream(name.replace('.', '/') + ".class");
-		
 		try {
 			
 			final byte[] classBytes;
 
-			if (name.startsWith("")) {
+			if (name.startsWith("com.sun.tools.javac.")) {
+				final InputStream classStream = getResourceAsStream(name.replace('.', '/') + ".class");
+				
 		        final ClassWriter renamedCw = new ClassWriter(true, false);
 		        new ClassReader(classStream).accept(new RenamingVisitor(new CheckClassAdapter(renamedCw), new ResourceRenamer() {
 					public String getNewNameFor(final String pOldName) {
 						if (pOldName.startsWith(FileOutputStream.class.getName())) {
-							//System.out.println("rewriting FOS" + name);
+//							System.out.println("rewriting FOS " + name);
 							return FileOutputStreamProxy.class.getName();
 						}
 						if (pOldName.startsWith(FileInputStream.class.getName())) {
-							//System.out.println("rewriting FIS" + name);
+//							System.out.println("rewriting FIS " + name);
 							return FileInputStreamProxy.class.getName();
 						}
 						return pOldName;
@@ -51,7 +50,8 @@ public final class JavacClassLoader extends ClassLoader {
 	        	classBytes = renamedCw.toByteArray();
 				
 			} else {
-				classBytes = IOUtils.toByteArray(classStream);						
+//				classBytes = IOUtils.toByteArray(classStream);
+				return super.findClass(name);
 			}
 			
 			return defineClass(name, classBytes, 0, classBytes.length);

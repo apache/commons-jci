@@ -40,6 +40,7 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 	        final Class renamedClass = cl.loadClass("com.sun.tools.javac.Main");
 	
 	        FileInputStreamProxy.setResourceReader(pReader);
+	        FileOutputStreamProxy.setResourceStore(pStore);
 	        
 			final Method compile = renamedClass.getMethod("compile", new Class[] { String[].class, PrintWriter.class });
 			final StringWriter out = new StringWriter();

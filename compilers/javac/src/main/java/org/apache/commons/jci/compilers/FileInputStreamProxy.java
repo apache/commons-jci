@@ -11,19 +11,20 @@ import org.apache.commons.jci.readers.ResourceReader;
 
 public class FileInputStreamProxy extends InputStream {
 	
-	private final static ThreadLocal readerThreadLocal = new ThreadLocal() {
-		public void set(Object o) {
-			System.out.println("writing " + o + " for " + Thread.currentThread().hashCode());
-			super.set(o);
-			System.out.println("reading1 " + super.get() + " for " + Thread.currentThread().hashCode());
-		}
-		
-		public Object get() {
-			final Object o = super.get();
-			System.out.println("reading2 " + o + " for " + Thread.currentThread().hashCode());
-			return o;
-		}
-	};
+	private final static ThreadLocal readerThreadLocal = new ThreadLocal();
+//	{
+//		public void set(Object o) {
+//			System.out.println(this.hashCode() + "@" + this.getClass().getClassLoader().hashCode() + " set " + o + " for " + Thread.currentThread().hashCode());
+//			super.set(o);
+//			System.out.println(this.hashCode() + "@" + this.getClass().getClassLoader().hashCode() + " get " + super.get() + " for " + Thread.currentThread().hashCode());
+//		}
+//		
+//		public Object get() {
+//			final Object o = super.get();
+//			System.out.println(this.hashCode() + "@" + this.getClass().getClassLoader().hashCode() + " get " + o + " for " + Thread.currentThread().hashCode());
+//			return o;
+//		}
+//	};
 	
 	private final InputStream in;
 	
