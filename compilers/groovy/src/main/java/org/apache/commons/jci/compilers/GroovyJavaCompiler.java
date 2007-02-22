@@ -26,7 +26,7 @@ import org.codehaus.groovy.tools.GroovyClass;
 
 public final class GroovyJavaCompiler extends AbstractJavaCompiler {
 
-    private final static Log log = LogFactory.getLog(GroovyJavaCompiler.class);
+    private final Log log = LogFactory.getLog(GroovyJavaCompiler.class);
     
     public CompilationResult compile(
             final String[] pResourceNames,
@@ -42,7 +42,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
         for (int i = 0; i < source.length; i++) {
             final String resourceName = pResourceNames[i];
             source[i] = new SourceUnit(
-                    ClassUtils.convertResourceNameToClassName(resourceName),
+                    ClassUtils.convertResourceToClassName(resourceName),
                     new String(pReader.getBytes(resourceName)), // FIXME delay the read
                     configuration,
                     groovyClassLoader,
@@ -61,7 +61,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
             for (final Iterator it = classes.iterator(); it.hasNext();) {
                 final GroovyClass clazz = (GroovyClass) it.next();
                 final byte[] bytes = clazz.getBytes();
-                pStore.write(clazz.getName(), bytes);
+                pStore.write(ClassUtils.convertClassToResourcePath(clazz.getName()), bytes);
             }
         } catch (final MultipleCompilationErrorsException e) {
             final ErrorCollector col = e.getErrorCollector();

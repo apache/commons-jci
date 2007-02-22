@@ -3,113 +3,89 @@ package org.apache.commons.jci.compilers;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileDescriptor;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.channels.FileChannel;
+
 import org.apache.commons.jci.readers.ResourceReader;
 
-public class FileInputStreamProxy extends InputStream
-{
-	private InputStream inputStream = null;
-
-	ResourceReader reader = null;
-
-	public FileInputStreamProxy(File file) throws FileNotFoundException
-	{
-		if (getReader().isAvailable(file.getName()))
-			inputStream = new ByteArrayInputStream(getReader().getBytes(file.getName()));
-		else
-			inputStream = new FileInputStream(file);
-	}
-
-	public FileInputStreamProxy(FileDescriptor fdObj)
-	{
-		inputStream = new FileInputStream(fdObj);
-	}
-
-	public FileInputStreamProxy(String name) throws FileNotFoundException
-	{
-		if (getReader().isAvailable(name))
-			inputStream = new ByteArrayInputStream(getReader().getBytes(name));
-		else
-		inputStream = new FileInputStream(name);
-	}
-
-	private ResourceReader getReader()
-	{
-		if (reader == null)
-		{
-			JavacClassLoader loader = (JavacClassLoader)Thread.currentThread().getContextClassLoader();
-			reader = loader.getReader();
+public class FileInputStreamProxy extends InputStream {
+	
+	private final static ThreadLocal readerThreadLocal = new ThreadLocal() {
+		public void set(Object o) {
+			System.out.println("writing " + o + " for " + Thread.currentThread().hashCode());
+			super.set(o);
+			System.out.println("reading1 " + super.get() + " for " + Thread.currentThread().hashCode());
 		}
-		return reader;
+		
+		public Object get() {
+			final Object o = super.get();
+			System.out.println("reading2 " + o + " for " + Thread.currentThread().hashCode());
+			return o;
+		}
+	};
+	
+	private final InputStream in;
+	
+	private final String name;
+	
+	public static void setResourceReader( final ResourceReader pReader ) {
+		readerThreadLocal.set(pReader);
+	}
+	
+	public FileInputStreamProxy(File pFile) throws FileNotFoundException {
+		this("" + pFile);
 	}
 
-	public int available() throws IOException
-	{
-		return inputStream.available();
+	public FileInputStreamProxy(FileDescriptor fdObj) {
+		throw new RuntimeException();
 	}
 
-	public void close() throws IOException
-	{
-		inputStream.close();
+	public FileInputStreamProxy(String pName) throws FileNotFoundException {
+		name = pName;
+
+		final ResourceReader reader = (ResourceReader) readerThreadLocal.get();
+
+		if (reader == null) {
+			throw new RuntimeException("forgot to set the ResourceReader for this thread?");
+		}
+		
+		in = new ByteArrayInputStream(reader.getBytes(name));
+	}
+	
+	public int read() throws IOException {
+		return in.read();
 	}
 
-	public boolean equals(Object obj)
-	{
-		return inputStream.equals(obj);
+	public int available() throws IOException {
+		return in.available();			
 	}
 
-	public FileChannel getChannel()
-	{
-		// TODO
-		throw new RuntimeException(":(");
+	public void close() throws IOException {
+		in.close();
 	}
 
-	public int hashCode()
-	{
-		return inputStream.hashCode();
+	public synchronized void mark(int readlimit) {
+		in.mark(readlimit);
 	}
 
-	public void mark(int readlimit)
-	{
-		inputStream.mark(readlimit);
+	public boolean markSupported() {
+		return in.markSupported();
 	}
 
-	public boolean markSupported()
-	{
-		return inputStream.markSupported();
+	public int read(byte[] b, int off, int len) throws IOException {
+		return in.read(b, off, len);
 	}
 
-	public int read() throws IOException
-	{
-		return inputStream.read();
+	public int read(byte[] b) throws IOException {
+		return in.read(b);
 	}
 
-	public int read(byte[] b, int off, int len) throws IOException
-	{
-		return inputStream.read(b, off, len);
+	public synchronized void reset() throws IOException {
+		in.reset();
 	}
 
-	public int read(byte[] b) throws IOException
-	{
-		return inputStream.read(b);
-	}
-
-	public void reset() throws IOException
-	{
-		inputStream.reset();
-	}
-
-	public long skip(long n) throws IOException
-	{
-		return inputStream.skip(n);
-	}
-
-	public String toString()
-	{
-		return inputStream.toString();
+	public long skip(long n) throws IOException {
+		return in.skip(n);
 	}
 }

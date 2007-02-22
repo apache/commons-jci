@@ -30,21 +30,8 @@ public abstract class AbstractTestCase extends TestCase {
 
     private final Log log = LogFactory.getLog(AbstractTestCase.class);
     
-    protected String extension = "java";
-
     protected File directory;
 
-    /*
-    public void runBare() throws Throwable {
-        try {
-            setUp();
-            runTest();
-        } finally {
-            tearDown();
-        }
-    }
-    */
-    
     protected void setUp() throws Exception {
     	
     	System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
