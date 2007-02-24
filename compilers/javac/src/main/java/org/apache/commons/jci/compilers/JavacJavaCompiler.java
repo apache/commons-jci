@@ -27,8 +27,8 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 	public JavacJavaCompiler() {
 		settings = null;
 	}
-	
-	
+
+
 	public JavacJavaCompiler( final JavacJavaCompilerSettings pSettings ) {
 		settings = pSettings;
 	}
@@ -37,11 +37,11 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 
 		try {
 			final ClassLoader cl = new JavacClassLoader(pClasspathClassLoader);
-	        final Class renamedClass = cl.loadClass("com.sun.tools.javac.Main");
-	
-	        FileInputStreamProxy.setResourceReader(pReader);
-	        FileOutputStreamProxy.setResourceStore(pStore);
-	        
+			final Class renamedClass = cl.loadClass("com.sun.tools.javac.Main");
+
+			FileInputStreamProxy.setResourceReader(pReader);
+			FileOutputStreamProxy.setResourceStore(pStore);
+
 			final Method compile = renamedClass.getMethod("compile", new Class[] { String[].class, PrintWriter.class });
 			final StringWriter out = new StringWriter();
 			final Integer ok = (Integer) compile.invoke(null, new Object[] { pSourcePaths, new PrintWriter(out) });
@@ -52,31 +52,13 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 				return new CompilationResult(new CompilationProblem[] {
 						new JavacCompilationProblem("Failure executing javac, but could not parse the error: " + out.toString(), true) });
 			}
-			
+
 			return result;
-			
+
 		} catch(Exception e) {
 			return new CompilationResult(new CompilationProblem[] {
 					new JavacCompilationProblem("Error while executing the compiler: " + e.toString(), true) });
 		}
-
-		
-		
-
-//		JavacClassLoader javacClassLoader = new JavacClassLoader(classPool,
-//				reader, store, baseClassLoader);
-//		ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
-//		Thread.currentThread().setContextClassLoader(javacClassLoader);
-//		try
-//		{
-//		}
-//		catch (Exception e)
-//		{
-//		}
-//		finally
-//		{
-//			Thread.currentThread().setContextClassLoader(oldLoader);
-//		}
 	}
 
 	private CompilationResult parseModernStream( final BufferedReader pReader ) throws IOException {
@@ -93,7 +75,7 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 				if (line == null) {
 					return new CompilationResult((CompilationProblem[]) problems.toArray(new CompilationProblem[problems.size()]));
 				}
-				
+
 				// TODO: there should be a better way to parse these
 				if (buffer.length() == 0 && line.startsWith(ERROR_PREFIX)) {
 					problems.add(new JavacCompilationProblem(line, true));
@@ -133,7 +115,7 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 				msg = msg.substring(WARNING_PREFIX.length());
 			}
 			msgBuffer.append(msg);
-			
+
 			String context = tokens.nextToken(EOL);
 			String pointer = tokens.nextToken(EOL);
 
@@ -183,33 +165,33 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 			if (settings.isOptimize()) {
 				args.add("-O");
 			}
-			
+
 			if (settings.isDebug()) {
 				args.add("-g");
 			}
-			
+
 			if (settings.isVerbose()) {
 				args.add("-verbose");
 			}
-			
+
 			if (settings.isShowDeprecation()) {
 				args.add("-deprecation");
 				// This is required to actually display the deprecation messages
 				settings.setShowWarnings(true);
 			}
-			
+
 			if (settings.getMaxmem() != null) {
 				args.add("-J-Xmx" + settings.getMaxmem());
 			}
-			
+
 			if (settings.getMeminitial() != null) {
 				args.add("-J-Xms" + settings.getMeminitial());
 			}
-			
+
 			if (!settings.isShowWarnings()) {
 				args.add("-nowarn");
 			}
-			
+
 			// TODO: this could be much improved
 			if (settings.getTargetVersion() != null) {
 				// Required, or it defaults to the target of your JDK (eg 1.5)
@@ -219,7 +201,7 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 				args.add("-target");
 				args.add(settings.getTargetVersion());
 			}
-			
+
 			// TODO suppressSource
 			if (settings.getSourceVersion() != null) {
 				// If omitted, later JDKs complain about a 1.1 target
@@ -229,7 +211,7 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 				args.add("-source");
 				args.add(settings.getSourceVersion());
 			}
-			
+
 			// TODO suppressEncoding
 			if (settings.getSourceEncoding() != null) {
 				args.add("-encoding");
@@ -238,7 +220,7 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 
 			// TODO CustomCompilerArguments
 		}
-		
+
 		return (String[]) args.toArray(new String[args.size()]);
 	}
 }
