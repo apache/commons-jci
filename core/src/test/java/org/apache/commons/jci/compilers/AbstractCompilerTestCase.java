@@ -197,7 +197,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
 	
 	
 	
-	private final String toString( final CompilationProblem[] pProblems ) {
+	public final String toString( final CompilationProblem[] pProblems ) {
 		final StringBuffer sb = new StringBuffer();
 		
 		for (int i = 0; i < pProblems.length; i++) {
