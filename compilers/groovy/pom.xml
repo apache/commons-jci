@@ -13,7 +13,7 @@
 
   <packaging>jar</packaging>
   <artifactId>commons-jci-groovy</artifactId>
-  <version>1.0-jsr-03</version>
+  <version>1.0-SNAPSHOT</version>
   <name>compiler-groovy</name>
 
   <dependencies>
