@@ -20,40 +20,48 @@ import org.apache.commons.jci.problems.CompilationProblem;
 
 public final class RhinoCompilationProblem implements CompilationProblem {
 
+	private final String message;
+	private final String fileName;
+	private final int line;
+//	private final String script;
+	private final int column;
+	private final boolean error;
+	
+	public RhinoCompilationProblem( final String pMessage, final String pFileName, final int pLine, final String pScript, final int pColumn, final boolean pError ) {
+		message = pMessage;
+		fileName = pFileName;
+		line = pLine;
+//		script = pScript;
+		column = pColumn;
+		error = pError;
+	}
+	
 	public int getEndColumn() {
-		// TODO Auto-generated method stub
-		return 0;
+		return column;
 	}
 
 	public int getEndLine() {
-		// TODO Auto-generated method stub
-		return 0;
+		return line;
 	}
 
 	public String getFileName() {
-		// TODO Auto-generated method stub
-		return null;
+		return fileName;
 	}
 
 	public String getMessage() {
-		// TODO Auto-generated method stub
-		return null;
+		return message;
 	}
 
 	public int getStartColumn() {
-		// TODO Auto-generated method stub
-		return 0;
+		return column;
 	}
 
 	public int getStartLine() {
-		// TODO Auto-generated method stub
-		return 0;
+		return line;
 	}
 
 	public boolean isError() {
-		// TODO Auto-generated method stub
-		return false;
+		return error;
 	}
-
 
 }

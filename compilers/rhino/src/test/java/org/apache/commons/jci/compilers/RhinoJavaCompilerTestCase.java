@@ -58,6 +58,38 @@ public final class RhinoJavaCompilerTestCase extends AbstractCompilerTestCase {
 	}
 
 	public void testUppercasePackageNameCompile() throws Exception {
+		final JavaCompiler compiler = createJavaCompiler(); 
+		
+		final ResourceReader reader = new ResourceReader() {
+			final private Map sources = new HashMap() {{
+				put("Jci/Simple.js", (
+					" var i = 0;\n" +
+					"\n"
+					).getBytes());
+			}};
+			
+			public byte[] getBytes( final String pResourceName ) {
+				return (byte[]) sources.get(pResourceName);
+			}
+
+			public boolean isAvailable( final String pResourceName ) {
+				return sources.containsKey(pResourceName);
+			}
+			
+		};
+		
+		final MemoryResourceStore store = new MemoryResourceStore();
+		final CompilationResult result = compiler.compile(
+				new String[] {
+						"Jci/Simple.js"
+				}, reader, store);
+		
+		assertEquals(toString(result.getErrors()), 0, result.getErrors().length);		
+		assertEquals(toString(result.getWarnings()), 0, result.getWarnings().length);
+		
+		final byte[] clazzBytes = store.read("Jci/Simple.class");		
+		assertNotNull(clazzBytes);
+		assertTrue(clazzBytes.length > 0);
 	}
 	
 	

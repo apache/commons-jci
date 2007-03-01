@@ -138,19 +138,16 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
         }
     }
 
-    public CompilationResult compile(
-            final String[] pClasses,
-            final ResourceReader pResourceReader,
-            final ResourceStore pStore,
-            final ClassLoader classLoader
-            ) {
-        final Map classFilesByName = new HashMap();       
+    public CompilationResult compile( final String[] pClasses, final ResourceReader pResourceReader, final ResourceStore pStore, final ClassLoader classLoader ) {
+
+    	final Map classFilesByName = new HashMap();       
         
         final CompilingIClassLoader icl = new CompilingIClassLoader(pResourceReader, classFilesByName, classLoader);
         for (int i = 0; i < pClasses.length; i++) {
             log.debug("compiling " + pClasses[i]);
             icl.loadIClass(Descriptor.fromClassName(ClassUtils.convertResourceToClassName(pClasses[i])));
         }
+        
         // Store all fully compiled classes
         for (Iterator i = classFilesByName.entrySet().iterator(); i.hasNext();) {
             final Map.Entry entry = (Map.Entry)i.next();
