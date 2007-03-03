@@ -1,109 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.apache.commons</groupId>
-  <parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.commons</groupId>
-    <artifactId>commons-parent</artifactId>
-    <version>1</version>
-  </parent>
-  <packaging>pom</packaging>  
-  
-  <artifactId>jci</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <name>Commons JCI</name>
-  <url>http://jakarta.apache.org/commons/sandbox/jci/</url>
-  <description>
+    <parent>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-parent</artifactId>
+        <version>1</version>
+    </parent>
+    <packaging>pom</packaging>
+    <artifactId>jci</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>Commons JCI</name>
+    <url>http://jakarta.apache.org/commons/sandbox/jci/</url>
+    <description>
     Common java compiler interface
   </description>
-  <inceptionYear>2004</inceptionYear>
-
-  <modules>
-    <module>core</module>
-    <module>fam</module>
-    <module>compilers/eclipse</module>
-    <module>compilers/janino</module>
-    <module>compilers/groovy</module>
-    <module>compilers/javac</module>
-    <module>examples</module>
-  </modules>
-
-  <distributionManagement>
-    <snapshotRepository>
-      <id>apache-maven-snapshot</id>
-      <name>repository</name>
-      <url>scpexe://scpexe://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository/</url>
-    </snapshotRepository>
-    <site>
-      <id>website</id>
-      <url>scpexe://people.apache.org/www/jakarta.apache.org/commons/sandbox/jci/</url>
-    </site>
-  </distributionManagement>
-
-  <developers>
-    <developer>
-      <id>tcurdt</id>
-      <name>Torsten Curdt</name>
-      <email>tcurdt at apache.org</email>
-      <organization>ASF</organization>
-      <organizationUrl>http://www.apache.org/</organizationUrl>
-      <timezone>+1</timezone>
-    </developer>
-  </developers>
-
-  <contributors>
-    <contributor>
-      <name>Don Brown</name>
-      <email>mrdon at apache.org</email>
-      <organization>ASF</organization>
-      <organizationUrl>http://www.apache.org/</organizationUrl>
-    </contributor>
-    <contributor>
-      <name>Joerk Heinicke</name>
-      <email>joerg.heinicke at gmx.de</email>
-    </contributor>
-    <contributor>
-      <name>Mark Proctor</name>
-      <email>mproctor at codehaus.org</email>
-    </contributor>
-  </contributors>
-
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk/</connection>
-    <developerConnection>scn:svn:https://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk/</developerConnection>
-    <url>http://svn.apache.org/viewvc/jakarta/commons/sandbox/jci/trunk/</url>
-  </scm>
-
-  <build>
-    <plugins>
-     <plugin>
-       <groupId>org.apache.maven.plugins</groupId>
-       <artifactId>maven-jar-plugin</artifactId>
-       <executions>
-         <execution>
-           <goals>
-             <goal>test-jar</goal>
-           </goals>
-         </execution>
-       </executions>
-     </plugin>
-    </plugins>
-
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-ssh-external</artifactId>
-        <version>1.0-alpha-6</version>
-      </extension>
-    </extensions>
-  </build>
-
-  <reporting>
-    <excludeDefaults>true</excludeDefaults>
+    <inceptionYear>2004</inceptionYear>
+    <modules>
+        <module>core</module>
+        <module>fam</module>
+        <module>compilers/eclipse</module>
+        <module>compilers/janino</module>
+        <module>compilers/groovy</module>
+        <module>compilers/javac</module>
+        <module>examples</module>
+    </modules>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>apache-maven-snapshot</id>
+            <name>repository</name>
+            <url>scpexe://scpexe://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository/</url>
+        </snapshotRepository>
+        <site>
+            <id>website</id>
+            <url>scpexe://people.apache.org/www/jakarta.apache.org/commons/sandbox/jci/</url>
+        </site>
+    </distributionManagement>
+    <developers>
+        <developer>
+            <id>tcurdt</id>
+            <name>Torsten Curdt</name>
+            <email>tcurdt at apache.org</email>
+            <organization>ASF</organization>
+            <organizationUrl>http://www.apache.org/</organizationUrl>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
+    <contributors>
+        <contributor>
+            <name>Don Brown</name>
+            <email>mrdon at apache.org</email>
+            <organization>ASF</organization>
+            <organizationUrl>http://www.apache.org/</organizationUrl>
+        </contributor>
+        <contributor>
+            <name>Joerk Heinicke</name>
+            <email>joerg.heinicke at gmx.de</email>
+        </contributor>
+        <contributor>
+            <name>Mark Proctor</name>
+            <email>mproctor at codehaus.org</email>
+        </contributor>
+    </contributors>
+    <scm>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk/</connection>
+        <developerConnection>scn:svn:https://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk/</developerConnection>
+        <url>http://svn.apache.org/viewvc/jakarta/commons/sandbox/jci/trunk/</url>
+    </scm>
+    <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh-external</artifactId>
+                <version>1.0-alpha-6</version>
+            </extension>
+        </extensions>
+    </build>
+    <reporting>
+        <excludeDefaults>true</excludeDefaults>
 <!--
     <plugins>
 
@@ -169,5 +143,5 @@
       </plugin>
     </plugins>
   -->
-  </reporting>
+    </reporting>
 </project>
