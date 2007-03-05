@@ -37,7 +37,7 @@ import org.apache.commons.logging.LogFactory;
 public class ReloadingListener extends AbstractFilesystemAlterationListener {
 
     private final Log log = LogFactory.getLog(ReloadingListener.class);
-
+    
     private final Set notificationListeners = new HashSet();
     private final ResourceStore store;
     
@@ -62,6 +62,14 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
     	
     }
     
+    public String getResourceNameFromRelativeFileName( final String pRelativeFileName ) {
+    	if ('/' == File.pathSeparatorChar) {
+    		return pRelativeFileName;
+    	}
+    	
+    	return pRelativeFileName.replace(File.pathSeparatorChar, '/');
+    }
+    
     public boolean isReloadRequired( final FilesystemAlterationObserver pObserver ) {
     	boolean reload = false;
     	
@@ -74,10 +82,8 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
         if (deleted.size() > 0) {
             for (Iterator it = deleted.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
-                final String resourceName = ClassUtils.relative(pObserver.getRootDirectory(), file);
-                //if (resourceName.endsWith(".class")) {
-                    store.remove(resourceName);
-                //}
+                final String resourceName = getResourceNameFromRelativeFileName(ClassUtils.relative(pObserver.getRootDirectory(), file));
+                store.remove(resourceName);
             }
             reload = true;
         }
@@ -87,16 +93,12 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
                 final File file = (File) it.next();
                 try {
                     final byte[] bytes = IOUtils.toByteArray(new FileInputStream(file));
-                    final String resourceName = ClassUtils.relative(pObserver.getRootDirectory(), file); 
-                    //if (resourceName.endsWith(".class")) {
-                        store.write(resourceName, bytes);
-                    //}
+                    final String resourceName = getResourceNameFromRelativeFileName(ClassUtils.relative(pObserver.getRootDirectory(), file));
+                     store.write(resourceName, bytes);
                 } catch(final Exception e) {
                     log.error("could not load " + file, e);
                 }
             }
-            // FIXME: not necessary
-            //reload = true;
         }
 
         if (changed.size() > 0) {
@@ -104,10 +106,8 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
                 final File file = (File) it.next();
                 try {
                     final byte[] bytes = IOUtils.toByteArray(new FileInputStream(file));
-                    final String resourceName = ClassUtils.relative(pObserver.getRootDirectory(), file); 
-                    //if (resourceName.endsWith(".class")) {
-                        store.write(resourceName, bytes);
-                    //}
+                    final String resourceName = getResourceNameFromRelativeFileName(ClassUtils.relative(pObserver.getRootDirectory(), file));
+                    store.write(resourceName, bytes);
                 } catch(final Exception e) {
                     log.error("could not load " + file, e);
                 }

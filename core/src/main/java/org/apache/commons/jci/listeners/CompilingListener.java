@@ -89,12 +89,13 @@ public class CompilingListener extends ReloadingListener {
             for (Iterator it = deleted.iterator(); it.hasNext();) {
                 final File deletedFile = (File) it.next();
 
-                if (deletedFile.getName().endsWith(".java")) {
+                final String resourceName = getResourceNameFromRelativeFileName(ClassUtils.relative(pObserver.getRootDirectory(), deletedFile));
+                
+                if (resourceName.endsWith(".java")) {
                     transactionalStore.remove(
-                    		ClassUtils.stripExtension(
-                    				ClassUtils.relative(pObserver.getRootDirectory(), deletedFile)) + ".class");
+                    		ClassUtils.stripExtension(resourceName) + ".class");
                 } else {
-                    transactionalStore.remove(ClassUtils.relative(pObserver.getRootDirectory(), deletedFile));                	
+                    transactionalStore.remove(resourceName);                	
                 }
 
                 
@@ -128,7 +129,8 @@ public class CompilingListener extends ReloadingListener {
             final String[] sourceFiles = new String[compileables.size()];            
             for (Iterator it = compileables.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
-                sourceFiles[i] = ClassUtils.relative(pObserver.getRootDirectory(), file);
+                final String resourceName = getResourceNameFromRelativeFileName(ClassUtils.relative(pObserver.getRootDirectory(), file));
+                sourceFiles[i] = resourceName;
                 i++;
             }
             
