@@ -96,7 +96,7 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
                 	is = new FileInputStream(file);
                     final byte[] bytes = IOUtils.toByteArray(is);
                     final String resourceName = getResourceNameFromRelativeFileName(ClassUtils.relative(pObserver.getRootDirectory(), file));
-                     store.write(resourceName, bytes);
+                    store.write(resourceName, bytes);
                 } catch(final Exception e) {
                     log.error("could not load " + file, e);
                 } finally {
