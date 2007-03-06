@@ -63,11 +63,11 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
     }
     
     public String getResourceNameFromRelativeFileName( final String pRelativeFileName ) {
-    	if ('/' == File.pathSeparatorChar) {
+    	if ('/' == File.separatorChar) {
     		return pRelativeFileName;
     	}
     	
-    	return pRelativeFileName.replace(File.pathSeparatorChar, '/');
+    	return pRelativeFileName.replace(File.separatorChar, '/');
     }
     
     public boolean isReloadRequired( final FilesystemAlterationObserver pObserver ) {

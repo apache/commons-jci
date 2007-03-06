@@ -142,7 +142,6 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
             classloader.loadClass("bla");
             fail();
         } catch(final ClassNotFoundException e) {
-            log.info(e.getMessage());
         }
     }
     
