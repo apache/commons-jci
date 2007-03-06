@@ -91,12 +91,16 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
         if (created.size() > 0) {
             for (Iterator it = created.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
+                FileInputStream is = null;
                 try {
-                    final byte[] bytes = IOUtils.toByteArray(new FileInputStream(file));
+                	is = new FileInputStream(file);
+                    final byte[] bytes = IOUtils.toByteArray(is);
                     final String resourceName = getResourceNameFromRelativeFileName(ClassUtils.relative(pObserver.getRootDirectory(), file));
                      store.write(resourceName, bytes);
                 } catch(final Exception e) {
                     log.error("could not load " + file, e);
+                } finally {
+                	IOUtils.closeQuietly(is);
                 }
             }
         }
@@ -104,12 +108,16 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
         if (changed.size() > 0) {
             for (Iterator it = changed.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
+                FileInputStream is = null;
                 try {
+                	is = new FileInputStream(file);
                     final byte[] bytes = IOUtils.toByteArray(new FileInputStream(file));
                     final String resourceName = getResourceNameFromRelativeFileName(ClassUtils.relative(pObserver.getRootDirectory(), file));
                     store.write(resourceName, bytes);
                 } catch(final Exception e) {
                     log.error("could not load " + file, e);
+                } finally {
+                	IOUtils.closeQuietly(is);
                 }
             }
             reload = true;

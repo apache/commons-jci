@@ -18,13 +18,13 @@ package org.apache.commons.jci.stores;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.io.IOUtils;
 
 
@@ -45,21 +45,11 @@ public final class FileResourceStore implements ResourceStore {
             is = new FileInputStream(getFile(pResourceName));
             final byte[] data = IOUtils.toByteArray(is);
             return data;
-        } catch (FileNotFoundException e) {
-        	// TODO
-        } catch (IOException e) {
-        	// TODO
+        } catch (Exception e) {
+        	return null;
         } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                	//TODO
-                }
-            }
+        	IOUtils.closeQuietly(is);
         }
-
-        return null;
     }
     
     public void write( final String pResourceName, final byte[] pData ) {
@@ -74,18 +64,10 @@ public final class FileResourceStore implements ResourceStore {
             }
             os = new FileOutputStream(file);
             os.write(pData);
-        } catch (FileNotFoundException e) {
-        	// TODO
-        } catch (IOException e) {
-        	// TODO        	
+        } catch (Exception e) {
+        	// FIXME: now what?
         } finally {
-            if (os != null) {
-                try {
-                    os.close();
-                } catch (IOException e) {
-                	//TODO
-                }
-            }
+        	IOUtils.closeQuietly(os);
         }
     }
 
