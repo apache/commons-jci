@@ -297,7 +297,7 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
     
     public void testInterval() throws Exception {
     	
-    	final long interval = 100;
+    	final long interval = 1000;
     	
         start();
         fam.setInterval(interval);
@@ -311,7 +311,7 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
         long diff = t2-t1;
         
         // interval should be at around the same interval
-        assertTrue( (diff > (interval-20)) && (diff < (interval+20)) );
+        assertTrue("the interval was set to " + interval + " but the time difference was " + diff, (diff > (interval-50)) && (diff < (interval+50)));
         
         stop();
     }    
