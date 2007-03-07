@@ -16,6 +16,10 @@
     Common java compiler interface
     </description>
     <inceptionYear>2004</inceptionYear>
+    <issueManagement>
+        <system>JIRA</system>
+        <url>https://issues.apache.org/jira/secure/IssueNavigator.jspa?component=12311185</url>
+    </issueManagement>
     <modules>
         <module>core</module>
         <module>fam</module>

@@ -8,7 +8,9 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -54,6 +56,8 @@ public final class JavacClassLoader extends URLClassLoader {
 		throw new RuntimeException(sb.toString());
 	}
 	
+	private final Map loaded = new HashMap();
+	
 	public JavacClassLoader( final ClassLoader pParent ) {
 		super(getToolsJar(), pParent);
 	}
@@ -67,7 +71,12 @@ public final class JavacClassLoader extends URLClassLoader {
 		}
 		
 		try {
-			
+
+			final Class clazz = (Class) loaded.get(name);
+			if (clazz != null) {
+				return clazz;
+			}
+						
 			final byte[] classBytes;
 
 			if (name.startsWith("com.sun.tools.javac.")) {
@@ -95,7 +104,9 @@ public final class JavacClassLoader extends URLClassLoader {
 				return super.findClass(name);
 			}
 			
-			return defineClass(name, classBytes, 0, classBytes.length);
+			final Class newClazz = defineClass(name, classBytes, 0, classBytes.length);			
+			loaded.put(name, newClazz);			
+			return newClazz;
 		} catch (IOException e) {
 			throw new ClassNotFoundException("", e);
 		}
