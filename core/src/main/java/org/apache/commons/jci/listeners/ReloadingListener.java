@@ -62,14 +62,6 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
     	
     }
     
-    public String getResourceNameFromRelativeFileName( final String pRelativeFileName ) {
-    	if ('/' == File.separatorChar) {
-    		return pRelativeFileName;
-    	}
-    	
-    	return pRelativeFileName.replace(File.separatorChar, '/');
-    }
-    
     public boolean isReloadRequired( final FilesystemAlterationObserver pObserver ) {
     	boolean reload = false;
     	
@@ -82,7 +74,7 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
         if (deleted.size() > 0) {
             for (Iterator it = deleted.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
-                final String resourceName = getResourceNameFromRelativeFileName(ClassUtils.relative(pObserver.getRootDirectory(), file));
+                final String resourceName = ClassUtils.getResourceNameFromFileName(ClassUtils.relative(pObserver.getRootDirectory(), file));
                 store.remove(resourceName);
             }
             reload = true;
@@ -95,7 +87,7 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
                 try {
                 	is = new FileInputStream(file);
                     final byte[] bytes = IOUtils.toByteArray(is);
-                    final String resourceName = getResourceNameFromRelativeFileName(ClassUtils.relative(pObserver.getRootDirectory(), file));
+                    final String resourceName = ClassUtils.getResourceNameFromFileName(ClassUtils.relative(pObserver.getRootDirectory(), file));
                     store.write(resourceName, bytes);
                 } catch(final Exception e) {
                     log.error("could not load " + file, e);
@@ -112,7 +104,7 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
                 try {
                 	is = new FileInputStream(file);
                     final byte[] bytes = IOUtils.toByteArray(is);
-                    final String resourceName = getResourceNameFromRelativeFileName(ClassUtils.relative(pObserver.getRootDirectory(), file));
+                    final String resourceName = ClassUtils.getResourceNameFromFileName(ClassUtils.relative(pObserver.getRootDirectory(), file));
                     store.write(resourceName, bytes);
                 } catch(final Exception e) {
                     log.error("could not load " + file, e);

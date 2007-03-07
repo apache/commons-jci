@@ -17,7 +17,7 @@ import org.apache.commons.jci.stores.ResourceStore;
 
 public final class JavacJavaCompiler extends AbstractJavaCompiler {
 
-	private static final String EOL = System.getProperty("line.separator");;
+	private static final String EOL = System.getProperty("line.separator");
 	private static final String WARNING_PREFIX = "warning: ";
 	private static final String NOTE_PREFIX = "Note: ";
 	private static final String ERROR_PREFIX = "error: ";

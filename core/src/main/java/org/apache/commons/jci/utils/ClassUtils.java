@@ -53,4 +53,18 @@ public final class ClassUtils {
 		return relFileName;
 	}
 	
+	/**
+	 * a/b/c.java -> a/b/c.java
+	 * a\b\c.java -> a/b/c.java
+	 * @param pFileName
+	 * @return
+	 */
+    public static String getResourceNameFromFileName( final String pFileName ) {
+    	if ('/' == File.separatorChar) {
+    		return pFileName;
+    	}
+    	
+    	return pFileName.replace(File.separatorChar, '/');
+    }
+	
 }

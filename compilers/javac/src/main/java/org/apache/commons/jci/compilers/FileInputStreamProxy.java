@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.jci.readers.ResourceReader;
+import org.apache.commons.jci.utils.ClassUtils;
 
 public class FileInputStreamProxy extends InputStream {
 	
@@ -29,7 +30,7 @@ public class FileInputStreamProxy extends InputStream {
 	}
 
 	public FileInputStreamProxy(String pName) throws FileNotFoundException {
-		name = pName;
+		name = ClassUtils.getResourceNameFromFileName(pName);
 
 		final ResourceReader reader = (ResourceReader) readerThreadLocal.get();
 
@@ -37,7 +38,13 @@ public class FileInputStreamProxy extends InputStream {
 			throw new RuntimeException("forgot to set the ResourceReader for this thread?");
 		}
 		
-		in = new ByteArrayInputStream(reader.getBytes(name));
+		final byte[] bytes = reader.getBytes(name);
+		
+		if (bytes == null) {
+			throw new FileNotFoundException(name);
+		}
+		
+		in = new ByteArrayInputStream(bytes);
 	}
 	
 	public int read() throws IOException {

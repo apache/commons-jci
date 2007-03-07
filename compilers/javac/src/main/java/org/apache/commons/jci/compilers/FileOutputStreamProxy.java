@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.commons.jci.stores.ResourceStore;
+import org.apache.commons.jci.utils.ClassUtils;
 
 public class FileOutputStreamProxy extends OutputStream {
 	
@@ -39,7 +40,7 @@ public class FileOutputStreamProxy extends OutputStream {
 	}
 
 	public FileOutputStreamProxy(String pName) throws FileNotFoundException {
-		name = pName;
+		name = ClassUtils.getResourceNameFromFileName(pName);
 	}
 	
 	public void write(int value) throws IOException {
