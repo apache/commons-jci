@@ -42,7 +42,7 @@ public final class ResourceStoreClassLoader extends ClassLoader {
                 final ResourceStore store = stores[i];
                 final byte[] clazzBytes = store.read(ClassUtils.convertClassToResourcePath(name));
                 if (clazzBytes != null) {
-                    log.debug(getId() + " found class " + name  + " (" + clazzBytes.length + " bytes)");
+                    log.trace(getId() + " found class: " + name  + " (" + clazzBytes.length + " bytes)");
                     return defineClass(name, clazzBytes, 0, clazzBytes.length);
                 }            
             }
@@ -52,7 +52,7 @@ public final class ResourceStoreClassLoader extends ClassLoader {
     }
     
     protected synchronized Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
-        log.debug(getId() + " looking for " + name);
+        // log.trace(getId() + " looking for: " + name);
         Class clazz = findLoadedClass(name);
 
         if (clazz == null) {
@@ -63,7 +63,7 @@ public final class ResourceStoreClassLoader extends ClassLoader {
                 final ClassLoader parent = getParent();
                 if (parent != null) {
                     clazz = parent.loadClass(name);
-                    log.debug(getId() + "delegating loading to parent: " + name);
+                    // log.trace(getId() + " delegating loading to parent: " + name);
                 } else {
                     throw new ClassNotFoundException(name);
                 }
