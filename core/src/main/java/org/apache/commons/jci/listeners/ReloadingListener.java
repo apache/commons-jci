@@ -30,7 +30,7 @@ import org.apache.commons.jci.monitor.FilesystemAlterationObserver;
 import org.apache.commons.jci.stores.MemoryResourceStore;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.jci.stores.Transactional;
-import org.apache.commons.jci.utils.ClassUtils;
+import org.apache.commons.jci.utils.ConversionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -78,7 +78,7 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
         if (deleted.size() > 0) {
             for (Iterator it = deleted.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
-                final String resourceName = ClassUtils.getResourceNameFromFileName(ClassUtils.relative(pObserver.getRootDirectory(), file));
+                final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), file));
                 store.remove(resourceName);
             }
             reload = true;
@@ -91,7 +91,7 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
                 try {
                 	is = new FileInputStream(file);
                     final byte[] bytes = IOUtils.toByteArray(is);
-                    final String resourceName = ClassUtils.getResourceNameFromFileName(ClassUtils.relative(pObserver.getRootDirectory(), file));
+                    final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), file));
                     store.write(resourceName, bytes);
                 } catch(final Exception e) {
                     log.error("could not load " + file, e);
@@ -108,7 +108,7 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
                 try {
                 	is = new FileInputStream(file);
                     final byte[] bytes = IOUtils.toByteArray(is);
-                    final String resourceName = ClassUtils.getResourceNameFromFileName(ClassUtils.relative(pObserver.getRootDirectory(), file));
+                    final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), file));
                     store.write(resourceName, bytes);
                 } catch(final Exception e) {
                     log.error("could not load " + file, e);

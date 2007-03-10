@@ -30,7 +30,7 @@ import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.problems.CompilationProblemHandler;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
-import org.apache.commons.jci.utils.ClassUtils;
+import org.apache.commons.jci.utils.ConversionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -93,7 +93,7 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
 
 				log.debug("compiling " + resourcePath + " (" + data.length + ")");
 				
-				pStore.write(ClassUtils.stripExtension(resourcePath) + ".class", data);
+				pStore.write(ConversionUtils.stripExtension(resourcePath) + ".class", data);
 
 			}
 			

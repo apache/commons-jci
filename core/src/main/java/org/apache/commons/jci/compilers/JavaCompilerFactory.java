@@ -20,7 +20,7 @@ package org.apache.commons.jci.compilers;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.jci.utils.ClassUtils;
+import org.apache.commons.jci.utils.ConversionUtils;
 
 
 /**
@@ -63,7 +63,7 @@ public final class JavaCompilerFactory {
         
         final String className;
         if (pHint.indexOf('.') < 0) {
-            className = "org.apache.commons.jci.compilers." + ClassUtils.toJavaCasing(pHint) + "JavaCompiler";
+            className = "org.apache.commons.jci.compilers." + ConversionUtils.toJavaCasing(pHint) + "JavaCompiler";
         } else {
             className = pHint;
         }

@@ -23,14 +23,14 @@ import java.io.File;
  * 
  * @author tcurdt
  */
-public final class ClassUtils {
+public final class ConversionUtils {
 
 	/**
 	 * Please do not use - internal
 	 * org/my/Class.xxx -> org.my.Class
 	 */
 	public static String convertResourceToClassName( final String pResourceName ) {
-		return ClassUtils.stripExtension(pResourceName).replace('/', '.');
+		return ConversionUtils.stripExtension(pResourceName).replace('/', '.');
 	}
 
 	/**

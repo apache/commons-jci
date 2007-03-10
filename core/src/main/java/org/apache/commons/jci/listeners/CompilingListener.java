@@ -32,7 +32,7 @@ import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.MemoryResourceStore;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.jci.stores.TransactionalResourceStore;
-import org.apache.commons.jci.utils.ClassUtils;
+import org.apache.commons.jci.utils.ConversionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -93,11 +93,11 @@ public class CompilingListener extends ReloadingListener {
             for (Iterator it = deleted.iterator(); it.hasNext();) {
                 final File deletedFile = (File) it.next();
 
-                final String resourceName = ClassUtils.getResourceNameFromFileName(ClassUtils.relative(pObserver.getRootDirectory(), deletedFile));
+                final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), deletedFile));
                 
                 if (resourceName.endsWith(".java")) {
                     transactionalStore.remove(
-                    		ClassUtils.stripExtension(resourceName) + ".class");
+                    		ConversionUtils.stripExtension(resourceName) + ".class");
                 } else {
                     transactionalStore.remove(resourceName);                	
                 }
@@ -133,7 +133,7 @@ public class CompilingListener extends ReloadingListener {
             final String[] sourceFiles = new String[compileables.size()];            
             for (Iterator it = compileables.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
-                final String resourceName = ClassUtils.getResourceNameFromFileName(ClassUtils.relative(pObserver.getRootDirectory(), file));
+                final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), file));
                 sourceFiles[i] = resourceName;
                 i++;
             }

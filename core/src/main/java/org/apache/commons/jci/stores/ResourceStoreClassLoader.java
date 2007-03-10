@@ -16,7 +16,7 @@
  */
 package org.apache.commons.jci.stores;
 
-import org.apache.commons.jci.utils.ClassUtils;
+import org.apache.commons.jci.utils.ConversionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -40,7 +40,7 @@ public final class ResourceStoreClassLoader extends ClassLoader {
         if (stores != null) {
             for (int i = 0; i < stores.length; i++) {
                 final ResourceStore store = stores[i];
-                final byte[] clazzBytes = store.read(ClassUtils.convertClassToResourcePath(name));
+                final byte[] clazzBytes = store.read(ConversionUtils.convertClassToResourcePath(name));
                 if (clazzBytes != null) {
                     log.debug(getId() + " found class: " + name  + " (" + clazzBytes.length + " bytes)");
                     return defineClass(name, clazzBytes, 0, clazzBytes.length);
