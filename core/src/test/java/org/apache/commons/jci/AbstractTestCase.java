@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.jci;
 
 import java.io.File;
@@ -25,7 +26,10 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
+/**
+ * 
+ * @author tcurdt
+ */
 public abstract class AbstractTestCase extends TestCase {
 
     private final Log log = LogFactory.getLog(AbstractTestCase.class);
@@ -115,6 +119,4 @@ public abstract class AbstractTestCase extends TestCase {
     protected void tearDown() throws Exception {
         FileUtils.deleteDirectory(directory);
     }
-
-
 }

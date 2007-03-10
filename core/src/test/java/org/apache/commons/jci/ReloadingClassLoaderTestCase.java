@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.jci;
 
 import java.io.File;
@@ -25,7 +26,10 @@ import org.apache.commons.jci.monitor.FilesystemAlterationMonitor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
+/**
+ * 
+ * @author tcurdt
+ */
 public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
 
     private final Log log = LogFactory.getLog(ReloadingClassLoaderTestCase.class);

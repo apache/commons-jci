@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.jci.problems;
 
 
@@ -32,5 +33,7 @@ package org.apache.commons.jci.problems;
  * @author tcurdt
  */
 public interface CompilationProblemHandler {
-    boolean handle( final CompilationProblem pProblem );
+
+	boolean handle( final CompilationProblem pProblem );
+
 }

@@ -14,12 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.jci.readers;
 
 /**
  * @author tcurdt
  */
 public interface ResourceReader {
-    boolean isAvailable( final String pResourceName );
+
+	boolean isAvailable( final String pResourceName );
     byte[] getBytes( final String pResourceName );
+
 }

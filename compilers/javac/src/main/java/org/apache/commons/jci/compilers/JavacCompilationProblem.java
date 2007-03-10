@@ -2,33 +2,22 @@ package org.apache.commons.jci.compilers;
 
 import org.apache.commons.jci.problems.CompilationProblem;
 
-public class JavacCompilationProblem implements CompilationProblem
-{
+public class JavacCompilationProblem implements CompilationProblem {
 	private int endCoumn;
-
 	private int endLine;
-
 	private String fileName;
-
 	private String message;
-
 	private int startCoumn;
-
 	private int startLine;
-
 	private boolean isError;
 
-	public JavacCompilationProblem(String message, boolean isError)
-	{
+	public JavacCompilationProblem(String message, boolean isError) {
 		this.message = message;
 		this.isError = isError;
 		this.fileName = "";
 	}
 
-	public JavacCompilationProblem(String fileName, boolean isError,
-			int startLine, int startCoumn, int endLine, int endCoumn,
-			String message)
-	{
+	public JavacCompilationProblem(String fileName, boolean isError, int startLine, int startCoumn, int endLine, int endCoumn, String message) {
 		this.message = message;
 		this.isError = isError;
 		this.fileName = fileName;
@@ -38,43 +27,35 @@ public class JavacCompilationProblem implements CompilationProblem
 		this.endLine = endLine;
 	}
 
-	public int getEndColumn()
-	{
+	public int getEndColumn() {
 		return endCoumn;
 	}
 
-	public int getEndLine()
-	{
+	public int getEndLine() {
 		return endLine;
 	}
 
-	public String getFileName()
-	{
+	public String getFileName() {
 		return fileName;
 	}
 
-	public String getMessage()
-	{
+	public String getMessage() {
 		return message;
 	}
 
-	public int getStartColumn()
-	{
+	public int getStartColumn() {
 		return startCoumn;
 	}
 
-	public int getStartLine()
-	{
+	public int getStartLine() {
 		return startLine;
 	}
 
-	public boolean isError()
-	{
+	public boolean isError() {
 		return isError;
 	}
 
-	public String toString()
-	{
+	public String toString() {
 		final StringBuffer sb = new StringBuffer();
 		sb.append(getFileName()).append(" (");
 		sb.append(getStartLine());

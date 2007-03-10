@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.jci;
 
 import java.io.InputStream;
@@ -26,6 +27,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
+ * The ReloadingClassLoader uses a delegation mechansim to allow
+ * classes to be reloaded. That means that loadClass calls may
+ * return different results if the class was change in the underlying
+ * ResoruceStore.
+ * 
  * @author tcurdt
  */
 public class ReloadingClassLoader extends ClassLoader implements ReloadNotificationListener {
@@ -36,8 +42,6 @@ public class ReloadingClassLoader extends ClassLoader implements ReloadNotificat
     private ResourceStore[] stores = new ResourceStore[0];
     private ClassLoader delegate;
 
-    //private final Collection reloadingListeners = new HashSet();
-    
     public ReloadingClassLoader( final ClassLoader pParent ) {        
         super(pParent);
         parent = pParent;        
@@ -45,16 +49,6 @@ public class ReloadingClassLoader extends ClassLoader implements ReloadNotificat
         delegate = new ResourceStoreClassLoader(parent, stores);
     }
 
-//    public void addListener(final ReloadingListener pListener) {
-////        pListener.setNotificationListener(this);
-//        addResourceStore(pListener.getStore());
-//    }
-    
-//    public void removeListener(final ReloadingListener pListener) {
-//        removeResourceStore(pListener.getStore());
-////        pListener.setNotificationListener(null);
-//    }
-    
     public boolean addResourceStore( final ResourceStore pStore ) {
         try {        
             final int n = stores.length;
@@ -71,89 +65,40 @@ public class ReloadingClassLoader extends ClassLoader implements ReloadNotificat
     }
 
     public boolean removeResourceStore( final ResourceStore pStore ) {
-        try {
-            final int n = stores.length;
-            int i = 0;
-                        
-            //find the pStore and index position with var i
-            while ( ( i <= n )  && ( stores[i] != pStore ) ) {
-                i++;
-            }
-                        
-            //pStore was not found
-            if ( i == n ) {
-                throw new Exception( "store" + pStore + " was not found" );
-            }
-            
-            // if stores length > 1 then array copy old values, else create new empty store 
-            if (n > 1) {            
-                final ResourceStore[] newStores = new ResourceStore[n - 1];
-                
-                System.arraycopy(stores, 0, newStores, 0, i-1);
-                System.arraycopy(stores, i, newStores, i, newStores.length - 1);
-                
-                stores = newStores;
-                delegate = new ResourceStoreClassLoader(parent, stores);
-            } else {
-                stores = new ResourceStore[0];
-            }
-            return true;
-            
-        } catch ( final Exception e ) {
-            log.error("could not remove resource store " + pStore, e);
+
+        final int n = stores.length;
+        int i = 0;
+           
+        // FIXME: this should be improved with a Map
+        // find the pStore and index position with var i
+        while ( ( i <= n )  && ( stores[i] != pStore ) ) {
+            i++;
         }
-                
-        return false;
+                    
+        // pStore was not found
+        if ( i == n ) {
+            return false;
+        }
+        
+        // if stores length > 1 then array copy old values, else create new empty store 
+        if (n > 1) {            
+            final ResourceStore[] newStores = new ResourceStore[n - 1];
+            
+            System.arraycopy(stores, 0, newStores, 0, i-1);
+            System.arraycopy(stores, i, newStores, i, newStores.length - 1);
+            
+            stores = newStores;
+            delegate = new ResourceStoreClassLoader(parent, stores);
+        } else {
+            stores = new ResourceStore[0];
+        }
+        return true;
     }
     
-    /*
-    public void start() {
-        fam = new FilesystemAlterationMonitor(); 
-        fam.addListener(new ReloadingListener(store) {  
-            protected void needsReload( boolean pReload ) {
-                super.needsReload(pReload);
-                if (pReload) {
-                    ReloadingClassLoader.this.reload();                    
-                } else {
-                    ReloadingClassLoader.this.notifyReloadingListeners(false);                    
-                }
-            }
-        }, repository);
-        fam.start();
-    }
-    
-    public void stop() {
-        fam.stop();
-    }
-    */
-    /*
-    public void addListener(final ReloadingClassLoaderListener pListener) {
-        synchronized (reloadingListeners) {
-            reloadingListeners.add(pListener);
-        }                
-    }
-    
-    public boolean removeListener(final ReloadingClassLoaderListener pListener) {
-        synchronized (reloadingListeners) {
-            return reloadingListeners.remove(pListener);
-        }        
-    }
-    */
     public void handleNotification() {
         log.debug("reloading");
         delegate = new ResourceStoreClassLoader(parent, stores);
-        //notifyReloadingListeners();
     }
-    /*
-    private void notifyReloadingListeners() { 
-        synchronized (reloadingListeners) {
-            for (final Iterator it = reloadingListeners.iterator(); it.hasNext();) {
-                final ReloadingClassLoaderListener listener = (ReloadingClassLoaderListener) it.next();
-                listener.hasReloaded();
-            }            
-        }
-    }
-    */
     
     public void clearAssertionStatus() {
         delegate.clearAssertionStatus();

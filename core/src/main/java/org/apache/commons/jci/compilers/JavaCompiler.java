@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.jci.compilers;
 
 import org.apache.commons.jci.problems.CompilationProblemHandler;
@@ -22,6 +23,17 @@ import org.apache.commons.jci.stores.ResourceStore;
 
 
 /**
+ * The general compiler interface. All compilers implementing
+ * this interface should read the resources from the reader
+ * and store the java class files into the ResourceStore.
+ * 
+ * The actual compilation language does not matter. But the
+ * contract is that the result of the compilation will be a
+ * class file.
+ * 
+ * If possible the compiler should notify the optional
+ * CompilationProblemHandler as soon as a problem is found.
+ * 
  * @author tcurdt
  */
 public interface JavaCompiler {

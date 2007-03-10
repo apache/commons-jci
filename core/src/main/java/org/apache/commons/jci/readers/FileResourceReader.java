@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.jci.readers;
 
 import java.io.File;
@@ -41,9 +42,8 @@ public final class FileResourceReader implements ResourceReader {
         try {
             return FileUtils.readFileToString(new File(root, pResourceName), "UTF-8").getBytes();
         } catch(Exception e) {
-        	// TODO
+            return null;
         }
-        return null;
     }
     
     /**

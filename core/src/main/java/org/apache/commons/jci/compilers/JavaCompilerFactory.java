@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.jci.compilers;
 
 import java.util.HashMap;
@@ -22,23 +23,29 @@ import java.util.Map;
 import org.apache.commons.jci.utils.ClassUtils;
 
 
-
+/**
+ * Creates JavaCompilers
+ * 
+ * TODO use META-INF discovery mechanism
+ * 
+ * @author tcurdt
+ */
 public final class JavaCompilerFactory {
 
     /**
-     * @deprecated
+     * @deprecated will be remove after the next release, please create an instance yourself
      */
 	private static final JavaCompilerFactory INSTANCE = new JavaCompilerFactory();
+
+    private final Map classCache = new HashMap();
     
     /**
-     * @deprecated
+     * @deprecated will be remove after the next release, please create an instance yourself
      */
     public static JavaCompilerFactory getInstance() {
         return JavaCompilerFactory.INSTANCE;
     }
 
-    private final Map classCache = new HashMap();
-    
     /**
      * Tries to guess the class name by convention. So for compilers
      * following the naming convention
@@ -51,8 +58,6 @@ public final class JavaCompilerFactory {
      * 
      * @param pHint
      * @return JavaCompiler or null
-     * 
-     * TODO use META-INF discovery mechanism
      */
     public JavaCompiler createCompiler(final String pHint) {
         
@@ -81,7 +86,6 @@ public final class JavaCompilerFactory {
         try {
             return (JavaCompiler) clazz.newInstance();
         } catch (Throwable t) {
-            t.printStackTrace();
             return null;
         }
     }

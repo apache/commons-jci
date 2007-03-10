@@ -18,9 +18,23 @@ import org.objectweb.asm.util.CheckClassAdapter;
 import org.vafer.dependency.asm.RenamingVisitor;
 import org.vafer.dependency.utils.ResourceRenamer;
 
+
+/**
+ * This classloader injects the FileIn/OutputStream wrappers
+ * into javac. Access to the store/reader is done via ThreadLocals.
+ * It also tries to find the javac class on the system and expands
+ * the classpath accordingly.
+ * 
+ * @author tcurdt
+ */
 public final class JavacClassLoader extends URLClassLoader {
+		
+	private final Map loaded = new HashMap();
 	
-	
+	public JavacClassLoader( final ClassLoader pParent ) {
+		super(getToolsJar(), pParent);
+	}
+
 	private static URL[] getToolsJar() {
 		try {
 			Class.forName("com.sun.tools.javac.Main");
@@ -55,17 +69,9 @@ public final class JavacClassLoader extends URLClassLoader {
 
 		throw new RuntimeException(sb.toString());
 	}
-	
-	private final Map loaded = new HashMap();
-	
-	public JavacClassLoader( final ClassLoader pParent ) {
-		super(getToolsJar(), pParent);
-	}
-	
+
 	protected Class findClass( final String name ) throws ClassNotFoundException {
 
-		//System.out.println("findClass " + name);
-		
 		if (name.startsWith("java.")) {
 			return super.findClass(name);
 		}
@@ -86,11 +92,9 @@ public final class JavacClassLoader extends URLClassLoader {
 		        new ClassReader(classStream).accept(new RenamingVisitor(new CheckClassAdapter(renamedCw), new ResourceRenamer() {
 					public String getNewNameFor(final String pOldName) {
 						if (pOldName.startsWith(FileOutputStream.class.getName())) {
-//							System.out.println("rewriting FOS " + name);
 							return FileOutputStreamProxy.class.getName();
 						}
 						if (pOldName.startsWith(FileInputStream.class.getName())) {
-//							System.out.println("rewriting FIS " + name);
 							return FileInputStreamProxy.class.getName();
 						}
 						return pOldName;
@@ -100,7 +104,6 @@ public final class JavacClassLoader extends URLClassLoader {
 	        	classBytes = renamedCw.toByteArray();
 				
 			} else {
-//				classBytes = IOUtils.toByteArray(classStream);
 				return super.findClass(name);
 			}
 			

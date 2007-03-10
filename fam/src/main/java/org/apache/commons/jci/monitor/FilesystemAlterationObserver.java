@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.jci.monitor;
 
 import java.io.File;
@@ -26,17 +27,14 @@ import java.io.File;
  */
 public interface FilesystemAlterationObserver {
 
-	// FilesystemAlterationObserver( final File pRootDirectory );
-	
 	File getRootDirectory();
 	
-	
 	void checkAndNotify();
-
 	
 	void addListener( final FilesystemAlterationListener pListener );	
 
 	void removeListener( final FilesystemAlterationListener pListener );
 	
 	FilesystemAlterationListener[] getListeners();
+
 }

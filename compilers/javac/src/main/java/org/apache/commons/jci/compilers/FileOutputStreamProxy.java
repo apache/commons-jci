@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.jci.utils.ClassUtils;
 
-public class FileOutputStreamProxy extends OutputStream {
+public final class FileOutputStreamProxy extends OutputStream {
 	
 	private final static ThreadLocal storeThreadLocal = new ThreadLocal();
 

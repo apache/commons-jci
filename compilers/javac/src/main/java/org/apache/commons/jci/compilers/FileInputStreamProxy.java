@@ -10,7 +10,7 @@ import java.io.InputStream;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.utils.ClassUtils;
 
-public class FileInputStreamProxy extends InputStream {
+public final class FileInputStreamProxy extends InputStream {
 	
 	private final static ThreadLocal readerThreadLocal = new ThreadLocal();
 	

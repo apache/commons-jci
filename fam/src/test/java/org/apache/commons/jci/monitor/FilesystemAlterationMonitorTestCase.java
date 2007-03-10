@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.jci.monitor;
 
 import java.io.File;
@@ -29,7 +30,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
-
+/**
+ * 
+ * @author tcurdt
+ */
 public final class FilesystemAlterationMonitorTestCase extends TestCase {
 
     private final Log log = LogFactory.getLog(FilesystemAlterationMonitorTestCase.class);
@@ -37,7 +41,7 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
     private FilesystemAlterationMonitor fam;
     private MyFilesystemAlterationListener listener;
 
-    protected File directory;
+    private File directory;
 
     
     protected void setUp() throws Exception {

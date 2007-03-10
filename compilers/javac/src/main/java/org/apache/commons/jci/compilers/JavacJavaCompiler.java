@@ -15,6 +15,16 @@ import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
 
+/**
+ * Compiler leveraging the javac from tools.jar. Using byte code rewriting
+ * it is tricked not to read/write from/to disk but use the ResourceReader and
+ * ResourceStore provided instead.
+ * 
+ * NOTE: (As of now) this compiler only works up until java5. Java6 comes with
+ * a new API based on jsr199. So please use that jsr199 compiler instead.
+ *   
+ * @author tcurdt
+ */
 public final class JavacJavaCompiler extends AbstractJavaCompiler {
 
 	private static final String EOL = System.getProperty("line.separator");
@@ -22,15 +32,14 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 	private static final String NOTE_PREFIX = "Note: ";
 	private static final String ERROR_PREFIX = "error: ";
 
-	private final JavacJavaCompilerSettings settings;
+//	private final JavacJavaCompilerSettings settings;
 
 	public JavacJavaCompiler() {
-		settings = null;
+//		settings = null;
 	}
 
-
 	public JavacJavaCompiler( final JavacJavaCompilerSettings pSettings ) {
-		settings = pSettings;
+//		settings = pSettings;
 	}
 
 	public CompilationResult compile( final String[] pSourcePaths, final ResourceReader pReader, ResourceStore pStore, final ClassLoader pClasspathClassLoader) {
@@ -58,6 +67,10 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 		} catch(Exception e) {
 			return new CompilationResult(new CompilationProblem[] {
 					new JavacCompilationProblem("Error while executing the compiler: " + e.toString(), true) });
+		} finally {
+			// help GC
+			FileInputStreamProxy.setResourceReader(null);
+			FileOutputStreamProxy.setResourceStore(null);
 		}
 	}
 
@@ -154,73 +167,73 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 		}
 	}
 
-	private String[] buildCompilerArguments( final String[] resourcePaths )
-	{
-		final List args = new ArrayList();
-		for (int i = 0; i < resourcePaths.length; i++) {
-			args.add(resourcePaths[i]);
-		}
-
-		if (settings != null) {
-			if (settings.isOptimize()) {
-				args.add("-O");
-			}
-
-			if (settings.isDebug()) {
-				args.add("-g");
-			}
-
-			if (settings.isVerbose()) {
-				args.add("-verbose");
-			}
-
-			if (settings.isShowDeprecation()) {
-				args.add("-deprecation");
-				// This is required to actually display the deprecation messages
-				settings.setShowWarnings(true);
-			}
-
-			if (settings.getMaxmem() != null) {
-				args.add("-J-Xmx" + settings.getMaxmem());
-			}
-
-			if (settings.getMeminitial() != null) {
-				args.add("-J-Xms" + settings.getMeminitial());
-			}
-
-			if (!settings.isShowWarnings()) {
-				args.add("-nowarn");
-			}
-
-			// TODO: this could be much improved
-			if (settings.getTargetVersion() != null) {
-				// Required, or it defaults to the target of your JDK (eg 1.5)
-				args.add("-target");
-				args.add("1.1");
-			} else {
-				args.add("-target");
-				args.add(settings.getTargetVersion());
-			}
-
-			// TODO suppressSource
-			if (settings.getSourceVersion() != null) {
-				// If omitted, later JDKs complain about a 1.1 target
-				args.add("-source");
-				args.add("1.3");
-			} else {
-				args.add("-source");
-				args.add(settings.getSourceVersion());
-			}
-
-			// TODO suppressEncoding
-			if (settings.getSourceEncoding() != null) {
-				args.add("-encoding");
-				args.add(settings.getSourceEncoding());
-			}
-
-			// TODO CustomCompilerArguments
-		}
-
-		return (String[]) args.toArray(new String[args.size()]);
-	}
+//	private String[] buildCompilerArguments( final String[] resourcePaths )
+//	{
+//		final List args = new ArrayList();
+//		for (int i = 0; i < resourcePaths.length; i++) {
+//			args.add(resourcePaths[i]);
+//		}
+//
+//		if (settings != null) {
+//			if (settings.isOptimize()) {
+//				args.add("-O");
+//			}
+//
+//			if (settings.isDebug()) {
+//				args.add("-g");
+//			}
+//
+//			if (settings.isVerbose()) {
+//				args.add("-verbose");
+//			}
+//
+//			if (settings.isShowDeprecation()) {
+//				args.add("-deprecation");
+//				// This is required to actually display the deprecation messages
+//				settings.setShowWarnings(true);
+//			}
+//
+//			if (settings.getMaxmem() != null) {
+//				args.add("-J-Xmx" + settings.getMaxmem());
+//			}
+//
+//			if (settings.getMeminitial() != null) {
+//				args.add("-J-Xms" + settings.getMeminitial());
+//			}
+//
+//			if (!settings.isShowWarnings()) {
+//				args.add("-nowarn");
+//			}
+//
+//			// TODO: this could be much improved
+//			if (settings.getTargetVersion() != null) {
+//				// Required, or it defaults to the target of your JDK (eg 1.5)
+//				args.add("-target");
+//				args.add("1.1");
+//			} else {
+//				args.add("-target");
+//				args.add(settings.getTargetVersion());
+//			}
+//
+//			// TODO suppressSource
+//			if (settings.getSourceVersion() != null) {
+//				// If omitted, later JDKs complain about a 1.1 target
+//				args.add("-source");
+//				args.add("1.3");
+//			} else {
+//				args.add("-source");
+//				args.add(settings.getSourceVersion());
+//			}
+//
+//			// TODO suppressEncoding
+//			if (settings.getSourceEncoding() != null) {
+//				args.add("-encoding");
+//				args.add(settings.getSourceEncoding());
+//			}
+//
+//			// TODO CustomCompilerArguments
+//		}
+//
+//		return (String[]) args.toArray(new String[args.size()]);
+//	}
 }
