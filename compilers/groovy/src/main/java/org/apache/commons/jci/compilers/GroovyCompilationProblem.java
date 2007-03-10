@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.jci.compilers;
 
 import org.apache.commons.jci.problems.CompilationProblem;
@@ -23,6 +24,10 @@ import org.codehaus.groovy.control.messages.SimpleMessage;
 import org.codehaus.groovy.control.messages.SyntaxErrorMessage;
 import org.codehaus.groovy.syntax.SyntaxException;
 
+/**
+ * 
+ * @author tcurdt
+ */
 public class GroovyCompilationProblem implements CompilationProblem {
 
     private final String fileName;

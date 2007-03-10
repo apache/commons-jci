@@ -1,16 +1,33 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.apache.commons.jci.compilers;
 
 import groovy.lang.GroovyClassLoader;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import org.apache.commons.jci.compilers.AbstractJavaCompiler;
-import org.apache.commons.jci.compilers.CompilationResult;
+
 import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
-import org.apache.commons.jci.utils.ClassUtils;
+import org.apache.commons.jci.utils.ConversionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.groovy.control.CompilationFailedException;
@@ -24,6 +41,10 @@ import org.codehaus.groovy.control.messages.Message;
 import org.codehaus.groovy.control.messages.WarningMessage;
 import org.codehaus.groovy.tools.GroovyClass;
 
+/**
+ * 
+ * @author tcurdt
+ */
 public final class GroovyJavaCompiler extends AbstractJavaCompiler {
 
     private final Log log = LogFactory.getLog(GroovyJavaCompiler.class);
@@ -42,7 +63,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
         for (int i = 0; i < source.length; i++) {
             final String resourceName = pResourceNames[i];
             source[i] = new SourceUnit(
-                    ClassUtils.convertResourceToClassName(resourceName),
+                    ConversionUtils.convertResourceToClassName(resourceName),
                     new String(pReader.getBytes(resourceName)), // FIXME delay the read
                     configuration,
                     groovyClassLoader,
@@ -61,7 +82,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
             for (final Iterator it = classes.iterator(); it.hasNext();) {
                 final GroovyClass clazz = (GroovyClass) it.next();
                 final byte[] bytes = clazz.getBytes();
-                pStore.write(ClassUtils.convertClassToResourcePath(clazz.getName()), bytes);
+                pStore.write(ConversionUtils.convertClassToResourcePath(clazz.getName()), bytes);
             }
         } catch (final MultipleCompilationErrorsException e) {
             final ErrorCollector col = e.getErrorCollector();

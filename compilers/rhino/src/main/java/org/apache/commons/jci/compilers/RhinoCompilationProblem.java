@@ -14,16 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.jci.compilers;
 
 import org.apache.commons.jci.problems.CompilationProblem;
 
+/**
+ * 
+ * @author tcurdt
+ */
 public final class RhinoCompilationProblem implements CompilationProblem {
 
 	private final String message;
 	private final String fileName;
 	private final int line;
-//	private final String script;
 	private final int column;
 	private final boolean error;
 	
@@ -31,7 +35,6 @@ public final class RhinoCompilationProblem implements CompilationProblem {
 		message = pMessage;
 		fileName = pFileName;
 		line = pLine;
-//		script = pScript;
 		column = pColumn;
 		error = pError;
 	}

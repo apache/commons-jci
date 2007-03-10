@@ -28,7 +28,7 @@ import java.util.StringTokenizer;
 import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
-import org.apache.commons.jci.utils.ClassUtils;
+import org.apache.commons.jci.utils.ConversionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jdt.core.compiler.IProblem;
@@ -73,7 +73,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
 
         CompilationUnit( final ResourceReader pReader, final String pSourceFile ) {
             reader = pReader;
-            clazzName = ClassUtils.convertResourceToClassName(pSourceFile);
+            clazzName = ConversionUtils.convertResourceToClassName(pSourceFile);
             fileName = pSourceFile;
             int dot = clazzName.lastIndexOf('.');
             if (dot > 0) {
@@ -119,12 +119,10 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             ) {
 
         final Map settingsMap = settings;
-//        final Set sourceFileIndex = new HashSet();
         final ICompilationUnit[] compilationUnits = new ICompilationUnit[pSourceFiles.length];
         for (int i = 0; i < compilationUnits.length; i++) {
             final String sourceFile = pSourceFiles[i];
             compilationUnits[i] = new CompilationUnit(pReader, sourceFile);
-//            sourceFileIndex.add(sourceFile);
             log.debug("compiling " + sourceFile);
         }
 
@@ -167,7 +165,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             	
             	log.debug("finding " + pClazzName);
             	
-            	final String resourceName = ClassUtils.convertClassToResourcePath(pClazzName);
+            	final String resourceName = ConversionUtils.convertClassToResourcePath(pClazzName);
             	
                 final byte[] clazzBytes = pStore.read(pClazzName);
                 if (clazzBytes != null) {
@@ -230,7 +228,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
 
             private boolean isPackage( final String pClazzName ) {
             	
-            	final InputStream is = pClassLoader.getResourceAsStream(ClassUtils.convertClassToResourcePath(pClazzName));
+            	final InputStream is = pClassLoader.getResourceAsStream(ConversionUtils.convertClassToResourcePath(pClazzName));
             	if (is != null) {
                 	log.debug("found the class for " + pClazzName + "- no package");
             		return false;

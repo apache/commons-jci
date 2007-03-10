@@ -14,12 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.jci.compilers;
 
 import org.apache.commons.jci.problems.CompilationProblem;
 import org.codehaus.janino.Location;
 import org.codehaus.janino.Scanner.LocatedException;
 
+/**
+ * 
+ * @author tcurdt
+ */
 public class JaninoCompilationProblem implements CompilationProblem {
 
     private final Location location;

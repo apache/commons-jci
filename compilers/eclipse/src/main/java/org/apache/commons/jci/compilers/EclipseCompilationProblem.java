@@ -14,12 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.jci.compilers;
 
 import org.apache.commons.jci.problems.CompilationProblem;
 import org.eclipse.jdt.core.compiler.IProblem;
 
-public class EclipseCompilationProblem implements CompilationProblem {
+/**
+ * 
+ * @author tcurdt
+ *
+ */
+public final class EclipseCompilationProblem implements CompilationProblem {
 
     private final IProblem problem;
 

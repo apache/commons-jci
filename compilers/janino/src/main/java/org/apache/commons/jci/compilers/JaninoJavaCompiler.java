@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.jci.compilers;
 
 import java.io.BufferedReader;
@@ -29,7 +30,7 @@ import java.util.Map;
 import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
-import org.apache.commons.jci.utils.ClassUtils;
+import org.apache.commons.jci.utils.ConversionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.janino.ClassLoaderIClassLoader;
@@ -145,14 +146,14 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
         final CompilingIClassLoader icl = new CompilingIClassLoader(pResourceReader, classFilesByName, classLoader);
         for (int i = 0; i < pClasses.length; i++) {
             log.debug("compiling " + pClasses[i]);
-            icl.loadIClass(Descriptor.fromClassName(ClassUtils.convertResourceToClassName(pClasses[i])));
+            icl.loadIClass(Descriptor.fromClassName(ConversionUtils.convertResourceToClassName(pClasses[i])));
         }
         
         // Store all fully compiled classes
         for (Iterator i = classFilesByName.entrySet().iterator(); i.hasNext();) {
             final Map.Entry entry = (Map.Entry)i.next();
             final String clazzName = (String)entry.getKey(); 
-            pStore.write(ClassUtils.convertClassToResourcePath(clazzName), (byte[])entry.getValue());
+            pStore.write(ConversionUtils.convertClassToResourcePath(clazzName), (byte[])entry.getValue());
         }
         
         final Collection problems = icl.getProblems();

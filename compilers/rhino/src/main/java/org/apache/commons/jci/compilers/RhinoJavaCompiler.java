@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.jci.compilers;
 
 import java.io.ByteArrayInputStream;
@@ -27,7 +28,7 @@ import java.util.Collection;
 import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
-import org.apache.commons.jci.utils.ClassUtils;
+import org.apache.commons.jci.utils.ConversionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mozilla.javascript.CompilerEnvirons;
@@ -250,7 +251,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
 		for (int i = 0; i < pResourcePaths.length; i++) {
             log.debug("compiling " + pResourcePaths[i]);
             
-            final String clazzName = ClassUtils.convertResourceToClassName(pResourcePaths[i]);
+            final String clazzName = ConversionUtils.convertResourceToClassName(pResourcePaths[i]);
             try {
 				cl.loadClass(clazzName);
 			} catch (ClassNotFoundException e) {
