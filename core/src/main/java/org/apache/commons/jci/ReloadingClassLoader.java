@@ -65,8 +65,7 @@ public class ReloadingClassLoader extends ClassLoader implements ReloadNotificat
             delegate = new ResourceStoreClassLoader(parent, stores);            
             return true;
         } catch ( final Exception e ) {
-        	e.printStackTrace();
-            // TODO: rethrow?
+            log.error("could not add resource store " + pStore);
         }
         return false;
     }
@@ -83,7 +82,7 @@ public class ReloadingClassLoader extends ClassLoader implements ReloadNotificat
                         
             //pStore was not found
             if ( i == n ) {
-                throw new Exception( "pStore was not found" );
+                throw new Exception( "store" + pStore + " was not found" );
             }
             
             // if stores length > 1 then array copy old values, else create new empty store 
@@ -101,7 +100,7 @@ public class ReloadingClassLoader extends ClassLoader implements ReloadNotificat
             return true;
             
         } catch ( final Exception e ) {
-            // TODO: re-throw?
+            log.error("could not remove resource store " + pStore, e);
         }
                 
         return false;

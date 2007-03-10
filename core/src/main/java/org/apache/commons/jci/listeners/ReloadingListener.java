@@ -139,8 +139,12 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
     }
 
     void notifyReloadNotificationListeners() {
+        
     	for (Iterator it = notificationListeners.iterator(); it.hasNext();) {
     		final ReloadNotificationListener listener = (ReloadNotificationListener) it.next();
+
+            log.debug("notifying listener " + listener);
+
 			listener.handleNotification();
 		}    	
     }
