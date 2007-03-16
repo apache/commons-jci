@@ -47,6 +47,9 @@ public final class ConversionUtils {
 	 */
 	public static String stripExtension( final String pResourceName ) {
 		final int i = pResourceName.lastIndexOf('.');
+		if (i < 0) {
+			return pResourceName;
+		}
 		final String withoutExtension = pResourceName.substring(0, i);
 		return withoutExtension;
 	}

@@ -263,5 +263,11 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
         problems.toArray(result);
         return new CompilationResult(result);
 	}
+
+
+	public JavaCompilerSettings createDefaultSettings() {
+		// FIXME
+		return null;
+	}
 	
 }

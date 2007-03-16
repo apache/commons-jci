@@ -184,6 +184,11 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 		}
 	}
 
+	public JavaCompilerSettings createDefaultSettings() {
+		// FIXME
+		return null;
+	}
+
 //	private String[] buildCompilerArguments( final String[] resourcePaths )
 //	{
 //		final List args = new ArrayList();

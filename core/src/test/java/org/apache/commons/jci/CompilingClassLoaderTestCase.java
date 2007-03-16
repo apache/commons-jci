@@ -24,6 +24,7 @@ import org.apache.commons.jci.classes.ExtendedDump;
 import org.apache.commons.jci.classes.SimpleDump;
 import org.apache.commons.jci.compilers.CompilationResult;
 import org.apache.commons.jci.compilers.JavaCompiler;
+import org.apache.commons.jci.compilers.JavaCompilerSettings;
 import org.apache.commons.jci.listeners.CompilingListener;
 import org.apache.commons.jci.monitor.FilesystemAlterationMonitor;
 import org.apache.commons.jci.problems.CompilationProblem;
@@ -105,6 +106,10 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
 		}
 
 		public void setCompilationProblemHandler(CompilationProblemHandler pHandler) {
+		}
+
+		public JavaCompilerSettings createDefaultSettings() {
+			return null;
 		}
     	
     }

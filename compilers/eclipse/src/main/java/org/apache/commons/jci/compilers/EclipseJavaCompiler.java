@@ -99,7 +99,14 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         }
 
         public char[] getContents() {
-            return new String(reader.getBytes(fileName)).toCharArray();
+        	final byte[] content = reader.getBytes(fileName);
+        	
+        	if (content == null) {
+        		return null;
+        		//throw new RuntimeException("resource " + fileName + " could not be found");
+        	}
+        	
+            return new String(content).toCharArray();
         }
 
         public char[] getMainTypeName() {
@@ -119,13 +126,68 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             ) {
 
         final Map settingsMap = settings;
+        
+        final Collection problems = new ArrayList();
+        
         final ICompilationUnit[] compilationUnits = new ICompilationUnit[pSourceFiles.length];
         for (int i = 0; i < compilationUnits.length; i++) {
             final String sourceFile = pSourceFiles[i];
-            compilationUnits[i] = new CompilationUnit(pReader, sourceFile);
-            log.debug("compiling " + sourceFile);
+            
+            if (pReader.isAvailable(sourceFile)) {            
+            	compilationUnits[i] = new CompilationUnit(pReader, sourceFile);
+                log.debug("compiling " + sourceFile);
+            } else {
+            	// log.error("source not found " + sourceFile);
+            	
+                final CompilationProblem problem = new CompilationProblem() {
+
+					public int getEndColumn() {
+						return 0;
+					}
+
+					public int getEndLine() {
+						return 0;
+					}
+
+					public String getFileName() {
+						return sourceFile;
+					}
+
+					public String getMessage() {
+						return "Source " + sourceFile + " could not be found";
+					}
+
+					public int getStartColumn() {
+						return 0;
+					}
+
+					public int getStartLine() {
+						return 0;
+					}
+
+					public boolean isError() {
+						return true;
+					}
+					
+					public String toString() {
+						return getMessage();
+					}
+                };
+
+                if (problemHandler != null) {
+                    problemHandler.handle(problem);
+                }
+                
+                problems.add(problem);
+            }
         }
 
+        if (problems.size() > 0) {
+            final CompilationProblem[] result = new CompilationProblem[problems.size()];
+            problems.toArray(result);
+            return new org.apache.commons.jci.compilers.CompilationResult(result);        	
+        }
+        
         final IErrorHandlingPolicy policy = DefaultErrorHandlingPolicies.proceedWithAllProblems();
         final IProblemFactory problemFactory = new DefaultProblemFactory(Locale.getDefault());
         final INameEnvironment nameEnvironment = new INameEnvironment() {
@@ -268,7 +330,6 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             }
         };
 
-        final Collection problems = new ArrayList();
         final ICompilerRequestor compilerRequestor = new ICompilerRequestor() {
             public void acceptResult( final CompilationResult pResult ) {
                 if (pResult.hasProblems()) {
@@ -308,4 +369,8 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         problems.toArray(result);
         return new org.apache.commons.jci.compilers.CompilationResult(result);
     }
+
+	public JavaCompilerSettings createDefaultSettings() {
+		return new EclipseJavaCompilerSettings();
+	}
 }

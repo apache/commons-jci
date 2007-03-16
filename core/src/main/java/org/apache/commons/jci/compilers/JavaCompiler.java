@@ -48,6 +48,8 @@ public interface JavaCompiler {
 	 */
     void setCompilationProblemHandler( final CompilationProblemHandler pHandler );
 
+    JavaCompilerSettings createDefaultSettings();
+    
     /**
      * Compiles the java resources "some/path/to/MyJava.java"
      * read through the ResourceReader and then stores the resulting
