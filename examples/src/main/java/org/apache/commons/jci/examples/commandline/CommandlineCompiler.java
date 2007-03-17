@@ -25,7 +25,6 @@ import java.util.Iterator;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
@@ -96,8 +95,8 @@ public final class CommandlineCompiler {
 				OptionBuilder.withDescription("Generate no warnings")
 					.create( "nowarn" ));
 		
-		final HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp("jci", options);
+//		final HelpFormatter formatter = new HelpFormatter();
+//		formatter.printHelp("jci", options);
 		
 		final CommandLineParser parser = new GnuParser();
 		final CommandLine cmd = parser.parse(options, args, true);
