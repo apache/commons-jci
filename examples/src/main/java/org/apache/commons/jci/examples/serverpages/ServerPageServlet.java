@@ -118,8 +118,12 @@ public final class ServerPageServlet extends HttpServlet {
 		jspListener = new CompilingListener(new JavaCompilerFactory().createCompiler("eclipse"), store) {
 
 			public String getSourceFileExtension() {
-				return ".java";
+				return ".jsp";
 			}
+
+			public String getSourceNameFromFile( final FilesystemAlterationObserver pObserver, final File pFile ) {
+		    	return ConversionUtils.stripExtension(ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), pFile))) + ".java";
+		    }
 			
 			public ResourceReader getReader( final FilesystemAlterationObserver pObserver ) {
 				return new JspReader(super.getReader(pObserver));

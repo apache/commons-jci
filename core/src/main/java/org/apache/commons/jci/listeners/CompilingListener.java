@@ -75,6 +75,10 @@ public class CompilingListener extends ReloadingListener {
     public ResourceReader getReader( final FilesystemAlterationObserver pObserver ) {
     	return new FileResourceReader(pObserver.getRootDirectory());
     }
+
+    public String getSourceNameFromFile( final FilesystemAlterationObserver pObserver, final File pFile ) {
+    	return ConversionUtils.stripExtension(ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), pFile))) + getSourceFileExtension();
+    }
     
     public ResourceStore getStore() {
         return transactionalStore;
@@ -144,7 +148,7 @@ public class CompilingListener extends ReloadingListener {
             final String[] sourceFiles = new String[compileables.size()];            
             for (Iterator it = compileables.iterator(); it.hasNext();) {
                 final File file = (File) it.next();
-                final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), file));
+                final String resourceName = getSourceNameFromFile(pObserver, file);
                 sourceFiles[i] = resourceName;
                 i++;
             }

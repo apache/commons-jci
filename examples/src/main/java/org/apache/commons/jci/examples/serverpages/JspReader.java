@@ -151,21 +151,28 @@ public final class JspReader implements ResourceReader {
 	}
 	
 	public byte[] getBytes( String pResourceName ) {
-		final byte[] resourceBytes = reader.getBytes(pResourceName);
 		
-		if (resourceBytes == null) {
-			return null;
+		if (pResourceName.endsWith(".java")) {
+			
+			final String jspResourceName = ConversionUtils.stripExtension(pResourceName) + ".jsp";
+			final byte[] resourceBytes = reader.getBytes(jspResourceName);
+			
+			if (resourceBytes == null) {
+				return null;
+			}
+						
+			final byte[] jspServletCode = transform(jspResourceName, resourceBytes);
+
+			System.out.println(new String(jspServletCode));
+
+			return jspServletCode;
 		}
 		
-		final byte[] jspServletCode = transform(pResourceName, resourceBytes);
-		
-		System.out.println(new String(jspServletCode));
-		
-		return jspServletCode;
+		return reader.getBytes(pResourceName);
 	}
 
 	public boolean isAvailable( String pResourceName ) {
-		return reader.isAvailable(pResourceName);
+		return reader.isAvailable(pResourceName) || reader.isAvailable(ConversionUtils.stripExtension(pResourceName) + ".jsp");
 	}
 
 }
