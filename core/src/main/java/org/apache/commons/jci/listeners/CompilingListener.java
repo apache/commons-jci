@@ -64,6 +64,18 @@ public class CompilingListener extends ReloadingListener {
         lastResult = null;
     }
     
+    public JavaCompiler getCompiler() {
+    	return compiler;
+    }
+    
+    public String getSourceFileExtension() {
+    	return ".java";
+    }
+
+    public ResourceReader getReader( final FilesystemAlterationObserver pObserver ) {
+    	return new FileResourceReader(pObserver.getRootDirectory());
+    }
+    
     public ResourceStore getStore() {
         return transactionalStore;
     }
@@ -75,7 +87,7 @@ public class CompilingListener extends ReloadingListener {
     public void onStart( final FilesystemAlterationObserver pObserver ) {
         super.onStart(pObserver);
 
-        reader = new FileResourceReader(pObserver.getRootDirectory());
+        reader = getReader(pObserver);
 
         transactionalStore.onStart();
     }
@@ -95,9 +107,8 @@ public class CompilingListener extends ReloadingListener {
 
                 final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), deletedFile));
                 
-                if (resourceName.endsWith(".java")) {
-                    transactionalStore.remove(
-                    		ConversionUtils.stripExtension(resourceName) + ".class");
+                if (resourceName.endsWith(getSourceFileExtension())) {
+                    transactionalStore.remove(ConversionUtils.stripExtension(resourceName) + ".class");
                 } else {
                     transactionalStore.remove(resourceName);                	
                 }
@@ -113,14 +124,14 @@ public class CompilingListener extends ReloadingListener {
         
         for (final Iterator it = created.iterator(); it.hasNext();) {
             final File createdFile = (File) it.next();
-            if (createdFile.getName().endsWith(".java")) {
+            if (createdFile.getName().endsWith(getSourceFileExtension())) {
                 compileables.add(createdFile);
             }
         }
         
         for (final Iterator it = changed.iterator(); it.hasNext();) {
             final File changedFile = (File) it.next();
-            if (changedFile.getName().endsWith(".java")) {
+            if (changedFile.getName().endsWith(getSourceFileExtension())) {
                 compileables.add(changedFile);
             }
         }

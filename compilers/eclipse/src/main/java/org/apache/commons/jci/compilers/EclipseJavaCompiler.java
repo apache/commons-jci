@@ -245,12 +245,6 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                 
             	log.debug("not in store " + pClazzName);
             	
-//                if (pReader.isAvailable(clazzName.replace('.', '/') + ".java")) {
-//                    log.debug("compile " + clazzName);
-//                    ICompilationUnit compilationUnit = new CompilationUnit(pReader, clazzName);
-//                    return new NameEnvironmentAnswer(compilationUnit, null);
-//                }
-
                 final InputStream is = pClassLoader.getResourceAsStream(resourceName);
                 if (is == null) {
                 	log.debug("class " + pClazzName + " not found");
@@ -296,6 +290,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             		return false;
             	}
             	
+            	// FIXME: this should not be tied to the extension
             	final String source = pClazzName.replace('.', '/') + ".java";
             	if (pReader.isAvailable(source)) {
                 	log.debug("found the source " + source + " for " + pClazzName + " - no package ");

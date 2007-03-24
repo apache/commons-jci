@@ -79,6 +79,8 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
             if (types.containsKey(pType)) {
                 return (IClass) types.get(pType);
             }
+            
+            // FIXME: should not be tied to the extension            
             final String resourceNameFromClass = className.replace('.', '/') + ".java";
 
             final byte[] content = resourceReader.getBytes(resourceNameFromClass);

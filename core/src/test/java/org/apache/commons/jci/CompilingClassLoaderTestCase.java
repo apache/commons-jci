@@ -46,18 +46,7 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
     private ReloadingClassLoader classloader;
     private CompilingListener listener;
     private FilesystemAlterationMonitor fam;
-    
-//    private final static class BeanUtils {
-//        
-//        public static void setProperty( Object object, String property, Object value) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-//            final Class clazz = object.getClass();
-//            
-//            final Method setter = clazz.getMethod("set" + property, new Class[]{ value.getClass()});
-//            setter.invoke(object, new Object[]{ value });   
-//        }
-//    }
-    
-    
+        
     private final static class MockJavaCompiler implements JavaCompiler {
 
         private final Log log = LogFactory.getLog(MockJavaCompiler.class);
@@ -140,15 +129,6 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
         
         log.debug("*** ready to test");        
     }
-    
-    
-//    public void testCompileProblems() throws Exception {
-//        delay();        
-//        writeFile("jci/Simple.java", "JavaSources.error");
-//        listener.waitForEvent();
-//        
-//        // FIXME
-//    }
     
     public void testCreate() throws Exception {
         initialCompile();
@@ -247,106 +227,6 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
         }
         
     }
-
-
-//    public void testReference1() throws Exception {        
-//        delay();        
-//        writeFile("jci/Foo.java",
-//                "package jci;\n" + 
-//                "\n" + 
-//                "public class Foo {\n" + 
-//                "    public String toString() {\n" + 
-//                "        return \"foo1\";\n" + 
-//                "    }\n" + 
-//                "}"
-//                );        
-//        writeFile("jci/Bar.java",
-//                "package jci;\n" + 
-//                "\n" + 
-//                "public class Bar {\n" + 
-//                "    \n" + 
-//                "    private Foo foo;\n" + 
-//                "    \n" + 
-//                "    public void setFoo( Foo foo) {\n" + 
-//                "        this.foo = foo;\n" + 
-//                "    }\n" + 
-//                "    \n" + 
-//                "    public String toString() {\n" + 
-//                "        return \"bar1\";\n" + 
-//                "    }\n" + 
-//                "}"
-//                );        
-//        listener.waitForEvent();
-//        
-//        final Object foo1 = classloader.loadClass("jci.Foo").newInstance();        
-//        assertTrue("foo1".equals(foo1.toString()));
-//
-//        final Object bar1 = classloader.loadClass("jci.Bar").newInstance();        
-//        assertTrue("bar1".equals(bar1.toString()));
-//        
-//        BeanUtils.setProperty(bar1, "Foo", foo1);
-//        
-//        delay();
-//        writeFile("jci/Foo.java",
-//                "package jci;\n" + 
-//                "\n" + 
-//                "public class Foo {\n" + 
-//                "    public String toString() {\n" + 
-//                "        return \"foo2\";\n" + 
-//                "    }\n" + 
-//                "}"
-//                );        
-//        listener.waitForEvent();
-//
-//        final Object foo2 = classloader.loadClass("jci.Foo").newInstance();        
-//        assertTrue("foo2".equals(foo2.toString()));
-//
-//        final Object bar2 = classloader.loadClass("jci.Bar").newInstance();        
-//        // has not change -> still bar1
-//        assertTrue("bar1".equals(bar2.toString()));
-//    
-//        BeanUtils.setProperty(bar2, "Foo", foo2);
-//        BeanUtils.setProperty(bar1, "Foo", foo2);
-//
-//    }
-//
-//    public void testReference2() throws Exception {        
-//        delay();        
-//        writeFile("jci/Foo.java",
-//                "package jci;\n" + 
-//                "\n" + 
-//                "public class Foo implements org.apache.commons.jci.MyFoo {\n" + 
-//                "    public String toString() {\n" + 
-//                "        return \"foo1\";\n" + 
-//                "    }\n" + 
-//                "}"
-//                );        
-//        listener.waitForEvent();
-//        
-//        final MyFoo foo1 = (MyFoo) classloader.loadClass("jci.Foo").newInstance();        
-//        assertTrue("foo1".equals(foo1.toString()));
-//
-//
-//        final MyBar bar1 = new MyBar();
-//        bar1.setFoo(foo1);
-//        
-//        delay();
-//        writeFile("jci/Foo.java",
-//                "package jci;\n" + 
-//                "\n" + 
-//                "public class Foo implements org.apache.commons.jci.MyFoo {\n" + 
-//                "    public String toString() {\n" + 
-//                "        return \"foo2\";\n" + 
-//                "    }\n" + 
-//                "}"
-//                );        
-//        listener.waitForEvent();
-//
-//        final MyFoo foo2 = (MyFoo) classloader.loadClass("jci.Foo").newInstance();        
-//        assertTrue("foo2".equals(foo2.toString()));
-//
-//        bar1.setFoo(foo2);
-//    }
 
     protected void tearDown() throws Exception {
         fam.removeListener(listener);

@@ -19,10 +19,12 @@ package org.apache.commons.jci.examples.serverpages;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
+import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,9 +32,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.jci.ReloadingClassLoader;
+import org.apache.commons.jci.compilers.CompilationResult;
+import org.apache.commons.jci.compilers.JavaCompilerFactory;
 import org.apache.commons.jci.listeners.CompilingListener;
 import org.apache.commons.jci.monitor.FilesystemAlterationMonitor;
 import org.apache.commons.jci.monitor.FilesystemAlterationObserver;
+import org.apache.commons.jci.problems.CompilationProblem;
+import org.apache.commons.jci.readers.ResourceReader;
+import org.apache.commons.jci.stores.MemoryResourceStore;
+import org.apache.commons.jci.stores.TransactionalResourceStore;
+import org.apache.commons.jci.utils.ConversionUtils;
 
 
 /**
@@ -43,111 +52,92 @@ public final class ServerPageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private final ReloadingClassLoader classloader = new ReloadingClassLoader(ServerPageServlet.class.getClassLoader());
-	private CompilingListener listener;
 	private FilesystemAlterationMonitor fam;
+	private CompilingListener jspListener; 
 
-	private Map serverPagesByClassName = new HashMap();
+	private Map servletsByClassname = new HashMap();
 
 	public void init() throws ServletException {
 		super.init();
 		
-		final File directory = new File(getServletContext().getRealPath("/") + getInitParameter("directory"));
+		final File serverpagesDir = new File(getServletContext().getRealPath("/") + getInitParameter("serverpagesDir"));
 		
-		log("monitoring classes in " + directory);
+		log("monitoring serverpages in " + serverpagesDir);
+		
+		final TransactionalResourceStore store = new TransactionalResourceStore(new MemoryResourceStore()) {
 
-        listener = new CompilingListener() {
+			private Set newClasses;
+			private Map newServletsByClassname;
+			
+			public void onStart() {
+				super.onStart();
 
-			public void onStop( final FilesystemAlterationObserver pObserver ) {
-				super.onStop(pObserver);
+				newClasses = new HashSet();
+				newServletsByClassname = new HashMap(servletsByClassname);				
+			}
 
-				final File root = pObserver.getRootDirectory();
-								
-				final Collection changedFiles = getChangedFiles();
-				changedFiles.addAll(getCreatedFiles());
-				final Collection deletedFiles = getDeletedFiles();
-				
+			public void onStop() {
+				super.onStop();
+
 				boolean reload = false;
-				
-				final Map newServerPagesByClassName = new HashMap(serverPagesByClassName);
-				
-				for (Iterator it = deletedFiles.iterator(); it.hasNext();) {
-					final File file = (File) it.next();
-					final String serverPageClassName = convertFileToServerPageClassName(root, file);
-					newServerPagesByClassName.remove(serverPageClassName);
-					reload = true;
-					log("removing " + serverPageClassName);
-				}
-
-				for (Iterator it = changedFiles.iterator(); it.hasNext();) {
-					final File file = (File) it.next();
-					
-					final String serverPageClassName = convertFileToServerPageClassName(root, file);
-					
-					if (serverPageClassName == null) {
-						continue;
-					}
+				for (Iterator it = newClasses.iterator(); it.hasNext();) {
+					final String clazzName = (String) it.next();
 					
 					try {
-						final Class clazz = classloader.loadClass(serverPageClassName);
-						final HttpServlet serverPage = (HttpServlet) clazz.newInstance();
-						newServerPagesByClassName.put(serverPageClassName, serverPage);
+						final Class clazz = classloader.loadClass(clazzName);
+
+//						if (!clazz.isAssignableFrom(HttpServlet.class)) {
+//							log(clazzName + " is not a servlet");
+//							continue;
+//						}
+
+						final HttpServlet servlet = (HttpServlet) clazz.newInstance();
+						newServletsByClassname.put(clazzName, servlet);
 						reload = true;
-						log("compiled " + serverPageClassName);
-					} catch (ClassNotFoundException e) {
+					} catch(Exception e) {
 						log("", e);
-					} catch (InstantiationException e) {
-						log("", e);
-					} catch (IllegalAccessException e) {
-						log("", e);
-					}
+					}					
 				}
 
 				if (reload) {
-					log("activating new map of serverpages "+ newServerPagesByClassName);
-					serverPagesByClassName = newServerPagesByClassName;					
+					log("activating new map of servlets "+ newServletsByClassname);
+					servletsByClassname = newServletsByClassname;					
 				}
+			}
 
-			}        	
+			public void write(String pResourceName, byte[] pResourceData) {
+				super.write(pResourceName, pResourceData);
+				
+				if (pResourceName.endsWith(".class")) {
+					newClasses.add(pResourceName.replace('/', '.').substring(0, pResourceName.length() - ".class".length()));
+				}
+			}
+			
+		};
+		
+		jspListener = new CompilingListener(new JavaCompilerFactory().createCompiler("eclipse"), store) {
+
+			public String getSourceFileExtension() {
+				return ".java";
+			}
+			
+			public ResourceReader getReader( final FilesystemAlterationObserver pObserver ) {
+				return new JspReader(super.getReader(pObserver));
+			}
         };
-        listener.addReloadNotificationListener(classloader);
+        jspListener.addReloadNotificationListener(classloader);
         
         fam = new FilesystemAlterationMonitor();
-        fam.addListener(directory, listener);
+        fam.addListener(serverpagesDir, jspListener);
         fam.start();
 	}
 
-	private String convertFileToServerPageClassName( final File root, final File file ) {
-
-		if (!file.getName().endsWith(".java")) {
-			return null;
-		}
-		
-		final String relativeName = file.getAbsolutePath().substring(root.getAbsolutePath().length() + 1);
-
-		log("relative: " + relativeName);
-		
-		final String clazzName = relativeName.replace('/', '.').substring(0, relativeName.length() - 5); 
-
-		log("clazz: " + clazzName);
-
-		return clazzName;
-	}
 	
-	private String convertRequestToServerPageClassName( final HttpServletRequest request ) {
+	private String convertRequestToServletClassname( final HttpServletRequest request ) {
 
 		final String path = request.getPathInfo().substring(1);
 
-//		log("1 " + request.getContextPath());
-//		log("2 " + request.getPathInfo());
-//		log("3 " + request.getPathTranslated());
-//		log("4 " + request.getRequestURI());
-//		log("5 " + request.getServletPath());
-//		log("6 " + request.getRequestURL());
-		
-		// FIXME
-		// /some/page/bla.jsp -> some.page.Bla
-		
-		final String clazz = path;
+		final String clazz = ConversionUtils.stripExtension(path).replace('/', '.');
 		
 		return clazz;
 	}
@@ -155,21 +145,41 @@ public final class ServerPageServlet extends HttpServlet {
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		log("request " + request.getRequestURI());
 		
-		final String serverPageNameClassName = convertRequestToServerPageClassName(request);
+		final CompilationResult result = jspListener.getCompilationResult();
+		final CompilationProblem[] errors = result.getErrors();
 
-		log("checking for serverpage " + serverPageNameClassName);
+		if (errors.length > 0) {
+			final PrintWriter out = response.getWriter();
+			
+			out.append("<html><body>");
+
+			for (int i = 0; i < errors.length; i++) {
+				final CompilationProblem problem = errors[i];
+				out.append(problem.toString()).append("<br/>").append('\n');
+			}
+			
+			out.append("</body></html>");
+			
+			out.flush();
+			out.close();
+			return;			
+		}
 		
-		final HttpServlet serverPage = (HttpServlet) serverPagesByClassName.get(serverPageNameClassName);
+		final String servletClassname = convertRequestToServletClassname(request);
+
+		log("checking for serverpage " + servletClassname);
 		
-		if (serverPage == null) {
-			log("no serverpage  for " + request.getRequestURI());
+		final HttpServlet servlet = (HttpServlet) servletsByClassname.get(servletClassname);
+		
+		if (servlet == null) {
+			log("no servlet  for " + request.getRequestURI());
 			response.sendError(404);
 			return;
 		}
 
-		log("delegating request to " + serverPageNameClassName);
+		log("delegating request to " + servletClassname);
 		
-		serverPage.service(request, response);
+		servlet.service(request, response);
 	}
 
 	public void destroy() {

@@ -27,4 +27,11 @@ public class EclipseJavaCompilerSettings extends JavaCompilerSettings {
     	
         return map;
     }
+    
+    public String toString() {
+        final StringBuffer sb = new StringBuffer();
+        sb.append(defaultEclipseSettings.toString());
+        // FIXME
+        return sb.toString();
+    }
 }

@@ -52,7 +52,7 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
     public ReloadingListener( final ResourceStore pStore ) {
         store = pStore;
     }
-    
+
     public ResourceStore getStore() {
         return store;
     }

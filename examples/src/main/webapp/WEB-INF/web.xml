@@ -4,8 +4,8 @@
         <servlet-name>serverpages</servlet-name>
         <servlet-class>org.apache.commons.jci.examples.serverpages.ServerPageServlet</servlet-class>
         <init-param>
-            <param-name>directory</param-name>
-            <param-value>/WEB-INF/classes</param-value>
+            <param-name>serverpagesDir</param-name>
+            <param-value>/WEB-INF/jsp</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>

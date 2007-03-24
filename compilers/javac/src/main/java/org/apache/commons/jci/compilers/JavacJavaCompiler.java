@@ -70,7 +70,7 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 
 			final Method compile = renamedClass.getMethod("compile", new Class[] { String[].class, PrintWriter.class });
 			final StringWriter out = new StringWriter();
-			final Integer ok = (Integer) compile.invoke(null, new Object[] { pSourcePaths, new PrintWriter(out) });
+			final Integer ok = (Integer) compile.invoke(null, new Object[] { buildCompilerArguments(pSourcePaths, pClasspathClassLoader), new PrintWriter(out) });
 
 			final CompilationResult result = parseModernStream(new BufferedReader(new StringReader(out.toString())));
 
@@ -189,7 +189,11 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 		return null;
 	}
 
-//	private String[] buildCompilerArguments( final String[] resourcePaths )
+	private String[] buildCompilerArguments( final String[] resourcePaths, final ClassLoader classloader ) {
+		
+		// FIXME: build classpath from classloader information
+		return resourcePaths;
+		
 //	{
 //		final List args = new ArrayList();
 //		for (int i = 0; i < resourcePaths.length; i++) {
@@ -257,5 +261,5 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 //		}
 //
 //		return (String[]) args.toArray(new String[args.size()]);
-//	}
+	}
 }
