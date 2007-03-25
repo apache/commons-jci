@@ -13,7 +13,7 @@
     <name>Commons JCI</name>
     <url>http://jakarta.apache.org/commons/sandbox/jci/</url>
     <description>
-    Common java compiler interface
+        Common java compiler interface
     </description>
     <inceptionYear>2004</inceptionYear>
     <issueManagement>
@@ -27,6 +27,7 @@
         <module>compilers/janino</module>
         <module>compilers/groovy</module>
         <module>compilers/javac</module>
+        <module>compilers/rhino</module>
         <module>examples</module>
     </modules>
     <distributionManagement>
@@ -86,10 +87,6 @@
                     </systemProperties>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-            </plugin>
         </plugins>
         <extensions>
             <extension>
@@ -104,6 +101,16 @@
         <excludeDefaults>true</excludeDefaults>
 -->
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>1.0.0</version>
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>taglist-maven-plugin</artifactId>
@@ -126,7 +133,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>2.1</version>
+                <version>2.2</version>
                 <configuration>
                     <aggregate>true</aggregate>
                 </configuration>

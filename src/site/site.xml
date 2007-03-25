@@ -1,28 +1,17 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="Jakarta Commons JCI">
-
-  <bannerRight>
-    <name>Jakarta Commons JCI</name>
-    <src>jci-logo-white.png</src>
-    <href>http://jakarta.apache.org/commons/sandbox/jci/</href>
-  </bannerRight>
-
-  <body>
-
-<!--
-    <breadcrumbs> 
-      <item name="Library Homepage" href="http://www.library.jhu.edu"/> 
-    </breadcrumbs>
--->
-
-    <menu name="Jakarta Commons JCI">
-      <item name="About" href="index.html"/> 
-      <item name="Downloads" href="downloads.html"/> 
-    </menu>
-
-<!--
-    <menu ref="modules"/>
--->
-
-  </body>
+    <bannerRight>
+        <name>Jakarta Commons JCI</name>
+        <src>jci-logo-white.png</src>
+        <href>http://jakarta.apache.org/commons/sandbox/jci/</href>
+    </bannerRight>
+    <body>
+        <menu name="Jakarta Commons JCI">
+            <item name="About" href="index.html"/>
+            <item name="Usage" href="usage.html"/>
+            <item name="FAQ" href="faq.html"/>
+            <item name="Downloads" href="downloads.html"/>
+        </menu>
+        <menu ref="modules"/>
+    </body>
 </project>

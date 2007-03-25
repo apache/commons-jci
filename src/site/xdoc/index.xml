@@ -1,40 +1,30 @@
 <?xml version="1.0"?>
-
 <document>
-
- <properties>
-  <title>About</title>
-  <author email="commons-dev@jakarta.apache.org">Commons Documentation Team</author>
- </properties>
-
- <body>
-
-<section name="The JCI Component">
-
-<p>JCI is a java compiler interface featuring a compiling classloader.</p>
-
-<p>The current implementation supports compilation via the following compilers:</p>
-
-<ul>
-  <li>eclipse</li>
-  <li>janino</li>
-  <li>groovy</li>
-  <li>javac</li>
-</ul>
-
-</section>
-
-<section name="Releases">
-    <p>
-       See the <a href="downloads.html">downloads</a> page for information on obtaining releases.
-    </p>
-</section>
-
-<section name="Documentation">
-  <p>
-     The <a href="apidocs/index.html">JavaDoc API documents</a> are available online.
-  </p>
-</section>
-
-</body>
+    <properties>
+        <title>Jakarta Commons JCI - About</title>
+        <author email="commons-dev@jakarta.apache.org">Commons Documentation Team</author>
+    </properties>
+    <body>
+        <section name="The JCI Component">
+            <p>JCI is a java compiler interface featuring a compiling classloader.</p>
+            <p>The current implementation supports compilation via the following compilers:</p>
+            <ul>
+                <li>eclipse</li>
+                <li>janino</li>
+                <li>groovy</li>
+                <li>javac</li>
+                <li>rhino</li>
+            </ul>
+        </section>
+        <section name="Releases">
+            <p>
+                See the <a href="downloads.html">downloads</a> page for information on obtaining releases.
+            </p>
+        </section>
+        <section name="Documentation">
+            <p>
+                The <a href="apidocs/index.html">JavaDoc API documents</a> are available online.
+            </p>
+        </section>
+    </body>
 </document>

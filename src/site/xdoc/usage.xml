@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<document>
+    <properties>
+        <title>Jakarta Commons JCI - Usage</title>
+        <author email="commons-dev@jakarta.apache.org">Commons Documentation Team</author>
+    </properties>
+    <body>
+        <section name="Compilation">
+            <p/>
+        </section>
+        <section name="Filesystem monitoring">
+            <p/>
+        </section>
+    </body>
+</document>
