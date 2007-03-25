@@ -62,7 +62,7 @@ public final class ServerPageServlet extends HttpServlet {
 		
 		final File serverpagesDir = new File(getServletContext().getRealPath("/") + getInitParameter("serverpagesDir"));
 		
-		log("monitoring serverpages in " + serverpagesDir);
+		log("Monitoring serverpages in " + serverpagesDir);
 		
 		final TransactionalResourceStore store = new TransactionalResourceStore(new MemoryResourceStore()) {
 
@@ -86,10 +86,10 @@ public final class ServerPageServlet extends HttpServlet {
 					try {
 						final Class clazz = classloader.loadClass(clazzName);
 
-//						if (!clazz.isAssignableFrom(HttpServlet.class)) {
-//							log(clazzName + " is not a servlet");
-//							continue;
-//						}
+						if (!HttpServlet.class.isAssignableFrom(clazz)) {
+							log(clazzName + " is not a servlet");
+							continue;
+						}
 
 						final HttpServlet servlet = (HttpServlet) clazz.newInstance();
 						newServletsByClassname.put(clazzName, servlet);
@@ -100,7 +100,7 @@ public final class ServerPageServlet extends HttpServlet {
 				}
 
 				if (reload) {
-					log("activating new map of servlets "+ newServletsByClassname);
+					log("Activating new map of servlets "+ newServletsByClassname);
 					servletsByClassname = newServletsByClassname;					
 				}
 			}
@@ -117,16 +117,54 @@ public final class ServerPageServlet extends HttpServlet {
 		
 		jspListener = new CompilingListener(new JavaCompilerFactory().createCompiler("eclipse"), store) {
 
-			public String getSourceFileExtension() {
-				return ".jsp";
+			private final JspGenerator transformer = new JspGenerator();
+			private final Map sources = new HashMap();
+			private final Set resourceToCompile = new HashSet();
+
+			public void onStart(FilesystemAlterationObserver pObserver) {
+				super.onStart(pObserver);
+
+				resourceToCompile.clear();
 			}
 
-			public String getSourceNameFromFile( final FilesystemAlterationObserver pObserver, final File pFile ) {
-		    	return ConversionUtils.stripExtension(ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), pFile))) + ".java";
-		    }
-			
+
+			public void onFileChange(File pFile) {
+				if (pFile.getName().endsWith(".jsp")) {
+					final String resourceName = ConversionUtils.stripExtension(getSourceNameFromFile(observer, pFile)) + ".java";
+					
+					log("Updating " + resourceName);
+					
+					sources.put(resourceName, transformer.generateJavaSource(resourceName, pFile));
+
+					resourceToCompile.add(resourceName);
+				}
+				super.onFileChange(pFile);
+			}
+
+
+			public void onFileCreate(File pFile) {
+				if (pFile.getName().endsWith(".jsp")) {
+					final String resourceName = ConversionUtils.stripExtension(getSourceNameFromFile(observer, pFile)) + ".java";
+
+					log("Creating " + resourceName);
+
+					sources.put(resourceName, transformer.generateJavaSource(resourceName, pFile));					
+
+					resourceToCompile.add(resourceName);
+				}
+				super.onFileCreate(pFile);
+			}
+
+
+			public String[] getResourcesToCompile(FilesystemAlterationObserver pObserver) {
+				final String[] resourceNames = new String[resourceToCompile.size()];
+				resourceToCompile.toArray(resourceNames);
+				return resourceNames;
+			}
+
+
 			public ResourceReader getReader( final FilesystemAlterationObserver pObserver ) {
-				return new JspReader(super.getReader(pObserver));
+				return new JspReader(sources, super.getReader(pObserver));
 			}
         };
         jspListener.addReloadNotificationListener(classloader);
@@ -147,7 +185,8 @@ public final class ServerPageServlet extends HttpServlet {
 	}
 	
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		log("request " + request.getRequestURI());
+
+		log("Request " + request.getRequestURI());
 		
 		final CompilationResult result = jspListener.getCompilationResult();
 		final CompilationProblem[] errors = result.getErrors();
@@ -171,17 +210,17 @@ public final class ServerPageServlet extends HttpServlet {
 		
 		final String servletClassname = convertRequestToServletClassname(request);
 
-		log("checking for serverpage " + servletClassname);
+		log("Checking for serverpage " + servletClassname);
 		
 		final HttpServlet servlet = (HttpServlet) servletsByClassname.get(servletClassname);
 		
 		if (servlet == null) {
-			log("no servlet  for " + request.getRequestURI());
+			log("No servlet  for " + request.getRequestURI());
 			response.sendError(404);
 			return;
 		}
 
-		log("delegating request to " + servletClassname);
+		log("Delegating request to " + servletClassname);
 		
 		servlet.service(request, response);
 	}

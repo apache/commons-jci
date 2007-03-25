@@ -23,7 +23,7 @@ package org.apache.commons.jci.compilers;
  * 
  * If you need more specific settings you have to provide
  * the native compiler configurations to the compilers.
- * Writing of custom factory is suggested. 
+ * Writing of a custom factory is suggested. 
  * 
  * @author tcurdt
  */

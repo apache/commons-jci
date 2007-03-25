@@ -8,8 +8,8 @@ o compiler implementations
 o documentation
 o dependency analysis for proper re-try after errors
 o removing of anonymous classes if parent class is being removed
-o refactore store interface to provide package information
 o ability to add (contents of) jars to the store ...and be able to remove them again
 o maven plugin to compile with any of the compilers -> codehaus.org/mojo
 o compiler discovery via META-INF
 o common compiler configuration
+o build javac classpath from provided classloader

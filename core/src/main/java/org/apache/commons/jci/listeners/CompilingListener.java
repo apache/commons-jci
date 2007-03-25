@@ -96,6 +96,31 @@ public class CompilingListener extends ReloadingListener {
         transactionalStore.onStart();
     }
 
+    public String[] getResourcesToCompile( final FilesystemAlterationObserver pObserver ) {
+        final Collection created = getCreatedFiles();
+        final Collection changed = getChangedFiles();
+
+        final Collection resourceNames = new ArrayList();
+        
+        for (final Iterator it = created.iterator(); it.hasNext();) {
+            final File createdFile = (File) it.next();
+            if (createdFile.getName().endsWith(getSourceFileExtension())) {
+            	resourceNames.add(getSourceNameFromFile(pObserver, createdFile));
+            }
+        }
+        
+        for (final Iterator it = changed.iterator(); it.hasNext();) {
+            final File changedFile = (File) it.next();
+            if (changedFile.getName().endsWith(getSourceFileExtension())) {
+            	resourceNames.add(getSourceNameFromFile(pObserver, changedFile));
+            }
+        }
+    	
+        final String[] result = new String[resourceNames.size()];
+        resourceNames.toArray(result);
+        return result;
+    }
+    
     public boolean isReloadRequired( final FilesystemAlterationObserver pObserver ) {
     	boolean reload = false;
     	
@@ -112,53 +137,26 @@ public class CompilingListener extends ReloadingListener {
                 final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), deletedFile));
                 
                 if (resourceName.endsWith(getSourceFileExtension())) {
+                	// if source resource got removed delete the corresponding class 
                     transactionalStore.remove(ConversionUtils.stripExtension(resourceName) + ".class");
                 } else {
+                	// ordinary resource to be removed
                     transactionalStore.remove(resourceName);                	
                 }
-
                 
                 // FIXME: does not remove nested classes
                 
             }
             reload = true;
         }
-                        
-        final Collection compileables = new ArrayList();
-        
-        for (final Iterator it = created.iterator(); it.hasNext();) {
-            final File createdFile = (File) it.next();
-            if (createdFile.getName().endsWith(getSourceFileExtension())) {
-                compileables.add(createdFile);
-            }
-        }
-        
-        for (final Iterator it = changed.iterator(); it.hasNext();) {
-            final File changedFile = (File) it.next();
-            if (changedFile.getName().endsWith(getSourceFileExtension())) {
-                compileables.add(changedFile);
-            }
-        }
+                                
+        final String[] resourcesToCompile = getResourcesToCompile(pObserver);
 
-        if (compileables.size() > 0) {
+        if (resourcesToCompile.length > 0) {
 
-            log.debug(compileables.size() + " classes to compile");
-
-            int i = 0;
-            final String[] sourceFiles = new String[compileables.size()];            
-            for (Iterator it = compileables.iterator(); it.hasNext();) {
-                final File file = (File) it.next();
-                final String resourceName = getSourceNameFromFile(pObserver, file);
-                sourceFiles[i] = resourceName;
-                i++;
-            }
+            log.debug(resourcesToCompile.length + " classes to compile");
             
-            final CompilationResult result =
-                compiler.compile(
-                    sourceFiles,
-                    reader,
-                    transactionalStore
-                    );
+            final CompilationResult result = compiler.compile(resourcesToCompile, reader, transactionalStore);
             
             synchronized(this) {
                 lastResult = result;
@@ -167,16 +165,13 @@ public class CompilingListener extends ReloadingListener {
             final CompilationProblem[] errors = result.getErrors();
             final CompilationProblem[] warnings = result.getWarnings();
             
-            log.debug(
-                    errors.length + " errors, " +
-                    warnings.length + " warnings"
-                    );
+            log.debug(errors.length + " errors, " + warnings.length + " warnings");
         
             if (errors.length > 0) {
                 // FIXME: they need to be marked for re-compilation
                 // and then added as compileables again
-                for (int j = 0; j < sourceFiles.length; j++) {
-                    transactionalStore.remove(sourceFiles[j]);
+                for (int j = 0; j < resourcesToCompile.length; j++) {
+                    transactionalStore.remove(resourcesToCompile[j]);
                 }
             }
             
