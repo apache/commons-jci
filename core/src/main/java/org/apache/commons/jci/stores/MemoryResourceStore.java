@@ -27,6 +27,8 @@ import org.apache.commons.logging.LogFactory;
 
 
 /**
+ * Store just in memory
+ * 
  * @author tcurdt
  */
 public final class MemoryResourceStore implements ResourceStore {

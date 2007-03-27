@@ -46,21 +46,26 @@ import org.eclipse.jdt.internal.compiler.env.INameEnvironment;
 import org.eclipse.jdt.internal.compiler.env.NameEnvironmentAnswer;
 import org.eclipse.jdt.internal.compiler.problem.DefaultProblemFactory;
 
+/**
+ * Eclipse compiler implemenation
+ * 
+ * @author tcurdt
+ */
 public final class EclipseJavaCompiler extends AbstractJavaCompiler {
 
     private final Log log = LogFactory.getLog(EclipseJavaCompiler.class);
-    private final Map settings;
+    private final EclipseJavaCompilerSettings defaultSettings;
 
     public EclipseJavaCompiler() {
         this(new EclipseJavaCompilerSettings());
     }
 
     public EclipseJavaCompiler(final Map pSettings) {
-        settings = pSettings;
+        defaultSettings = new EclipseJavaCompilerSettings(pSettings);
     }
 
     public EclipseJavaCompiler(final EclipseJavaCompilerSettings pSettings) {
-        settings = pSettings.getMap();
+        defaultSettings = pSettings;
     }
 
     final class CompilationUnit implements ICompilationUnit {
@@ -118,14 +123,16 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         }
     }
 
+    
     public org.apache.commons.jci.compilers.CompilationResult compile(
             final String[] pSourceFiles,
             final ResourceReader pReader,
             final ResourceStore pStore,
-            final ClassLoader pClassLoader
+            final ClassLoader pClassLoader,
+            final JavaCompilerSettings pSettings
             ) {
 
-        final Map settingsMap = settings;
+        final Map settingsMap = ((EclipseJavaCompilerSettings) defaultSettings).getMap();
         
         final Collection problems = new ArrayList();
         
@@ -366,6 +373,6 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
     }
 
 	public JavaCompilerSettings createDefaultSettings() {
-		return new EclipseJavaCompilerSettings();
+		return defaultSettings;
 	}
 }

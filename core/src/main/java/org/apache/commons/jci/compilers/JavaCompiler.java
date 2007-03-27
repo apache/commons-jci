@@ -48,8 +48,21 @@ public interface JavaCompiler {
 	 */
     void setCompilationProblemHandler( final CompilationProblemHandler pHandler );
 
+    /**
+     * factory method to create the underlying default settings
+     */
     JavaCompilerSettings createDefaultSettings();
     
+    /**
+     * uses the default compiler settings and the current classloader
+     */
+    CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore );
+
+    /**
+     * uses the default compiler settings
+     */
+    CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader pClassLoader );
+
     /**
      * Compiles the java resources "some/path/to/MyJava.java"
      * read through the ResourceReader and then stores the resulting
@@ -65,13 +78,10 @@ public interface JavaCompiler {
      * @param pResourcePaths
      * @param pReader
      * @param pStore
+     * @param pClassLoader
+     * @param pSettings
      * @return always a CompilationResult
      */
-    CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore );
+    CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader pClassLoader, final JavaCompilerSettings pSettings );
 
-    /**
-     * As the usual compiler but you can provide the classloader
-     * and therefor the classpath you are compiling with.
-     */
-    CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader classLoader );
 }

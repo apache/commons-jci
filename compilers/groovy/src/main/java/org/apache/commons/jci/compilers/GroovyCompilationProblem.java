@@ -25,10 +25,11 @@ import org.codehaus.groovy.control.messages.SyntaxErrorMessage;
 import org.codehaus.groovy.syntax.SyntaxException;
 
 /**
+ * Groovy version of a CompilationProblem
  * 
  * @author tcurdt
  */
-public class GroovyCompilationProblem implements CompilationProblem {
+public final class GroovyCompilationProblem implements CompilationProblem {
 
     private final String fileName;
     private final String message;

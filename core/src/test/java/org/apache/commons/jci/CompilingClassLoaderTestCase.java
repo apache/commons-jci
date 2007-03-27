@@ -51,7 +51,7 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
 
         private final Log log = LogFactory.getLog(MockJavaCompiler.class);
 
-		public CompilationResult compile(String[] pResourcePaths, ResourceReader pReader, ResourceStore pStore, ClassLoader classLoader) {
+		public CompilationResult compile(String[] pResourcePaths, ResourceReader pReader, ResourceStore pStore, ClassLoader pClassLoader, JavaCompilerSettings pSettings ) {
 			
 			for (int i = 0; i < pResourcePaths.length; i++) {
 				final String resourcePath = pResourcePaths[i];				
@@ -90,6 +90,10 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
 			return new CompilationResult(new CompilationProblem[0]);
 		}
 
+		public CompilationResult compile(String[] pResourcePaths, ResourceReader pReader, ResourceStore pStore, ClassLoader pClassLoader) {
+			return compile(pResourcePaths, pReader, pStore, pClassLoader, null);
+		}
+    	
 		public CompilationResult compile(String[] pResourcePaths, ResourceReader pReader, ResourceStore pStore) {
 			return compile(pResourcePaths, pReader, pStore, null);
 		}
@@ -100,7 +104,7 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
 		public JavaCompilerSettings createDefaultSettings() {
 			return null;
 		}
-    	
+
     }
     
     protected void setUp() throws Exception {

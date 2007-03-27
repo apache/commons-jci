@@ -17,6 +17,8 @@
 package org.apache.commons.jci.stores;
 
 /**
+ * A Store is where the compilers are storing the results
+ * 
  * @author tcurdt
  */
 public interface ResourceStore {

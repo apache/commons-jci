@@ -20,6 +20,7 @@ package org.apache.commons.jci.utils;
 import java.io.File;
 
 /**
+ * Mainly common path manipultation helper methods
  * 
  * @author tcurdt
  */

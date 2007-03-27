@@ -22,6 +22,7 @@ import java.io.File;
 import org.apache.commons.jci.monitor.FilesystemAlterationObserver;
 
 /**
+ * The most simple implemenation of an FilesystemAlterationListener.
  * 
  * @author tcurdt
  */

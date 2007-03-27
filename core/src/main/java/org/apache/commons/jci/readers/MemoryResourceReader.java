@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
+ * A memory based reader to compile from memory
  * 
  * @author tcurdt
  */

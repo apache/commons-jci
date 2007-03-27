@@ -50,6 +50,13 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
 
     private final Log log = LogFactory.getLog(RhinoJavaCompiler.class);
 
+    private final JavaCompilerSettings defaultSettings;
+    
+    
+    public RhinoJavaCompiler() {
+    	defaultSettings = new RhinoJavaCompilerSettings();
+    }
+    
     /**
      * based on code from dev.helma.org
      * http://dev.helma.org/source/file/helma/branches/rhinoloader/src/org/helma/javascript/RhinoLoader.java/?revision=95
@@ -244,9 +251,9 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
     }
     
     
-	public CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader classLoader) {
+	public CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader pClassLoader, final JavaCompilerSettings pSettings ) {
 
-		final RhinoCompilingClassLoader cl = new RhinoCompilingClassLoader(pReader, pStore, classLoader);
+		final RhinoCompilingClassLoader cl = new RhinoCompilingClassLoader(pReader, pStore, pClassLoader);
 		
 		for (int i = 0; i < pResourcePaths.length; i++) {
             log.debug("compiling " + pResourcePaths[i]);
@@ -266,8 +273,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
 
 
 	public JavaCompilerSettings createDefaultSettings() {
-		// FIXME
-		return null;
+		return defaultSettings;
 	}
 	
 }

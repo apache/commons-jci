@@ -17,6 +17,11 @@
 
 package org.apache.commons.jci.stores;
 
+/**
+ * Receive start/stop events
+ * 
+ * @author tcurdt
+ */
 public interface Transactional {
 
     void onStart();

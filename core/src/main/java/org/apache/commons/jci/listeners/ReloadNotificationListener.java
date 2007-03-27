@@ -18,6 +18,7 @@
 package org.apache.commons.jci.listeners;
 
 /**
+ * Classes implementing this interface can get notified by ReloadingListeners
  * 
  * @author tcurdt
  */

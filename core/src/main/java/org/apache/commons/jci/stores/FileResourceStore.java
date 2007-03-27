@@ -30,6 +30,8 @@ import org.apache.commons.io.IOUtils;
 
 
 /**
+ * Stores the results on disk
+ * 
  * @author tcurdt
  */
 public final class FileResourceStore implements ResourceStore {

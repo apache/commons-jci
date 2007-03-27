@@ -24,6 +24,8 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 
 /**
+ * A simple file system based Reader implementation
+ * 
  * @author tcurdt
  */
 public final class FileResourceReader implements ResourceReader {

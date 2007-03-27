@@ -15,16 +15,25 @@
  * limitations under the License.
  */
 
-package org.apache.commons.jci.readers;
+package org.apache.commons.jci.compilers;
+
+import org.codehaus.groovy.control.CompilerConfiguration;
 
 /**
- * A ResourceReader provide acces to resource like e.g. source code
+ * Native configuration for the Groovy compiler
  * 
  * @author tcurdt
  */
-public interface ResourceReader {
+public final class GroovyJavaCompilerSettings extends JavaCompilerSettings {
 
-	boolean isAvailable( final String pResourceName );
-    byte[] getBytes( final String pResourceName );
-
+	private final CompilerConfiguration settings;
+	
+	public GroovyJavaCompilerSettings( final CompilerConfiguration pSettings ) {
+		settings = pSettings;
+	}
+	
+	public CompilerConfiguration getCompilerConfiguration() {
+		return settings;
+	}
+	
 }

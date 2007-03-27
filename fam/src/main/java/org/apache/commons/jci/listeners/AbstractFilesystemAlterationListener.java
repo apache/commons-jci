@@ -26,7 +26,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * 
+ * AbstractFilesystemAlterationListener provides some convenience methods helping to
+ * implement a FilesystemAlterationListener.
  * @author tcurdt
  */
 public abstract class AbstractFilesystemAlterationListener implements FilesystemAlterationListener {
@@ -142,12 +143,12 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
         }
     }
     
-    /*
-     * we don't reset the signal
-     * so if there was a check it is
-     * already true and exit immediatly
-     * otherwise it will behave just
+    /**
+     * we don't reset the signal so if there was a check it is
+     * already true and exit immediatly otherwise it will behave just
      * like waitForCheck()
+     * 
+     * @throws Exception in case of a timeout
      */
     public void waitForFirstCheck() throws Exception {
         log.debug("waiting for first check");
@@ -156,6 +157,11 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
         }        
     }
 
+    /**
+     * wait for the next filesystem check to happen
+     * 
+     * @throws Exception in case of a timeout
+     */
     public void waitForCheck() throws Exception {
         synchronized(checkSignal) {
             checkSignal.triggered = false;

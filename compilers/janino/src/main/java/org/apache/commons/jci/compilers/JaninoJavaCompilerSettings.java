@@ -15,16 +15,8 @@
  * limitations under the License.
  */
 
-package org.apache.commons.jci.readers;
+package org.apache.commons.jci.compilers;
 
-/**
- * A ResourceReader provide acces to resource like e.g. source code
- * 
- * @author tcurdt
- */
-public interface ResourceReader {
-
-	boolean isAvailable( final String pResourceName );
-    byte[] getBytes( final String pResourceName );
-
+public final class JaninoJavaCompilerSettings extends JavaCompilerSettings {
+	// TODO: implement the native janino compiler settings
 }

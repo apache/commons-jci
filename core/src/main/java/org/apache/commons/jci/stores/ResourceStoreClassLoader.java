@@ -22,6 +22,8 @@ import org.apache.commons.logging.LogFactory;
 
 
 /**
+ * A ClassLoader backed by an array of ResourceStores
+ * 
  * @author tcurdt
  */
 public final class ResourceStoreClassLoader extends ClassLoader {

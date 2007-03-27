@@ -41,6 +41,7 @@ import org.apache.commons.jci.stores.ResourceStore;
  * a new API based on jsr199. So please use that jsr199 compiler instead.
  *   
  * @author tcurdt
+ * @todo classpath and settings support
  */
 public final class JavacJavaCompiler extends AbstractJavaCompiler {
 
@@ -49,17 +50,17 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 	private static final String NOTE_PREFIX = "Note: ";
 	private static final String ERROR_PREFIX = "error: ";
 
-//	private final JavacJavaCompilerSettings settings;
+	private final JavacJavaCompilerSettings settings;
 
 	public JavacJavaCompiler() {
-//		settings = null;
+		settings = new JavacJavaCompilerSettings();
 	}
 
 	public JavacJavaCompiler( final JavacJavaCompilerSettings pSettings ) {
-//		settings = pSettings;
+		settings = pSettings;
 	}
 
-	public CompilationResult compile( final String[] pSourcePaths, final ResourceReader pReader, ResourceStore pStore, final ClassLoader pClasspathClassLoader) {
+	public CompilationResult compile( final String[] pSourcePaths, final ResourceReader pReader, ResourceStore pStore, final ClassLoader pClasspathClassLoader, final JavaCompilerSettings pSettings ) {
 
 		try {
 			final ClassLoader cl = new JavacClassLoader(pClasspathClassLoader);
@@ -185,8 +186,7 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 	}
 
 	public JavaCompilerSettings createDefaultSettings() {
-		// FIXME
-		return null;
+		return settings;
 	}
 
 	private String[] buildCompilerArguments( final String[] resourcePaths, final ClassLoader classloader ) {

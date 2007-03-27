@@ -42,20 +42,28 @@ import org.codehaus.groovy.control.messages.WarningMessage;
 import org.codehaus.groovy.tools.GroovyClass;
 
 /**
+ * Groovy implementation of the JavaCompiler interface
  * 
  * @author tcurdt
  */
 public final class GroovyJavaCompiler extends AbstractJavaCompiler {
 
     private final Log log = LogFactory.getLog(GroovyJavaCompiler.class);
+    private final GroovyJavaCompilerSettings defaultSettings;
     
+    public GroovyJavaCompiler() {
+    	defaultSettings = new GroovyJavaCompilerSettings(new CompilerConfiguration());
+    }
+        
     public CompilationResult compile(
             final String[] pResourceNames,
             final ResourceReader pReader,
             final ResourceStore pStore,
-            final ClassLoader pClassLoader
+            final ClassLoader pClassLoader,
+            final JavaCompilerSettings pSettings
             ) {
-        final CompilerConfiguration configuration = new CompilerConfiguration();
+
+    	final CompilerConfiguration configuration = ((GroovyJavaCompilerSettings) pSettings).getCompilerConfiguration();
         final ErrorCollector collector = new ErrorCollector(configuration);
         final GroovyClassLoader groovyClassLoader = new GroovyClassLoader(pClassLoader);
         final CompilationUnit unit = new CompilationUnit(configuration, null, groovyClassLoader);
@@ -119,7 +127,6 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
     }
 
 	public JavaCompilerSettings createDefaultSettings() {
-		// FIXME
-		return null;
+		return defaultSettings;
 	}
 }

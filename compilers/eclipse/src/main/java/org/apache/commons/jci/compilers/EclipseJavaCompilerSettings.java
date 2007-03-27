@@ -1,12 +1,33 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.apache.commons.jci.compilers;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.jci.compilers.JavaCompilerSettings;
+
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 
-
-public class EclipseJavaCompilerSettings extends JavaCompilerSettings {
+/**
+ * Native Eclipse compiler settings
+ * 
+ * @author tcurdt
+ */
+public final class EclipseJavaCompilerSettings extends JavaCompilerSettings {
 
     final private Map defaultEclipseSettings = new HashMap();
 
@@ -15,6 +36,10 @@ public class EclipseJavaCompilerSettings extends JavaCompilerSettings {
     	defaultEclipseSettings.put(CompilerOptions.OPTION_SourceFileAttribute, CompilerOptions.GENERATE);
     	defaultEclipseSettings.put(CompilerOptions.OPTION_ReportUnusedImport, CompilerOptions.IGNORE);
         defaultEclipseSettings.put(CompilerOptions.OPTION_LocalVariableAttribute, CompilerOptions.GENERATE);
+    }
+    
+    public EclipseJavaCompilerSettings( final Map pMap ) {
+    	defaultEclipseSettings.putAll(pMap);
     }
     
     Map getMap() {
@@ -29,9 +54,6 @@ public class EclipseJavaCompilerSettings extends JavaCompilerSettings {
     }
     
     public String toString() {
-        final StringBuffer sb = new StringBuffer();
-        sb.append(defaultEclipseSettings.toString());
-        // FIXME
-        return sb.toString();
+        return defaultEclipseSettings.toString();
     }
 }

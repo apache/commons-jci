@@ -44,7 +44,11 @@ public abstract class AbstractJavaCompiler implements JavaCompiler {
 			classLoader = this.getClass().getClassLoader();
 		}
 
-		return compile(pClazzNames, pReader, pStore, classLoader);
+		return compile(pClazzNames, pReader, pStore, classLoader, createDefaultSettings());
+	}
+
+	public CompilationResult compile( final String[] pClazzNames, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader pClassLoader ) {
+		return compile(pClazzNames, pReader, pStore, pClassLoader, createDefaultSettings());
 	}
 
 }

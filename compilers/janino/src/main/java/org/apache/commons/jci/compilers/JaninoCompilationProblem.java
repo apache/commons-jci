@@ -22,10 +22,11 @@ import org.codehaus.janino.Location;
 import org.codehaus.janino.Scanner.LocatedException;
 
 /**
+ * Janino version of a CompilationProblem
  * 
  * @author tcurdt
  */
-public class JaninoCompilationProblem implements CompilationProblem {
+public final class JaninoCompilationProblem implements CompilationProblem {
 
     private final Location location;
     private final String fileName;

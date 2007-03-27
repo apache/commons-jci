@@ -35,6 +35,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
+ * This Listener waits for FAM events to trigger a reload of classes
+ * or resources.
  * 
  * @author tcurdt
  */
