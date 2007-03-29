@@ -2,12 +2,12 @@
 <document>
    <properties>
       <title>Jakarta Commons JCI - Downloads</title>
-      <author email="commons-dev@jakarta.apache.org">Commons Documentation Team</author>
+      <author email="commons-dev@jakarta.apache.org">Commons Development Team</author>
    </properties>
 
    <body>
       <section name="Releases">
-         <p>There are no releases available.</p>
+         <p>There are no releases available yet.</p>
 
 <!--
          <p>The following releases are available:</p>
@@ -44,15 +44,15 @@
 <!--
       <section name="Release Candidate">
          <p>
-            Release candidates for the upcoming 1.1 release can be downloaded 
-            <a href="http://people.apache.org/~dirkv/builds/">here</a>.
+            Release candidates for the upcoming 1.0 release can be downloaded 
+            <a href="http://people.apache.org/~tcurdt/jci/rc/">here</a>.
          </p>
          <p>
             Please review and report any problem on the 
             <a href="mail-lists.html">mailing list</a>.
          </p>
          <p>
-            Final release target is 20 October 2003. 
+            Planet release target is 10 April 2007.
          </p>
       </section>
 -->

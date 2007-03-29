@@ -45,6 +45,10 @@ import org.apache.commons.jci.utils.ConversionUtils;
 
 
 /**
+ * A mini JSP servlet that monitors a certain directory and
+ * recompiles and then instantiates the JSP pages as soon as
+ * they have changed.
+ *
  * @author tcurdt
  */
 public final class ServerPageServlet extends HttpServlet {
@@ -91,8 +95,10 @@ public final class ServerPageServlet extends HttpServlet {
 							continue;
 						}
 
+					    // create new instance of jsp page
 						final HttpServlet servlet = (HttpServlet) clazz.newInstance();
 						newServletsByClassname.put(clazzName, servlet);
+
 						reload = true;
 					} catch(Exception e) {
 						log("", e);
@@ -109,12 +115,15 @@ public final class ServerPageServlet extends HttpServlet {
 				super.write(pResourceName, pResourceData);
 				
 				if (pResourceName.endsWith(".class")) {
+
+				    // compiler writes a new class, remember the classes to reload
 					newClasses.add(pResourceName.replace('/', '.').substring(0, pResourceName.length() - ".class".length()));
 				}
 			}
 			
 		};
 		
+		// listener that generates the java code from the jsp page and provides that to the compiler
 		jspListener = new CompilingListener(new JavaCompilerFactory().createCompiler("eclipse"), store) {
 
 			private final JspGenerator transformer = new JspGenerator();
@@ -157,6 +166,7 @@ public final class ServerPageServlet extends HttpServlet {
 
 
 			public String[] getResourcesToCompile(FilesystemAlterationObserver pObserver) {
+			    // we only want to compile the jsp pages
 				final String[] resourceNames = new String[resourceToCompile.size()];
 				resourceToCompile.toArray(resourceNames);
 				return resourceNames;
@@ -174,7 +184,6 @@ public final class ServerPageServlet extends HttpServlet {
         fam.start();
 	}
 
-	
 	private String convertRequestToServletClassname( final HttpServletRequest request ) {
 
 		final String path = request.getPathInfo().substring(1);
@@ -192,6 +201,9 @@ public final class ServerPageServlet extends HttpServlet {
 		final CompilationProblem[] errors = result.getErrors();
 
 		if (errors.length > 0) {
+		    
+		    // if there are errors we provide the compilation errors instead of the jsp page
+		    
 			final PrintWriter out = response.getWriter();
 			
 			out.append("<html><body>");

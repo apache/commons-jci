@@ -40,7 +40,9 @@ import org.apache.commons.jci.stores.FileResourceStore;
 import org.apache.commons.jci.stores.ResourceStore;
 
 /**
- *  * @author tcurdt
+ * A simple front end to jci mimicking the javac command line
+ *
+ * @author tcurdt
  */
 public final class CommandlineCompiler {
     
@@ -137,8 +139,6 @@ public final class CommandlineCompiler {
 				maxwarns = Integer.parseInt(option.getValue());
 			}
 		}
-		
-		System.out.println(settings);
 		
         final ResourceReader reader = new FileResourceReader(sourcepath);
         final ResourceStore store = new FileResourceStore(targetpath);
