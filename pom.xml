@@ -11,7 +11,7 @@
     <artifactId>commons-jci</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>Commons JCI</name>
-    <url>http://jakarta.apache.org/commons/sandbox/jci/</url>
+    <url>http://jakarta.apache.org/commons/jci/</url>
     <description>
         Common java compiler interface
     </description>
@@ -38,7 +38,7 @@
         </snapshotRepository>
         <site>
             <id>website</id>
-            <url>scpexe://people.apache.org/www/jakarta.apache.org/commons/sandbox/jci/</url>
+            <url>scpexe://people.apache.org/www/jakarta.apache.org/commons/jci/</url>
         </site>
     </distributionManagement>
     <developers>
@@ -68,12 +68,27 @@
         </contributor>
     </contributors>
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk/</connection>
-        <developerConnection>scn:svn:https://svn.apache.org/repos/asf/jakarta/commons/sandbox/jci/trunk/</developerConnection>
-        <url>http://svn.apache.org/viewvc/jakarta/commons/sandbox/jci/trunk/</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/proper/jci/trunk/</connection>
+        <developerConnection>scn:svn:https://svn.apache.org/repos/asf/jakarta/commons/proper/jci/trunk/</developerConnection>
+        <url>http://svn.apache.org/viewvc/jakarta/commons/proper/jci/trunk/</url>
     </scm>
     <build>
         <plugins>
+            <!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>

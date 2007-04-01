@@ -11,5 +11,5 @@ o removing of anonymous classes if parent class is being removed
 o ability to add (contents of) jars to the store ...and be able to remove them again
 o maven plugin to compile with any of the compilers -> codehaus.org/mojo
 o compiler discovery via META-INF
-o common compiler configuration
+o finish common configuration for some compilers
 o build javac classpath from provided classloader
