@@ -10,6 +10,9 @@
     <artifactId>commons-jci-examples</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>examples</name>
+    <description>
+        Commons JCI examples.
+    </description>
     <reporting>
         <excludeDefaults>true</excludeDefaults>
     </reporting>
@@ -17,12 +20,12 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-jci-core</artifactId>
-            <version>1.0-RC1</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-jci-eclipse</artifactId>
-            <version>1.0-RC1</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>commons-cli</groupId>

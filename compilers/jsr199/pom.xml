@@ -10,6 +10,9 @@
     <artifactId>commons-jci-jsr166</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>compiler-jsr166</name>
+    <description>
+        Commons JCI compiler implementation for JDK 1.6 and up.
+    </description>
     <dependencies>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -26,20 +29,14 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
+            <version>3.8.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+
+    <properties>
+        <maven.compile.source>1.6</maven.compile.source>
+        <maven.compile.target>1.6</maven.compile.target>
+    </properties>
+
 </project>
