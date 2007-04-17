@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <project name="Jakarta Commons JCI">
     <bannerRight>
         <name>Jakarta Commons JCI</name>
@@ -7,10 +7,10 @@
     </bannerRight>
     <body>
         <menu name="Jakarta Commons JCI">
-            <item name="About" href="index.html"/>
-            <item name="Usage" href="usage.html"/>
-            <item name="FAQ" href="faq.html"/>
-            <item name="Downloads" href="downloads.html"/>
+            <item name="About" href="http://jakarta.apache.org/commons/jci/index.html"/>
+            <item name="Usage" href="http://jakarta.apache.org/commons/jci/usage.html"/>
+            <item name="FAQ" href="http://jakarta.apache.org/commons/jci/faq.html"/>
+            <item name="Downloads" href="http://jakarta.apache.org/commons/jci/downloads.html"/>
         </menu>
         <menu ref="modules"/>
     </body>
