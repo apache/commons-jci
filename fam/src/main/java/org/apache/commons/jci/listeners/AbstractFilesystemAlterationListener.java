@@ -50,83 +50,83 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
     private final Signal eventSignal = new Signal();
     private final Signal checkSignal = new Signal();
     
-	protected FilesystemAlterationObserver observer;
-	    
-	public void onDirectoryCreate( final File pDir ) {
-		createdDirectories.add(pDir);
-	}
-	public void onDirectoryChange( final File pDir ) {
-    	changedDirectories.add(pDir);
-	}
-	public void onDirectoryDelete( final File pDir ) {
-		deletedDirectories.add(pDir);
-	}
+    protected FilesystemAlterationObserver observer;
 
-	public void onFileCreate( final File pFile) {
-		createdFiles.add(pFile);
-	}
-	public void onFileChange( final File pFile ) {
-		changedFiles.add(pFile);
-	}
-	public void onFileDelete( final File pFile ) {
-		deletedFiles.add(pFile);
-	}
+    public void onDirectoryCreate( final File pDir ) {
+        createdDirectories.add(pDir);
+    }
+    public void onDirectoryChange( final File pDir ) {
+        changedDirectories.add(pDir);
+    }
+    public void onDirectoryDelete( final File pDir ) {
+        deletedDirectories.add(pDir);
+    }
 
-	
-	public Collection getChangedDirectories() {
-		return changedDirectories;
-	}
+    public void onFileCreate( final File pFile) {
+        createdFiles.add(pFile);
+    }
+    public void onFileChange( final File pFile ) {
+        changedFiles.add(pFile);
+    }
+    public void onFileDelete( final File pFile ) {
+        deletedFiles.add(pFile);
+    }
 
-	public Collection getChangedFiles() {
-		return changedFiles;
-	}
 
-	public Collection getCreatedDirectories() {
-		return createdDirectories;
-	}
+    public Collection getChangedDirectories() {
+        return changedDirectories;
+    }
 
-	public Collection getCreatedFiles() {
-		return createdFiles;
-	}
+    public Collection getChangedFiles() {
+        return changedFiles;
+    }
 
-	public Collection getDeletedDirectories() {
-		return deletedDirectories;
-	}
+    public Collection getCreatedDirectories() {
+        return createdDirectories;
+    }
 
-	public Collection getDeletedFiles() {
-		return deletedFiles;
-	}
+    public Collection getCreatedFiles() {
+        return createdFiles;
+    }
 
-	protected void signals() {
-    	if (createdFiles.size() > 0 || createdDirectories.size() > 0 ||
-        	changedFiles.size() > 0 || changedDirectories.size() > 0 ||
-        	deletedFiles.size() > 0 || deletedDirectories.size() > 0) {
+    public Collection getDeletedDirectories() {
+        return deletedDirectories;
+    }
 
-    		log.debug("event signal");
-    		
-    		synchronized(eventSignal) {
+    public Collection getDeletedFiles() {
+        return deletedFiles;
+    }
+
+    protected void signals() {
+        if (createdFiles.size() > 0 || createdDirectories.size() > 0 ||
+            changedFiles.size() > 0 || changedDirectories.size() > 0 ||
+            deletedFiles.size() > 0 || deletedDirectories.size() > 0) {
+
+            log.debug("event signal");
+
+            synchronized(eventSignal) {
                 eventSignal.triggered = true;
                 eventSignal.notifyAll();
-            }    	    		
-    	}
-    	
-    	log.debug("check signal");
-    	
+            }
+        }
+
+        log.debug("check signal");
+
         synchronized(checkSignal) {
             checkSignal.triggered = true;
             checkSignal.notifyAll();
-        }		
-	}
+        }
+    }
 
-	public void onStart( final FilesystemAlterationObserver pObserver ) {
-		observer = pObserver;
+    public void onStart( final FilesystemAlterationObserver pObserver ) {
+        observer = pObserver;
 
-		createdFiles.clear();
-    	changedFiles.clear();
-    	deletedFiles.clear();
-    	createdDirectories.clear();
-    	changedDirectories.clear();
-    	deletedDirectories.clear();
+        createdFiles.clear();
+        changedFiles.clear();
+        deletedFiles.clear();
+        createdDirectories.clear();
+        changedDirectories.clear();
+        deletedDirectories.clear();
     }
 
     public void onStop( final FilesystemAlterationObserver pObserver ) {
@@ -134,7 +134,7 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
         observer = null;
     }
         
-	public void waitForEvent() throws Exception {
+    public void waitForEvent() throws Exception {
         synchronized(eventSignal) {
             eventSignal.triggered = false;
         }

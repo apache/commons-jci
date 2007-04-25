@@ -143,7 +143,7 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 
     public CompilationResult compile( final String[] pSourceNames, final ResourceReader pResourceReader, final ResourceStore pStore, final ClassLoader pClassLoader, final JavaCompilerSettings pSettings ) {
 
-    	final Map classFilesByName = new HashMap();       
+        final Map classFilesByName = new HashMap();       
         
         final CompilingIClassLoader icl = new CompilingIClassLoader(pResourceReader, classFilesByName, pClassLoader);
         for (int i = 0; i < pSourceNames.length; i++) {
@@ -164,9 +164,9 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
         return new CompilationResult(result);
     }
 
-	public JavaCompilerSettings createDefaultSettings() {
-		// FIXME
-		return null;
-	}
+    public JavaCompilerSettings createDefaultSettings() {
+        // FIXME
+        return null;
+    }
     
 }

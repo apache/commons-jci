@@ -32,75 +32,75 @@ import org.apache.commons.jci.utils.ConversionUtils;
  * @author tcurdt
  */
 public final class FileInputStreamProxy extends InputStream {
-	
-	private final static ThreadLocal readerThreadLocal = new ThreadLocal();
-	
-	private final InputStream in;	
-	private final String name;
-	
-	public static void setResourceReader( final ResourceReader pReader ) {
-		readerThreadLocal.set(pReader);
-	}
-	
-	public FileInputStreamProxy(File pFile) throws FileNotFoundException {
-		this("" + pFile);
-	}
 
-	public FileInputStreamProxy(FileDescriptor fdObj) {
-		throw new RuntimeException();
-	}
+    private final static ThreadLocal readerThreadLocal = new ThreadLocal();
 
-	public FileInputStreamProxy(String pName) throws FileNotFoundException {
-		name = ConversionUtils.getResourceNameFromFileName(pName);
+    private final InputStream in;
+    private final String name;
 
-		final ResourceReader reader = (ResourceReader) readerThreadLocal.get();
+    public static void setResourceReader( final ResourceReader pReader ) {
+        readerThreadLocal.set(pReader);
+    }
 
-		if (reader == null) {
-			throw new RuntimeException("forgot to set the ResourceReader for this thread?");
-		}
-		
-		final byte[] bytes = reader.getBytes(name);
-		
-		if (bytes == null) {
-			throw new FileNotFoundException(name);
-		}
-		
-		in = new ByteArrayInputStream(bytes);
-	}
-	
-	public int read() throws IOException {
-		return in.read();
-	}
+    public FileInputStreamProxy(File pFile) throws FileNotFoundException {
+        this("" + pFile);
+    }
 
-	public int available() throws IOException {
-		return in.available();			
-	}
+    public FileInputStreamProxy(FileDescriptor fdObj) {
+        throw new RuntimeException();
+    }
 
-	public void close() throws IOException {
-		in.close();
-	}
+    public FileInputStreamProxy(String pName) throws FileNotFoundException {
+        name = ConversionUtils.getResourceNameFromFileName(pName);
 
-	public synchronized void mark(int readlimit) {
-		in.mark(readlimit);
-	}
+        final ResourceReader reader = (ResourceReader) readerThreadLocal.get();
 
-	public boolean markSupported() {
-		return in.markSupported();
-	}
+        if (reader == null) {
+            throw new RuntimeException("forgot to set the ResourceReader for this thread?");
+        }
 
-	public int read(byte[] b, int off, int len) throws IOException {
-		return in.read(b, off, len);
-	}
+        final byte[] bytes = reader.getBytes(name);
 
-	public int read(byte[] b) throws IOException {
-		return in.read(b);
-	}
+        if (bytes == null) {
+            throw new FileNotFoundException(name);
+        }
 
-	public synchronized void reset() throws IOException {
-		in.reset();
-	}
+        in = new ByteArrayInputStream(bytes);
+    }
 
-	public long skip(long n) throws IOException {
-		return in.skip(n);
-	}
+    public int read() throws IOException {
+        return in.read();
+    }
+
+    public int available() throws IOException {
+        return in.available();
+    }
+
+    public void close() throws IOException {
+        in.close();
+    }
+
+    public synchronized void mark(int readlimit) {
+        in.mark(readlimit);
+    }
+
+    public boolean markSupported() {
+        return in.markSupported();
+    }
+
+    public int read(byte[] b, int off, int len) throws IOException {
+        return in.read(b, off, len);
+    }
+
+    public int read(byte[] b) throws IOException {
+        return in.read(b);
+    }
+
+    public synchronized void reset() throws IOException {
+        in.reset();
+    }
+
+    public long skip(long n) throws IOException {
+        return in.skip(n);
+    }
 }

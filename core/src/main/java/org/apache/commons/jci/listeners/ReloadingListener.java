@@ -60,17 +60,17 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
     }
 
     public void addReloadNotificationListener( final ReloadNotificationListener pNotificationListener ) {
-    	notificationListeners.add(pNotificationListener);
-    	
-    	if (pNotificationListener instanceof ReloadingClassLoader) {
-    		((ReloadingClassLoader)pNotificationListener).addResourceStore(store);
-    	}
-    	
+        notificationListeners.add(pNotificationListener);
+
+        if (pNotificationListener instanceof ReloadingClassLoader) {
+            ((ReloadingClassLoader)pNotificationListener).addResourceStore(store);
+        }
+
     }
     
     public boolean isReloadRequired( final FilesystemAlterationObserver pObserver ) {
-    	boolean reload = false;
-    	
+        boolean reload = false;
+
         final Collection created = getCreatedFiles();
         final Collection changed = getChangedFiles();
         final Collection deleted = getDeletedFiles();
@@ -91,14 +91,14 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
                 final File file = (File) it.next();
                 FileInputStream is = null;
                 try {
-                	is = new FileInputStream(file);
+                    is = new FileInputStream(file);
                     final byte[] bytes = IOUtils.toByteArray(is);
                     final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), file));
                     store.write(resourceName, bytes);
                 } catch(final Exception e) {
                     log.error("could not load " + file, e);
                 } finally {
-                	IOUtils.closeQuietly(is);
+                    IOUtils.closeQuietly(is);
                 }
             }
         }
@@ -108,19 +108,19 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
                 final File file = (File) it.next();
                 FileInputStream is = null;
                 try {
-                	is = new FileInputStream(file);
+                    is = new FileInputStream(file);
                     final byte[] bytes = IOUtils.toByteArray(is);
                     final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), file));
                     store.write(resourceName, bytes);
                 } catch(final Exception e) {
                     log.error("could not load " + file, e);
                 } finally {
-                	IOUtils.closeQuietly(is);
+                    IOUtils.closeQuietly(is);
                 }
             }
             reload = true;
         }
-    	
+
         return reload;
     }
     
@@ -138,7 +138,7 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
         }
         
         if (reload) {
-        	notifyReloadNotificationListeners();
+            notifyReloadNotificationListeners();
         }
         
         super.onStop(pObserver);
@@ -146,13 +146,13 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
 
     void notifyReloadNotificationListeners() {
         
-    	for (Iterator it = notificationListeners.iterator(); it.hasNext();) {
-    		final ReloadNotificationListener listener = (ReloadNotificationListener) it.next();
+        for (Iterator it = notificationListeners.iterator(); it.hasNext();) {
+            final ReloadNotificationListener listener = (ReloadNotificationListener) it.next();
 
             log.debug("notifying listener " + listener);
 
-			listener.handleNotification();
-		}    	
+            listener.handleNotification();
+        }
     }
     
     public void onDirectoryCreate( final File pDir ) {                

@@ -21,42 +21,42 @@ import java.util.List;
 
 public final class JavacJavaCompilerSettings extends JavaCompilerSettings {
 
-	private boolean optimize;
-	private String maxmem;
-	private String meminitial;
+    private boolean optimize;
+    private String maxmem;
+    private String meminitial;
 
-	private List customCompilerArguments;
+    private List customCompilerArguments;
 
-	public List getCustomCompilerArguments() {
-		return customCompilerArguments;
-	}
+    public List getCustomCompilerArguments() {
+        return customCompilerArguments;
+    }
 
-	public void setCustomCompilerArguments(List customCompilerArguments) {
-		this.customCompilerArguments = customCompilerArguments;
-	}
+    public void setCustomCompilerArguments(List customCompilerArguments) {
+        this.customCompilerArguments = customCompilerArguments;
+    }
 
-	public String getMaxmem() {
-		return maxmem;
-	}
+    public String getMaxmem() {
+        return maxmem;
+    }
 
-	public void setMaxmem(String maxmem) {
-		this.maxmem = maxmem;
-	}
+    public void setMaxmem(String maxmem) {
+        this.maxmem = maxmem;
+    }
 
-	public String getMeminitial() {
-		return meminitial;
-	}
+    public String getMeminitial() {
+        return meminitial;
+    }
 
-	public void setMeminitial(String meminitial) {
-		this.meminitial = meminitial;
-	}
+    public void setMeminitial(String meminitial) {
+        this.meminitial = meminitial;
+    }
 
-	public boolean isOptimize() {
-		return optimize;
-	}
+    public boolean isOptimize() {
+        return optimize;
+    }
 
-	public void setOptimize(boolean optimize) {
-		this.optimize = optimize;
-	}
+    public void setOptimize(boolean optimize) {
+        this.optimize = optimize;
+    }
 
 }

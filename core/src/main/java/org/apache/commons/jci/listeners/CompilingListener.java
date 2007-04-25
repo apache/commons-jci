@@ -60,26 +60,26 @@ public class CompilingListener extends ReloadingListener {
     }
     
     public CompilingListener( final JavaCompiler pCompiler, final TransactionalResourceStore pTransactionalStore ) {
-    	super(pTransactionalStore);
+        super(pTransactionalStore);
         compiler = pCompiler;
         transactionalStore = pTransactionalStore;
         lastResult = null;
     }
     
     public JavaCompiler getCompiler() {
-    	return compiler;
+        return compiler;
     }
     
     public String getSourceFileExtension() {
-    	return ".java";
+        return ".java";
     }
 
     public ResourceReader getReader( final FilesystemAlterationObserver pObserver ) {
-    	return new FileResourceReader(pObserver.getRootDirectory());
+        return new FileResourceReader(pObserver.getRootDirectory());
     }
 
     public String getSourceNameFromFile( final FilesystemAlterationObserver pObserver, final File pFile ) {
-    	return ConversionUtils.stripExtension(ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), pFile))) + getSourceFileExtension();
+        return ConversionUtils.stripExtension(ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), pFile))) + getSourceFileExtension();
     }
     
     public ResourceStore getStore() {
@@ -107,25 +107,25 @@ public class CompilingListener extends ReloadingListener {
         for (final Iterator it = created.iterator(); it.hasNext();) {
             final File createdFile = (File) it.next();
             if (createdFile.getName().endsWith(getSourceFileExtension())) {
-            	resourceNames.add(getSourceNameFromFile(pObserver, createdFile));
+                resourceNames.add(getSourceNameFromFile(pObserver, createdFile));
             }
         }
         
         for (final Iterator it = changed.iterator(); it.hasNext();) {
             final File changedFile = (File) it.next();
             if (changedFile.getName().endsWith(getSourceFileExtension())) {
-            	resourceNames.add(getSourceNameFromFile(pObserver, changedFile));
+                resourceNames.add(getSourceNameFromFile(pObserver, changedFile));
             }
         }
-    	
+
         final String[] result = new String[resourceNames.size()];
         resourceNames.toArray(result);
         return result;
     }
     
     public boolean isReloadRequired( final FilesystemAlterationObserver pObserver ) {
-    	boolean reload = false;
-    	
+        boolean reload = false;
+
         final Collection created = getCreatedFiles();
         final Collection changed = getChangedFiles();
         final Collection deleted = getDeletedFiles();
@@ -139,11 +139,11 @@ public class CompilingListener extends ReloadingListener {
                 final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), deletedFile));
                 
                 if (resourceName.endsWith(getSourceFileExtension())) {
-                	// if source resource got removed delete the corresponding class 
+                    // if source resource got removed delete the corresponding class 
                     transactionalStore.remove(ConversionUtils.stripExtension(resourceName) + ".class");
                 } else {
-                	// ordinary resource to be removed
-                    transactionalStore.remove(resourceName);                	
+                    // ordinary resource to be removed
+                    transactionalStore.remove(resourceName);
                 }
                 
                 // FIXME: does not remove nested classes

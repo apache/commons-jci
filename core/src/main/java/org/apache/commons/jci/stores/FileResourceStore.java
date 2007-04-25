@@ -49,9 +49,9 @@ public final class FileResourceStore implements ResourceStore {
             final byte[] data = IOUtils.toByteArray(is);
             return data;
         } catch (Exception e) {
-        	return null;
+            return null;
         } finally {
-        	IOUtils.closeQuietly(is);
+            IOUtils.closeQuietly(is);
         }
     }
     
@@ -68,9 +68,9 @@ public final class FileResourceStore implements ResourceStore {
             os = new FileOutputStream(file);
             os.write(pData);
         } catch (Exception e) {
-        	// FIXME: now what?
+            // FIXME: now what?
         } finally {
-        	IOUtils.closeQuietly(os);
+            IOUtils.closeQuietly(os);
         }
     }
 

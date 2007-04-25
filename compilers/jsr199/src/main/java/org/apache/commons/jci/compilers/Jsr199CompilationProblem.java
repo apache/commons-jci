@@ -23,46 +23,46 @@ import org.apache.commons.jci.problems.CompilationProblem;
 
 public class Jsr199CompilationProblem implements CompilationProblem {
 
-	final Diagnostic<? extends JavaFileObject> problem;
-	
-	public Jsr199CompilationProblem( final Diagnostic<? extends JavaFileObject> pProblem ) {
-		problem = pProblem;
-	}
-	
-	public int getEndColumn() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    final Diagnostic<? extends JavaFileObject> problem;
 
-	public int getEndLine() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    public Jsr199CompilationProblem( final Diagnostic<? extends JavaFileObject> pProblem ) {
+        problem = pProblem;
+    }
 
-	public String getFileName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public int getEndColumn() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-	public String getMessage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public int getEndLine() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-	public int getStartColumn() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    public String getFileName() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public int getStartLine() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    public String getMessage() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public boolean isError() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    public int getStartColumn() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    public int getStartLine() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    public boolean isError() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
 
 }

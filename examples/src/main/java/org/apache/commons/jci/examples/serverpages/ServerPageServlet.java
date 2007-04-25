@@ -53,194 +53,194 @@ import org.apache.commons.jci.utils.ConversionUtils;
  */
 public final class ServerPageServlet extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private final ReloadingClassLoader classloader = new ReloadingClassLoader(ServerPageServlet.class.getClassLoader());
-	private FilesystemAlterationMonitor fam;
-	private CompilingListener jspListener; 
+    private final ReloadingClassLoader classloader = new ReloadingClassLoader(ServerPageServlet.class.getClassLoader());
+    private FilesystemAlterationMonitor fam;
+    private CompilingListener jspListener; 
 
-	private Map servletsByClassname = new HashMap();
+    private Map servletsByClassname = new HashMap();
 
-	public void init() throws ServletException {
-		super.init();
-		
-		final File serverpagesDir = new File(getServletContext().getRealPath("/") + getInitParameter("serverpagesDir"));
-		
-		log("Monitoring serverpages in " + serverpagesDir);
-		
-		final TransactionalResourceStore store = new TransactionalResourceStore(new MemoryResourceStore()) {
+    public void init() throws ServletException {
+        super.init();
 
-			private Set newClasses;
-			private Map newServletsByClassname;
-			
-			public void onStart() {
-				super.onStart();
+        final File serverpagesDir = new File(getServletContext().getRealPath("/") + getInitParameter("serverpagesDir"));
 
-				newClasses = new HashSet();
-				newServletsByClassname = new HashMap(servletsByClassname);				
-			}
+        log("Monitoring serverpages in " + serverpagesDir);
 
-			public void onStop() {
-				super.onStop();
+        final TransactionalResourceStore store = new TransactionalResourceStore(new MemoryResourceStore()) {
 
-				boolean reload = false;
-				for (Iterator it = newClasses.iterator(); it.hasNext();) {
-					final String clazzName = (String) it.next();
-					
-					try {
-						final Class clazz = classloader.loadClass(clazzName);
+            private Set newClasses;
+            private Map newServletsByClassname;
 
-						if (!HttpServlet.class.isAssignableFrom(clazz)) {
-							log(clazzName + " is not a servlet");
-							continue;
-						}
+            public void onStart() {
+                super.onStart();
 
-					    // create new instance of jsp page
-						final HttpServlet servlet = (HttpServlet) clazz.newInstance();
-						newServletsByClassname.put(clazzName, servlet);
+                newClasses = new HashSet();
+                newServletsByClassname = new HashMap(servletsByClassname);
+            }
 
-						reload = true;
-					} catch(Exception e) {
-						log("", e);
-					}					
-				}
+            public void onStop() {
+                super.onStop();
 
-				if (reload) {
-					log("Activating new map of servlets "+ newServletsByClassname);
-					servletsByClassname = newServletsByClassname;					
-				}
-			}
+                boolean reload = false;
+                for (Iterator it = newClasses.iterator(); it.hasNext();) {
+                    final String clazzName = (String) it.next();
 
-			public void write(String pResourceName, byte[] pResourceData) {
-				super.write(pResourceName, pResourceData);
-				
-				if (pResourceName.endsWith(".class")) {
+                    try {
+                        final Class clazz = classloader.loadClass(clazzName);
 
-				    // compiler writes a new class, remember the classes to reload
-					newClasses.add(pResourceName.replace('/', '.').substring(0, pResourceName.length() - ".class".length()));
-				}
-			}
-			
-		};
-		
-		// listener that generates the java code from the jsp page and provides that to the compiler
-		jspListener = new CompilingListener(new JavaCompilerFactory().createCompiler("eclipse"), store) {
+                        if (!HttpServlet.class.isAssignableFrom(clazz)) {
+                            log(clazzName + " is not a servlet");
+                            continue;
+                        }
 
-			private final JspGenerator transformer = new JspGenerator();
-			private final Map sources = new HashMap();
-			private final Set resourceToCompile = new HashSet();
+                        // create new instance of jsp page
+                        final HttpServlet servlet = (HttpServlet) clazz.newInstance();
+                        newServletsByClassname.put(clazzName, servlet);
 
-			public void onStart(FilesystemAlterationObserver pObserver) {
-				super.onStart(pObserver);
+                        reload = true;
+                    } catch(Exception e) {
+                        log("", e);
+                    }
+                }
 
-				resourceToCompile.clear();
-			}
+                if (reload) {
+                    log("Activating new map of servlets "+ newServletsByClassname);
+                    servletsByClassname = newServletsByClassname;
+                }
+            }
 
+            public void write(String pResourceName, byte[] pResourceData) {
+                super.write(pResourceName, pResourceData);
 
-			public void onFileChange(File pFile) {
-				if (pFile.getName().endsWith(".jsp")) {
-					final String resourceName = ConversionUtils.stripExtension(getSourceNameFromFile(observer, pFile)) + ".java";
-					
-					log("Updating " + resourceName);
-					
-					sources.put(resourceName, transformer.generateJavaSource(resourceName, pFile));
+                if (pResourceName.endsWith(".class")) {
 
-					resourceToCompile.add(resourceName);
-				}
-				super.onFileChange(pFile);
-			}
+                    // compiler writes a new class, remember the classes to reload
+                    newClasses.add(pResourceName.replace('/', '.').substring(0, pResourceName.length() - ".class".length()));
+                }
+            }
+
+        };
+
+        // listener that generates the java code from the jsp page and provides that to the compiler
+        jspListener = new CompilingListener(new JavaCompilerFactory().createCompiler("eclipse"), store) {
+
+            private final JspGenerator transformer = new JspGenerator();
+            private final Map sources = new HashMap();
+            private final Set resourceToCompile = new HashSet();
+
+            public void onStart(FilesystemAlterationObserver pObserver) {
+                super.onStart(pObserver);
+
+                resourceToCompile.clear();
+            }
 
 
-			public void onFileCreate(File pFile) {
-				if (pFile.getName().endsWith(".jsp")) {
-					final String resourceName = ConversionUtils.stripExtension(getSourceNameFromFile(observer, pFile)) + ".java";
+            public void onFileChange(File pFile) {
+                if (pFile.getName().endsWith(".jsp")) {
+                    final String resourceName = ConversionUtils.stripExtension(getSourceNameFromFile(observer, pFile)) + ".java";
 
-					log("Creating " + resourceName);
+                    log("Updating " + resourceName);
 
-					sources.put(resourceName, transformer.generateJavaSource(resourceName, pFile));					
+                    sources.put(resourceName, transformer.generateJavaSource(resourceName, pFile));
 
-					resourceToCompile.add(resourceName);
-				}
-				super.onFileCreate(pFile);
-			}
-
-
-			public String[] getResourcesToCompile(FilesystemAlterationObserver pObserver) {
-			    // we only want to compile the jsp pages
-				final String[] resourceNames = new String[resourceToCompile.size()];
-				resourceToCompile.toArray(resourceNames);
-				return resourceNames;
-			}
+                    resourceToCompile.add(resourceName);
+                }
+                super.onFileChange(pFile);
+            }
 
 
-			public ResourceReader getReader( final FilesystemAlterationObserver pObserver ) {
-				return new JspReader(sources, super.getReader(pObserver));
-			}
+            public void onFileCreate(File pFile) {
+                if (pFile.getName().endsWith(".jsp")) {
+                    final String resourceName = ConversionUtils.stripExtension(getSourceNameFromFile(observer, pFile)) + ".java";
+
+                    log("Creating " + resourceName);
+
+                    sources.put(resourceName, transformer.generateJavaSource(resourceName, pFile));
+
+                    resourceToCompile.add(resourceName);
+                }
+                super.onFileCreate(pFile);
+            }
+
+
+            public String[] getResourcesToCompile(FilesystemAlterationObserver pObserver) {
+                // we only want to compile the jsp pages
+                final String[] resourceNames = new String[resourceToCompile.size()];
+                resourceToCompile.toArray(resourceNames);
+                return resourceNames;
+            }
+
+
+            public ResourceReader getReader( final FilesystemAlterationObserver pObserver ) {
+                return new JspReader(sources, super.getReader(pObserver));
+            }
         };
         jspListener.addReloadNotificationListener(classloader);
         
         fam = new FilesystemAlterationMonitor();
         fam.addListener(serverpagesDir, jspListener);
         fam.start();
-	}
+    }
 
-	private String convertRequestToServletClassname( final HttpServletRequest request ) {
+    private String convertRequestToServletClassname( final HttpServletRequest request ) {
 
-		final String path = request.getPathInfo().substring(1);
+        final String path = request.getPathInfo().substring(1);
 
-		final String clazz = ConversionUtils.stripExtension(path).replace('/', '.');
-		
-		return clazz;
-	}
-	
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        final String clazz = ConversionUtils.stripExtension(path).replace('/', '.');
 
-		log("Request " + request.getRequestURI());
-		
-		final CompilationResult result = jspListener.getCompilationResult();
-		final CompilationProblem[] errors = result.getErrors();
+        return clazz;
+    }
 
-		if (errors.length > 0) {
-		    
-		    // if there are errors we provide the compilation errors instead of the jsp page
-		    
-			final PrintWriter out = response.getWriter();
-			
-			out.append("<html><body>");
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-			for (int i = 0; i < errors.length; i++) {
-				final CompilationProblem problem = errors[i];
-				out.append(problem.toString()).append("<br/>").append('\n');
-			}
-			
-			out.append("</body></html>");
-			
-			out.flush();
-			out.close();
-			return;			
-		}
-		
-		final String servletClassname = convertRequestToServletClassname(request);
+        log("Request " + request.getRequestURI());
 
-		log("Checking for serverpage " + servletClassname);
-		
-		final HttpServlet servlet = (HttpServlet) servletsByClassname.get(servletClassname);
-		
-		if (servlet == null) {
-			log("No servlet  for " + request.getRequestURI());
-			response.sendError(404);
-			return;
-		}
+        final CompilationResult result = jspListener.getCompilationResult();
+        final CompilationProblem[] errors = result.getErrors();
 
-		log("Delegating request to " + servletClassname);
-		
-		servlet.service(request, response);
-	}
+        if (errors.length > 0) {
 
-	public void destroy() {
-		
-		fam.stop();
-		
-		super.destroy();		
-	}
+            // if there are errors we provide the compilation errors instead of the jsp page
+
+            final PrintWriter out = response.getWriter();
+
+            out.append("<html><body>");
+
+            for (int i = 0; i < errors.length; i++) {
+                final CompilationProblem problem = errors[i];
+                out.append(problem.toString()).append("<br/>").append('\n');
+            }
+
+            out.append("</body></html>");
+
+            out.flush();
+            out.close();
+            return;
+        }
+
+        final String servletClassname = convertRequestToServletClassname(request);
+
+        log("Checking for serverpage " + servletClassname);
+
+        final HttpServlet servlet = (HttpServlet) servletsByClassname.get(servletClassname);
+
+        if (servlet == null) {
+            log("No servlet  for " + request.getRequestURI());
+            response.sendError(404);
+            return;
+        }
+
+        log("Delegating request to " + servletClassname);
+
+        servlet.service(request, response);
+    }
+
+    public void destroy() {
+
+        fam.stop();
+
+        super.destroy();
+    }
 }

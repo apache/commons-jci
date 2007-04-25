@@ -300,9 +300,9 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
     }
     
     public void testInterval() throws Exception {
-    	
-    	final long interval = 1000;
-    	
+
+        final long interval = 1000;
+
         start();
         fam.setInterval(interval);
 

@@ -33,134 +33,134 @@ import org.apache.commons.jci.utils.ConversionUtils;
  */
 public final class JspGenerator {
 
-	private String quote( final String s ) {
-		
-		final StringBuffer sb = new StringBuffer();
-		final char[] input = s.toCharArray();
-		
-		for (int i = 0; i < input.length; i++) {
-			final char c = input[i];
-			if (c == '"') {
-				sb.append('\\');
-			}
-			if (c == '\\') {
-				sb.append('\\');
-			}
-			
-			if (c == '\n') {
-				sb.append("\");\n").append("    out.write(\"");
-				continue;
-			}
-			sb.append(c);
-		}
-		
-		return sb.toString();
-	}
-	
-	private void wrap( final StringBuffer pInput, final Writer pOutput ) throws IOException {
-		
-		pOutput.append("    out.write(\"");
-		
-		pOutput.append(quote(pInput.toString()));
+    private String quote( final String s ) {
 
-		pOutput.append("\");").append('\n');
-	}
-	
-	public byte[] generateJavaSource( final  String pResourceName, final File pFile ) {
+        final StringBuffer sb = new StringBuffer();
+        final char[] input = s.toCharArray();
 
-		try {
-			final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			final Reader input = new InputStreamReader(new FileInputStream(pFile));
-			final Writer output = new OutputStreamWriter(outputStream);
-			
-			final int p = pResourceName.lastIndexOf('/');
+        for (int i = 0; i < input.length; i++) {
+            final char c = input[i];
+            if (c == '"') {
+                sb.append('\\');
+            }
+            if (c == '\\') {
+                sb.append('\\');
+            }
 
-			final String className;
-			final String packageName;
+            if (c == '\n') {
+                sb.append("\");\n").append("    out.write(\"");
+                continue;
+            }
+            sb.append(c);
+        }
 
-			if (p < 0) {
-				className = ConversionUtils.stripExtension(pResourceName);
-				packageName = "";
-			} else {
-				className = ConversionUtils.stripExtension(pResourceName.substring(p+1));
-				packageName = pResourceName.substring(0, p).replace('/', '.');
-				output.append("package ").append(packageName).append(";").append('\n');				
-			}
-			
-			
-			output.append("import java.io.PrintWriter;").append('\n');
-			output.append("import java.io.IOException;").append('\n');
-			output.append("import javax.servlet.http.HttpServlet;").append('\n');
-			output.append("import javax.servlet.http.HttpServletRequest;").append('\n');
-			output.append("import javax.servlet.http.HttpServletResponse;").append('\n');
-			output.append("import javax.servlet.ServletException;").append('\n');
-			output.append("public class ").append(className).append(" extends HttpServlet {").append('\n');
-			output.append("  protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {").append('\n');
-			output.append("    final PrintWriter out = response.getWriter();").append('\n');
-			
-			
-			final char[] open = "<?".toCharArray();
-			final char[] close = "?>".toCharArray();
+        return sb.toString();
+    }
 
-			StringBuffer sb = new StringBuffer();
-			char[] watch = open;
-			int w = 0;
-			while(true) {
-				int c = input.read();
-				
-				if (c < 0) {
-					break;
-				}
+    private void wrap( final StringBuffer pInput, final Writer pOutput ) throws IOException {
 
-				if (c == watch[w]) {
-					w++;
-					if (watch.length == w) {
-						if (watch == open) {
-							// found open
-							
-							wrap(sb, output);
+        pOutput.append("    out.write(\"");
 
-							sb = new StringBuffer();
-							watch = close;
-						} else if (watch == close) {
-							// found close
+        pOutput.append(quote(pInput.toString()));
 
-							// <? ... ?> is java
-							output.append(sb.toString());
-							
-							sb = new StringBuffer();
-							watch = open;
-						}
-						w = 0;
-					}
-				} else {
-					if (w > 0) {
-						sb.append(watch, 0, w);
-					}
+        pOutput.append("\");").append('\n');
+    }
 
-					sb.append((char)c);
+    public byte[] generateJavaSource( final  String pResourceName, final File pFile ) {
 
-					w = 0;
-				}
-			}
+        try {
+            final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            final Reader input = new InputStreamReader(new FileInputStream(pFile));
+            final Writer output = new OutputStreamWriter(outputStream);
 
-			if (watch == open) {
-				wrap(sb, output);
-			}
+            final int p = pResourceName.lastIndexOf('/');
 
-			
-			output.append("    out.close();").append('\n');
-			output.append("    out.flush();").append('\n');
-			output.append("  }").append('\n');
-			output.append("}").append('\n');
-			
-			
-			output.close();
-			
-			return outputStream.toByteArray();
-		} catch (IOException e) {
-			return null;
-		}
-	}
+            final String className;
+            final String packageName;
+
+            if (p < 0) {
+                className = ConversionUtils.stripExtension(pResourceName);
+                packageName = "";
+            } else {
+                className = ConversionUtils.stripExtension(pResourceName.substring(p+1));
+                packageName = pResourceName.substring(0, p).replace('/', '.');
+                output.append("package ").append(packageName).append(";").append('\n');
+            }
+
+
+            output.append("import java.io.PrintWriter;").append('\n');
+            output.append("import java.io.IOException;").append('\n');
+            output.append("import javax.servlet.http.HttpServlet;").append('\n');
+            output.append("import javax.servlet.http.HttpServletRequest;").append('\n');
+            output.append("import javax.servlet.http.HttpServletResponse;").append('\n');
+            output.append("import javax.servlet.ServletException;").append('\n');
+            output.append("public class ").append(className).append(" extends HttpServlet {").append('\n');
+            output.append("  protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {").append('\n');
+            output.append("    final PrintWriter out = response.getWriter();").append('\n');
+
+
+            final char[] open = "<?".toCharArray();
+            final char[] close = "?>".toCharArray();
+
+            StringBuffer sb = new StringBuffer();
+            char[] watch = open;
+            int w = 0;
+            while(true) {
+                int c = input.read();
+
+                if (c < 0) {
+                    break;
+                }
+
+                if (c == watch[w]) {
+                    w++;
+                    if (watch.length == w) {
+                        if (watch == open) {
+                            // found open
+
+                            wrap(sb, output);
+
+                            sb = new StringBuffer();
+                            watch = close;
+                        } else if (watch == close) {
+                            // found close
+
+                            // <? ... ?> is java
+                            output.append(sb.toString());
+
+                            sb = new StringBuffer();
+                            watch = open;
+                        }
+                        w = 0;
+                    }
+                } else {
+                    if (w > 0) {
+                        sb.append(watch, 0, w);
+                    }
+
+                    sb.append((char)c);
+
+                    w = 0;
+                }
+            }
+
+            if (watch == open) {
+                wrap(sb, output);
+            }
+
+
+            output.append("    out.close();").append('\n');
+            output.append("    out.flush();").append('\n');
+            output.append("  }").append('\n');
+            output.append("}").append('\n');
+
+
+            output.close();
+
+            return outputStream.toByteArray();
+        } catch (IOException e) {
+            return null;
+        }
+    }
 
 }

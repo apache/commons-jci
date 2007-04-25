@@ -41,7 +41,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class CompilingClassLoaderTestCase extends AbstractTestCase {
 
-	private final Log log = LogFactory.getLog(CompilingClassLoaderTestCase.class);
+    private final Log log = LogFactory.getLog(CompilingClassLoaderTestCase.class);
 
     private ReloadingClassLoader classloader;
     private CompilingListener listener;
@@ -51,59 +51,59 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
 
         private final Log log = LogFactory.getLog(MockJavaCompiler.class);
 
-		public CompilationResult compile(String[] pResourcePaths, ResourceReader pReader, ResourceStore pStore, ClassLoader pClassLoader, JavaCompilerSettings pSettings ) {
-			
-			for (int i = 0; i < pResourcePaths.length; i++) {
-				final String resourcePath = pResourcePaths[i];				
-				final byte[] resourceContent = pReader.getBytes(resourcePath);
-				
-				log.debug("resource " + resourcePath + " = " + ((resourceContent!=null)?new String(resourceContent):null) );
-				
-				final byte[] data;
-				
-				if ("jci/Simple.java".equals(resourcePath)) {
+        public CompilationResult compile(String[] pResourcePaths, ResourceReader pReader, ResourceStore pStore, ClassLoader pClassLoader, JavaCompilerSettings pSettings ) {
 
-					try {
-						data = SimpleDump.dump(new String(resourceContent));
-					} catch (Exception e) {
-						throw new RuntimeException("cannot handle resource " + resourcePath, e);
-					}
-					
-				} else if ("jci/Extended.java".equals(resourcePath)) {
+            for (int i = 0; i < pResourcePaths.length; i++) {
+                final String resourcePath = pResourcePaths[i];
+                final byte[] resourceContent = pReader.getBytes(resourcePath);
 
-					try {
-						data = ExtendedDump.dump();
-					} catch (Exception e) {
-						throw new RuntimeException("cannot handle resource " + resourcePath, e);
-					}
-					
-				} else {
-					throw new RuntimeException("cannot handle resource " + resourcePath);
-				}
+                log.debug("resource " + resourcePath + " = " + ((resourceContent!=null)?new String(resourceContent):null) );
 
-				log.debug("compiling " + resourcePath + " (" + data.length + ")");
-				
-				pStore.write(ConversionUtils.stripExtension(resourcePath) + ".class", data);
+                final byte[] data;
 
-			}
-			
-			return new CompilationResult(new CompilationProblem[0]);
-		}
+                if ("jci/Simple.java".equals(resourcePath)) {
 
-		public CompilationResult compile(String[] pResourcePaths, ResourceReader pReader, ResourceStore pStore, ClassLoader pClassLoader) {
-			return compile(pResourcePaths, pReader, pStore, pClassLoader, null);
-		}
-    	
-		public CompilationResult compile(String[] pResourcePaths, ResourceReader pReader, ResourceStore pStore) {
-			return compile(pResourcePaths, pReader, pStore, null);
-		}
+                    try {
+                        data = SimpleDump.dump(new String(resourceContent));
+                    } catch (Exception e) {
+                        throw new RuntimeException("cannot handle resource " + resourcePath, e);
+                    }
 
-		public void setCompilationProblemHandler(CompilationProblemHandler pHandler) {
-		}
+                } else if ("jci/Extended.java".equals(resourcePath)) {
 
-		public JavaCompilerSettings createDefaultSettings() {
-			return null;
-		}
+                    try {
+                        data = ExtendedDump.dump();
+                    } catch (Exception e) {
+                        throw new RuntimeException("cannot handle resource " + resourcePath, e);
+                    }
+
+                } else {
+                    throw new RuntimeException("cannot handle resource " + resourcePath);
+                }
+
+                log.debug("compiling " + resourcePath + " (" + data.length + ")");
+
+                pStore.write(ConversionUtils.stripExtension(resourcePath) + ".class", data);
+
+            }
+
+            return new CompilationResult(new CompilationProblem[0]);
+        }
+
+        public CompilationResult compile(String[] pResourcePaths, ResourceReader pReader, ResourceStore pStore, ClassLoader pClassLoader) {
+            return compile(pResourcePaths, pReader, pStore, pClassLoader, null);
+        }
+
+        public CompilationResult compile(String[] pResourcePaths, ResourceReader pReader, ResourceStore pStore) {
+            return compile(pResourcePaths, pReader, pStore, null);
+        }
+
+        public void setCompilationProblemHandler(CompilationProblemHandler pHandler) {
+        }
+
+        public JavaCompilerSettings createDefaultSettings() {
+            return null;
+        }
 
     }
     

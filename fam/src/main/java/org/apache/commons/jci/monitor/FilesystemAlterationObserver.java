@@ -28,14 +28,14 @@ import java.io.File;
  */
 public interface FilesystemAlterationObserver {
 
-	File getRootDirectory();
-	
-	void checkAndNotify();
-	
-	void addListener( final FilesystemAlterationListener pListener );	
+    File getRootDirectory();
 
-	void removeListener( final FilesystemAlterationListener pListener );
-	
-	FilesystemAlterationListener[] getListeners();
+    void checkAndNotify();
+
+    void addListener( final FilesystemAlterationListener pListener );
+
+    void removeListener( final FilesystemAlterationListener pListener );
+
+    FilesystemAlterationListener[] getListeners();
 
 }

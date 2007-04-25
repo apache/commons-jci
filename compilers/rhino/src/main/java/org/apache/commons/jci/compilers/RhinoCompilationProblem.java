@@ -25,46 +25,46 @@ import org.apache.commons.jci.problems.CompilationProblem;
  */
 public final class RhinoCompilationProblem implements CompilationProblem {
 
-	private final String message;
-	private final String fileName;
-	private final int line;
-	private final int column;
-	private final boolean error;
-	
-	public RhinoCompilationProblem( final String pMessage, final String pFileName, final int pLine, final String pScript, final int pColumn, final boolean pError ) {
-		message = pMessage;
-		fileName = pFileName;
-		line = pLine;
-		column = pColumn;
-		error = pError;
-	}
-	
-	public int getEndColumn() {
-		return column;
-	}
+    private final String message;
+    private final String fileName;
+    private final int line;
+    private final int column;
+    private final boolean error;
 
-	public int getEndLine() {
-		return line;
-	}
+    public RhinoCompilationProblem( final String pMessage, final String pFileName, final int pLine, final String pScript, final int pColumn, final boolean pError ) {
+        message = pMessage;
+        fileName = pFileName;
+        line = pLine;
+        column = pColumn;
+        error = pError;
+    }
 
-	public String getFileName() {
-		return fileName;
-	}
+    public int getEndColumn() {
+        return column;
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public int getEndLine() {
+        return line;
+    }
 
-	public int getStartColumn() {
-		return column;
-	}
+    public String getFileName() {
+        return fileName;
+    }
 
-	public int getStartLine() {
-		return line;
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	public boolean isError() {
-		return error;
-	}
+    public int getStartColumn() {
+        return column;
+    }
+
+    public int getStartLine() {
+        return line;
+    }
+
+    public boolean isError() {
+        return error;
+    }
 
 }

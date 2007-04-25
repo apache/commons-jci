@@ -52,7 +52,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
     private final GroovyJavaCompilerSettings defaultSettings;
     
     public GroovyJavaCompiler() {
-    	defaultSettings = new GroovyJavaCompilerSettings(new CompilerConfiguration());
+        defaultSettings = new GroovyJavaCompilerSettings(new CompilerConfiguration());
     }
         
     public CompilationResult compile(
@@ -63,7 +63,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
             final JavaCompilerSettings pSettings
             ) {
 
-    	final CompilerConfiguration configuration = ((GroovyJavaCompilerSettings) pSettings).getCompilerConfiguration();
+        final CompilerConfiguration configuration = ((GroovyJavaCompilerSettings) pSettings).getCompilerConfiguration();
         final ErrorCollector collector = new ErrorCollector(configuration);
         final GroovyClassLoader groovyClassLoader = new GroovyClassLoader(pClassLoader);
         final CompilationUnit unit = new CompilationUnit(configuration, null, groovyClassLoader);
@@ -126,7 +126,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
         return new CompilationResult(result);
     }
 
-	public JavaCompilerSettings createDefaultSettings() {
-		return defaultSettings;
-	}
+    public JavaCompilerSettings createDefaultSettings() {
+        return defaultSettings;
+    }
 }

@@ -31,16 +31,16 @@ public class FileChangeListener extends AbstractFilesystemAlterationListener {
     private boolean changed;
     
     public boolean hasChanged() {
-    	return changed;
+        return changed;
     }
     
     public void onStart( final FilesystemAlterationObserver pObserver ) {
         changed = false;
-    	super.onStart(pObserver);
+        super.onStart(pObserver);
     }
 
     public void onStop( final FilesystemAlterationObserver pObserver ) {
-    	super.onStop(pObserver);
+        super.onStop(pObserver);
     }
 
     

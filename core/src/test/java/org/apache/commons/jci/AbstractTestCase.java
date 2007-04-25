@@ -37,9 +37,9 @@ public abstract class AbstractTestCase extends TestCase {
     protected File directory;
 
     protected void setUp() throws Exception {
-    	
-    	System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
-    	
+
+        System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
+
         directory = createTempDirectory();
         assertTrue(directory.exists());
         assertTrue(directory.isDirectory());
@@ -95,7 +95,7 @@ public abstract class AbstractTestCase extends TestCase {
     }
     
     protected void delay() {
-    	try {
+        try {
             Thread.sleep(1500);
         } catch (final InterruptedException e) {
         }

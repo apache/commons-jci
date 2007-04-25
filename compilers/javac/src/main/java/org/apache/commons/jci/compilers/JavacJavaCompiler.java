@@ -45,221 +45,221 @@ import org.apache.commons.jci.stores.ResourceStore;
  */
 public final class JavacJavaCompiler extends AbstractJavaCompiler {
 
-	private static final String EOL = System.getProperty("line.separator");
-	private static final String WARNING_PREFIX = "warning: ";
-	private static final String NOTE_PREFIX = "Note: ";
-	private static final String ERROR_PREFIX = "error: ";
+    private static final String EOL = System.getProperty("line.separator");
+    private static final String WARNING_PREFIX = "warning: ";
+    private static final String NOTE_PREFIX = "Note: ";
+    private static final String ERROR_PREFIX = "error: ";
 
-	private final JavacJavaCompilerSettings settings;
+    private final JavacJavaCompilerSettings settings;
 
-	public JavacJavaCompiler() {
-		settings = new JavacJavaCompilerSettings();
-	}
+    public JavacJavaCompiler() {
+        settings = new JavacJavaCompilerSettings();
+    }
 
-	public JavacJavaCompiler( final JavacJavaCompilerSettings pSettings ) {
-		settings = pSettings;
-	}
+    public JavacJavaCompiler( final JavacJavaCompilerSettings pSettings ) {
+        settings = pSettings;
+    }
 
-	public CompilationResult compile( final String[] pSourcePaths, final ResourceReader pReader, ResourceStore pStore, final ClassLoader pClasspathClassLoader, final JavaCompilerSettings pSettings ) {
+    public CompilationResult compile( final String[] pSourcePaths, final ResourceReader pReader, ResourceStore pStore, final ClassLoader pClasspathClassLoader, final JavaCompilerSettings pSettings ) {
 
-		try {
-			final ClassLoader cl = new JavacClassLoader(pClasspathClassLoader);
-			final Class renamedClass = cl.loadClass("com.sun.tools.javac.Main");
+        try {
+            final ClassLoader cl = new JavacClassLoader(pClasspathClassLoader);
+            final Class renamedClass = cl.loadClass("com.sun.tools.javac.Main");
 
-			FileInputStreamProxy.setResourceReader(pReader);
-			FileOutputStreamProxy.setResourceStore(pStore);
+            FileInputStreamProxy.setResourceReader(pReader);
+            FileOutputStreamProxy.setResourceStore(pStore);
 
-			final Method compile = renamedClass.getMethod("compile", new Class[] { String[].class, PrintWriter.class });
-			final StringWriter out = new StringWriter();
-			final Integer ok = (Integer) compile.invoke(null, new Object[] { buildCompilerArguments(pSourcePaths, pClasspathClassLoader), new PrintWriter(out) });
+            final Method compile = renamedClass.getMethod("compile", new Class[] { String[].class, PrintWriter.class });
+            final StringWriter out = new StringWriter();
+            final Integer ok = (Integer) compile.invoke(null, new Object[] { buildCompilerArguments(pSourcePaths, pClasspathClassLoader), new PrintWriter(out) });
 
-			final CompilationResult result = parseModernStream(new BufferedReader(new StringReader(out.toString())));
+            final CompilationResult result = parseModernStream(new BufferedReader(new StringReader(out.toString())));
 
-			if (result.getErrors().length == 0 && ok.intValue() != 0) {
-				return new CompilationResult(new CompilationProblem[] {
-						new JavacCompilationProblem("Failure executing javac, but could not parse the error: " + out.toString(), true) });
-			}
+            if (result.getErrors().length == 0 && ok.intValue() != 0) {
+                return new CompilationResult(new CompilationProblem[] {
+                        new JavacCompilationProblem("Failure executing javac, but could not parse the error: " + out.toString(), true) });
+            }
 
-			return result;
+            return result;
 
-		} catch(Exception e) {
-			return new CompilationResult(new CompilationProblem[] {
-					new JavacCompilationProblem("Error while executing the compiler: " + e.toString(), true) });
-		} finally {
-			// help GC
-			FileInputStreamProxy.setResourceReader(null);
-			FileOutputStreamProxy.setResourceStore(null);
-		}
-	}
+        } catch(Exception e) {
+            return new CompilationResult(new CompilationProblem[] {
+                    new JavacCompilationProblem("Error while executing the compiler: " + e.toString(), true) });
+        } finally {
+            // help GC
+            FileInputStreamProxy.setResourceReader(null);
+            FileOutputStreamProxy.setResourceStore(null);
+        }
+    }
 
-	private CompilationResult parseModernStream( final BufferedReader pReader ) throws IOException {
-		final List problems = new ArrayList();
-		String line;
+    private CompilationResult parseModernStream( final BufferedReader pReader ) throws IOException {
+        final List problems = new ArrayList();
+        String line;
 
-		while (true) {
-			// cleanup the buffer
-			final StringBuffer buffer = new StringBuffer();
+        while (true) {
+            // cleanup the buffer
+            final StringBuffer buffer = new StringBuffer();
 
-			// most errors terminate with the '^' char
-			do {
-				line = pReader.readLine();
-				if (line == null) {
-					return new CompilationResult((CompilationProblem[]) problems.toArray(new CompilationProblem[problems.size()]));
-				}
+            // most errors terminate with the '^' char
+            do {
+                line = pReader.readLine();
+                if (line == null) {
+                    return new CompilationResult((CompilationProblem[]) problems.toArray(new CompilationProblem[problems.size()]));
+                }
 
-				// TODO: there should be a better way to parse these
-				if (buffer.length() == 0 && line.startsWith(ERROR_PREFIX)) {
-					problems.add(new JavacCompilationProblem(line, true));
-				}
-				else if (buffer.length() == 0 && line.startsWith(NOTE_PREFIX)) {
-					// skip this one - it is JDK 1.5 telling us that the
-					// interface is deprecated.
-				} else {
-					buffer.append(line);
-					buffer.append(EOL);
-				}
-			} while (!line.endsWith("^"));
+                // TODO: there should be a better way to parse these
+                if (buffer.length() == 0 && line.startsWith(ERROR_PREFIX)) {
+                    problems.add(new JavacCompilationProblem(line, true));
+                }
+                else if (buffer.length() == 0 && line.startsWith(NOTE_PREFIX)) {
+                    // skip this one - it is JDK 1.5 telling us that the
+                    // interface is deprecated.
+                } else {
+                    buffer.append(line);
+                    buffer.append(EOL);
+                }
+            } while (!line.endsWith("^"));
 
-			// add the error
-			problems.add(parseModernError(buffer.toString()));
-		}
-	}
+            // add the error
+            problems.add(parseModernError(buffer.toString()));
+        }
+    }
 
-	private CompilationProblem parseModernError( final String pError ) {
-		final StringTokenizer tokens = new StringTokenizer(pError, ":");
-		boolean isError = true;
-		try {
-			String file = tokens.nextToken();
-			// When will this happen?
-			if (file.length() == 1) {
-				file = new StringBuffer(file).append(":").append(
-						tokens.nextToken()).toString();
-			}
-			final int line = Integer.parseInt(tokens.nextToken());
-			final StringBuffer msgBuffer = new StringBuffer();
+    private CompilationProblem parseModernError( final String pError ) {
+        final StringTokenizer tokens = new StringTokenizer(pError, ":");
+        boolean isError = true;
+        try {
+            String file = tokens.nextToken();
+            // When will this happen?
+            if (file.length() == 1) {
+                file = new StringBuffer(file).append(":").append(
+                        tokens.nextToken()).toString();
+            }
+            final int line = Integer.parseInt(tokens.nextToken());
+            final StringBuffer msgBuffer = new StringBuffer();
 
-			String msg = tokens.nextToken(EOL).substring(2);
-			isError = !msg.startsWith(WARNING_PREFIX);
+            String msg = tokens.nextToken(EOL).substring(2);
+            isError = !msg.startsWith(WARNING_PREFIX);
 
-			// Remove the 'warning: ' prefix
-			if (!isError) {
-				msg = msg.substring(WARNING_PREFIX.length());
-			}
-			msgBuffer.append(msg);
+            // Remove the 'warning: ' prefix
+            if (!isError) {
+                msg = msg.substring(WARNING_PREFIX.length());
+            }
+            msgBuffer.append(msg);
 
-			String context = tokens.nextToken(EOL);
-			String pointer = tokens.nextToken(EOL);
+            String context = tokens.nextToken(EOL);
+            String pointer = tokens.nextToken(EOL);
 
-			if (tokens.hasMoreTokens()) {
-				msgBuffer.append(EOL);
-				msgBuffer.append(context); // 'symbol' line
-				msgBuffer.append(EOL);
-				msgBuffer.append(pointer); // 'location' line
-				msgBuffer.append(EOL);
+            if (tokens.hasMoreTokens()) {
+                msgBuffer.append(EOL);
+                msgBuffer.append(context); // 'symbol' line
+                msgBuffer.append(EOL);
+                msgBuffer.append(pointer); // 'location' line
+                msgBuffer.append(EOL);
 
-				context = tokens.nextToken(EOL);
+                context = tokens.nextToken(EOL);
 
-				try {
-					pointer = tokens.nextToken(EOL);
-				} catch (NoSuchElementException e) {
-					pointer = context;
-					context = null;
-				}
-			}
-			final String message = msgBuffer.toString();
-			int startcolumn = pointer.indexOf("^");
-			int endcolumn = context == null ? startcolumn : context.indexOf(" ", startcolumn);
-			if (endcolumn == -1) {
-				endcolumn = context.length();
-			}
-			return new JavacCompilationProblem(file, isError, line, startcolumn, line, endcolumn, message);
-		}
-		catch (NoSuchElementException e) {
-			return new JavacCompilationProblem("no more tokens - could not parse error message: " + pError, isError);
-		}
-		catch (NumberFormatException e) {
-			return new JavacCompilationProblem("could not parse error message: " + pError, isError);
-		}
-		catch (Exception e) {
-			return new JavacCompilationProblem("could not parse error message: " + pError, isError);
-		}
-	}
+                try {
+                    pointer = tokens.nextToken(EOL);
+                } catch (NoSuchElementException e) {
+                    pointer = context;
+                    context = null;
+                }
+            }
+            final String message = msgBuffer.toString();
+            int startcolumn = pointer.indexOf("^");
+            int endcolumn = context == null ? startcolumn : context.indexOf(" ", startcolumn);
+            if (endcolumn == -1) {
+                endcolumn = context.length();
+            }
+            return new JavacCompilationProblem(file, isError, line, startcolumn, line, endcolumn, message);
+        }
+        catch (NoSuchElementException e) {
+            return new JavacCompilationProblem("no more tokens - could not parse error message: " + pError, isError);
+        }
+        catch (NumberFormatException e) {
+            return new JavacCompilationProblem("could not parse error message: " + pError, isError);
+        }
+        catch (Exception e) {
+            return new JavacCompilationProblem("could not parse error message: " + pError, isError);
+        }
+    }
 
-	public JavaCompilerSettings createDefaultSettings() {
-		return settings;
-	}
+    public JavaCompilerSettings createDefaultSettings() {
+        return settings;
+    }
 
-	private String[] buildCompilerArguments( final String[] resourcePaths, final ClassLoader classloader ) {
-		
-		// FIXME: build classpath from classloader information
-		return resourcePaths;
-		
-//	{
-//		final List args = new ArrayList();
-//		for (int i = 0; i < resourcePaths.length; i++) {
-//			args.add(resourcePaths[i]);
-//		}
+    private String[] buildCompilerArguments( final String[] resourcePaths, final ClassLoader classloader ) {
+
+        // FIXME: build classpath from classloader information
+        return resourcePaths;
+
+//    {
+//        final List args = new ArrayList();
+//        for (int i = 0; i < resourcePaths.length; i++) {
+//            args.add(resourcePaths[i]);
+//        }
 //
-//		if (settings != null) {
-//			if (settings.isOptimize()) {
-//				args.add("-O");
-//			}
+//        if (settings != null) {
+//            if (settings.isOptimize()) {
+//                args.add("-O");
+//            }
 //
-//			if (settings.isDebug()) {
-//				args.add("-g");
-//			}
+//            if (settings.isDebug()) {
+//                args.add("-g");
+//            }
 //
-//			if (settings.isVerbose()) {
-//				args.add("-verbose");
-//			}
+//            if (settings.isVerbose()) {
+//                args.add("-verbose");
+//            }
 //
-//			if (settings.isShowDeprecation()) {
-//				args.add("-deprecation");
-//				// This is required to actually display the deprecation messages
-//				settings.setShowWarnings(true);
-//			}
+//            if (settings.isShowDeprecation()) {
+//                args.add("-deprecation");
+//                // This is required to actually display the deprecation messages
+//                settings.setShowWarnings(true);
+//            }
 //
-//			if (settings.getMaxmem() != null) {
-//				args.add("-J-Xmx" + settings.getMaxmem());
-//			}
+//            if (settings.getMaxmem() != null) {
+//                args.add("-J-Xmx" + settings.getMaxmem());
+//            }
 //
-//			if (settings.getMeminitial() != null) {
-//				args.add("-J-Xms" + settings.getMeminitial());
-//			}
+//            if (settings.getMeminitial() != null) {
+//                args.add("-J-Xms" + settings.getMeminitial());
+//            }
 //
-//			if (!settings.isShowWarnings()) {
-//				args.add("-nowarn");
-//			}
+//            if (!settings.isShowWarnings()) {
+//                args.add("-nowarn");
+//            }
 //
-//			// TODO: this could be much improved
-//			if (settings.getTargetVersion() != null) {
-//				// Required, or it defaults to the target of your JDK (eg 1.5)
-//				args.add("-target");
-//				args.add("1.1");
-//			} else {
-//				args.add("-target");
-//				args.add(settings.getTargetVersion());
-//			}
+//            // TODO: this could be much improved
+//            if (settings.getTargetVersion() != null) {
+//                // Required, or it defaults to the target of your JDK (eg 1.5)
+//                args.add("-target");
+//                args.add("1.1");
+//            } else {
+//                args.add("-target");
+//                args.add(settings.getTargetVersion());
+//            }
 //
-//			// TODO suppressSource
-//			if (settings.getSourceVersion() != null) {
-//				// If omitted, later JDKs complain about a 1.1 target
-//				args.add("-source");
-//				args.add("1.3");
-//			} else {
-//				args.add("-source");
-//				args.add(settings.getSourceVersion());
-//			}
+//            // TODO suppressSource
+//            if (settings.getSourceVersion() != null) {
+//                // If omitted, later JDKs complain about a 1.1 target
+//                args.add("-source");
+//                args.add("1.3");
+//            } else {
+//                args.add("-source");
+//                args.add(settings.getSourceVersion());
+//            }
 //
-//			// TODO suppressEncoding
-//			if (settings.getSourceEncoding() != null) {
-//				args.add("-encoding");
-//				args.add(settings.getSourceEncoding());
-//			}
+//            // TODO suppressEncoding
+//            if (settings.getSourceEncoding() != null) {
+//                args.add("-encoding");
+//                args.add(settings.getSourceEncoding());
+//            }
 //
-//			// TODO CustomCompilerArguments
-//		}
+//            // TODO CustomCompilerArguments
+//        }
 //
-//		return (String[]) args.toArray(new String[args.size()]);
-	}
+//        return (String[]) args.toArray(new String[args.size()]);
+    }
 }

@@ -25,18 +25,18 @@ import org.apache.commons.jci.AbstractTestCase;
  */
 public final class ResourceReaderTestCase extends AbstractTestCase {
 
-	public void testFileResourceReader() throws Exception {
+    public void testFileResourceReader() throws Exception {
         writeFile("test", "test");
-		checkRead(new FileResourceReader(directory));
-	}
+        checkRead(new FileResourceReader(directory));
+    }
 
-	public void testMemoryResourceReader() throws Exception {
-		final MemoryResourceReader reader = new MemoryResourceReader();
-		reader.add("test", "test".getBytes());
-		checkRead(reader);
-	}
-	
-	private void checkRead( final ResourceReader reader ) throws Exception {
+    public void testMemoryResourceReader() throws Exception {
+        final MemoryResourceReader reader = new MemoryResourceReader();
+        reader.add("test", "test".getBytes());
+        checkRead(reader);
+    }
+
+    private void checkRead( final ResourceReader reader ) throws Exception {
         assertTrue(reader.isAvailable("test"));
         final byte[] content = reader.getBytes("test");
         assertTrue(content != null);

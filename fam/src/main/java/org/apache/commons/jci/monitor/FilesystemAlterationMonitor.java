@@ -69,39 +69,39 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
 
     public void addListener( final File pRoot, final FilesystemAlterationListener pListener ) {
-    	
-    	FilesystemAlterationObserver observer;
-    	
-    	synchronized (observersLock) {
-        	observer = (FilesystemAlterationObserver)observers.get(pRoot);
 
-        	if (observer == null) {
-    			final Map newObservers = new HashMap(observers);    			
-        		observer = new FilesystemAlterationObserverImpl(pRoot);
-        		newObservers.put(pRoot, observer);
-        		observers = Collections.unmodifiableMap(newObservers);
-        	}			
-		}
-    	
-    	observer.addListener(pListener);    	
+        FilesystemAlterationObserver observer;
+
+        synchronized (observersLock) {
+            observer = (FilesystemAlterationObserver)observers.get(pRoot);
+
+            if (observer == null) {
+                final Map newObservers = new HashMap(observers);
+                observer = new FilesystemAlterationObserverImpl(pRoot);
+                newObservers.put(pRoot, observer);
+                observers = Collections.unmodifiableMap(newObservers);
+            }
+        }
+
+        observer.addListener(pListener);
     }
    
     public void removeListener( final FilesystemAlterationListener pListener ) {
-    	synchronized (observersLock) {
-    		for (Iterator it = observers.values().iterator(); it.hasNext();) {
-				final FilesystemAlterationObserver observer = (FilesystemAlterationObserver) it.next();
-				observer.removeListener(pListener);
-				// FIXME: remove observer if there are no listeners?
-			}
-    	}
+        synchronized (observersLock) {
+            for (Iterator it = observers.values().iterator(); it.hasNext();) {
+                final FilesystemAlterationObserver observer = (FilesystemAlterationObserver) it.next();
+                observer.removeListener(pListener);
+                // FIXME: remove observer if there are no listeners?
+            }
+        }
     }
 
     public FilesystemAlterationListener[] getListenersFor( final File pRoot  ) {
-    	final FilesystemAlterationObserver observer = (FilesystemAlterationObserver)observers.get(pRoot);
+        final FilesystemAlterationObserver observer = (FilesystemAlterationObserver)observers.get(pRoot);
 
         if (observer == null) {
-        	return new FilesystemAlterationListener[0];
-        }			
+            return new FilesystemAlterationListener[0];
+        }
 
         return observer.getListeners();
     }
@@ -117,11 +117,11 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
             final Map currentObservers = observers;
             
-        	for (Iterator it = currentObservers.values().iterator(); it.hasNext();) {
-				final FilesystemAlterationObserver observer = (FilesystemAlterationObserver) it.next();
-				observer.checkAndNotify();				
-			}
-        	            
+            for (Iterator it = currentObservers.values().iterator(); it.hasNext();) {
+                final FilesystemAlterationObserver observer = (FilesystemAlterationObserver) it.next();
+                observer.checkAndNotify();
+            }
+
             try {
                 Thread.sleep(delay);
             } catch (final InterruptedException e) {

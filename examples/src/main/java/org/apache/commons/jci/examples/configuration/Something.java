@@ -21,8 +21,8 @@ import java.util.Properties;
 
 public class Something implements Configurable {
 
-	public void configure( Properties properties ) throws ConfigurationException {
-		System.out.println("Configuration changed");
-	}
+    public void configure( Properties properties ) throws ConfigurationException {
+        System.out.println("Configuration changed");
+    }
 
 }

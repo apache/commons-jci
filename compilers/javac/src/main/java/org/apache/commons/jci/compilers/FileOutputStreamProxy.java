@@ -32,63 +32,63 @@ import org.apache.commons.jci.utils.ConversionUtils;
  * @author tcurdt
  */
 public final class FileOutputStreamProxy extends OutputStream {
-	
-	private final static ThreadLocal storeThreadLocal = new ThreadLocal();
 
-	private final ByteArrayOutputStream out = new ByteArrayOutputStream();
-	private final String name;	
-	
-	
-	public static void setResourceStore( final ResourceStore pStore ) {
-		storeThreadLocal.set(pStore);
-	}
+    private final static ThreadLocal storeThreadLocal = new ThreadLocal();
 
-	
-	public FileOutputStreamProxy(File pFile, boolean append) throws FileNotFoundException {
-		this("" + pFile);
-	}
+    private final ByteArrayOutputStream out = new ByteArrayOutputStream();
+    private final String name;
 
-	public FileOutputStreamProxy(File pFile) throws FileNotFoundException {
-		this("" + pFile);
-	}
 
-	public FileOutputStreamProxy(FileDescriptor fdObj) {
-		throw new RuntimeException();
-	}
+    public static void setResourceStore( final ResourceStore pStore ) {
+        storeThreadLocal.set(pStore);
+    }
 
-	public FileOutputStreamProxy(String pName, boolean append) throws FileNotFoundException {
-		this(pName);
-	}
 
-	public FileOutputStreamProxy(String pName) throws FileNotFoundException {
-		name = ConversionUtils.getResourceNameFromFileName(pName);
-	}
-	
-	public void write(int value) throws IOException {
-		out.write(value);
-	}
+    public FileOutputStreamProxy(File pFile, boolean append) throws FileNotFoundException {
+        this("" + pFile);
+    }
 
-	public void close() throws IOException {
-		out.close();
-		
-		final ResourceStore store = (ResourceStore) storeThreadLocal.get();
+    public FileOutputStreamProxy(File pFile) throws FileNotFoundException {
+        this("" + pFile);
+    }
 
-		if (store == null) {
-			throw new RuntimeException("forgot to set the ResourceStore for this thread?");
-		}
-		
-		store.write(name, out.toByteArray());
-	}
+    public FileOutputStreamProxy(FileDescriptor fdObj) {
+        throw new RuntimeException();
+    }
 
-	public void flush() throws IOException {
-		out.flush();
-	}
+    public FileOutputStreamProxy(String pName, boolean append) throws FileNotFoundException {
+        this(pName);
+    }
 
-	public void write(byte[] b, int off, int len) throws IOException {
-		out.write(b, off, len);
-	}
+    public FileOutputStreamProxy(String pName) throws FileNotFoundException {
+        name = ConversionUtils.getResourceNameFromFileName(pName);
+    }
 
-	public void write(byte[] b) throws IOException {
-		out.write(b);
-	}
+    public void write(int value) throws IOException {
+        out.write(value);
+    }
+
+    public void close() throws IOException {
+        out.close();
+
+        final ResourceStore store = (ResourceStore) storeThreadLocal.get();
+
+        if (store == null) {
+            throw new RuntimeException("forgot to set the ResourceStore for this thread?");
+        }
+
+        store.write(name, out.toByteArray());
+    }
+
+    public void flush() throws IOException {
+        out.flush();
+    }
+
+    public void write(byte[] b, int off, int len) throws IOException {
+        out.write(b, off, len);
+    }
+
+    public void write(byte[] b) throws IOException {
+        out.write(b);
+    }
 }

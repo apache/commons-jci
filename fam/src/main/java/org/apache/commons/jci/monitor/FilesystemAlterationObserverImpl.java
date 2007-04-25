@@ -38,60 +38,60 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
     
     private interface MonitorFile {
 
-    	long lastModified();
-    	MonitorFile[] listFiles();
-    	boolean isDirectory();
-    	boolean exists();
-    	String getName();
+        long lastModified();
+        MonitorFile[] listFiles();
+        boolean isDirectory();
+        boolean exists();
+        String getName();
 
     }
     
-	private final static class MonitorFileImpl implements MonitorFile {
-		
-		private final File file;
-		
-		public MonitorFileImpl( final File pFile ) {
-			file = pFile;
-		}
+    private final static class MonitorFileImpl implements MonitorFile {
 
-		public boolean exists() {
-			return file.exists();
-		}
+        private final File file;
 
-		public MonitorFile[] listFiles() {
-			final File[] childs = file.listFiles();
-			
-			final MonitorFile[] providers = new MonitorFile[childs.length];
-			for (int i = 0; i < providers.length; i++) {
-				providers[i] = new MonitorFileImpl(childs[i]);
-			}
-			return providers;
-		}
+        public MonitorFileImpl( final File pFile ) {
+            file = pFile;
+        }
 
-		public String getName() {
-			return file.getName();
-		}
+        public boolean exists() {
+            return file.exists();
+        }
 
-		public boolean isDirectory() {
-			return file.isDirectory();
-		}
+        public MonitorFile[] listFiles() {
+            final File[] childs = file.listFiles();
 
-		public long lastModified() {
-			return file.lastModified();
-		}
-		
-		public String toString() {
-			return file.toString();
-		}
-		
-	}
-	
-	private final class Entry {
+            final MonitorFile[] providers = new MonitorFile[childs.length];
+            for (int i = 0; i < providers.length; i++) {
+                providers[i] = new MonitorFileImpl(childs[i]);
+            }
+            return providers;
+        }
 
-    	private final static int TYPE_UNKNOWN = 0;
-    	private final static int TYPE_FILE = 1;
-    	private final static int TYPE_DIRECTORY = 2;
-    	
+        public String getName() {
+            return file.getName();
+        }
+
+        public boolean isDirectory() {
+            return file.isDirectory();
+        }
+
+        public long lastModified() {
+            return file.lastModified();
+        }
+
+        public String toString() {
+            return file.toString();
+        }
+
+    }
+
+    private final class Entry {
+
+        private final static int TYPE_UNKNOWN = 0;
+        private final static int TYPE_FILE = 1;
+        private final static int TYPE_DIRECTORY = 2;
+
         private final MonitorFile file;
         private long lastModified = -1;
         private int lastType = TYPE_UNKNOWN;
@@ -102,132 +102,132 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
         }
 
         public String getName() {
-        	return file.getName();
+            return file.getName();
         }
         
         
-		public String toString() {
+        public String toString() {
             return file.toString();
         }
 
 
-		private void compareChilds() {
-			if (!file.isDirectory()) {
-				return;
-			}
-			
-			final MonitorFile[] files = file.listFiles();
-			final Set deleted = new HashSet(childs.values());
-			for (int i = 0; i < files.length; i++) {
-				final MonitorFile f = files[i];
-				final String name = f.getName();
-				final Entry entry = (Entry)childs.get(name);
-				if (entry != null) {
-					// already recognized as child
-					deleted.remove(entry);
-					
-					if(entry.needsToBeDeleted()) {
-						// we have to delete this one
-						childs.remove(name);
-					}
-				} else {
-					// a new child
-					final Entry newChild = new Entry(f);
-					childs.put(name, newChild);
-					newChild.needsToBeDeleted();
-				}
-			}
-			
-			// the ones not found on disk anymore
-			
-			for (Iterator it = deleted.iterator(); it.hasNext();) {
-				final Entry entry = (Entry) it.next();
-				entry.deleteChildsAndNotify();				
-				childs.remove(entry.getName());
-			}
-		}
+        private void compareChilds() {
+            if (!file.isDirectory()) {
+                return;
+            }
 
-		
-		private void deleteChildsAndNotify() {
-        	for (Iterator it = childs.values().iterator(); it.hasNext();) {
-				final Entry entry = (Entry) it.next();
+            final MonitorFile[] files = file.listFiles();
+            final Set deleted = new HashSet(childs.values());
+            for (int i = 0; i < files.length; i++) {
+                final MonitorFile f = files[i];
+                final String name = f.getName();
+                final Entry entry = (Entry)childs.get(name);
+                if (entry != null) {
+                    // already recognized as child
+                    deleted.remove(entry);
 
-				entry.deleteChildsAndNotify();
-			}
-        	childs.clear();			
+                    if(entry.needsToBeDeleted()) {
+                        // we have to delete this one
+                        childs.remove(name);
+                    }
+                } else {
+                    // a new child
+                    final Entry newChild = new Entry(f);
+                    childs.put(name, newChild);
+                    newChild.needsToBeDeleted();
+                }
+            }
 
-			if(lastType == TYPE_DIRECTORY) {
-				notifyOnDirectoryDelete(this);
-			} else if (lastType == TYPE_FILE) {
-				notifyOnFileDelete(this);					
-			}
-		}
-		
+            // the ones not found on disk anymore
+
+            for (Iterator it = deleted.iterator(); it.hasNext();) {
+                final Entry entry = (Entry) it.next();
+                entry.deleteChildsAndNotify();
+                childs.remove(entry.getName());
+            }
+        }
+
+
+        private void deleteChildsAndNotify() {
+            for (Iterator it = childs.values().iterator(); it.hasNext();) {
+                final Entry entry = (Entry) it.next();
+
+                entry.deleteChildsAndNotify();
+            }
+            childs.clear();
+
+            if(lastType == TYPE_DIRECTORY) {
+                notifyOnDirectoryDelete(this);
+            } else if (lastType == TYPE_FILE) {
+                notifyOnFileDelete(this);
+            }
+        }
+
         public boolean needsToBeDeleted() {
-        	
-        	if (!file.exists()) {
-        		// deleted or has never existed yet
-        		
-//        		log.debug(file + " does not exist or has been deleted");
 
-        		deleteChildsAndNotify();
+            if (!file.exists()) {
+                // deleted or has never existed yet
 
-        		// mark to be deleted by parent
-        		return true;        		
-        	} else {
-        		// exists
-        		final long currentModified = file.lastModified(); 
+//                log.debug(file + " does not exist or has been deleted");
 
-        		if (currentModified != lastModified) {
-	        		// last modified has changed
-    				lastModified = currentModified;
+                deleteChildsAndNotify();
 
-//            		log.debug(file + " has new last modified");
-    				
-        			// types only changes when also the last modified changes
-	        		final int newType = (file.isDirectory()?TYPE_DIRECTORY:TYPE_FILE); 
-	
-	        		if (lastType != newType) {
-	        			// the type has changed
+                // mark to be deleted by parent
+                return true;
+            } else {
+                // exists
+                final long currentModified = file.lastModified(); 
 
-//	            		log.debug(file + " has a new type");
-	        			
-	        			deleteChildsAndNotify();
-	        				        			
-	        			lastType = newType;
+                if (currentModified != lastModified) {
+                    // last modified has changed
+                    lastModified = currentModified;
 
-	        			// and then an add as the new type
+//                    log.debug(file + " has new last modified");
 
-	        			if (newType == TYPE_DIRECTORY) {
-	        				notifyOnDirectoryCreate(this);     				
-	        				compareChilds();        				
-		        		} else {	        		
-		    				notifyOnFileCreate(this);     				
-		        		}
+                    // types only changes when also the last modified changes
+                    final int newType = (file.isDirectory()?TYPE_DIRECTORY:TYPE_FILE); 
 
-	    	    		return false;
-	        		}
-	        		        		
-	        		if (newType == TYPE_DIRECTORY) {
-        				notifyOnDirectoryChange(this);     				
-        				compareChilds();        				
-	        		} else {	        		
-	    				notifyOnFileChange(this);     				
-	        		}
-	        		
-    	    		return false;
+                    if (lastType != newType) {
+                        // the type has changed
 
-        		} else {
+//                        log.debug(file + " has a new type");
 
-        			// so exists and has not changed
-        			
-//            		log.debug(file + " does exist and has not changed");
+                        deleteChildsAndNotify();
 
-        			compareChilds();
+                        lastType = newType;
 
-        			return false;
-	        	}
-        	}    		
+                        // and then an add as the new type
+
+                        if (newType == TYPE_DIRECTORY) {
+                            notifyOnDirectoryCreate(this);
+                            compareChilds();
+                        } else {
+                            notifyOnFileCreate(this);
+                        }
+
+                        return false;
+                    }
+
+                    if (newType == TYPE_DIRECTORY) {
+                        notifyOnDirectoryChange(this);
+                        compareChilds();
+                    } else {
+                        notifyOnFileChange(this);
+                    }
+
+                    return false;
+
+                } else {
+
+                    // so exists and has not changed
+
+//                    log.debug(file + " does exist and has not changed");
+
+                    compareChilds();
+
+                    return false;
+                }
+            }
         }
         
         public MonitorFile getFile() {
@@ -240,135 +240,135 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
 
     }
 
-	private final File rootDirectory;
-	private final Entry rootEntry;
+    private final File rootDirectory;
+    private final Entry rootEntry;
 
-	private FilesystemAlterationListener[] listeners = new FilesystemAlterationListener[0];
-	private Set listenersSet = new HashSet();
-	
-	public FilesystemAlterationObserverImpl( final File pRootDirectory ) {
-		rootDirectory = pRootDirectory;
-		rootEntry = new Entry(new MonitorFileImpl(pRootDirectory));
-	}
+    private FilesystemAlterationListener[] listeners = new FilesystemAlterationListener[0];
+    private Set listenersSet = new HashSet();
 
-	
-	
-	private void notifyOnStart() {
-		log.debug("onStart " + rootEntry);
-		for (int i = 0; i < listeners.length; i++) {
-			final FilesystemAlterationListener listener = listeners[i];
-			listener.onStart(this);
-		}
-	}
-	private void notifyOnStop() {
-		log.debug("onStop " + rootEntry);
-		for (int i = 0; i < listeners.length; i++) {
-			final FilesystemAlterationListener listener = listeners[i];
-			listener.onStop(this);
-		}
-	}
+    public FilesystemAlterationObserverImpl( final File pRootDirectory ) {
+        rootDirectory = pRootDirectory;
+        rootEntry = new Entry(new MonitorFileImpl(pRootDirectory));
+    }
 
-	private void notifyOnFileCreate( final Entry pEntry ) {
-		log.debug("onFileCreate " + pEntry);
-		for (int i = 0; i < listeners.length; i++) {
-			final FilesystemAlterationListener listener = listeners[i];
-			listener.onFileCreate(((MonitorFileImpl)pEntry.getFile()).file );
-		}
-	}
-	private void notifyOnFileChange( final Entry pEntry ) {
-		log.debug("onFileChange " + pEntry);
-		for (int i = 0; i < listeners.length; i++) {
-			final FilesystemAlterationListener listener = listeners[i];
-			listener.onFileChange(((MonitorFileImpl)pEntry.getFile()).file );
-		}
-	}
-	private void notifyOnFileDelete( final Entry pEntry ) {
-		log.debug("onFileDelete " + pEntry);
-		for (int i = 0; i < listeners.length; i++) {
-			final FilesystemAlterationListener listener = listeners[i];
-			listener.onFileDelete(((MonitorFileImpl)pEntry.getFile()).file );
-		}
-	}
 
-	private void notifyOnDirectoryCreate( final Entry pEntry ) {
-		log.debug("onDirectoryCreate " + pEntry);
-		for (int i = 0; i < listeners.length; i++) {
-			final FilesystemAlterationListener listener = listeners[i];
-			listener.onDirectoryCreate(((MonitorFileImpl)pEntry.getFile()).file );
-		}
-	}
-	private void notifyOnDirectoryChange( final Entry pEntry ) {
-		log.debug("onDirectoryChange " + pEntry);
-		for (int i = 0; i < listeners.length; i++) {
-			final FilesystemAlterationListener listener = listeners[i];
-			listener.onDirectoryChange(((MonitorFileImpl)pEntry.getFile()).file );
-		}
-	}
-	private void notifyOnDirectoryDelete( final Entry pEntry ) {
-		log.debug("onDirectoryDelete " + pEntry);
-		for (int i = 0; i < listeners.length; i++) {
-			final FilesystemAlterationListener listener = listeners[i];
-			listener.onDirectoryDelete(((MonitorFileImpl)pEntry.getFile()).file );
-		}
-	}
-	
+
+    private void notifyOnStart() {
+        log.debug("onStart " + rootEntry);
+        for (int i = 0; i < listeners.length; i++) {
+            final FilesystemAlterationListener listener = listeners[i];
+            listener.onStart(this);
+        }
+    }
+    private void notifyOnStop() {
+        log.debug("onStop " + rootEntry);
+        for (int i = 0; i < listeners.length; i++) {
+            final FilesystemAlterationListener listener = listeners[i];
+            listener.onStop(this);
+        }
+    }
+
+    private void notifyOnFileCreate( final Entry pEntry ) {
+        log.debug("onFileCreate " + pEntry);
+        for (int i = 0; i < listeners.length; i++) {
+            final FilesystemAlterationListener listener = listeners[i];
+            listener.onFileCreate(((MonitorFileImpl)pEntry.getFile()).file );
+        }
+    }
+    private void notifyOnFileChange( final Entry pEntry ) {
+        log.debug("onFileChange " + pEntry);
+        for (int i = 0; i < listeners.length; i++) {
+            final FilesystemAlterationListener listener = listeners[i];
+            listener.onFileChange(((MonitorFileImpl)pEntry.getFile()).file );
+        }
+    }
+    private void notifyOnFileDelete( final Entry pEntry ) {
+        log.debug("onFileDelete " + pEntry);
+        for (int i = 0; i < listeners.length; i++) {
+            final FilesystemAlterationListener listener = listeners[i];
+            listener.onFileDelete(((MonitorFileImpl)pEntry.getFile()).file );
+        }
+    }
+
+    private void notifyOnDirectoryCreate( final Entry pEntry ) {
+        log.debug("onDirectoryCreate " + pEntry);
+        for (int i = 0; i < listeners.length; i++) {
+            final FilesystemAlterationListener listener = listeners[i];
+            listener.onDirectoryCreate(((MonitorFileImpl)pEntry.getFile()).file );
+        }
+    }
+    private void notifyOnDirectoryChange( final Entry pEntry ) {
+        log.debug("onDirectoryChange " + pEntry);
+        for (int i = 0; i < listeners.length; i++) {
+            final FilesystemAlterationListener listener = listeners[i];
+            listener.onDirectoryChange(((MonitorFileImpl)pEntry.getFile()).file );
+        }
+    }
+    private void notifyOnDirectoryDelete( final Entry pEntry ) {
+        log.debug("onDirectoryDelete " + pEntry);
+        for (int i = 0; i < listeners.length; i++) {
+            final FilesystemAlterationListener listener = listeners[i];
+            listener.onDirectoryDelete(((MonitorFileImpl)pEntry.getFile()).file );
+        }
+    }
+
 
     private void checkEntries() {
-		if(rootEntry.needsToBeDeleted()) {
-			// root not existing
-			rootEntry.lastType = Entry.TYPE_UNKNOWN;
-		}    	
+        if(rootEntry.needsToBeDeleted()) {
+            // root not existing
+            rootEntry.lastType = Entry.TYPE_UNKNOWN;
+        }
     }
 
     
-    public synchronized void checkAndNotify() {    	
-    	if (listeners.length == 0) {
-    		return;
-    	}
-    	
-    	notifyOnStart();
+    public synchronized void checkAndNotify() {
+        if (listeners.length == 0) {
+            return;
+        }
+
+        notifyOnStart();
         
         checkEntries();
         
-    	notifyOnStop();			
+        notifyOnStop();
     }
 
     
     public File getRootDirectory() {
-    	return rootDirectory;
+        return rootDirectory;
     }
 
-	public synchronized void addListener( final FilesystemAlterationListener pListener ) {
-		if (listenersSet.add(pListener)) {
-			createArrayFromSet();			
-		}		
-	}
+    public synchronized void addListener( final FilesystemAlterationListener pListener ) {
+        if (listenersSet.add(pListener)) {
+            createArrayFromSet();
+        }
+    }
 
-	public synchronized void removeListener( final FilesystemAlterationListener pListener ) {
-		if (listenersSet.remove(pListener)) {
-			createArrayFromSet();			
-		}		
-	}
+    public synchronized void removeListener( final FilesystemAlterationListener pListener ) {
+        if (listenersSet.remove(pListener)) {
+            createArrayFromSet();
+        }
+    }
 
-	private void createArrayFromSet() {
-		final FilesystemAlterationListener[] newListeners = new FilesystemAlterationListener[listenersSet.size()];
-		listenersSet.toArray(newListeners);
-		listeners = newListeners;		
-	}
-	
-	public FilesystemAlterationListener[] getListeners() {
-		return listeners;
-	}
+    private void createArrayFromSet() {
+        final FilesystemAlterationListener[] newListeners = new FilesystemAlterationListener[listenersSet.size()];
+        listenersSet.toArray(newListeners);
+        listeners = newListeners;
+    }
 
-	
-	public static void main( String[] args ) {
-		final FilesystemAlterationObserverImpl observer = new FilesystemAlterationObserverImpl(new File(args[0]));
-		while(true) {
-			observer.checkEntries();
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-			}
-		}
-	}
+    public FilesystemAlterationListener[] getListeners() {
+        return listeners;
+    }
+
+
+    public static void main( String[] args ) {
+        final FilesystemAlterationObserverImpl observer = new FilesystemAlterationObserverImpl(new File(args[0]));
+        while(true) {
+            observer.checkEntries();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+            }
+        }
+    }
 }

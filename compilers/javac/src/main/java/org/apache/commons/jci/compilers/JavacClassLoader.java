@@ -45,110 +45,110 @@ import org.vafer.dependency.utils.ResourceRenamer;
  * @author tcurdt
  */
 public final class JavacClassLoader extends URLClassLoader {
-		
-	private final Map loaded = new HashMap();
-	
-	public JavacClassLoader( final ClassLoader pParent ) {
-		super(getToolsJar(), pParent);
-	}
 
-	private static URL[] getToolsJar() {
-		try {
-			Class.forName("com.sun.tools.javac.Main");
-			
-			// found - no addtional classpath entry required
-			return new URL[0];
+    private final Map loaded = new HashMap();
 
-		} catch (Exception e) {
-		}
+    public JavacClassLoader( final ClassLoader pParent ) {
+        super(getToolsJar(), pParent);
+    }
 
-		// no compiler in current classpath, let's try to find the tools.jar
+    private static URL[] getToolsJar() {
+        try {
+            Class.forName("com.sun.tools.javac.Main");
 
-		String javaHome = System.getProperty("java.home");
-		if (javaHome.toLowerCase(Locale.US).endsWith(File.separator + "jre")) {
-			javaHome = javaHome.substring(0, javaHome.length()-4);
-		}
-		
-		final File toolsJar = new File(javaHome + "/lib/tools.jar");
+            // found - no addtional classpath entry required
+            return new URL[0];
 
-		if (toolsJar.exists()) {
-			try {
-				return new URL[] { toolsJar.toURL() };
-			} catch (MalformedURLException e) {
-			}
-		}
-		
-		final StringBuffer sb = new StringBuffer();
-		sb.append("Could not find javac compiler class (should be in the tools.jar/classes.jar in your JRE/JDK). ");
-		sb.append("os.name").append('=').append(System.getProperty("os.name")).append(", ");
-		sb.append("os.version").append('=').append(System.getProperty("os.version")).append(", ");
-		sb.append("java.class.path").append('=').append(System.getProperty("java.class.path"));
+        } catch (Exception e) {
+        }
 
-		throw new RuntimeException(sb.toString());
-	}
+        // no compiler in current classpath, let's try to find the tools.jar
 
-	protected Class findClass( final String name ) throws ClassNotFoundException {
+        String javaHome = System.getProperty("java.home");
+        if (javaHome.toLowerCase(Locale.US).endsWith(File.separator + "jre")) {
+            javaHome = javaHome.substring(0, javaHome.length()-4);
+        }
 
-		if (name.startsWith("java.")) {
-			return super.findClass(name);
-		}
-		
-		try {
+        final File toolsJar = new File(javaHome + "/lib/tools.jar");
 
-			final Class clazz = (Class) loaded.get(name);
-			if (clazz != null) {
-				return clazz;
-			}
-						
-			final byte[] classBytes;
+        if (toolsJar.exists()) {
+            try {
+                return new URL[] { toolsJar.toURL() };
+            } catch (MalformedURLException e) {
+            }
+        }
 
-			if (name.startsWith("com.sun.tools.javac.")) {
-				final InputStream classStream = getResourceAsStream(name.replace('.', '/') + ".class");
-				
-		        final ClassWriter renamedCw = new ClassWriter(true, false);
-		        new ClassReader(classStream).accept(new RenamingVisitor(new CheckClassAdapter(renamedCw), new ResourceRenamer() {
-					public String getNewNameFor(final String pOldName) {
-						if (pOldName.startsWith(FileOutputStream.class.getName())) {
-							return FileOutputStreamProxy.class.getName();
-						}
-						if (pOldName.startsWith(FileInputStream.class.getName())) {
-							return FileInputStreamProxy.class.getName();
-						}
-						return pOldName;
-					}        		
-	        	}), false);
+        final StringBuffer sb = new StringBuffer();
+        sb.append("Could not find javac compiler class (should be in the tools.jar/classes.jar in your JRE/JDK). ");
+        sb.append("os.name").append('=').append(System.getProperty("os.name")).append(", ");
+        sb.append("os.version").append('=').append(System.getProperty("os.version")).append(", ");
+        sb.append("java.class.path").append('=').append(System.getProperty("java.class.path"));
 
-	        	classBytes = renamedCw.toByteArray();
-				
-			} else {
-				return super.findClass(name);
-			}
-			
-			final Class newClazz = defineClass(name, classBytes, 0, classBytes.length);			
-			loaded.put(name, newClazz);			
-			return newClazz;
-		} catch (IOException e) {
-			throw new ClassNotFoundException("", e);
-		}
-	}
+        throw new RuntimeException(sb.toString());
+    }
 
-	protected synchronized Class loadClass( final String classname, final boolean resolve ) throws ClassNotFoundException {
+    protected Class findClass( final String name ) throws ClassNotFoundException {
 
-		Class theClass = findLoadedClass(classname);
-		if (theClass != null) {
-			return theClass;
-		}
+        if (name.startsWith("java.")) {
+            return super.findClass(name);
+        }
 
-		try {
-			theClass = findClass(classname);
-		} catch (ClassNotFoundException cnfe) {
-			theClass = getParent().loadClass(classname);
-		}
+        try {
 
-		if (resolve) {
-			resolveClass(theClass);
-		}
+            final Class clazz = (Class) loaded.get(name);
+            if (clazz != null) {
+                return clazz;
+            }
 
-		return theClass;
-	}
+            final byte[] classBytes;
+
+            if (name.startsWith("com.sun.tools.javac.")) {
+                final InputStream classStream = getResourceAsStream(name.replace('.', '/') + ".class");
+
+                final ClassWriter renamedCw = new ClassWriter(true, false);
+                new ClassReader(classStream).accept(new RenamingVisitor(new CheckClassAdapter(renamedCw), new ResourceRenamer() {
+                    public String getNewNameFor(final String pOldName) {
+                        if (pOldName.startsWith(FileOutputStream.class.getName())) {
+                            return FileOutputStreamProxy.class.getName();
+                        }
+                        if (pOldName.startsWith(FileInputStream.class.getName())) {
+                            return FileInputStreamProxy.class.getName();
+                        }
+                        return pOldName;
+                    }
+                }), false);
+
+                classBytes = renamedCw.toByteArray();
+
+            } else {
+                return super.findClass(name);
+            }
+
+            final Class newClazz = defineClass(name, classBytes, 0, classBytes.length);
+            loaded.put(name, newClazz);
+            return newClazz;
+        } catch (IOException e) {
+            throw new ClassNotFoundException("", e);
+        }
+    }
+
+    protected synchronized Class loadClass( final String classname, final boolean resolve ) throws ClassNotFoundException {
+
+        Class theClass = findLoadedClass(classname);
+        if (theClass != null) {
+            return theClass;
+        }
+
+        try {
+            theClass = findClass(classname);
+        } catch (ClassNotFoundException cnfe) {
+            theClass = getParent().loadClass(classname);
+        }
+
+        if (resolve) {
+            resolveClass(theClass);
+        }
+
+        return theClass;
+    }
 }

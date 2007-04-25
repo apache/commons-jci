@@ -35,57 +35,57 @@ import org.apache.commons.jci.monitor.FilesystemAlterationObserver;
  */
 public final class ConfigurationReloading {
 
-	private final FilesystemAlterationMonitor fam = new FilesystemAlterationMonitor();
-	
-	private void run(String[] args) {
-		
-		final File configFile = new File("some.properties");
+    private final FilesystemAlterationMonitor fam = new FilesystemAlterationMonitor();
 
-		System.out.println("Watching " + configFile.getAbsolutePath());
-		
-		final Collection configurables = new ArrayList();
-		
-		final FilesystemAlterationListener listener = new FileChangeListener() {
-			public void onStop(FilesystemAlterationObserver pObserver) {
-				super.onStop(pObserver);
-				
-				if (hasChanged()) {
-					System.out.println("Configuration change detected " + configFile);
+    private void run(String[] args) {
 
-					final Properties props = new Properties();
-					try {
-						
-						props.load(new FileInputStream(configFile));
+        final File configFile = new File("some.properties");
 
-						System.out.println("Notifying about configuration change " + configFile);
+        System.out.println("Watching " + configFile.getAbsolutePath());
 
-						for (Iterator it = configurables.iterator(); it.hasNext();) {
-							final Configurable configurable = (Configurable) it.next();
-							configurable.configure(props);
-						}
-						
-					} catch (Exception e) {
-						System.err.println("Failed to load configuration " + configFile);
-					}
+        final Collection configurables = new ArrayList();
 
-				}
-			}			
-		};
-		
-		fam.addListener(configFile, listener);			
+        final FilesystemAlterationListener listener = new FileChangeListener() {
+            public void onStop(FilesystemAlterationObserver pObserver) {
+                super.onStop(pObserver);
+
+                if (hasChanged()) {
+                    System.out.println("Configuration change detected " + configFile);
+
+                    final Properties props = new Properties();
+                    try {
+
+                        props.load(new FileInputStream(configFile));
+
+                        System.out.println("Notifying about configuration change " + configFile);
+
+                        for (Iterator it = configurables.iterator(); it.hasNext();) {
+                            final Configurable configurable = (Configurable) it.next();
+                            configurable.configure(props);
+                        }
+
+                    } catch (Exception e) {
+                        System.err.println("Failed to load configuration " + configFile);
+                    }
+
+                }
+            }
+        };
+
+        fam.addListener(configFile, listener);
 		fam.start();
 
 		configurables.add(new Something());
-		
-		while(true) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-			}
-		}
-	}
-	
-	public static void main(String[] args) {
-		new ConfigurationReloading().run(args);
-	}
+
+        while(true) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        new ConfigurationReloading().run(args);
+    }
 }

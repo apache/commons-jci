@@ -38,14 +38,14 @@ import org.apache.commons.jci.stores.ResourceStore;
  */
 public interface JavaCompiler {
 
-	/**
-	 * Set the the handler that gets the notification of an error
-	 * or warning as soon as this information is available from
-	 * the compiler.
-	 * Note: Some compilers might not support this feature.
-	 * 
-	 * @param pHandler
-	 */
+    /**
+     * Set the the handler that gets the notification of an error
+     * or warning as soon as this information is available from
+     * the compiler.
+     * Note: Some compilers might not support this feature.
+     * 
+     * @param pHandler
+     */
     void setCompilationProblemHandler( final CompilationProblemHandler pHandler );
 
     /**

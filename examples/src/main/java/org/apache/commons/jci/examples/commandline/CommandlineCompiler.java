@@ -48,137 +48,137 @@ public final class CommandlineCompiler {
     
     public static void main( String[] args ) throws Exception {
 
-		final Options options = new Options();
-		
-		options.addOption(
-				OptionBuilder.withArgName("a.jar:b.jar")
-					.hasArg()
-					.withValueSeparator( ':' )
-					.withDescription("Specify where to find user class files")
-					.create( "classpath" ));
+        final Options options = new Options();
 
-		options.addOption(
-				OptionBuilder.withArgName("release")
-					.hasArg()
-					.withDescription("Provide source compatibility with specified release")
-					.create( "source" ));
+        options.addOption(
+                OptionBuilder.withArgName("a.jar:b.jar")
+                    .hasArg()
+                    .withValueSeparator( ':' )
+                    .withDescription("Specify where to find user class files")
+                    .create( "classpath" ));
 
-		options.addOption(
-				OptionBuilder.withArgName("release")
-					.hasArg()
-					.withDescription("Generate class files for specific VM version")
-					.create( "target" ));
+        options.addOption(
+                OptionBuilder.withArgName("release")
+                    .hasArg()
+                    .withDescription("Provide source compatibility with specified release")
+                    .create( "source" ));
 
-		options.addOption(
-				OptionBuilder.withArgName("path")
-					.hasArg()
-					.withDescription("Specify where to find input source files")
-					.create( "sourcepath" ));
+        options.addOption(
+                OptionBuilder.withArgName("release")
+                    .hasArg()
+                    .withDescription("Generate class files for specific VM version")
+                    .create( "target" ));
 
-		options.addOption(
-				OptionBuilder.withArgName("directory")
-					.hasArg()
-					.withDescription("Specify where to place generated class files")
-					.create( "d" ));
+        options.addOption(
+                OptionBuilder.withArgName("path")
+                    .hasArg()
+                    .withDescription("Specify where to find input source files")
+                    .create( "sourcepath" ));
 
-		options.addOption(
-				OptionBuilder.withArgName("num")
-					.hasArg()
-					.withDescription("Stop compilation after these number of errors")
-					.create( "Xmaxerrs" ));
+        options.addOption(
+                OptionBuilder.withArgName("directory")
+                    .hasArg()
+                    .withDescription("Specify where to place generated class files")
+                    .create( "d" ));
 
-		options.addOption(
-				OptionBuilder.withArgName("num")
-					.hasArg()
-					.withDescription("Stop compilation after these number of warning")
-					.create( "Xmaxwarns" ));
+        options.addOption(
+                OptionBuilder.withArgName("num")
+                    .hasArg()
+                    .withDescription("Stop compilation after these number of errors")
+                    .create( "Xmaxerrs" ));
 
-		options.addOption(
-				OptionBuilder.withDescription("Generate no warnings")
-					.create( "nowarn" ));
-		
-//		final HelpFormatter formatter = new HelpFormatter();
-//		formatter.printHelp("jci", options);
-		
-		final CommandLineParser parser = new GnuParser();
-		final CommandLine cmd = parser.parse(options, args, true);
+        options.addOption(
+                OptionBuilder.withArgName("num")
+                    .hasArg()
+                    .withDescription("Stop compilation after these number of warning")
+                    .create( "Xmaxwarns" ));
 
-		ClassLoader classloader = CommandlineCompiler.class.getClassLoader();
-		File sourcepath = new File(".");
-		File targetpath = new File(".");
-		int maxerrs = 10;
-		int maxwarns = 10;
-		final boolean nowarn = cmd.hasOption("nowarn");
-		
-		
-		final JavaCompiler compiler = new JavaCompilerFactory().createCompiler("eclipse");		
-		final JavaCompilerSettings settings = compiler.createDefaultSettings();
-		
-		
-		for (Iterator it = cmd.iterator(); it.hasNext();) {
-			final Option option = (Option) it.next();
-			
-			if ("classpath".equals(option.getOpt())) {
-				final String[] values = option.getValues();
-				final URL[] urls = new URL[values.length];
-				for (int i = 0; i < urls.length; i++) {
-					urls[i] = new File(values[i]).toURL();
-				}
-				classloader = new URLClassLoader(urls);
-			} else if ("source".equals(option.getOpt())) {
-				settings.setSourceVersion(option.getValue());
-			} else if ("target".equals(option.getOpt())) {
-				settings.setTargetVersion(option.getValue());
-			} else if ("sourcepath".equals(option.getOpt())) {
-				sourcepath = new File(option.getValue());
-			} else if ("d".equals(option.getOpt())) {
-				targetpath = new File(option.getValue());
-			} else if ("Xmaxerrs".equals(option.getOpt())) {
-				maxerrs = Integer.parseInt(option.getValue());
-			} else if ("Xmaxwarns".equals(option.getOpt())) {
-				maxwarns = Integer.parseInt(option.getValue());
-			}
-		}
-		
+        options.addOption(
+                OptionBuilder.withDescription("Generate no warnings")
+                    .create( "nowarn" ));
+
+//        final HelpFormatter formatter = new HelpFormatter();
+//        formatter.printHelp("jci", options);
+
+        final CommandLineParser parser = new GnuParser();
+        final CommandLine cmd = parser.parse(options, args, true);
+
+        ClassLoader classloader = CommandlineCompiler.class.getClassLoader();
+        File sourcepath = new File(".");
+        File targetpath = new File(".");
+        int maxerrs = 10;
+        int maxwarns = 10;
+        final boolean nowarn = cmd.hasOption("nowarn");
+
+
+        final JavaCompiler compiler = new JavaCompilerFactory().createCompiler("eclipse");
+        final JavaCompilerSettings settings = compiler.createDefaultSettings();
+
+
+        for (Iterator it = cmd.iterator(); it.hasNext();) {
+            final Option option = (Option) it.next();
+
+            if ("classpath".equals(option.getOpt())) {
+                final String[] values = option.getValues();
+                final URL[] urls = new URL[values.length];
+                for (int i = 0; i < urls.length; i++) {
+                    urls[i] = new File(values[i]).toURL();
+                }
+                classloader = new URLClassLoader(urls);
+            } else if ("source".equals(option.getOpt())) {
+                settings.setSourceVersion(option.getValue());
+            } else if ("target".equals(option.getOpt())) {
+                settings.setTargetVersion(option.getValue());
+            } else if ("sourcepath".equals(option.getOpt())) {
+                sourcepath = new File(option.getValue());
+            } else if ("d".equals(option.getOpt())) {
+                targetpath = new File(option.getValue());
+            } else if ("Xmaxerrs".equals(option.getOpt())) {
+                maxerrs = Integer.parseInt(option.getValue());
+            } else if ("Xmaxwarns".equals(option.getOpt())) {
+                maxwarns = Integer.parseInt(option.getValue());
+            }
+        }
+
         final ResourceReader reader = new FileResourceReader(sourcepath);
         final ResourceStore store = new FileResourceStore(targetpath);
         
         final int maxErrors = maxerrs;
         final int maxWarnings = maxwarns;
         compiler.setCompilationProblemHandler(new CompilationProblemHandler() {
-        	int errors = 0;
-        	int warnings = 0;
-			public boolean handle(final CompilationProblem pProblem) {				
+            int errors = 0;
+            int warnings = 0;
+            public boolean handle(final CompilationProblem pProblem) {
 
-				if (pProblem.isError()) {
-					System.err.println(pProblem);				
+                if (pProblem.isError()) {
+                    System.err.println(pProblem);
 
-					errors++;
+                    errors++;
 
-					if (errors >= maxErrors) {
-						return false;
-					}
-				} else {
-					if (!nowarn) {
-						System.err.println(pProblem);				
-					}
-					
-					warnings++;
+                    if (errors >= maxErrors) {
+                        return false;
+                    }
+                } else {
+                    if (!nowarn) {
+                        System.err.println(pProblem);
+                    }
 
-					if (warnings >= maxWarnings) {
-						return false;
-					}
-				}
-				
-				return true;
-			}        	
+                    warnings++;
+
+                    if (warnings >= maxWarnings) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
         });
         
         final String[] resource = cmd.getArgs();
         
         for (int i = 0; i < resource.length; i++) {
-			System.out.println("compiling " + resource[i]);
-		}
+            System.out.println("compiling " + resource[i]);
+        }
         
         final CompilationResult result = compiler.compile(resource, reader, store, classloader);
         

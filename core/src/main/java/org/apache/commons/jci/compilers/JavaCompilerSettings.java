@@ -28,66 +28,66 @@ package org.apache.commons.jci.compilers;
  * @author tcurdt
  */
 public class JavaCompilerSettings {
-	
-	private String targetVersion;
-	private String sourceVersion;
-	private String sourceEncoding;
-	private boolean warnings;
-	private boolean deprecations;
-	private boolean verbose;
 
-	
-	public void setTargetVersion( final String pTargetVersion ) {
-		targetVersion = pTargetVersion;
-	}
+    private String targetVersion;
+    private String sourceVersion;
+    private String sourceEncoding;
+    private boolean warnings;
+    private boolean deprecations;
+    private boolean verbose;
 
-	public String getTargetVersion() {
-		return targetVersion;
-	}
-	
-	
-	public void setSourceVersion( final String pSourceVersion ) {
-		sourceVersion = pSourceVersion;
-	}
 
-	public String getSourceVersion() {
-		return sourceVersion;
-	}
+    public void setTargetVersion( final String pTargetVersion ) {
+        targetVersion = pTargetVersion;
+    }
 
-	
-	public void setSourceEncoding( final String pSourceEncoding ) {
-		sourceEncoding = pSourceEncoding;
-	}
+    public String getTargetVersion() {
+        return targetVersion;
+    }
 
-	public String getSourceEncoding() {
-		return sourceEncoding;
-	}
 
-	
-	public void setWarnings( final boolean pWarnings ) {
-		warnings = pWarnings;
-	}
+    public void setSourceVersion( final String pSourceVersion ) {
+        sourceVersion = pSourceVersion;
+    }
 
-	public boolean isWarnings() {
-		return warnings;
-	}
+    public String getSourceVersion() {
+        return sourceVersion;
+    }
 
-	
-	public void setDeprecations( final boolean pDeprecations )  {
-		deprecations = pDeprecations;
-	}
 
-	public boolean isDeprecations() {
-		return deprecations;
-	}
+    public void setSourceEncoding( final String pSourceEncoding ) {
+        sourceEncoding = pSourceEncoding;
+    }
 
-	
-	public void setVerbose( final boolean pVerbose ) {
-		verbose = pVerbose;
-	}
+    public String getSourceEncoding() {
+        return sourceEncoding;
+    }
 
-	public boolean isVerbose() {
-		return verbose;
-	}
+
+    public void setWarnings( final boolean pWarnings ) {
+        warnings = pWarnings;
+    }
+
+    public boolean isWarnings() {
+        return warnings;
+    }
+
+
+    public void setDeprecations( final boolean pDeprecations )  {
+        deprecations = pDeprecations;
+    }
+
+    public boolean isDeprecations() {
+        return deprecations;
+    }
+
+
+    public void setVerbose( final boolean pVerbose ) {
+        verbose = pVerbose;
+    }
+
+    public boolean isVerbose() {
+        return verbose;
+    }
 
 }

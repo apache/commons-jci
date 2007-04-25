@@ -27,7 +27,7 @@ import java.io.File;
  * @author tcurdt
  */
 public interface FilesystemAlterationListener {
-	
+
     void onStart( final FilesystemAlterationObserver pObserver );
     void onFileCreate( final File pFile );
     void onFileChange( final File pFile );

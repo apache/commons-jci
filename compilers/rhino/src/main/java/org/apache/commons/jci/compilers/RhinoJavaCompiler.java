@@ -54,7 +54,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
     
     
     public RhinoJavaCompiler() {
-    	defaultSettings = new RhinoJavaCompilerSettings();
+        defaultSettings = new RhinoJavaCompilerSettings();
     }
     
     /**
@@ -63,217 +63,217 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
      */
     private final class RhinoCompilingClassLoader extends ClassLoader {
 
-    	private final ScriptableObject scope;
-    	private final ResourceReader reader;
-    	private final ResourceStore store;
+        private final ScriptableObject scope;
+        private final ResourceReader reader;
+        private final ResourceStore store;
 
-    	private final Collection problems = new ArrayList();
-    	
-    	private final class ProblemCollector implements ErrorReporter {
+        private final Collection problems = new ArrayList();
+        
+        private final class ProblemCollector implements ErrorReporter {
 
-    		public void error(String pMessage, String pFileName, int pLine, String pScript, int pColumn) {
-    			
-    			final CompilationProblem problem = new RhinoCompilationProblem(pMessage, pFileName, pLine, pScript, pColumn, true); 
-    			
-    			if (problemHandler != null) {
-    				problemHandler.handle(problem);
-    			}
-    			
-    			problems.add(problem); 
-    		}
+            public void error(String pMessage, String pFileName, int pLine, String pScript, int pColumn) {
 
-    		public void warning(String pMessage, String pFileName, int pLine, String pScript, int pColumn) {
+                final CompilationProblem problem = new RhinoCompilationProblem(pMessage, pFileName, pLine, pScript, pColumn, true); 
 
-    			final CompilationProblem problem = new RhinoCompilationProblem(pMessage, pFileName, pLine, pScript, pColumn, false); 
-    			
-    			if (problemHandler != null) {
-    				problemHandler.handle(problem);
-    			}
-    			
-    			problems.add(problem); 
-    		}
+                if (problemHandler != null) {
+                    problemHandler.handle(problem);
+                }
 
-    		public EvaluatorException runtimeError(String pMessage, String pFileName, int pLine, String pScript, int pColumn) {
-    			return new EvaluatorException(pMessage, pFileName, pLine, pScript, pColumn);
-    		}		
-    	}
-    	
-    	public RhinoCompilingClassLoader( final ResourceReader pReader, final ResourceStore pStore, final ClassLoader pClassLoader) {
-    		super(pClassLoader);
-    		
-    		reader = pReader;
-    		store = pStore;
+                problems.add(problem); 
+            }
 
-    		final Context context = Context.enter();
-    		scope = new ImporterTopLevel(context);
-    		Context.exit();
-    	}
+            public void warning(String pMessage, String pFileName, int pLine, String pScript, int pColumn) {
 
-    	public Collection getProblems() {
-    		return problems;
-    	}
-    	
-    	protected Class findClass( final String pName ) throws ClassNotFoundException {
-    		final Context context = Context.enter();
-    		context.setErrorReporter(new ProblemCollector());
+                final CompilationProblem problem = new RhinoCompilationProblem(pMessage, pFileName, pLine, pScript, pColumn, false); 
 
-    		try {
-    			return compileClass(context, pName);
-    		} catch( EvaluatorException e ) {
-    			throw new ClassNotFoundException(e.getMessage(), e);
-    		} catch (IOException e) {
-    			throw new ClassNotFoundException(e.getMessage(), e);
-    		} finally {
-    			Context.exit();
-    		}
-    	}
+                if (problemHandler != null) {
+                    problemHandler.handle(problem);
+                }
 
+                problems.add(problem); 
+            }
 
-    	private Class compileClass( final Context pContext, final String pClassName) throws IOException, ClassNotFoundException {
+            public EvaluatorException runtimeError(String pMessage, String pFileName, int pLine, String pScript, int pColumn) {
+                return new EvaluatorException(pMessage, pFileName, pLine, pScript, pColumn);
+            }
+        }
 
-    		Class superclass = null;
+        public RhinoCompilingClassLoader( final ResourceReader pReader, final ResourceStore pStore, final ClassLoader pClassLoader) {
+            super(pClassLoader);
 
-    		final String pSourceName = pClassName.replace('.', '/') + ".js";
-    		
-    		final Scriptable target = evaluate(pContext, pSourceName);
+            reader = pReader;
+            store = pStore;
 
-    		final Object baseClassName = ScriptableObject.getProperty(target, "__extends__");
+            final Context context = Context.enter();
+            scope = new ImporterTopLevel(context);
+            Context.exit();
+        }
 
-    		if (baseClassName instanceof String) {
-    			superclass = Class.forName((String) baseClassName);
-    		}
+        public Collection getProblems() {
+            return problems;
+        }
 
-    		final ArrayList interfaceClasses = new ArrayList();
+        protected Class findClass( final String pName ) throws ClassNotFoundException {
+            final Context context = Context.enter();
+            context.setErrorReporter(new ProblemCollector());
 
-    		final Object interfaceNames = ScriptableObject.getProperty(target, "__implements__");
-
-    		if (interfaceNames instanceof NativeArray) {
-
-    			final NativeArray interfaceNameArray = (NativeArray) interfaceNames;
-
-    			for (int i=0; i<interfaceNameArray.getLength(); i++) {
-    				
-    				final Object obj = interfaceNameArray.get(i, interfaceNameArray);
-
-    				if (obj instanceof String) {
-    					interfaceClasses.add(Class.forName((String) obj));
-    				}
-    			}
-
-    		} else if (interfaceNames instanceof String) {
-    			
-    			interfaceClasses.add(Class.forName((String) interfaceNames));
-    		
-    		}
-
-    		final Class[] interfaces;
-
-    		if (!interfaceClasses.isEmpty()) {
-    			interfaces = new Class[interfaceClasses.size()];
-    			interfaceClasses.toArray(interfaces);
-    		} else {
-    			// FIXME: hm ...really no empty array good enough?
-    			interfaces = null;
-    		}
-
-    		return compileClass(pContext, pSourceName, pClassName, superclass, interfaces);
-
-    	}
+            try {
+                return compileClass(context, pName);
+            } catch( EvaluatorException e ) {
+                throw new ClassNotFoundException(e.getMessage(), e);
+            } catch (IOException e) {
+                throw new ClassNotFoundException(e.getMessage(), e);
+            } finally {
+                Context.exit();
+            }
+        }
 
 
-    	private Class compileClass( final Context pContext, final String pSourceName, final String pClassName, final Class pSuperClass, final Class[] pInterfaces) throws IOException {
+        private Class compileClass( final Context pContext, final String pClassName) throws IOException, ClassNotFoundException {
 
-    		final CompilerEnvirons environments = new CompilerEnvirons();
-    		environments.initFromContext(pContext);
-    		final ClassCompiler compiler = new ClassCompiler(environments);
+            Class superclass = null;
 
-    		if (pSuperClass != null) {
-    			compiler.setTargetExtends(pSuperClass);
-    		}
+            final String pSourceName = pClassName.replace('.', '/') + ".js";
 
-    		if (pInterfaces != null) {
-    			compiler.setTargetImplements(pInterfaces);
-    		}
+            final Scriptable target = evaluate(pContext, pSourceName);
 
-    		final byte[] sourceBytes = reader.getBytes(pSourceName);
+            final Object baseClassName = ScriptableObject.getProperty(target, "__extends__");
 
-    		final Object[] classes = compiler.compileToClassFiles(new String(sourceBytes), getName(pSourceName), 1, pClassName);
+            if (baseClassName instanceof String) {
+                superclass = Class.forName((String) baseClassName);
+            }
 
-    		final GeneratedClassLoader loader = pContext.createClassLoader(pContext.getApplicationClassLoader());
+            final ArrayList interfaceClasses = new ArrayList();
 
-    		Class clazz = null;
+            final Object interfaceNames = ScriptableObject.getProperty(target, "__implements__");
 
-    		for (int i = 0; i < classes.length; i += 2) {
+            if (interfaceNames instanceof NativeArray) {
 
-    			final String clazzName = (String) classes[i];
-    			final byte[] clazzBytes = (byte[]) classes[i+1];
-    			
-    			store.write(clazzName.replace('.', '/') + ".class", clazzBytes);
-    			
-    			Class c = loader.defineClass(clazzName, clazzBytes);
-    			loader.linkClass(c);
+                final NativeArray interfaceNameArray = (NativeArray) interfaceNames;
 
-    			if (i == 0) {
-    				clazz = c;
-    			}
+                for (int i=0; i<interfaceNameArray.getLength(); i++) {
 
-    		}
+                    final Object obj = interfaceNameArray.get(i, interfaceNameArray);
 
-    		return clazz;
-    	}
+                    if (obj instanceof String) {
+                        interfaceClasses.add(Class.forName((String) obj));
+                    }
+                }
 
-    	private String getName(String s) {
-    		final int i = s.lastIndexOf('/');
-    		if (i < 0) {
-    			return s;
-    		}
-    		
-    		return s.substring(i + 1);
-    	}
-    	
-    	private Scriptable evaluate( final Context pContext, final String pSourceName) throws JavaScriptException, IOException {
+            } else if (interfaceNames instanceof String) {
 
-    		if (!reader.isAvailable(pSourceName)) {
-    			throw new FileNotFoundException("File " + pSourceName + " not found");
-    		}
+                interfaceClasses.add(Class.forName((String) interfaceNames));
 
-    		final Scriptable target = pContext.newObject(scope);
+            }
 
-    		final byte[] sourceBytes = reader.getBytes(pSourceName);
-    		
-    		final Reader reader = new InputStreamReader(new ByteArrayInputStream(sourceBytes));
+            final Class[] interfaces;
 
-    		pContext.evaluateReader(target, reader, getName(pSourceName), 1, null);
+            if (!interfaceClasses.isEmpty()) {
+                interfaces = new Class[interfaceClasses.size()];
+                interfaceClasses.toArray(interfaces);
+            } else {
+                // FIXME: hm ...really no empty array good enough?
+                interfaces = null;
+            }
 
-    		return target;
-    	}
+            return compileClass(pContext, pSourceName, pClassName, superclass, interfaces);
+
+        }
+
+
+        private Class compileClass( final Context pContext, final String pSourceName, final String pClassName, final Class pSuperClass, final Class[] pInterfaces) throws IOException {
+
+            final CompilerEnvirons environments = new CompilerEnvirons();
+            environments.initFromContext(pContext);
+            final ClassCompiler compiler = new ClassCompiler(environments);
+
+            if (pSuperClass != null) {
+                compiler.setTargetExtends(pSuperClass);
+            }
+
+            if (pInterfaces != null) {
+                compiler.setTargetImplements(pInterfaces);
+            }
+
+            final byte[] sourceBytes = reader.getBytes(pSourceName);
+
+            final Object[] classes = compiler.compileToClassFiles(new String(sourceBytes), getName(pSourceName), 1, pClassName);
+
+            final GeneratedClassLoader loader = pContext.createClassLoader(pContext.getApplicationClassLoader());
+
+            Class clazz = null;
+
+            for (int i = 0; i < classes.length; i += 2) {
+
+                final String clazzName = (String) classes[i];
+                final byte[] clazzBytes = (byte[]) classes[i+1];
+
+                store.write(clazzName.replace('.', '/') + ".class", clazzBytes);
+
+                Class c = loader.defineClass(clazzName, clazzBytes);
+                loader.linkClass(c);
+
+                if (i == 0) {
+                    clazz = c;
+                }
+
+            }
+
+            return clazz;
+        }
+
+        private String getName(String s) {
+            final int i = s.lastIndexOf('/');
+            if (i < 0) {
+                return s;
+            }
+
+            return s.substring(i + 1);
+        }
+
+        private Scriptable evaluate( final Context pContext, final String pSourceName) throws JavaScriptException, IOException {
+
+            if (!reader.isAvailable(pSourceName)) {
+                throw new FileNotFoundException("File " + pSourceName + " not found");
+            }
+
+            final Scriptable target = pContext.newObject(scope);
+
+            final byte[] sourceBytes = reader.getBytes(pSourceName);
+
+            final Reader reader = new InputStreamReader(new ByteArrayInputStream(sourceBytes));
+
+            pContext.evaluateReader(target, reader, getName(pSourceName), 1, null);
+
+            return target;
+        }
 
     }
     
     
-	public CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader pClassLoader, final JavaCompilerSettings pSettings ) {
+    public CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader pClassLoader, final JavaCompilerSettings pSettings ) {
 
-		final RhinoCompilingClassLoader cl = new RhinoCompilingClassLoader(pReader, pStore, pClassLoader);
-		
-		for (int i = 0; i < pResourcePaths.length; i++) {
+        final RhinoCompilingClassLoader cl = new RhinoCompilingClassLoader(pReader, pStore, pClassLoader);
+
+        for (int i = 0; i < pResourcePaths.length; i++) {
             log.debug("compiling " + pResourcePaths[i]);
             
             final String clazzName = ConversionUtils.convertResourceToClassName(pResourcePaths[i]);
             try {
-				cl.loadClass(clazzName);
-			} catch (ClassNotFoundException e) {
-			}
-		}
-		
+                cl.loadClass(clazzName);
+            } catch (ClassNotFoundException e) {
+            }
+        }
+
         final Collection problems = cl.getProblems();
         final CompilationProblem[] result = new CompilationProblem[problems.size()];
         problems.toArray(result);
         return new CompilationResult(result);
-	}
+    }
 
 
-	public JavaCompilerSettings createDefaultSettings() {
-		return defaultSettings;
-	}
-	
+    public JavaCompilerSettings createDefaultSettings() {
+        return defaultSettings;
+    }
+
 }

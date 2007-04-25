@@ -26,14 +26,14 @@ import org.codehaus.groovy.control.CompilerConfiguration;
  */
 public final class GroovyJavaCompilerSettings extends JavaCompilerSettings {
 
-	private final CompilerConfiguration settings;
-	
-	public GroovyJavaCompilerSettings( final CompilerConfiguration pSettings ) {
-		settings = pSettings;
-	}
-	
-	public CompilerConfiguration getCompilerConfiguration() {
-		return settings;
-	}
-	
+    private final CompilerConfiguration settings;
+
+    public GroovyJavaCompilerSettings( final CompilerConfiguration pSettings ) {
+        settings = pSettings;
+    }
+
+    public CompilerConfiguration getCompilerConfiguration() {
+        return settings;
+    }
+
 }

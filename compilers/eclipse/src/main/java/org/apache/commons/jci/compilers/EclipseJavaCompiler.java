@@ -104,13 +104,13 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         }
 
         public char[] getContents() {
-        	final byte[] content = reader.getBytes(fileName);
-        	
-        	if (content == null) {
-        		return null;
-        		//throw new RuntimeException("resource " + fileName + " could not be found");
-        	}
-        	
+            final byte[] content = reader.getBytes(fileName);
+
+            if (content == null) {
+                return null;
+                //throw new RuntimeException("resource " + fileName + " could not be found");
+            }
+
             return new String(content).toCharArray();
         }
 
@@ -141,44 +141,44 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             final String sourceFile = pSourceFiles[i];
             
             if (pReader.isAvailable(sourceFile)) {            
-            	compilationUnits[i] = new CompilationUnit(pReader, sourceFile);
+                compilationUnits[i] = new CompilationUnit(pReader, sourceFile);
                 log.debug("compiling " + sourceFile);
             } else {
-            	// log.error("source not found " + sourceFile);
-            	
+                // log.error("source not found " + sourceFile);
+
                 final CompilationProblem problem = new CompilationProblem() {
 
-					public int getEndColumn() {
-						return 0;
-					}
+                    public int getEndColumn() {
+                        return 0;
+                    }
 
-					public int getEndLine() {
-						return 0;
-					}
+                    public int getEndLine() {
+                        return 0;
+                    }
 
-					public String getFileName() {
-						return sourceFile;
-					}
+                    public String getFileName() {
+                        return sourceFile;
+                    }
 
-					public String getMessage() {
-						return "Source " + sourceFile + " could not be found";
-					}
+                    public String getMessage() {
+                        return "Source " + sourceFile + " could not be found";
+                    }
 
-					public int getStartColumn() {
-						return 0;
-					}
+                    public int getStartColumn() {
+                        return 0;
+                    }
 
-					public int getStartLine() {
-						return 0;
-					}
+                    public int getStartLine() {
+                        return 0;
+                    }
 
-					public boolean isError() {
-						return true;
-					}
-					
-					public String toString() {
-						return getMessage();
-					}
+                    public boolean isError() {
+                        return true;
+                    }
+                    
+                    public String toString() {
+                        return getMessage();
+                    }
                 };
 
                 if (problemHandler != null) {
@@ -192,7 +192,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         if (problems.size() > 0) {
             final CompilationProblem[] result = new CompilationProblem[problems.size()];
             problems.toArray(result);
-            return new org.apache.commons.jci.compilers.CompilationResult(result);        	
+            return new org.apache.commons.jci.compilers.CompilationResult(result);
         }
         
         final IErrorHandlingPolicy policy = DefaultErrorHandlingPolicies.proceedWithAllProblems();
@@ -210,7 +210,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
 
                 //log.debug("finding compoundTypeName=" + result.toString());
 
-            	return findType(result.toString());
+                return findType(result.toString());
             }
 
             public NameEnvironmentAnswer findType( final char[] pTypeName, final char[][] pPackageName ) {
@@ -220,22 +220,22 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                     result.append('.');
                 }
                 
-//            	log.debug("finding typeName=" + new String(typeName) + " packageName=" + result.toString());
+//                log.debug("finding typeName=" + new String(typeName) + " packageName=" + result.toString());
 
-            	result.append(pTypeName);
+                result.append(pTypeName);
                 return findType(result.toString());
             }
 
             private NameEnvironmentAnswer findType( final String pClazzName ) {
-            	
-            	if (isPackage(pClazzName)) {
-            		return null;
-            	}
-            	
-            	log.debug("finding " + pClazzName);
-            	
-            	final String resourceName = ConversionUtils.convertClassToResourcePath(pClazzName);
-            	
+                
+                if (isPackage(pClazzName)) {
+                    return null;
+                }
+                
+                log.debug("finding " + pClazzName);
+                
+                final String resourceName = ConversionUtils.convertClassToResourcePath(pClazzName);
+                
                 final byte[] clazzBytes = pStore.read(pClazzName);
                 if (clazzBytes != null) {
                     log.debug("loading from store " + pClazzName);
@@ -250,12 +250,12 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                     }
                 }
                 
-            	log.debug("not in store " + pClazzName);
-            	
+                log.debug("not in store " + pClazzName);
+                
                 final InputStream is = pClassLoader.getResourceAsStream(resourceName);
                 if (is == null) {
-                	log.debug("class " + pClazzName + " not found");
-                	return null;
+                    log.debug("class " + pClazzName + " not found");
+                    return null;
                 }
 
                 final byte[] buffer = new byte[8192];
@@ -290,21 +290,21 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             }
 
             private boolean isPackage( final String pClazzName ) {
-            	
-            	final InputStream is = pClassLoader.getResourceAsStream(ConversionUtils.convertClassToResourcePath(pClazzName));
-            	if (is != null) {
-                	log.debug("found the class for " + pClazzName + "- no package");
-            		return false;
-            	}
-            	
-            	// FIXME: this should not be tied to the extension
-            	final String source = pClazzName.replace('.', '/') + ".java";
-            	if (pReader.isAvailable(source)) {
-                	log.debug("found the source " + source + " for " + pClazzName + " - no package ");
-            		return false;
-            	}
-            	
-            	return true;
+                
+                final InputStream is = pClassLoader.getResourceAsStream(ConversionUtils.convertClassToResourcePath(pClazzName));
+                if (is != null) {
+                    log.debug("found the class for " + pClazzName + "- no package");
+                    return false;
+                }
+                
+                // FIXME: this should not be tied to the extension
+                final String source = pClazzName.replace('.', '/') + ".java";
+                if (pReader.isAvailable(source)) {
+                    log.debug("found the source " + source + " for " + pClazzName + " - no package ");
+                    return false;
+                }
+                
+                return true;
             }
 
             public boolean isPackage( char[][] parentPackageName, char[] pPackageName ) {
@@ -328,7 +328,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             }
 
             public void cleanup() {
-            	log.debug("cleanup");
+                log.debug("cleanup");
             }
         };
 
@@ -372,7 +372,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         return new org.apache.commons.jci.compilers.CompilationResult(result);
     }
 
-	public JavaCompilerSettings createDefaultSettings() {
-		return defaultSettings;
-	}
+    public JavaCompilerSettings createDefaultSettings() {
+        return defaultSettings;
+    }
 }
