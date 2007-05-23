@@ -31,6 +31,11 @@
         <module>examples</module>
     </modules>
     <distributionManagement>
+        <repository>
+            <id>staging</id>
+            <name>Apache Release Staging Repository</name>
+            <url>scpexe://people.apache.org/www/people.apache.org/builds/jakarta-commons/jci/</url>
+        </repository>
         <site>
             <id>website</id>
             <url>scpexe://people.apache.org/www/jakarta.apache.org/commons/jci/</url>
