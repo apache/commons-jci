@@ -21,6 +21,7 @@ import java.io.File;
 
 /**
  * Mainly common path manipultation helper methods
+ * NOT FOR USE OUTSIDE OF JCI
  * 
  * @author tcurdt
  */
@@ -61,6 +62,7 @@ public final class ConversionUtils {
         return new String(name);
     }
 
+/*
     public static String clazzName( final File base, final File file ) {
         final int rootLength = base.getAbsolutePath().length();
         final String absFileName = file.getAbsolutePath();
@@ -69,7 +71,7 @@ public final class ConversionUtils {
         final String clazzName = relFileName.replace(File.separatorChar, '.');
         return clazzName;
     }
-
+*/
     public static String relative( final File base, final File file ) {
         final int rootLength = base.getAbsolutePath().length();
         final String absFileName = file.getAbsolutePath();

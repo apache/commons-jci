@@ -4,11 +4,11 @@
     <parent>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-jci</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
     <packaging>jar</packaging>
     <artifactId>commons-jci-rhino</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <name>compiler-rhino</name>
     <description>
         Commons JCI compiler implementation for rhino javascript.
@@ -17,7 +17,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-jci-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

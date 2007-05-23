@@ -71,7 +71,7 @@ public class ReloadingClassLoader extends ClassLoader implements ReloadNotificat
            
         // FIXME: this should be improved with a Map
         // find the pStore and index position with var i
-        while ( ( i <= n )  && ( stores[i] != pStore ) ) {
+        while ( ( i < n )  && ( stores[i] != pStore ) ) {
             i++;
         }
                     
@@ -81,17 +81,16 @@ public class ReloadingClassLoader extends ClassLoader implements ReloadNotificat
         }
         
         // if stores length > 1 then array copy old values, else create new empty store 
-        if (n > 1) {            
-            final ResourceStore[] newStores = new ResourceStore[n - 1];
-            
-            System.arraycopy(stores, 0, newStores, 0, i-1);
-            System.arraycopy(stores, i, newStores, i, newStores.length - 1);
-            
-            stores = newStores;
-            delegate = new ResourceStoreClassLoader(parent, stores);
-        } else {
-            stores = new ResourceStore[0];
+        final ResourceStore[] newStores = new ResourceStore[n - 1];
+        if (i > 0) {
+            System.arraycopy(stores, 0, newStores, 0, i);
         }
+        if (i < n - 1) {
+            System.arraycopy(stores, i + 1, newStores, i, (n - i - 1));
+        }
+            
+        stores = newStores;
+        delegate = new ResourceStoreClassLoader(parent, stores);
         return true;
     }
     
