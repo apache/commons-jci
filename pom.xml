@@ -26,7 +26,7 @@
     <packaging>pom</packaging>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-jci</artifactId>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
     <name>Commons JCI</name>
     <description>
         Commons JCI is a java compiler interface. It can be used to either compile java (or any other language that can be compiled to java classes like e.g. groovy or javascript) to java. It is well integrated with a FAM (FilesystemAlterationMonitor) that can be used with the JCI compiling/reloading classloader. All the currently supported compilers (even javac before java6) feature in-memory compilation.
@@ -85,9 +85,9 @@
         </contributor>
     </contributors>
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/proper/jci/tags/1.0-RC3</connection>
-        <developerConnection>scn:svn:https://svn.apache.org/repos/asf/jakarta/commons/proper/jci/tags/1.0-RC3</developerConnection>
-        <url>http://svn.apache.org/viewvc/jakarta/commons/proper/jci/tags/1.0-RC3</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/proper/jci/trunk/</connection>
+        <developerConnection>scn:svn:https://svn.apache.org/repos/asf/jakarta/commons/proper/jci/trunk/</developerConnection>
+        <url>http://svn.apache.org/viewvc/jakarta/commons/proper/jci/trunk/</url>
     </scm>
     <build>
         <plugins>
