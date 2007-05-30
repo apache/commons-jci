@@ -229,6 +229,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.0-alpha-3</version>
                         <configuration>
                             <useAgent>true</useAgent>
                         </configuration>
