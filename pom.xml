@@ -281,6 +281,7 @@
         </profile>
     </profiles>
     <properties>
+        <gpg.useAgent>true</gpg.useAgent>
         <maven.compile.source>1.4</maven.compile.source>
         <maven.compile.target>1.4</maven.compile.target>
         <commons.deployment.protocol>scpexe</commons.deployment.protocol>
