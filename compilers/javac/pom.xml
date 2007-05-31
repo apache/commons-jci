@@ -21,11 +21,11 @@
     <parent>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-jci</artifactId>
-        <version>1.0</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
     <packaging>jar</packaging>
     <artifactId>commons-jci-javac</artifactId>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
     <name>compiler-javac</name>
     <description>
         Commons JCI compiler implementation for the javac compiler (up to JDK 1.5).
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-jci-core</artifactId>
-            <version>1.0</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
