@@ -27,7 +27,7 @@
     <packaging>pom</packaging>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-jci</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <name>Commons JCI</name>
     <description>
         Commons JCI is a java compiler interface. It can be used to either compile java (or any other language that can be compiled to java classes like e.g. groovy or javascript) to java. It is well integrated with a FAM (FilesystemAlterationMonitor) that can be used with the JCI compiling/reloading classloader. All the currently supported compilers (even javac before java6) feature in-memory compilation.
@@ -286,6 +286,6 @@
         <maven.compile.source>1.4</maven.compile.source>
         <maven.compile.target>1.4</maven.compile.target>
         <commons.deployment.protocol>scpexe</commons.deployment.protocol>
-        <release.tag>1.0-RC3</release.tag>
+        <release.tag>1.0-RC4</release.tag>
     </properties>
 </project>
