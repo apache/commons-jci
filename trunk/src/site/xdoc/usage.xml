@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!--
+
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+--><document>
+    <properties>
+        <title>Jakarta Commons JCI - Usage</title>
+        <author email="commons-dev@jakarta.apache.org">Commons Development Team</author>
+    </properties>
+    <body>
+        <section name="Compilation">
+            <p>
+                The <code>JavaCompiler</code> is quite simple. You have to provide the paths to
+                the sources, where to get the sources from and where to store the classes. Then
+                you just pick one of the compilers to do the work. The result of the compilation
+                is returned as <code>CompilationResult</code>.
+            </p>
+            
+<source><![CDATA[
+JavaCompiler compiler = new JavaCompilerFactory().createCompiler("eclipse");
+CompilationResult result = compiler.compile(sources, new FileResourceReader(sourceDir), new FileResourceStore(targetDir));
+
+System.out.println( result.getErrors().length + " errors");
+System.out.println( result.getWarnings().length + " warnings");
+]]></source>
+            <p>
+                Information like line numbers of errors etc are accessible in a consistent way.
+                If supported by the compiler you can even get notified about error before the
+                end of the compilation. (see the <code>CompilationProblemHandler</code>) for that.
+                The <a href="http://jakarta.apache.org/commons/sandbox/jci/commons-jci-examples/index.html">example subproject</a>
+                provides a simple <a href="http://jakarta.apache.org/commons/sandbox/jci/xref/org/apache/commons/jci/examples/serverpages/ServerPageServlet.html">JSP servlet</a>
+                and a javac-like <a href="http://jakarta.apache.org/commons/sandbox/jci/xref/org/apache/commons/jci/examples/commandline/CommandlineCompiler.html">command line interface</a>.
+            </p>
+            
+        </section>
+        <section name="Filesystem monitoring">
+            <p>
+                A subproject of JCI provides a <code>FilesystemAlterationMonitor</code> that can
+                be used to get notified when files change on the local filesystem. If you attach
+                a <code>ReloadingListener</code> or a <code>CompilingListener</code> it can even
+                trigger the reload of a class in the <code>ReloadingClassLoader</code>.
+            </p>
+<source><![CDATA[
+ReloadingClassLoader classloader = new ReloadingClassLoader(this.getClass().getClassLoader());
+ReloadingListener listener = new ReloadingListener();
+
+listener.addReloadNotificationListener(classloader);
+
+FilesystemAlterationMonitor fam = new FilesystemAlterationMonitor();
+fam.addListener(directory, listener);
+fam.start();
+]]></source>
+            <p>
+                But you can also just implement a simple <code>FilesystemAlterationListener</code>
+                yourself and just use it to get notified about configuration files changes
+                <a href="http://jakarta.apache.org/commons/sandbox/jci/xref/org/apache/commons/jci/examples/configuration/ConfigurationReloading.html">for example</a>.
+                The example just extends the <code>FileChangeListener</code> that provides a few convenience methods.
+            </p>
+
+        </section>
+    </body>
+</document>
