@@ -21,11 +21,11 @@
     <parent>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-jci</artifactId>
-        <version>1.0</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
     <packaging>jar</packaging>
     <artifactId>commons-jci-core</artifactId>
-    <version>1.0</version>
+    <version>1.1-SNAPSHOT</version>
     <name>core</name>
     <description>
         Commons JCI core interfaces and implementations.
