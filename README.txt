@@ -9,6 +9,6 @@ You need to have maven 2.0.x installed. All you need to do is to call
 Releases are done with
 
  mvn -Prelease release:prepare
- mvn -Prelease release:perform assembly:assembly
+ mvn -Prelease release:perform
 
 It is suggested to be using a ssh and gpg agent for the release process.
