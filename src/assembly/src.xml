@@ -28,6 +28,7 @@
             <includes>
                 <include>LICENSE.txt</include>
                 <include>NOTICE.txt</include>
+                <include>README.txt</include>
                 <include>pom.xml</include>
                 <include>core/pom.xml</include>
                 <include>fam/pom.xml</include>
@@ -36,6 +37,7 @@
                 <include>compilers/janino/pom.xml</include>
                 <include>compilers/javac/pom.xml</include>
                 <include>compilers/rhino/pom.xml</include>
+                <include>exmaples/pom.xml</include>
             </includes>
         </fileSet>
         <fileSet>
@@ -61,6 +63,9 @@
         </fileSet>
         <fileSet>
             <directory>compilers/rhino/src</directory>
+        </fileSet>
+        <fileSet>
+            <directory>examples/src</directory>
         </fileSet>
     </fileSets>
 </assembly>
