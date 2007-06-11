@@ -20,71 +20,86 @@
         <format>tar.gz</format>
         <format>zip</format>
     </formats>
+    <baseDirectory>commons-jci-${project.version}-bin</baseDirectory>
     <includeSiteDirectory>false</includeSiteDirectory>
+
+<!--
+    <moduleSets>
+        <moduleSet>
+            <includes>
+                <include>org.apache.commons:commons-jci-core</include>
+            </includes>
+            <binaries>
+                <outputDirectory>lib/${artifactId}</outputDirectory>
+                <unpack>false</unpack>
+            </binaries>
+        </moduleSet>
+    </moduleSets>
+-->
     <fileSets>
         <fileSet>
             <includes>
-                <include>LICENSE.txt</include>
-                <include>NOTICE.txt</include>
-                <include>README.txt</include>
+                <include>../LICENSE.txt</include>
+                <include>../NOTICE.txt</include>
+                <include>../README.txt</include>
             </includes>
         </fileSet>
         <fileSet>
-            <directory>target/site/apidocs</directory>
+            <directory>../target/site/apidocs</directory>
             <outputDirectory>apidocs</outputDirectory>
         </fileSet>
         <fileSet>
             <outputDirectory>lib</outputDirectory>
-            <directory>core/target</directory>
+            <directory>../core/target</directory>
             <includes>
                 <include>*.jar</include>
             </includes>
         </fileSet>
         <fileSet>
             <outputDirectory>lib</outputDirectory>
-            <directory>fam/target</directory>
+            <directory>../fam/target</directory>
             <includes>
                 <include>*.jar</include>
             </includes>
         </fileSet>
         <fileSet>
             <outputDirectory>lib</outputDirectory>
-            <directory>compilers/eclipse/target</directory>
+            <directory>../compilers/eclipse/target</directory>
             <includes>
                 <include>*.jar</include>
             </includes>
         </fileSet>
         <fileSet>
             <outputDirectory>lib</outputDirectory>
-            <directory>compilers/groovy/target</directory>
+            <directory>../compilers/groovy/target</directory>
             <includes>
                 <include>*.jar</include>
             </includes>
         </fileSet>
         <fileSet>
             <outputDirectory>lib</outputDirectory>
-            <directory>compilers/janino/target</directory>
+            <directory>../compilers/janino/target</directory>
             <includes>
                 <include>*.jar</include>
             </includes>
         </fileSet>
         <fileSet>
             <outputDirectory>lib</outputDirectory>
-            <directory>compilers/javac/target</directory>
+            <directory>../compilers/javac/target</directory>
             <includes>
                 <include>*.jar</include>
             </includes>
         </fileSet>
         <fileSet>
             <outputDirectory>lib</outputDirectory>
-            <directory>compilers/rhino/target</directory>
+            <directory>../compilers/rhino/target</directory>
             <includes>
                 <include>*.jar</include>
             </includes>
         </fileSet>
         <fileSet>
             <outputDirectory>lib</outputDirectory>
-            <directory>examples/target</directory>
+            <directory>../examples/target</directory>
             <includes>
                 <include>*.jar</include>
             </includes>

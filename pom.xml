@@ -47,6 +47,7 @@
         <module>compilers/javac</module>
         <module>compilers/rhino</module>
         <module>examples</module>
+        <module>assembly</module>
     </modules>
     <distributionManagement>
         <site>
@@ -111,24 +112,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/assembly/bin.xml</descriptor>
-                        <descriptor>src/assembly/src.xml</descriptor>
-                    </descriptors>
-                    <tarLongFileMode>gnu</tarLongFileMode>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>attached</goal>
-                        </goals>
-                    </execution>
-                </executions>                
             </plugin>
         </plugins>
         <extensions>
