@@ -1,46 +1,64 @@
 #!/bin/sh
 
-TMP="`pwd`/target"
-DIST="$TMP/dist"
-LIB="$DIST/lib"
+set -e
 
-find $TMP -name *.zip -delete
-find $TMP -name *.tar.gz -delete
-rm -R $DIST 2>/dev/null
+BASE=`pwd`
 
+RC=`xml sel -N m=http://maven.apache.org/POM/4.0.0 -t -v '/m:project/m:properties/m:release.tag' $BASE/pom.xml`
+STAGING=`xml sel -N m=http://maven.apache.org/POM/4.0.0 -t -v "/m:project/m:profiles/m:profile[m:id/text() = 'release']/m:distributionManagement/m:repository/m:url" $BASE/pom.xml | sed "s/\\${commons.deployment.protocol}:\/\//$USER@/" | sed "s/\\${release.tag}/$RC/" | sed 's#/#:/#'`
+RELEASE=`echo $RC|sed s/-.*//`
 
-# build source dist
+echo "creating $RELEASE from $RC at $STAGING"
 
-tar czvf $TMP/commons-jci-1.0-src.tar.gz --exclude .svn --exclude target --exclude dist.sh .
-zip -r $TMP/commons-jci-1.0-src.zip . -x "*.svn/*" -x "target/*"
+MAVEN_RELEASE="$BASE/target/maven-dist"
+DIST="$BASE/target/dist"
 
+rm -R $MAVEN_RELEASE 2>/dev/null || true
+rm -R $DIST 2>/dev/null || true
+
+scp -r $STAGING $MAVEN_RELEASE
 
 
 # build binary dist
 
+LIB="$DIST/bin/lib"
 mkdir -p $LIB 2>/dev/null
 
-JARS=`find target -type f -name "*-1.0.jar"`
+JARS=`find $MAVEN_RELEASE -type f -name "*-$RELEASE.jar"`
 
 for A in $JARS ; do
     cp $A $LIB
 done
 
-cp LICENSE.txt NOTICE.txt $DIST
+cp $BASE/LICENSE.txt $BASE/NOTICE.txt $DIST/bin
+
+cd $DIST/bin
+
+tar czvf $BASE/target/commons-jci-$RELEASE-bin.tar.gz .
+zip -r $BASE/target/commons-jci-$RELEASE-bin.zip .
+
+cd -
 
 
 
-cd $DIST
 
-tar czvf $TMP/commons-jci-1.0-bin.tar.gz .
-zip -r $TMP/commons-jci-1.0-bin.zip .
+# build source dist
+
+SOURCE=`xml sel -N m=http://maven.apache.org/POM/4.0.0 -t -v "/m:project/m:scm/m:developerConnection" $BASE/pom.xml | sed 's/scn:svn://' | sed "s/trunk/tags\/$RC/"`
+
+mkdir -p $DIST/src 2>/dev/null
+cd $DIST/src
+
+svn co $SOURCE .
 
 
+tar czvf $BASE/target/commons-jci-$RELEASE-src.tar.gz --exclude .svn --exclude target --exclude dist.sh .
+zip -r $BASE/target/commons-jci-$RELEASE-src.zip . -x "*.svn/*" -x "target/*"
 
 
+# sign
 
-ARTIFACTS="$TMP/commons-jci-1.0-bin.tar.gz $TMP/commons-jci-1.0-bin.zip $TMP/commons-jci-1.0-src.tar.gz $TMP/commons-jci-1.0-src.zip"
-
+ARTIFACTS="`find $BASE/target -name *.zip -maxdepth 1` `find $BASE/target -name *.tar.gz -maxdepth 1`"
 
 RUNNING=`ps -ax | grep gpg-agent | grep -v grep`
 if [ -z "$RUNNING" ]; then
@@ -58,8 +76,7 @@ for A in $ARTIFACTS ; do
   openssl sha1 < $A > $A.sha1
 done
 
-
-for A in $TGZS $ZIPS ; do
+for A in $ARTIFACTS ; do
   echo $A
   gpg --verify $A.asc $A
 done

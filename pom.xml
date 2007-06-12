@@ -47,7 +47,6 @@
         <module>compilers/javac</module>
         <module>compilers/rhino</module>
         <module>examples</module>
-        <module>assembly</module>
     </modules>
     <distributionManagement>
         <site>
