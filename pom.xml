@@ -262,7 +262,7 @@
                         <artifactId>maven-release-plugin</artifactId>
                         <configuration>
                             <generateReleasePoms>true</generateReleasePoms>
-                            <preparationGoals>clean install</preparationGoals>
+                            <!-- <preparationGoals>clean install</preparationGoals> -->
                             <autoVersionSubmodules>true</autoVersionSubmodules>
                             <tag>${release.tag}</tag>
                         </configuration>
