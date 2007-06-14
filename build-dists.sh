@@ -13,15 +13,18 @@ echo "creating $RELEASE from $RC at $STAGING"
 MAVEN_RELEASE="$BASE/target/maven-dist"
 DIST="$BASE/target/dist"
 
-rm -R $MAVEN_RELEASE 2>/dev/null || true
-rm -R $DIST 2>/dev/null || true
 
+rm -Rf $DIST 2>/dev/null || true
+find $BASE/target -name "commons-jci*" -delete
+
+
+rm -R $MAVEN_RELEASE 2>/dev/null || true
 scp -r $STAGING $MAVEN_RELEASE
 
 
 # build binary dist
 
-LIB="$DIST/bin/lib"
+LIB="$DIST/bin/commons-jci-$RELEASE-bin/lib"
 mkdir -p $LIB 2>/dev/null
 
 JARS=`find $MAVEN_RELEASE -type f -name "*-$RELEASE.jar"`
@@ -30,7 +33,7 @@ for A in $JARS ; do
     cp $A $LIB
 done
 
-cp $BASE/LICENSE.txt $BASE/NOTICE.txt $DIST/bin
+cp $BASE/LICENSE.txt $BASE/NOTICE.txt $DIST/bin/commons-jci-$RELEASE-bin/
 
 cd $DIST/bin
 
@@ -49,8 +52,7 @@ SOURCE=`xml sel -N m=http://maven.apache.org/POM/4.0.0 -t -v "/m:project/m:scm/m
 mkdir -p $DIST/src 2>/dev/null
 cd $DIST/src
 
-svn co $SOURCE .
-
+svn co $SOURCE commons-jci-$RELEASE-src
 
 tar czvf $BASE/target/commons-jci-$RELEASE-src.tar.gz --exclude .svn --exclude target --exclude dist.sh .
 zip -r $BASE/target/commons-jci-$RELEASE-src.zip . -x "*.svn/*" -x "target/*"
