@@ -24,27 +24,25 @@
 
    <body>
       <section name="Releases">
-         <p>There are no releases available yet.</p>
 
-<!--
          <p>The following releases are available:</p>
-         <ul>
-           <li>Version 1.1 - 20 October 2003</li>
-           <li>Version 1.0 - 12 August 2002</li>
-         </ul>
-         <br/>
+
+         <h1>Version 1.1 </h1>
          <p>
-            The latest binary release is always available on the 
-            <a href="http://jakarta.apache.org/site/binindex.cgi#commons-jci">
-            Jakarta Binary Downloads page</a>,
-            its source is available from 
-            <a href="http://jakarta.apache.org/site/sourceindex.cgi#commons-jci">
-            Jakarta Source Downloads page</a>.
+             The current trunk and not released yet. Access to the source tree to see the latest and
+             greatest code is possible through <a href="source-repository.html">anonymous SVN access</a>.
          </p>
+
+         <h1>Version 1.0, 18.06.2007</h1>
+         <p>
+             JCI is available through <a href="http://repo1.maven.org">maven repository</a> mirrors.
+             Traditional release distributions are are available from the
+             <a href="http://jakarta.apache.org/site/downloads/downloads_commons-jci.cgi">Jakarta download page</a>.
+         </p>
+<!--
          <p>
             Older releases are retained by the Apache Software Foundation but are 
-            moved into a
-            <a href="http://archive.apache.org/dist/jakarta/commons/jci/">
+            moved into a <a href="http://archive.apache.org/dist/jakarta/commons/jci/">
             special archive area</a>.
          </p>
          <p>
@@ -52,16 +50,12 @@
            Nightly source and binary drops</a> are available.
          </p>
 -->
-         <p>
-            Access to the source tree to see the latest and greatest code is possible
-            through <a href="source-repository.html">anonymous SVN access</a>.
-         </p>
       </section>
 
 <!--
       <section name="Release Candidate">
          <p>
-            Release candidates for the upcoming 1.0 release can be downloaded 
+            Release candidates for the upcoming 1.1 release can be downloaded 
             <a href="http://people.apache.org/~tcurdt/jci/rc/">here</a>.
          </p>
          <p>
@@ -69,7 +63,7 @@
             <a href="mail-lists.html">mailing list</a>.
          </p>
          <p>
-            Planet release target is 10 April 2007.
+            Planet release target is 10 April 200x.
          </p>
       </section>
 -->
