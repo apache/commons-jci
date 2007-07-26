@@ -31,17 +31,15 @@ import java.util.Set;
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.FileObject;
-import javax.tools.JavaCompilerTool;
+import javax.tools.JavaCompiler;
 import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.SimpleJavaFileObject;
 import javax.tools.ToolProvider;
-import javax.tools.JavaFileObject.Kind;
 
 import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -173,9 +171,22 @@ public final class Jsr199JavaCompiler extends AbstractJavaCompiler {
             log.debug("list " + location + packageName + kinds + recurse);
             return units;
         }
+		public boolean isSameFile(FileObject fileobject, FileObject fileobject1) {
+			return false;
+		}
     }
     
-    public CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader classLoader) {
+    private final Jsr199JavaCompilerSettings settings;
+    
+    public Jsr199JavaCompiler() {
+        settings = new Jsr199JavaCompilerSettings();
+    }
+
+    public Jsr199JavaCompiler( final Jsr199JavaCompilerSettings pSettings ) {
+        settings = pSettings;
+    }
+    
+    public CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader classLoader, JavaCompilerSettings settings) {
 
         final Collection<JavaFileObject> units = new ArrayList<JavaFileObject>();
         for (int i = 0; i < pResourcePaths.length; i++) {
@@ -184,13 +195,13 @@ public final class Jsr199JavaCompiler extends AbstractJavaCompiler {
             units.add(new CompilationUnit(sourcePath, pReader));
         }
 
-        final JavaCompilerTool compiler = ToolProvider.getSystemJavaCompilerTool();
+        final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 //        final JavaFileManager fileManager = compiler.getStandardFileManager(diagnostics);
         final JavaFileManager fileManager = new JciJavaFileManager(units, pStore);
         final DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 
 
-        compiler.getTask(null, fileManager, diagnostics, null, null, units).run();
+        compiler.getTask(null, fileManager, diagnostics, null, null, units).call();
 
         try {
             fileManager.close();
@@ -208,5 +219,9 @@ public final class Jsr199JavaCompiler extends AbstractJavaCompiler {
 
         return new CompilationResult(problems);
     }
+
+	public JavaCompilerSettings createDefaultSettings() {
+		return this.settings;
+	}
 
 }
