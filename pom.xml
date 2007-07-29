@@ -32,7 +32,7 @@
     <description>
         Commons JCI is a java compiler interface. It can be used to either compile java (or any other language that can be compiled to java classes like e.g. groovy or javascript) to java. It is well integrated with a FAM (FilesystemAlterationMonitor) that can be used with the JCI compiling/reloading classloader. All the currently supported compilers (even javac before java6) feature in-memory compilation.
     </description>
-    <url>http://jakarta.apache.org/commons/jci/</url>
+    <url>http://commons.apache.org/jci/</url>
     <inceptionYear>2004</inceptionYear>
     <issueManagement>
         <system>JIRA</system>
@@ -51,7 +51,7 @@
     <distributionManagement>
         <site>
             <id>website</id>
-            <url>scpexe://people.apache.org/www/jakarta.apache.org/commons/jci/</url>
+            <url>scpexe://people.apache.org/www/commons.apache.org/jci/</url>
         </site>
     </distributionManagement>
     <developers>
@@ -81,9 +81,9 @@
         </contributor>
     </contributors>
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/proper/jci/trunk/</connection>
-        <developerConnection>scn:svn:https://svn.apache.org/repos/asf/jakarta/commons/proper/jci/trunk/</developerConnection>
-        <url>http://svn.apache.org/viewvc/jakarta/commons/proper/jci/trunk/</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/commons/proper/jci/trunk/</connection>
+        <developerConnection>scn:svn:https://svn.apache.org/repos/asf/commons/proper/jci/trunk/</developerConnection>
+        <url>http://svn.apache.org/viewvc/commons/proper/jci/trunk/</url>
     </scm>
     <build>
         <plugins>
@@ -203,7 +203,7 @@
                 <repository>
                     <id>apache.staging</id>
                     <name>Apache Release Staging Repository</name>
-                    <url>${commons.deployment.protocol}://people.apache.org/www/people.apache.org/builds/jakarta-commons/jci/${release.tag}/</url>
+                    <url>${commons.deployment.protocol}://people.apache.org/www/people.apache.org/builds/commons/jci/${release.tag}/</url>
                 </repository>
             </distributionManagement>
             <build>
