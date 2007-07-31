@@ -37,7 +37,7 @@
          <p>
              JCI is available through <a href="http://repo1.maven.org">maven repository</a> mirrors.
              Traditional release distributions are are available from the
-             <a href="http://jakarta.apache.org/site/downloads/downloads_commons-jci.cgi">Jakarta download page</a>.
+             <a href="http://commons.apache.org/downloads/download_jci.cgi">JCI download page</a>.
          </p>
 <!--
          <p>
@@ -46,7 +46,7 @@
             special archive area</a>.
          </p>
          <p>
-           <a href="http://people.apache.org/builds/jakarta-commons/nightly/commons-jci/">
+           <a href="http://people.apache.org/builds/commons/nightly/commons-jci/">
            Nightly source and binary drops</a> are available.
          </p>
 -->
