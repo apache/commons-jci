@@ -16,18 +16,18 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
---><project name="Jakarta Commons JCI">
+--><project name="Apache Commons JCI">
     <bannerRight>
-        <name>Jakarta Commons JCI</name>
+        <name>Apache Commons JCI</name>
         <src>jci-logo-white.png</src>
-        <href>http://jakarta.apache.org/commons/sandbox/jci/</href>
+        <href>http://commons.apache.org/sandbox/jci/</href>
     </bannerRight>
     <body>
-        <menu name="Jakarta Commons JCI">
-            <item name="About" href="http://jakarta.apache.org/commons/jci/index.html"/>
-            <item name="Usage" href="http://jakarta.apache.org/commons/jci/usage.html"/>
-            <item name="FAQ" href="http://jakarta.apache.org/commons/jci/faq.html"/>
-            <item name="Downloads" href="http://jakarta.apache.org/commons/jci/downloads.html"/>
+        <menu name="Apache Commons JCI">
+            <item name="About" href="http://commons.apache.org/jci/index.html"/>
+            <item name="Usage" href="http://commons.apache.org/jci/usage.html"/>
+            <item name="FAQ" href="http://commons.apache.org/jci/faq.html"/>
+            <item name="Downloads" href="http://commons.apache.org/jci/downloads.html"/>
         </menu>
         <menu ref="modules"/>
     </body>
