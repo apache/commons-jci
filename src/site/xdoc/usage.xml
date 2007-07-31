@@ -41,9 +41,9 @@ System.out.println( result.getWarnings().length + " warnings");
                 Information like line numbers of errors etc are accessible in a consistent way.
                 If supported by the compiler you can even get notified about error before the
                 end of the compilation. (see the <code>CompilationProblemHandler</code>) for that.
-                The <a href="http://commons.apache.org/sandbox/jci/commons-jci-examples/index.html">example subproject</a>
-                provides a simple <a href="http://commons.apache.org/sandbox/jci/xref/org/apache/commons/jci/examples/serverpages/ServerPageServlet.html">JSP servlet</a>
-                and a javac-like <a href="http://commons.apache.org/sandbox/jci/xref/org/apache/commons/jci/examples/commandline/CommandlineCompiler.html">command line interface</a>.
+                The <a href="http://commons.apache.org/jci/commons-jci-examples/index.html">example subproject</a>
+                provides a simple <a href="http://commons.apache.org/jci/xref/org/apache/commons/jci/examples/serverpages/ServerPageServlet.html">JSP servlet</a>
+                and a javac-like <a href="http://commons.apache.org/jci/xref/org/apache/commons/jci/examples/commandline/CommandlineCompiler.html">command line interface</a>.
             </p>
             
         </section>
@@ -67,7 +67,7 @@ fam.start();
             <p>
                 But you can also just implement a simple <code>FilesystemAlterationListener</code>
                 yourself and just use it to get notified about configuration files changes
-                <a href="http://commons.apache.org/sandbox/jci/xref/org/apache/commons/jci/examples/configuration/ConfigurationReloading.html">for example</a>.
+                <a href="http://commons.apache.org/jci/xref/org/apache/commons/jci/examples/configuration/ConfigurationReloading.html">for example</a>.
                 The example just extends the <code>FileChangeListener</code> that provides a few convenience methods.
             </p>
 
