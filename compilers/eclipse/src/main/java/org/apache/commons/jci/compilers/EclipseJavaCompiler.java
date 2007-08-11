@@ -132,7 +132,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             final JavaCompilerSettings pSettings
             ) {
 
-        final Map settingsMap = ((EclipseJavaCompilerSettings) defaultSettings).getMap();
+        final Map settingsMap = ((EclipseJavaCompilerSettings) defaultSettings).toNativeSettings();
         
         final Collection problems = new ArrayList();
         

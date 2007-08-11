@@ -29,13 +29,14 @@ package org.apache.commons.jci.compilers;
  */
 public class JavaCompilerSettings {
 
-    private String targetVersion;
-    private String sourceVersion;
-    private String sourceEncoding;
-    private boolean warnings;
-    private boolean deprecations;
-    private boolean verbose;
+    private String targetVersion = "1.4";
+    private String sourceVersion = "1.4";
+    private String sourceEncoding = "UTF-8";
+    private boolean warnings = false;
+    private boolean deprecations = false;
 
+    /** @deprecated */
+    private boolean verbose = false;
 
     public void setTargetVersion( final String pTargetVersion ) {
         targetVersion = pTargetVersion;
@@ -82,10 +83,12 @@ public class JavaCompilerSettings {
     }
 
 
+    /** @deprecated */
     public void setVerbose( final boolean pVerbose ) {
         verbose = pVerbose;
     }
 
+    /** @deprecated */
     public boolean isVerbose() {
         return verbose;
     }

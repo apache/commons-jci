@@ -41,19 +41,41 @@ public final class EclipseJavaCompilerSettings extends JavaCompilerSettings {
     public EclipseJavaCompilerSettings( final Map pMap ) {
         defaultEclipseSettings.putAll(pMap);
     }
+
+    private static Map nativeVersions = new HashMap() {
+		private static final long serialVersionUID = 1L;
+	{
+    	put("1.1", CompilerOptions.VERSION_1_1);
+    	put("1.2", CompilerOptions.VERSION_1_2);
+    	put("1.3", CompilerOptions.VERSION_1_3);
+    	put("1.4", CompilerOptions.VERSION_1_4);
+    	put("1.5", CompilerOptions.VERSION_1_5);
+    	put("1.6", CompilerOptions.VERSION_1_6);
+    }};
     
-    Map getMap() {
+    private String toNativeVersion( final String pVersion ) {
+    	final String nativeVersion = (String) nativeVersions.get(pVersion);
+    	
+    	if (nativeVersion == null) {
+    		throw new RuntimeException("unknown version " + pVersion);
+    	}
+    	
+    	return nativeVersion;
+    }
+    
+    Map toNativeSettings() {
         final Map map = new HashMap(defaultEclipseSettings);
 
-        map.put(CompilerOptions.OPTION_ReportDeprecation, CompilerOptions.GENERATE);
-        map.put(CompilerOptions.OPTION_TargetPlatform, CompilerOptions.VERSION_1_4);
-        map.put(CompilerOptions.OPTION_Source, CompilerOptions.VERSION_1_4);
-        map.put(CompilerOptions.OPTION_Encoding, "UTF-8");
+        map.put(CompilerOptions.OPTION_SuppressWarnings, isWarnings()?CompilerOptions.GENERATE:CompilerOptions.DO_NOT_GENERATE);
+        map.put(CompilerOptions.OPTION_ReportDeprecation, isDeprecations()?CompilerOptions.GENERATE:CompilerOptions.DO_NOT_GENERATE);
+        map.put(CompilerOptions.OPTION_TargetPlatform, toNativeVersion(getTargetVersion()));
+        map.put(CompilerOptions.OPTION_Source, toNativeVersion(getSourceVersion()));
+        map.put(CompilerOptions.OPTION_Encoding, getSourceEncoding());
 
         return map;
     }
     
     public String toString() {
-        return defaultEclipseSettings.toString();
+        return toNativeSettings().toString();
     }
 }
