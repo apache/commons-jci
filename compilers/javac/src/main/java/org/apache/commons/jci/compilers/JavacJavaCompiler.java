@@ -50,14 +50,14 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
     private static final String NOTE_PREFIX = "Note: ";
     private static final String ERROR_PREFIX = "error: ";
 
-    private final JavacJavaCompilerSettings settings;
+    private final JavacJavaCompilerSettings defaultSettings;
 
     public JavacJavaCompiler() {
-        settings = new JavacJavaCompilerSettings();
+        defaultSettings = new JavacJavaCompilerSettings();
     }
 
     public JavacJavaCompiler( final JavacJavaCompilerSettings pSettings ) {
-        settings = pSettings;
+        defaultSettings = pSettings;
     }
 
     public CompilationResult compile( final String[] pSourcePaths, final ResourceReader pReader, ResourceStore pStore, final ClassLoader pClasspathClassLoader, final JavaCompilerSettings pSettings ) {
@@ -71,7 +71,10 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 
             final Method compile = renamedClass.getMethod("compile", new Class[] { String[].class, PrintWriter.class });
             final StringWriter out = new StringWriter();
-            final Integer ok = (Integer) compile.invoke(null, new Object[] { buildCompilerArguments(pSourcePaths, pClasspathClassLoader), new PrintWriter(out) });
+
+            final String[] compilerArguments = buildCompilerArguments(new JavacJavaCompilerSettings(pSettings), pSourcePaths, pClasspathClassLoader);
+            
+            final Integer ok = (Integer) compile.invoke(null, new Object[] { compilerArguments, new PrintWriter(out) });
 
             final CompilationResult result = parseModernStream(new BufferedReader(new StringReader(out.toString())));
 
@@ -186,80 +189,23 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
     }
 
     public JavaCompilerSettings createDefaultSettings() {
-        return settings;
+        return defaultSettings;
     }
 
-    private String[] buildCompilerArguments( final String[] resourcePaths, final ClassLoader classloader ) {
+    private String[] buildCompilerArguments( final JavacJavaCompilerSettings pSettings, final String[] pResourcePaths, final ClassLoader pClassloader ) {
 
         // FIXME: build classpath from classloader information
-        return resourcePaths;
-
-//    {
-//        final List args = new ArrayList();
-//        for (int i = 0; i < resourcePaths.length; i++) {
-//            args.add(resourcePaths[i]);
-//        }
-//
-//        if (settings != null) {
-//            if (settings.isOptimize()) {
-//                args.add("-O");
-//            }
-//
-//            if (settings.isDebug()) {
-//                args.add("-g");
-//            }
-//
-//            if (settings.isVerbose()) {
-//                args.add("-verbose");
-//            }
-//
-//            if (settings.isShowDeprecation()) {
-//                args.add("-deprecation");
-//                // This is required to actually display the deprecation messages
-//                settings.setShowWarnings(true);
-//            }
-//
-//            if (settings.getMaxmem() != null) {
-//                args.add("-J-Xmx" + settings.getMaxmem());
-//            }
-//
-//            if (settings.getMeminitial() != null) {
-//                args.add("-J-Xms" + settings.getMeminitial());
-//            }
-//
-//            if (!settings.isShowWarnings()) {
-//                args.add("-nowarn");
-//            }
-//
-//            // TODO: this could be much improved
-//            if (settings.getTargetVersion() != null) {
-//                // Required, or it defaults to the target of your JDK (eg 1.5)
-//                args.add("-target");
-//                args.add("1.1");
-//            } else {
-//                args.add("-target");
-//                args.add(settings.getTargetVersion());
-//            }
-//
-//            // TODO suppressSource
-//            if (settings.getSourceVersion() != null) {
-//                // If omitted, later JDKs complain about a 1.1 target
-//                args.add("-source");
-//                args.add("1.3");
-//            } else {
-//                args.add("-source");
-//                args.add(settings.getSourceVersion());
-//            }
-//
-//            // TODO suppressEncoding
-//            if (settings.getSourceEncoding() != null) {
-//                args.add("-encoding");
-//                args.add(settings.getSourceEncoding());
-//            }
-//
-//            // TODO CustomCompilerArguments
-//        }
-//
-//        return (String[]) args.toArray(new String[args.size()]);
+    	final String[] classpath = new String[0];
+    	final String[] resources = pResourcePaths;    	
+    	final String[] args = pSettings.toNativeSettings();
+    	
+    	final String[] result = new String[classpath.length + resources.length + args.length];
+    	
+    	System.arraycopy(classpath, 0, result, 0, classpath.length);
+    	System.arraycopy(resources, 0, result, classpath.length, resources.length);
+    	System.arraycopy(args, 0, result, classpath.length + resources.length, args.length);
+    	
+    	return result;
     }
+    
 }

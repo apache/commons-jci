@@ -38,6 +38,14 @@ public final class EclipseJavaCompilerSettings extends JavaCompilerSettings {
         defaultEclipseSettings.put(CompilerOptions.OPTION_LocalVariableAttribute, CompilerOptions.GENERATE);
     }
     
+    public EclipseJavaCompilerSettings( final JavaCompilerSettings pSettings ) {
+    	super(pSettings);
+    	
+    	if (pSettings instanceof EclipseJavaCompilerSettings) {
+    		defaultEclipseSettings.putAll(((EclipseJavaCompilerSettings)pSettings).toNativeSettings());
+    	}
+    }
+    
     public EclipseJavaCompilerSettings( final Map pMap ) {
         defaultEclipseSettings.putAll(pMap);
     }

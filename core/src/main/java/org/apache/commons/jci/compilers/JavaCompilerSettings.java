@@ -18,6 +18,7 @@
 package org.apache.commons.jci.compilers;
 
 
+
 /**
  * Most common denominator for JavaCompiler settings.
  * 
@@ -34,10 +35,23 @@ public class JavaCompilerSettings {
     private String sourceEncoding = "UTF-8";
     private boolean warnings = false;
     private boolean deprecations = false;
+    private boolean debug = false;
 
     /** @deprecated */
     private boolean verbose = false;
 
+    public JavaCompilerSettings() {    	
+    }
+    
+    public JavaCompilerSettings( final JavaCompilerSettings pSettings ) {
+    	targetVersion = pSettings.targetVersion;
+    	sourceVersion = pSettings.sourceVersion;
+    	sourceEncoding = pSettings.sourceEncoding;
+    	warnings = pSettings.warnings;
+    	deprecations = pSettings.deprecations;
+    	debug = pSettings.debug;
+    }
+    
     public void setTargetVersion( final String pTargetVersion ) {
         targetVersion = pTargetVersion;
     }
@@ -82,6 +96,13 @@ public class JavaCompilerSettings {
         return deprecations;
     }
 
+    public void setDebug( final boolean pDebug )  {
+        debug = pDebug;
+    }
+
+    public boolean isDebug() {
+        return debug;
+    }
 
     /** @deprecated */
     public void setVerbose( final boolean pVerbose ) {

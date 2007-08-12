@@ -17,46 +17,141 @@
 
 package org.apache.commons.jci.compilers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public final class JavacJavaCompilerSettings extends JavaCompilerSettings {
 
     private boolean optimize;
-    private String maxmem;
-    private String meminitial;
+    private String memMax;
+    private String memInitial;
+    private String[] customArguments;
 
-    private List customCompilerArguments;
-
-    public List getCustomCompilerArguments() {
-        return customCompilerArguments;
+    public JavacJavaCompilerSettings() {    	
+    }
+    
+    public JavacJavaCompilerSettings( final JavaCompilerSettings pSettings ) {
+    	super(pSettings);
+    }
+    
+    
+    public void setCustomArguments( final String[] pCustomArguments ) {
+    	customArguments = pCustomArguments;
+    }
+    
+    public String[] getCustomArguments() {
+    	return customArguments;
+    }
+    
+    
+    public void setMaxMemory( final String pMemMax ) {
+    	memMax = pMemMax;
+    }
+    
+    public String getMaxMemory() {
+    	return memMax;
+    }
+    
+    
+    public void setInitialMemory( final String pMemInitial ) {
+    	memInitial = pMemInitial;
+    }
+    
+    public String getInitialMemory() {
+    	return memInitial;
     }
 
-    public void setCustomCompilerArguments(List customCompilerArguments) {
-        this.customCompilerArguments = customCompilerArguments;
-    }
-
-    public String getMaxmem() {
-        return maxmem;
-    }
-
-    public void setMaxmem(String maxmem) {
-        this.maxmem = maxmem;
-    }
-
-    public String getMeminitial() {
-        return meminitial;
-    }
-
-    public void setMeminitial(String meminitial) {
-        this.meminitial = meminitial;
-    }
-
+    
     public boolean isOptimize() {
         return optimize;
     }
 
-    public void setOptimize(boolean optimize) {
-        this.optimize = optimize;
+    public void setOptimize( final boolean pOptimize ) {
+        optimize = pOptimize;
     }
 
+    
+    
+    /** @deprecated */
+    public List getCustomCompilerArguments() {
+    	final List list = new ArrayList();
+    	for (int i = 0; i < customArguments.length; i++) {
+			list.add(customArguments[i]);
+		}
+    	return list;    	
+    }
+
+    /** @deprecated */
+    public void setCustomCompilerArguments(List customCompilerArguments) {
+    	customArguments = (String[]) customCompilerArguments.toArray(new String[customCompilerArguments.size()]);
+    }
+
+    /** @deprecated */
+    public String getMaxmem() {
+        return memMax;
+    }
+
+    /** @deprecated */
+    public void setMaxmem(String maxmem) {
+        this.memMax = maxmem;
+    }
+
+    /** @deprecated */
+    public String getMeminitial() {
+        return memInitial;
+    }
+
+    /** @deprecated */
+    public void setMeminitial(String meminitial) {
+        this.memInitial = meminitial;
+    }
+
+    
+    
+    
+    String[] toNativeSettings() {
+    	
+    	final List args = new ArrayList();
+
+    	if (isOptimize()) {
+    		args.add("-O");
+    	}
+
+    	if (isDebug()) {
+    		args.add("-g");
+    	}
+
+    	if (isDeprecations()) {
+    		args.add("-deprecation");
+    	}
+
+    	if (!isWarnings() && !isDeprecations()) {
+    		args.add("-nowarn");
+    	}
+
+    	if (getMaxMemory() != null) {
+    		args.add("-J-Xmx" + getMaxMemory());
+    	}
+
+    	if (getInitialMemory() != null) {
+    		args.add("-J-Xms" + getInitialMemory());
+    	}
+
+    	args.add("-target");
+    	args.add(getTargetVersion());
+
+    	args.add("-source");
+    	args.add(getSourceVersion());
+
+    	args.add("-encoding");
+    	args.add(getSourceEncoding());
+
+    	if (customArguments != null) {
+	    	for (int i = 0; i < customArguments.length; i++) {
+				args.add(customArguments[i]);
+			}
+    	}
+
+    	return (String[])args.toArray(new String[args.size()]);
+    }
 }

@@ -60,11 +60,11 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         this(new EclipseJavaCompilerSettings());
     }
 
-    public EclipseJavaCompiler(final Map pSettings) {
+    public EclipseJavaCompiler( final Map pSettings ) {
         defaultSettings = new EclipseJavaCompilerSettings(pSettings);
     }
 
-    public EclipseJavaCompiler(final EclipseJavaCompilerSettings pSettings) {
+    public EclipseJavaCompiler( final EclipseJavaCompilerSettings pSettings ) {
         defaultSettings = pSettings;
     }
 
@@ -132,7 +132,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             final JavaCompilerSettings pSettings
             ) {
 
-        final Map settingsMap = ((EclipseJavaCompilerSettings) defaultSettings).toNativeSettings();
+        final Map settingsMap = new EclipseJavaCompilerSettings(defaultSettings).toNativeSettings();
         
         final Collection problems = new ArrayList();
         
@@ -373,6 +373,6 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
     }
 
     public JavaCompilerSettings createDefaultSettings() {
-        return defaultSettings;
+        return new EclipseJavaCompilerSettings(defaultSettings);
     }
 }

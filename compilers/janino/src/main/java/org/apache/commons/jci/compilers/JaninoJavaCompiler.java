@@ -56,6 +56,16 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 
     private final Log log = LogFactory.getLog(JaninoJavaCompiler.class);
 
+    private final JaninoJavaCompilerSettings defaultSettings;
+
+    public JaninoJavaCompiler() {
+    	this(new JaninoJavaCompilerSettings());
+    }
+    
+    public JaninoJavaCompiler( final JaninoJavaCompilerSettings pSettings ) {
+    	defaultSettings = pSettings;
+    }
+    
     private class CompilingIClassLoader extends IClassLoader {
 
         private final Map types = new HashMap();
@@ -165,8 +175,7 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
     }
 
     public JavaCompilerSettings createDefaultSettings() {
-        // FIXME
-        return null;
+        return new JaninoJavaCompilerSettings(defaultSettings);
     }
     
 }
