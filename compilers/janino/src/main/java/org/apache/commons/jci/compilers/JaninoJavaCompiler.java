@@ -158,7 +158,11 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
         final CompilingIClassLoader icl = new CompilingIClassLoader(pResourceReader, classFilesByName, pClassLoader);
         for (int i = 0; i < pSourceNames.length; i++) {
             log.debug("compiling " + pSourceNames[i]);
-            icl.loadIClass(Descriptor.fromClassName(ConversionUtils.convertResourceToClassName(pSourceNames[i])));
+            try {
+				icl.loadIClass(Descriptor.fromClassName(ConversionUtils.convertResourceToClassName(pSourceNames[i])));
+			} catch (ClassNotFoundException e) {
+				log.error(e);
+			}
         }
         
         // Store all fully compiled classes
