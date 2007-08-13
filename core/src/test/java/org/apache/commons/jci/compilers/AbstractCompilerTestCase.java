@@ -225,6 +225,67 @@ public abstract class AbstractCompilerTestCase extends TestCase {
         assertTrue(clazzBytes.length > 0);
     }
 
+    /*
+     * https://issues.apache.org/jira/browse/JCI-53
+     */
+    public void testCrossReferenceCompilation() throws Exception {
+        final JavaCompiler compiler = createJavaCompiler(); 
+
+        final ResourceReader reader = new ResourceReader() {
+            final private Map sources = new HashMap() {
+                private static final long serialVersionUID = 1L;
+                {
+                    put("jci/Func1.java", (
+                            "package jci;\n" +
+                            "import static jci.Func1.func2;" +
+                            "public class Func1 {\n" +
+                            "  public static boolean func1() throws Exception {\n" +
+                            "    return true;\n" +
+                            "  }\n" +
+                    "}").getBytes());
+                    put("jci/Func2.java", (
+                            "package jci;\n" +
+                            "import static jci.Func1.func1;" +
+                            "public class Func2 {\n" +
+                            "  public static boolean func2() throws Exception {\n" +
+                            "    return true;\n" +
+                            "  }\n" +
+                    "}").getBytes());
+                }};
+
+            public byte[] getBytes( final String pResourceName ) {
+                return (byte[]) sources.get(pResourceName);
+            }
+
+            public boolean isAvailable( final String pResourceName ) {
+                return sources.containsKey(pResourceName);
+            }
+
+        };
+
+        final JavaCompilerSettings settings = compiler.createDefaultSettings();
+        settings.setTargetVersion("1.5");
+        settings.setSourceVersion("1.5");
+        
+        final MemoryResourceStore store = new MemoryResourceStore();
+        final CompilationResult result = compiler.compile(
+                new String[] {
+                        "jci/Func1.java",
+                        "jci/Func2.java"
+                }, reader, store, this.getClass().getClassLoader(), settings);
+
+        assertEquals(toString(result.getErrors()), 0, result.getErrors().length);
+        assertEquals(toString(result.getWarnings()), 0, result.getWarnings().length);
+
+        final byte[] clazzBytesFunc1 = store.read("jci/Func1.class");
+        assertNotNull(clazzBytesFunc1);
+        assertTrue(clazzBytesFunc1.length > 0);
+
+        final byte[] clazzBytesFunc2 = store.read("jci/Func2.class");
+        assertNotNull(clazzBytesFunc2);
+        assertTrue(clazzBytesFunc2.length > 0);
+    }
+    
 
 
     public final String toString( final CompilationProblem[] pProblems ) {
