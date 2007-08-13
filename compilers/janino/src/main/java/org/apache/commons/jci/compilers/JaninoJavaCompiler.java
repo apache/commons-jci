@@ -116,15 +116,14 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
     			new ResourceFinder() {
 
 					public Resource findResource( final String pSourceName ) {
-						final String name = pSourceName;
-						final byte[] bytes = pResourceReader.getBytes(name);
+						final byte[] bytes = pResourceReader.getBytes(pSourceName);
 						
 						if (bytes == null) {
-							log.debug("failed to find source " + name);
+							log.debug("failed to find source " + pSourceName);
 							return null;
 						}
 						
-						log.debug("reading " + name + " (" + bytes.length + ")");
+						log.debug("reading " + pSourceName + " (" + bytes.length + ")");
 						
 						return new JciResource(pSourceName, bytes);
 					}
@@ -134,15 +133,14 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
     			new ResourceFinder() {
 
 					public Resource findResource( final String pResourceName ) {
-						final String name = pResourceName;
-						final byte[] bytes = pStore.read(name);
+						final byte[] bytes = pStore.read(pResourceName);
 						
 						if (bytes == null) {
-							log.debug("failed to find " + name);
+							log.debug("failed to find " + pResourceName);
 							return null;
 						}
 
-						log.debug("reading " + name + " (" + bytes.length + ")");
+						log.debug("reading " + pResourceName + " (" + bytes.length + ")");
 						
 						return new JciResource(pResourceName, bytes);
 					}

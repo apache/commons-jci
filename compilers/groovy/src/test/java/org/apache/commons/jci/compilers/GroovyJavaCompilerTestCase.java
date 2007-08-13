@@ -35,4 +35,8 @@ public final class GroovyJavaCompilerTestCase extends AbstractCompilerTestCase {
         // FIXME: inner classes not supported in groovy?
     }
 
+	public void testCrossReferenceCompilation() throws Exception {
+		// FIXME: static imports not supported in groovy?
+	}
+
 }

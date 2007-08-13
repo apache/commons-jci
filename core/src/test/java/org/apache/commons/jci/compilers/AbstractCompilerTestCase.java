@@ -237,7 +237,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
                 {
                     put("jci/Func1.java", (
                             "package jci;\n" +
-                            "import static jci.Func1.func2;" +
+                            "import static jci.Func2.func2;" +
                             "public class Func1 {\n" +
                             "  public static boolean func1() throws Exception {\n" +
                             "    return true;\n" +

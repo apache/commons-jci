@@ -73,7 +73,7 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
             final StringWriter out = new StringWriter();
 
             final String[] compilerArguments = buildCompilerArguments(new JavacJavaCompilerSettings(pSettings), pSourcePaths, pClasspathClassLoader);
-            
+                        
             final Integer ok = (Integer) compile.invoke(null, new Object[] { compilerArguments, new PrintWriter(out) });
 
             final CompilationResult result = parseModernStream(new BufferedReader(new StringReader(out.toString())));
@@ -189,7 +189,7 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
     }
 
     public JavaCompilerSettings createDefaultSettings() {
-        return defaultSettings;
+        return new JavacJavaCompilerSettings(defaultSettings);
     }
 
     private String[] buildCompilerArguments( final JavacJavaCompilerSettings pSettings, final String[] pResourcePaths, final ClassLoader pClassloader ) {
