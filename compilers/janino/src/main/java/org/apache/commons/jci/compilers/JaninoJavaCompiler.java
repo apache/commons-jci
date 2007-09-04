@@ -24,18 +24,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
-import org.apache.commons.jci.utils.ConversionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.codehaus.janino.CachingJavaSourceClassLoader;
+import org.codehaus.janino.ClassLoaderIClassLoader;
 import org.codehaus.janino.CompileException;
+import org.codehaus.janino.Compiler;
 import org.codehaus.janino.DebuggingInformation;
 import org.codehaus.janino.FilterWarningHandler;
 import org.codehaus.janino.Location;
@@ -110,11 +107,11 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
     public CompilationResult compile( final String[] pSourceNames, final ResourceReader pResourceReader, final ResourceStore pStore, final ClassLoader pClassLoader, final JavaCompilerSettings pSettings ) {
 
     	final Collection problems = new ArrayList();
-    	    	
-    	final CachingJavaSourceClassLoader cl = new CachingJavaSourceClassLoader(
-    			pClassLoader,
-    			new ResourceFinder() {
+    	
+    	final StringPattern[] pattern = StringPattern.PATTERNS_NONE;
 
+    	final Compiler compiler = new Compiler(
+    			new ResourceFinder() {
 					public Resource findResource( final String pSourceName ) {
 						final byte[] bytes = pResourceReader.getBytes(pSourceName);
 						
@@ -126,12 +123,10 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 						log.debug("reading " + pSourceName + " (" + bytes.length + ")");
 						
 						return new JciResource(pSourceName, bytes);
-					}
-    		
+					}    		
     			},
-    			pSettings.getSourceEncoding(),
+    			new ClassLoaderIClassLoader(pClassLoader),
     			new ResourceFinder() {
-
 					public Resource findResource( final String pResourceName ) {
 						final byte[] bytes = pStore.read(pResourceName);
 						
@@ -143,11 +138,9 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 						log.debug("reading " + pResourceName + " (" + bytes.length + ")");
 						
 						return new JciResource(pResourceName, bytes);
-					}
-    		
+					}    		
     			},
     			new ResourceCreator() {
-
 					public OutputStream createResource( final String pResourceName ) throws IOException {
 						return new JciOutputStream(pResourceName, pStore);
 					}
@@ -157,14 +150,24 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 
 						pStore.remove(pResourceName);
 						return true;
-					}
-    				
+					}    				
     			},
-    			pSettings.isDebug()?DebuggingInformation.ALL:DebuggingInformation.NONE
+    			pSettings.getSourceEncoding(),
+    			false,
+    			pSettings.isDebug()?DebuggingInformation.ALL:DebuggingInformation.NONE,
+    			new FilterWarningHandler(pattern, new WarningHandler() {
+						public void handleWarning( final String pHandle, final String pMessage, final Location pLocation ) {
+							final CompilationProblem problem = new JaninoCompilationProblem(pLocation.getFileName(), pLocation, pMessage, false);
+							if (problemHandler != null) {
+								problemHandler.handle(problem);
+							}
+							problems.add(problem);
+						}    		
+			    	})    			
     			);
     	
     	
-    	cl.setCompileErrorHandler(new ErrorHandler() {
+    	compiler.setCompileErrorHandler(new ErrorHandler() {
 			public void handleError( final String pMessage, final Location pLocation ) throws CompileException {
 				final CompilationProblem problem = new JaninoCompilationProblem(pLocation.getFileName(), pLocation, pMessage, true);
 				if (problemHandler != null) {
@@ -174,36 +177,19 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 			}
     	});
     	
-    	final StringPattern[] pattern = StringPattern.PATTERNS_NONE;
-    	cl.setWarningHandler(new FilterWarningHandler(pattern, new WarningHandler() {
-			public void handleWarning( final String pHandle, final String pMessage, final Location pLocation ) {
-				final CompilationProblem problem = new JaninoCompilationProblem(pLocation.getFileName(), pLocation, pMessage, false);
-				if (problemHandler != null) {
-					problemHandler.handle(problem);
-				}
-				problems.add(problem);
-			}    		
-    	}));
-    	
-    	
-    	
-        final Map classFilesByName = new HashMap();       
-        
+
+    	final Resource[] resources = new Resource[pSourceNames.length];
         for (int i = 0; i < pSourceNames.length; i++) {
-            log.debug("compiling " + pSourceNames[i]);            
-            try {
-				cl.loadClass(ConversionUtils.convertResourceToClassName(pSourceNames[i]));
-			} catch (ClassNotFoundException e) {
-				log.error(e);
-			}
+            log.debug("compiling " + pSourceNames[i]);
+            final byte[] source = pResourceReader.getBytes(pSourceNames[i]);
+            resources[i] = new JciResource(pSourceNames[i], source);
         }
         
-        // Store all fully compiled classes
-        for (Iterator i = classFilesByName.entrySet().iterator(); i.hasNext();) {
-            final Map.Entry entry = (Map.Entry)i.next();
-            final String clazzName = (String)entry.getKey(); 
-            pStore.write(ConversionUtils.convertClassToResourcePath(clazzName), (byte[])entry.getValue());
-        }
+        try {
+			compiler.compile(resources);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
         
         final CompilationProblem[] result = new CompilationProblem[problems.size()];
         problems.toArray(result);
