@@ -13,3 +13,5 @@ o maven plugin to compile with any of the compilers -> codehaus.org/mojo
 o compiler discovery via META-INF
 o finish common configuration for some compilers
 o build javac classpath from provided classloader
+o move the reader/store interfaces to streams (maybe?)
+o add exceptions to interfaces (maybe?)
