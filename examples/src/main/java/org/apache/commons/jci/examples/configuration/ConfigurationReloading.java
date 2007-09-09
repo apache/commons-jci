@@ -19,6 +19,8 @@ package org.apache.commons.jci.examples.configuration;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -53,9 +55,10 @@ public final class ConfigurationReloading {
                     System.out.println("Configuration change detected " + configFile);
 
                     final Properties props = new Properties();
+                    InputStream is = null; 
                     try {
-
-                        props.load(new FileInputStream(configFile));
+                    	is = new FileInputStream(configFile);
+                        props.load(is);
 
                         System.out.println("Notifying about configuration change " + configFile);
 
@@ -66,6 +69,11 @@ public final class ConfigurationReloading {
 
                     } catch (Exception e) {
                         System.err.println("Failed to load configuration " + configFile);
+                    } finally {
+                    	try {
+							is.close();
+						} catch (IOException e) {
+						}
                     }
 
                 }

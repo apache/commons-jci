@@ -37,9 +37,13 @@ public final class ResourceStoreTestCase extends AbstractTestCase {
         checkRemove(new FileResourceStore(directory));
     }
 
-    public void testTransactionalFileResourceStore() {
+    public void testTransactionalFileResourceStore() {    	
         checkReadWrite(new TransactionalResourceStore(new FileResourceStore(directory)));
         checkRemove(new TransactionalResourceStore(new FileResourceStore(directory)));
+        
+        final ResourceStore rs = new FileResourceStore(directory);
+        final TransactionalResourceStore trs = new TransactionalResourceStore(rs);
+        assertEquals(rs.toString(), trs.toString());
     }
 
     private void checkReadWrite( final ResourceStore pStore ) {

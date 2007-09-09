@@ -147,20 +147,23 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
         listener = new MyFilesystemAlterationListener();
         
         fam.addListener(directory, listener);
-        assertTrue(fam.getListenersFor(directory).length == 1);
+        assertEquals(1, fam.getListenersFor(directory).length);
         
         fam.addListener(directory, listener); 
-        assertTrue(fam.getListenersFor(directory).length == 1);
-    }
+        assertEquals(1, fam.getListenersFor(directory).length);
+        
+        fam.removeListener(listener);
+        assertEquals(0, fam.getListenersFor(directory).length);
+}
 
     public void testDirectoryDoublication() throws Exception {
         fam = new FilesystemAlterationMonitor();
 
         fam.addListener(directory, new MyFilesystemAlterationListener()); 
-        assertTrue(fam.getListenersFor(directory).length == 1);
+        assertEquals(1, fam.getListenersFor(directory).length);
         
         fam.addListener(directory, new MyFilesystemAlterationListener()); 
-        assertTrue(fam.getListenersFor(directory).length == 2);
+        assertEquals(2, fam.getListenersFor(directory).length);
     }
 
     public void testCreateFileDetection() throws Exception {
@@ -170,9 +173,39 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
         
         listener.waitForCheck();
         
-        assertTrue(listener.getCreatedFiles().size() == 1);
+        assertEquals(1, listener.getCreatedFiles().size());
         
         stop();
+    }
+
+    public void testTimeout() throws Exception {
+    	listener = new MyFilesystemAlterationListener();
+    	
+    	try {
+        	listener.waitForFirstCheck();
+        	fail("should be an timeout");
+        } catch(Exception e) {
+        	assertEquals("timeout", e.getMessage());
+        }
+
+        start();
+
+        try {
+        	listener.waitForEvent();
+        	fail("should be an timeout");
+        } catch(Exception e) {
+        	assertEquals("timeout", e.getMessage());
+        }
+        
+        stop();
+
+        try {
+        	listener.waitForCheck();
+        	fail("should be an timeout");
+        } catch(Exception e) {
+        	assertEquals("timeout", e.getMessage());
+        }
+    
     }
 
     public void testCreateDirectoryDetection() throws Exception {
@@ -182,7 +215,7 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
         
         listener.waitForCheck();
         
-        assertTrue(listener.getCreatedDirectories().size() == 1);
+        assertEquals(1, listener.getCreatedDirectories().size());
         
         stop();
     }
@@ -194,14 +227,15 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
         
         listener.waitForCheck();
         
-        assertTrue(listener.getCreatedFiles().size() == 1);
+        assertEquals(1, listener.getCreatedFiles().size());
+        assertEquals(0, listener.getChangedDirectories().size());
         
         file.delete();
         assertTrue(!file.exists());
 
         listener.waitForCheck();
         
-        assertTrue(listener.getDeletedFiles().size() == 1);
+        assertEquals(1, listener.getDeletedFiles().size());
         
         stop();        
     }
@@ -238,7 +272,7 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
         
         listener.waitForCheck();
         
-        assertTrue(listener.getCreatedFiles().size() == 1);
+        assertEquals(1, listener.getCreatedFiles().size());
 
         delay();
 
@@ -246,7 +280,7 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
 
         listener.waitForCheck();
         
-        assertTrue(listener.getChangedFiles().size() == 1);
+        assertEquals(1, listener.getChangedFiles().size());
         
         stop();
     }

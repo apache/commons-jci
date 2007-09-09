@@ -39,7 +39,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
     private final Object observersLock = new Object();
     private Map observers = Collections.unmodifiableMap(new HashMap());    
     private long delay = 3000;
-    private Thread thread;
+    private Thread thread = null;
 
     private volatile boolean running = true;
         

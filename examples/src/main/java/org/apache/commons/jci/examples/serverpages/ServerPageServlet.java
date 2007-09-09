@@ -56,8 +56,8 @@ public final class ServerPageServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private final ReloadingClassLoader classloader = new ReloadingClassLoader(ServerPageServlet.class.getClassLoader());
-    private FilesystemAlterationMonitor fam;
-    private CompilingListener jspListener; 
+    private FilesystemAlterationMonitor fam = null;
+    private CompilingListener jspListener = null; 
 
     private Map servletsByClassname = new HashMap();
 

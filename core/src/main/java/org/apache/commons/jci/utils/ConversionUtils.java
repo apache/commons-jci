@@ -18,6 +18,7 @@
 package org.apache.commons.jci.utils;
 
 import java.io.File;
+import java.util.Locale;
 
 /**
  * Mainly common path manipultation helper methods
@@ -57,7 +58,7 @@ public final class ConversionUtils {
     }
 
     public static String toJavaCasing(final String pName) {
-        final char[] name = pName.toLowerCase().toCharArray();
+        final char[] name = pName.toLowerCase(Locale.US).toCharArray();
         name[0] = Character.toUpperCase(name[0]);
         return new String(name);
     }

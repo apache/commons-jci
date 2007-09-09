@@ -27,7 +27,7 @@ import java.util.HashMap;
  */
 public class MemoryResourceReader implements ResourceReader {
     
-    private Map resources;
+    private Map resources = null;
 
     public boolean isAvailable( final String pResourceName ) {
         if (resources == null) {

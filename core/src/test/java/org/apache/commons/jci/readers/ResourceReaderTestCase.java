@@ -34,15 +34,19 @@ public final class ResourceReaderTestCase extends AbstractTestCase {
         final MemoryResourceReader reader = new MemoryResourceReader();
         reader.add("test", "test".getBytes());
         checkRead(reader);
+        reader.remove(null);
+        assertTrue(reader.isAvailable("test"));
+        reader.remove("test");
+        assertFalse(reader.isAvailable("test"));
     }
 
     private void checkRead( final ResourceReader reader ) throws Exception {
         assertTrue(reader.isAvailable("test"));
         final byte[] content = reader.getBytes("test");
         assertTrue(content != null);
-        assertTrue("test".equals(new String(content)));        
+        assertEquals("test", new String(content));        
 
-        assertTrue(!reader.isAvailable("bla"));
+        assertFalse(reader.isAvailable("bla"));
         assertTrue(reader.getBytes("bla") == null);
     }
 }

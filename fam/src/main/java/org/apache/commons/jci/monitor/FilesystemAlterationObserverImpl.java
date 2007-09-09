@@ -321,16 +321,18 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
     }
 
     
-    public synchronized void checkAndNotify() {
-        if (listeners.length == 0) {
-            return;
-        }
-
-        notifyOnStart();
-        
-        checkEntries();
-        
-        notifyOnStop();
+    public void checkAndNotify() {
+    	synchronized(listenersSet) {
+	        if (listeners.length == 0) {
+	            return;
+	        }
+	
+	        notifyOnStart();
+	        
+	        checkEntries();
+	        
+	        notifyOnStop();
+    	}
     }
 
     
@@ -338,29 +340,38 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
         return rootDirectory;
     }
 
-    public synchronized void addListener( final FilesystemAlterationListener pListener ) {
-        if (listenersSet.add(pListener)) {
-            createArrayFromSet();
-        }
+    public void addListener( final FilesystemAlterationListener pListener ) {
+    	synchronized(listenersSet) {
+	        if (listenersSet.add(pListener)) {
+	            listeners = createArrayFromSet();
+	        }
+    	}
     }
 
-    public synchronized void removeListener( final FilesystemAlterationListener pListener ) {
-        if (listenersSet.remove(pListener)) {
-            createArrayFromSet();
-        }
+    public void removeListener( final FilesystemAlterationListener pListener ) {
+    	synchronized(listenersSet) {
+	        if (listenersSet.remove(pListener)) {
+	            listeners = createArrayFromSet();
+	        }
+    	}
     }
 
-    private void createArrayFromSet() {
+    private FilesystemAlterationListener[] createArrayFromSet() {
         final FilesystemAlterationListener[] newListeners = new FilesystemAlterationListener[listenersSet.size()];
         listenersSet.toArray(newListeners);
-        listeners = newListeners;
+        return newListeners;
     }
 
     public FilesystemAlterationListener[] getListeners() {
-        return listeners;
+    	synchronized(listenersSet) {
+        	final FilesystemAlterationListener[] res = new FilesystemAlterationListener[listeners.length];
+        	System.arraycopy(listeners, 0, res, 0, res.length);
+            return res;
+    	}    	
     }
 
-
+    /*
+     
     public static void main( String[] args ) {
         final FilesystemAlterationObserverImpl observer = new FilesystemAlterationObserverImpl(new File(args[0]));
         while(true) {
@@ -371,4 +382,6 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
             }
         }
     }
+
+    */
 }

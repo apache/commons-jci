@@ -58,7 +58,7 @@ public class ReloadingClassLoader extends ClassLoader implements ReloadNotificat
             stores = newStores;
             delegate = new ResourceStoreClassLoader(parent, stores);            
             return true;
-        } catch ( final Exception e ) {
+        } catch ( final RuntimeException e ) {
             log.error("could not add resource store " + pStore);
         }
         return false;

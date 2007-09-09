@@ -34,7 +34,9 @@ public final class ResourceStoreClassLoader extends ClassLoader {
 
     public ResourceStoreClassLoader( final ClassLoader pParent, final ResourceStore[] pStores ) {
         super(pParent);
-        stores = pStores;
+        
+        stores = new ResourceStore[pStores.length]; 
+        System.arraycopy(pStores, 0, stores, 0, stores.length);	
     }
 
     private Class fastFindClass(final String name) {
