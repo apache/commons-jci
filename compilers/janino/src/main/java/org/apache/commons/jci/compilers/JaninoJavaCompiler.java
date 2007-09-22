@@ -37,6 +37,8 @@ import org.codehaus.janino.DebuggingInformation;
 import org.codehaus.janino.FilterWarningHandler;
 import org.codehaus.janino.Location;
 import org.codehaus.janino.WarningHandler;
+import org.codehaus.janino.Parser.ParseException;
+import org.codehaus.janino.Scanner.ScanException;
 import org.codehaus.janino.UnitCompiler.ErrorHandler;
 import org.codehaus.janino.util.StringPattern;
 import org.codehaus.janino.util.resource.Resource;
@@ -83,7 +85,7 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 		}
     }
 
-    private final class JciOutputStream extends ByteArrayOutputStream {
+    private final static class JciOutputStream extends ByteArrayOutputStream {
 
     	private final String name;
     	private final ResourceStore store;
@@ -98,8 +100,6 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 
 			final byte[] bytes = toByteArray();
 			
-			log.debug("writing " + name + " (" + bytes.length + ")");
-
 			store.write(name, bytes);
 		}
     }
@@ -186,11 +186,18 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
         }
         
         try {
-			compiler.compile(resources);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-        
+            compiler.compile(resources);
+        } catch ( ScanException e ) {
+            problems.add(new JaninoCompilationProblem(e));
+        } catch ( ParseException e ) {
+            problems.add(new JaninoCompilationProblem(e)); 
+        } catch ( IOException e ) {
+            // I'm hoping the existing compiler problems handler catches these
+        	log.error("this error should have been cought before", e);
+        } catch ( CompileException e ) {
+            // I'm hoping the existing compiler problems handler catches these
+        	log.error("this error should have been cought before", e);
+        }        
         final CompilationProblem[] result = new CompilationProblem[problems.size()];
         problems.toArray(result);
         return new CompilationResult(result);
