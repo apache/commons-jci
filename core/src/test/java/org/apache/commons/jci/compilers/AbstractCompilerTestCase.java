@@ -264,8 +264,8 @@ public abstract class AbstractCompilerTestCase extends TestCase {
         };
 
         final JavaCompilerSettings settings = compiler.createDefaultSettings();
-        settings.setTargetVersion("1.5");
-        settings.setSourceVersion("1.5");
+        settings.setTargetVersion("1.4");
+        settings.setSourceVersion("1.4");
         
         final MemoryResourceStore store = new MemoryResourceStore();
         final CompilationResult result = compiler.compile(
