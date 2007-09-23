@@ -229,7 +229,13 @@ public abstract class AbstractCompilerTestCase extends TestCase {
      * https://issues.apache.org/jira/browse/JCI-53
      */
     public void testCrossReferenceCompilation() throws Exception {
-        final JavaCompiler compiler = createJavaCompiler(); 
+    	final String javaVersion = System.getProperty("java.version");
+    	if (!(javaVersion.startsWith("1.5") || javaVersion.startsWith("1.6"))) {
+    		System.err.println("WARNING! Skipping testCrossReferenceCompilation() because your runtime does not support java 1.5+ yet");
+    		return;
+    	}
+    	
+    	final JavaCompiler compiler = createJavaCompiler(); 
 
         final ResourceReader reader = new ResourceReader() {
             final private Map sources = new HashMap() {
@@ -264,8 +270,8 @@ public abstract class AbstractCompilerTestCase extends TestCase {
         };
 
         final JavaCompilerSettings settings = compiler.createDefaultSettings();
-        settings.setTargetVersion("1.4");
-        settings.setSourceVersion("1.4");
+        settings.setTargetVersion("1.5");
+        settings.setSourceVersion("1.5");
         
         final MemoryResourceStore store = new MemoryResourceStore();
         final CompilationResult result = compiler.compile(

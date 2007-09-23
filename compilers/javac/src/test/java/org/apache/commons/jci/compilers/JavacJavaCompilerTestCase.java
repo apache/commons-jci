@@ -27,11 +27,4 @@ public class JavacJavaCompilerTestCase extends AbstractCompilerTestCase {
         return "javac";
     }
     
-    public void testJavaVersion() {
-    	System.out.println("java.version: " + System.getProperty("java.version"));
-    	System.out.println("os.name: " + System.getProperty("os.name"));
-    	System.out.println("os.version: " + System.getProperty("os.version"));
-    	System.out.println("os.arch: " + System.getProperty("os.arch"));
-    }
-
 }
