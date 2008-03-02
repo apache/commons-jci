@@ -23,7 +23,7 @@
         <artifactId>commons-jci</artifactId>
         <version>1.1-SNAPSHOT</version>
     </parent>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
     <artifactId>commons-jci-core</artifactId>
     <version>1.1-SNAPSHOT</version>
     <name>core</name>
@@ -65,6 +65,9 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <properties>
+        <commons.componentid>jci-core</commons.componentid>
+    </properties>
     <build>
         <plugins>
             <plugin>

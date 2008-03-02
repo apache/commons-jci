@@ -23,7 +23,7 @@
         <artifactId>commons-jci</artifactId>
         <version>1.1-SNAPSHOT</version>
     </parent>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
     <artifactId>commons-jci-rhino</artifactId>
     <version>1.1-SNAPSHOT</version>
     <name>compiler-rhino</name>
@@ -55,4 +55,7 @@
             <version>1.6R5</version>
         </dependency>
     </dependencies>
+    <properties>
+        <commons.componentid>jci-rhino</commons.componentid>
+    </properties>
 </project>

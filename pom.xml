@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-parent</artifactId>
-        <version>7</version>
+        <version>8</version>
     </parent>
     <packaging>pom</packaging>
     <groupId>org.apache.commons</groupId>
@@ -276,6 +276,11 @@
         <gpg.useAgent>true</gpg.useAgent>
         <maven.compile.source>1.4</maven.compile.source>
         <maven.compile.target>1.4</maven.compile.target>
+        <commons.componentid>jci</commons.componentid>
+        <commons.release.version>1.0</commons.release.version>
+        <commons.binary.suffix>-bin</commons.binary.suffix>
+        <commons.jira.id>JCI</commons.jira.id>
+        <commons.jira.pid>12310650</commons.jira.pid>
         <commons.deployment.protocol>scpexe</commons.deployment.protocol>
         <release.tag>1.1-RC1</release.tag>
     </properties>

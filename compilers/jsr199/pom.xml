@@ -23,7 +23,7 @@
         <artifactId>commons-jci</artifactId>
         <version>1.1-SNAPSHOT</version>
     </parent>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
     <artifactId>commons-jci-jsr166</artifactId>
     <version>1.1-SNAPSHOT</version>
     <name>compiler-jsr166</name>
@@ -54,6 +54,7 @@
     <properties>
         <maven.compile.source>1.6</maven.compile.source>
         <maven.compile.target>1.6</maven.compile.target>
+        <commons.componentid>jci-jsr166</commons.componentid>
     </properties>
 
 </project>

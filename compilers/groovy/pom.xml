@@ -23,7 +23,7 @@
         <artifactId>commons-jci</artifactId>
         <version>1.1-SNAPSHOT</version>
     </parent>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
     <artifactId>commons-jci-groovy</artifactId>
     <version>1.1-SNAPSHOT</version>
     <name>compiler-groovy</name>
@@ -55,4 +55,7 @@
             <version>1.0-jsr-03</version>
         </dependency>
     </dependencies>
+    <properties>
+        <commons.componentid>jci-groovy</commons.componentid>
+    </properties> 
 </project>
