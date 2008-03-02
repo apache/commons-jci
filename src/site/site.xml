@@ -27,6 +27,7 @@
             <item name="About" href="http://commons.apache.org/jci/index.html"/>
             <item name="Usage" href="http://commons.apache.org/jci/usage.html"/>
             <item name="FAQ" href="http://commons.apache.org/jci/faq.html"/>
+            <item name="Issue Tracking" href="http://commons.apache.org/jci/issue-tracking.html"/>
             <item name="Downloads" href="http://commons.apache.org/jci/downloads.html"/>
         </menu>
         <menu ref="modules"/>
