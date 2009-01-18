@@ -26,7 +26,7 @@ public class SimpleDump implements Opcodes {
 
     public static byte[] dump( final String to ) throws Exception {
 
-        ClassWriter cw = new ClassWriter(true);
+        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
         MethodVisitor mv;
 
         cw.visit(V1_4, ACC_PUBLIC + ACC_SUPER, "jci/Simple", null, "java/lang/Object", null);
