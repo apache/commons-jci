@@ -36,11 +36,11 @@
       </SVNRepository>
     </repository>
     <release>
-      <revision>
+      <Version>
         <name>commons-jci</name>
         <created>2007-06-18</created>
-        <version>1.2</version>
-      </revision>
+        <revision>1.2</revision>
+      </Version>
     </release>
     <mailing-list rdf:resource="http://commons.apache.org/mail-lists.html"/>
   </Project>
