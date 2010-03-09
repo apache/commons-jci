@@ -82,7 +82,7 @@
     </contributors>
     <scm>
         <connection>scm:svn:http://svn.apache.org/repos/asf/commons/proper/jci/trunk/</connection>
-        <developerConnection>scn:svn:https://svn.apache.org/repos/asf/commons/proper/jci/trunk/</developerConnection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/commons/proper/jci/trunk/</developerConnection>
         <url>http://svn.apache.org/viewvc/commons/proper/jci/trunk/</url>
     </scm>
     <build>
