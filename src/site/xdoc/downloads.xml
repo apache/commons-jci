@@ -37,7 +37,7 @@
          <p>
              JCI is available through <a href="http://repo1.maven.org">maven repository</a> mirrors.
              Traditional release distributions are are available from the
-             <a href="http://commons.apache.org/downloads/download_jci.cgi">JCI download page</a>.
+             <a href="http://commons.apache.org/jci/download_jci.cgi">JCI download page</a>.
          </p>
 <!--
          <p>
