@@ -224,18 +224,20 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
         start();
 
         final File file = writeFile("file", "file");
+
+        assertTrue("file should exist", file.exists());
         
         listener.waitForCheck();
         
-        assertEquals(1, listener.getCreatedFiles().size());
-        assertEquals(0, listener.getChangedDirectories().size());
+        assertEquals("expecting 1 file created", 1, listener.getCreatedFiles().size());
+        assertEquals("expecting 0 directories changed", 0, listener.getChangedDirectories().size());
         
         file.delete();
-        assertTrue(!file.exists());
+        assertFalse("file should not exist", file.exists());
 
         listener.waitForCheck();
         
-        assertEquals(1, listener.getDeletedFiles().size());
+        assertEquals("expecting 1 file deleted", 1, listener.getDeletedFiles().size());
         
         stop();        
     }
