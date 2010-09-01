@@ -81,8 +81,8 @@ public abstract class AbstractCompilerTestCase extends TestCase {
         assertEquals(toString(result.getWarnings()), 0, result.getWarnings().length);
 
         final byte[] clazzBytes = store.read("jci/Simple.class");
-        assertNotNull(clazzBytes);
-        assertTrue(clazzBytes.length > 0);
+        assertNotNull("jci/Simple.class is not null",clazzBytes);
+        assertTrue("jci/Simple.class is not empty", clazzBytes.length > 0);
     }
 
     public void testExtendedCompile() throws Exception {
@@ -129,12 +129,12 @@ public abstract class AbstractCompilerTestCase extends TestCase {
         assertEquals(toString(result.getWarnings()), 0, result.getWarnings().length);
 
         final byte[] clazzBytesSimple = store.read("jci/Simple.class");
-        assertNotNull(clazzBytesSimple);
-        assertTrue(clazzBytesSimple.length > 0);
+        assertNotNull("jci/Simple.class is not null", clazzBytesSimple);
+        assertTrue("jci/Simple.class is not empty", clazzBytesSimple.length > 0);
 
         final byte[] clazzBytesExtended = store.read("jci/Extended.class");
-        assertNotNull(clazzBytesExtended);
-        assertTrue(clazzBytesExtended.length > 0);
+        assertNotNull("jci/Extended.class is not null", clazzBytesExtended);
+        assertTrue("jci/Extended.class is not empty",clazzBytesExtended.length > 0);
     }
 
     public void testInternalClassCompile() throws Exception {
@@ -176,12 +176,12 @@ public abstract class AbstractCompilerTestCase extends TestCase {
         assertEquals(toString(result.getWarnings()), 0, result.getWarnings().length);
 
         final byte[] clazzBytes = store.read("jci/Simple.class");
-        assertNotNull(clazzBytes);
-        assertTrue(clazzBytes.length > 0);
+        assertNotNull("jci/Simple.class is not null", clazzBytes);
+        assertTrue("jci/Simple.class is not empty", clazzBytes.length > 0);
 
         final byte[] subClazzBytes = store.read("jci/Simple$Sub.class");
-        assertNotNull(subClazzBytes);
-        assertTrue(subClazzBytes.length > 0);
+        assertNotNull("jci/Simple$Sub.class is not null", subClazzBytes);
+        assertTrue("jci/Simple$Sub.class is not empty", subClazzBytes.length > 0);
 
     }
 
@@ -221,8 +221,8 @@ public abstract class AbstractCompilerTestCase extends TestCase {
         assertEquals(toString(result.getWarnings()), 0, result.getWarnings().length);
 
         final byte[] clazzBytes = store.read("Jci/Simple.class");
-        assertNotNull(clazzBytes);
-        assertTrue(clazzBytes.length > 0);
+        assertNotNull("Jci/Simple.class is not null", clazzBytes);
+        assertTrue("Jci/Simple.class is not empty", clazzBytes.length > 0);
     }
 
     /*
@@ -284,12 +284,12 @@ public abstract class AbstractCompilerTestCase extends TestCase {
         assertEquals(toString(result.getWarnings()), 0, result.getWarnings().length);
 
         final byte[] clazzBytesFunc1 = store.read("jci/Func1.class");
-        assertNotNull(clazzBytesFunc1);
-        assertTrue(clazzBytesFunc1.length > 0);
+        assertNotNull("jci/Func1.class is not null", clazzBytesFunc1);
+        assertTrue("jci/Func1.class is not empty", clazzBytesFunc1.length > 0);
 
         final byte[] clazzBytesFunc2 = store.read("jci/Func2.class");
-        assertNotNull(clazzBytesFunc2);
-        assertTrue(clazzBytesFunc2.length > 0);
+        assertNotNull("jci/Func2.class is not null", clazzBytesFunc2);
+        assertTrue("jci/Func2.class is not empty", clazzBytesFunc2.length > 0);
     }
     
 
