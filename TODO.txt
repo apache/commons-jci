@@ -1,17 +1,25 @@
-o compiler implementations
-  o jsr199
+ORDER BY IMPORTANCE
+
+o update to the compilers and other dependencies (only thing that seems to need some adjustments is janino)
+o simplify the maven build (right now uses custom modules and so on ... which always caused problems)
+o update the maven build (bring it in line with the latest commons pom, plugins etc
+o finish common configuration for some compilers
+o deprecate javac
+o finish implementation of jsr199 compiler
+
+o removing of anonymous classes if parent class is being removed (could require interface changes)
+o ability to add (contents of) jars to the store ...and be able to remove them again
+o add exceptions to interfaces
+o move the reader/store interfaces to streams
+o documentation
+o dependency analysis for proper re-try after errors
+o maven plugin to compile with any of the compilers
+o compiler discovery via META-INF
+o new compiler implementations
   o jikes
   o pizza
   o jruby (maybe?)
   o jpython (maybe?)
   o c# (maybe?)
-o documentation
-o dependency analysis for proper re-try after errors
-o removing of anonymous classes if parent class is being removed
-o ability to add (contents of) jars to the store ...and be able to remove them again
-o maven plugin to compile with any of the compilers -> codehaus.org/mojo
-o compiler discovery via META-INF
-o finish common configuration for some compilers
-o build javac classpath from provided classloader
-o move the reader/store interfaces to streams (maybe?)
-o add exceptions to interfaces (maybe?)
+
+
