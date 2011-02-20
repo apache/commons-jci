@@ -1,6 +1,5 @@
 ORDER BY IMPORTANCE
 
-o update to the compilers and other dependencies (only thing that seems to need some adjustments is janino)
 o simplify the maven build (right now uses custom modules and so on ... which always caused problems)
 o update the maven build (bring it in line with the latest commons pom, plugins etc
 o finish common configuration for some compilers
