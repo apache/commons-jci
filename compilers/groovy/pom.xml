@@ -50,9 +50,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>groovy</groupId>
+            <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-            <version>1.0-jsr-03</version>
+            <version>1.7.7</version>
         </dependency>
     </dependencies>
     <properties>

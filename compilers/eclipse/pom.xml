@@ -50,9 +50,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.jdt</groupId>
-            <artifactId>core</artifactId>
-            <version>3.2.0.658</version>
+            <groupId>org.eclipse.jdt.core.compiler</groupId>
+            <artifactId>ecj</artifactId>
+            <version>3.5.1</version>
         </dependency>
     </dependencies>
     <properties>

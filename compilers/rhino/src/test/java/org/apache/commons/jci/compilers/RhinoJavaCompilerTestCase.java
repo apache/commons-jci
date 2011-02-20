@@ -117,6 +117,9 @@ public final class RhinoJavaCompilerTestCase extends AbstractCompilerTestCase {
         assertTrue(clazzBytes.length > 0);
     }
 
+    public void testCrossReferenceCompilation() throws Exception {
+        
+    }
 
 
 }
