@@ -48,7 +48,7 @@ import org.eclipse.jdt.internal.compiler.problem.DefaultProblemFactory;
 
 /**
  * Eclipse compiler implemenation
- * 
+ *
  * @author tcurdt
  */
 public final class EclipseJavaCompiler extends AbstractJavaCompiler {
@@ -86,11 +86,11 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             } else {
                 typeName = clazzName.toCharArray();
             }
-            
+
             log.debug("className=" + clazzName);
             log.debug("fileName=" + fileName);
-            log.debug("typeName=" + new String(typeName)); 
-            
+            log.debug("typeName=" + new String(typeName));
+
             final StringTokenizer izer = new StringTokenizer(clazzName, ".");
             packageName = new char[izer.countTokens() - 1][];
             for (int i = 0; i < packageName.length; i++) {
@@ -123,7 +123,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         }
     }
 
-    
+
     public org.apache.commons.jci.compilers.CompilationResult compile(
             final String[] pSourceFiles,
             final ResourceReader pReader,
@@ -133,14 +133,14 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             ) {
 
         final Map settingsMap = new EclipseJavaCompilerSettings(pSettings).toNativeSettings();
-        
+
         final Collection problems = new ArrayList();
-        
+
         final ICompilationUnit[] compilationUnits = new ICompilationUnit[pSourceFiles.length];
         for (int i = 0; i < compilationUnits.length; i++) {
             final String sourceFile = pSourceFiles[i];
-            
-            if (pReader.isAvailable(sourceFile)) {            
+
+            if (pReader.isAvailable(sourceFile)) {
                 compilationUnits[i] = new CompilationUnit(pReader, sourceFile);
                 log.debug("compiling " + sourceFile);
             } else {
@@ -175,7 +175,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                     public boolean isError() {
                         return true;
                     }
-                    
+
                     public String toString() {
                         return getMessage();
                     }
@@ -184,7 +184,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                 if (problemHandler != null) {
                     problemHandler.handle(problem);
                 }
-                
+
                 problems.add(problem);
             }
         }
@@ -194,7 +194,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             problems.toArray(result);
             return new org.apache.commons.jci.compilers.CompilationResult(result);
         }
-        
+
         final IErrorHandlingPolicy policy = DefaultErrorHandlingPolicies.proceedWithAllProblems();
         final IProblemFactory problemFactory = new DefaultProblemFactory(Locale.getDefault());
         final INameEnvironment nameEnvironment = new INameEnvironment() {
@@ -219,7 +219,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                     result.append(pPackageName[i]);
                     result.append('.');
                 }
-                
+
 //                log.debug("finding typeName=" + new String(typeName) + " packageName=" + result.toString());
 
                 result.append(pTypeName);
@@ -227,15 +227,15 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             }
 
             private NameEnvironmentAnswer findType( final String pClazzName ) {
-                
+
                 if (isPackage(pClazzName)) {
                     return null;
                 }
-                
+
                 log.debug("finding " + pClazzName);
-                
+
                 final String resourceName = ConversionUtils.convertClassToResourcePath(pClazzName);
-                
+
                 final byte[] clazzBytes = pStore.read(pClazzName);
                 if (clazzBytes != null) {
                     log.debug("loading from store " + pClazzName);
@@ -249,9 +249,9 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                         return null;
                     }
                 }
-                
+
                 log.debug("not in store " + pClazzName);
-                
+
                 final InputStream is = pClassLoader.getResourceAsStream(resourceName);
                 if (is == null) {
                     log.debug("class " + pClazzName + " not found");
@@ -290,20 +290,20 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             }
 
             private boolean isPackage( final String pClazzName ) {
-                
+
                 final InputStream is = pClassLoader.getResourceAsStream(ConversionUtils.convertClassToResourcePath(pClazzName));
                 if (is != null) {
                     log.debug("found the class for " + pClazzName + "- no package");
                     return false;
                 }
-                
+
                 // FIXME: this should not be tied to the extension
                 final String source = pClazzName.replace('.', '/') + ".java";
                 if (pReader.isAvailable(source)) {
                     log.debug("found the source " + source + " for " + pClazzName + " - no package ");
                     return false;
                 }
-                
+
                 return true;
             }
 
@@ -317,9 +317,9 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                         result.append(parentPackageName[i]);
                     }
                 }
-                
+
 //                log.debug("isPackage parentPackageName=" + result.toString() + " packageName=" + new String(packageName));
-                
+
                 if (parentPackageName != null && parentPackageName.length > 0) {
                     result.append('.');
                 }
@@ -338,7 +338,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                     final IProblem[] iproblems = pResult.getProblems();
                     for (int i = 0; i < iproblems.length; i++) {
                         final IProblem iproblem = iproblems[i];
-                        final CompilationProblem problem = new EclipseCompilationProblem(iproblem); 
+                        final CompilationProblem problem = new EclipseCompilationProblem(iproblem);
                         if (problemHandler != null) {
                             problemHandler.handle(problem);
                         }
