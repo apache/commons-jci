@@ -297,9 +297,9 @@ public abstract class AbstractCompilerTestCase extends TestCase {
      * https://issues.apache.org/jira/browse/JCI-59
      */
     public void testAdditionalTopLevelClassCompile() throws Exception {
-       final JavaCompiler compiler = createJavaCompiler(); 
-
-       final ResourceReader reader = new ResourceReader() {
+        final JavaCompiler compiler = createJavaCompiler(); 
+    
+        final ResourceReader reader = new ResourceReader() {
            final private Map sources = new HashMap() {
                private static final long serialVersionUID = 1L;
                {
@@ -316,29 +316,28 @@ public abstract class AbstractCompilerTestCase extends TestCase {
                        "  }\n" +
                        "}").getBytes());
                }};
-
+    
            public byte[] getBytes( final String pResourceName ) {
                return (byte[]) sources.get(pResourceName);
            }
-
+    
            public boolean isAvailable( final String pResourceName ) {
                return sources.containsKey(pResourceName);
            }
-
-       };
-
-       final MemoryResourceStore store = new MemoryResourceStore();
-       final CompilationResult result = compiler.compile(
+        };
+    
+        final MemoryResourceStore store = new MemoryResourceStore();
+        final CompilationResult result = compiler.compile(
                new String[] {
                        "jci/Simple.java"
                }, reader, store);
-
-       assertEquals(toString(result.getErrors()), 0, result.getErrors().length);
-       assertEquals(toString(result.getWarnings()), 0, result.getWarnings().length);
-
-       final byte[] clazzBytes = store.read("jci/Simple.class");
-       assertNotNull(clazzBytes);
-       assertTrue(clazzBytes.length > 0);
+    
+        assertEquals(toString(result.getErrors()), 0, result.getErrors().length);
+        assertEquals(toString(result.getWarnings()), 0, result.getWarnings().length);
+    
+        final byte[] clazzBytes = store.read("jci/Simple.class");
+        assertNotNull(clazzBytes);
+        assertTrue(clazzBytes.length > 0);
     }
 
     public final String toString( final CompilationProblem[] pProblems ) {
