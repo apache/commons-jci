@@ -28,7 +28,7 @@ import org.apache.commons.jci.stores.MemoryResourceStore;
 
 /**
  * Providing convenience methods for JavaCompiler TestCases
- * 
+ *
  * @author tcurdt
  */
 public abstract class AbstractCompilerTestCase extends TestCase {
@@ -46,7 +46,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
     }
 
     public void testSimpleCompile() throws Exception {
-        final JavaCompiler compiler = createJavaCompiler(); 
+        final JavaCompiler compiler = createJavaCompiler();
 
         final ResourceReader reader = new ResourceReader() {
             final private Map sources = new HashMap() {
@@ -86,7 +86,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
     }
 
     public void testExtendedCompile() throws Exception {
-        final JavaCompiler compiler = createJavaCompiler(); 
+        final JavaCompiler compiler = createJavaCompiler();
 
         final ResourceReader reader = new ResourceReader() {
             final private Map sources = new HashMap() {
@@ -138,7 +138,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
     }
 
     public void testInternalClassCompile() throws Exception {
-        final JavaCompiler compiler = createJavaCompiler(); 
+        final JavaCompiler compiler = createJavaCompiler();
 
         final ResourceReader reader = new ResourceReader() {
             final private Map sources = new HashMap() {
@@ -186,7 +186,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
     }
 
     public void testUppercasePackageNameCompile() throws Exception {
-        final JavaCompiler compiler = createJavaCompiler(); 
+        final JavaCompiler compiler = createJavaCompiler();
 
         final ResourceReader reader = new ResourceReader() {
             final private Map sources = new HashMap() {
@@ -229,13 +229,14 @@ public abstract class AbstractCompilerTestCase extends TestCase {
      * https://issues.apache.org/jira/browse/JCI-53
      */
     public void testCrossReferenceCompilation() throws Exception {
-    	final String javaVersion = System.getProperty("java.version");
-    	if (!(javaVersion.startsWith("1.5") || javaVersion.startsWith("1.6"))) {
-    		System.err.println("WARNING! Skipping testCrossReferenceCompilation() because your runtime does not support java 1.5+ yet");
-    		return;
-    	}
-    	
-    	final JavaCompiler compiler = createJavaCompiler(); 
+      final String javaVersion = System.getProperty("java.version");
+
+      if (!(javaVersion.startsWith("1.5") || javaVersion.startsWith("1.6"))) {
+          System.err.println("WARNING! Skipping testCrossReferenceCompilation() because your runtime does not support java 1.5+ yet");
+          return;
+      }
+
+      final JavaCompiler compiler = createJavaCompiler();
 
         final ResourceReader reader = new ResourceReader() {
             final private Map sources = new HashMap() {
@@ -272,7 +273,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
         final JavaCompilerSettings settings = compiler.createDefaultSettings();
         settings.setTargetVersion("1.5");
         settings.setSourceVersion("1.5");
-        
+
         final MemoryResourceStore store = new MemoryResourceStore();
         final CompilationResult result = compiler.compile(
                 new String[] {
@@ -291,7 +292,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
         assertNotNull("jci/Func2.class is not null", clazzBytesFunc2);
         assertTrue("jci/Func2.class is not empty", clazzBytesFunc2.length > 0);
     }
-    
+
 
 
     public final String toString( final CompilationProblem[] pProblems ) {
