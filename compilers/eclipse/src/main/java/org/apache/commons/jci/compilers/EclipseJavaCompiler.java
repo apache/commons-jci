@@ -236,7 +236,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
 
                 final String resourceName = ConversionUtils.convertClassToResourcePath(pClazzName);
 
-                final byte[] clazzBytes = pStore.read(pClazzName);
+                final byte[] clazzBytes = pStore.read(resourceName);
                 if (clazzBytes != null) {
                     log.debug("loading from store " + pClazzName);
 
@@ -294,6 +294,11 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                 final InputStream is = pClassLoader.getResourceAsStream(ConversionUtils.convertClassToResourcePath(pClazzName));
                 if (is != null) {
                     log.debug("found the class for " + pClazzName + "- no package");
+                    try {
+                        is.close();
+                    } catch (final IOException ie) {
+                        log.error("could not close input stream", ie);
+                    } 
                     return false;
                 }
 

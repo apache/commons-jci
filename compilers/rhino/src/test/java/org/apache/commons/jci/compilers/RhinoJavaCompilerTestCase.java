@@ -118,8 +118,11 @@ public final class RhinoJavaCompilerTestCase extends AbstractCompilerTestCase {
     }
 
     public void testCrossReferenceCompilation() throws Exception {
-        
+        // NA
     }
 
+    public void testAdditionalTopLevelClassCompile() throws Exception {
+        // NA
+    }
 
 }
