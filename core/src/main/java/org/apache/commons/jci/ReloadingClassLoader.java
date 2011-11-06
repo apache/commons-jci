@@ -29,8 +29,8 @@ import org.apache.commons.logging.LogFactory;
 /**
  * The ReloadingClassLoader uses a delegation mechansim to allow
  * classes to be reloaded. That means that loadClass calls may
- * return different results if the class was change in the underlying
- * ResoruceStore.
+ * return different results if the class was changed in the underlying
+ * ResourceStore.
  * 
  * @author tcurdt
  */
