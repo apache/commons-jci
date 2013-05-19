@@ -23,7 +23,7 @@
     <category rdf:resource="http://projects.apache.org/category/library"/>
     <license rdf:resource="http://usefulinc.com/doap/licenses/asl20"/>
     <bug-database rdf:resource="http://issues.apache.org/jira/browse/JCI"/>
-    <download-page rdf:resource="http://commons.apache.org/downloads/download_jci.cgi"/>
+    <download-page rdf:resource="http://commons.apache.org/jci/download_jci.cgi"/>
     <asfext:pmc rdf:resource="http://commons.apache.org/"/>
     <shortdesc xml:lang="en">Commons JCI</shortdesc>
     <description xml:lang="en">
