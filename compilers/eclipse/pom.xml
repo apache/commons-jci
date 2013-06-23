@@ -52,7 +52,7 @@
         <dependency>
             <groupId>org.eclipse.jdt.core.compiler</groupId>
             <artifactId>ecj</artifactId>
-            <version>3.5.1</version>
+            <version>4.2.2</version>
         </dependency>
     </dependencies>
     <properties>

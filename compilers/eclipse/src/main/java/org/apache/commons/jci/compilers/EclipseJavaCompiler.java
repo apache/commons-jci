@@ -121,6 +121,10 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         public char[][] getPackageName() {
             return packageName;
         }
+
+        public boolean ignoreOptionalProblems() {
+            return false;
+        }
     }
 
 
