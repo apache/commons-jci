@@ -45,6 +45,7 @@
         <module>compilers/groovy</module>
         <module>compilers/rhino</module>
         <!-- <module>compilers/jsr199</module> -->
+        <!-- <module>compilers/javac</module> -->
     </modules>
 
     <developers>
