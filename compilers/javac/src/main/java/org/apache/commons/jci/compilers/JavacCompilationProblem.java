@@ -25,18 +25,22 @@ import org.apache.commons.jci.problems.CompilationProblem;
  */
 public class JavacCompilationProblem implements CompilationProblem {
 
-    private int endCoumn;
-    private int endLine;
-    private String fileName;
-    private String message;
-    private int startCoumn;
-    private int startLine;
-    private boolean isError;
+    private final int endCoumn;
+    private final int endLine;
+    private final String fileName;
+    private final String message;
+    private final int startCoumn;
+    private final int startLine;
+    private final boolean isError;
 
     public JavacCompilationProblem(String message, boolean isError) {
         this.message = message;
         this.isError = isError;
         this.fileName = "";
+        this.startLine = 0;
+        this.startCoumn = 0;
+        this.endCoumn = 0;
+        this.endLine = 0;
     }
 
     public JavacCompilationProblem(String fileName, boolean isError, int startLine, int startCoumn, int endLine, int endCoumn, String message) {
