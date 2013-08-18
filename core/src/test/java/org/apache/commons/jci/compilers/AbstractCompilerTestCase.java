@@ -332,17 +332,17 @@ public abstract class AbstractCompilerTestCase extends TestCase {
                        "jci/Simple.java"
                }, reader, store);
     
-        assertEquals(toString(result.getErrors()), 0, result.getErrors().length);
+        assertEquals("Unexpected errors(s): " + toString(result.getErrors()), 0, result.getErrors().length);
     
         final byte[] clazzBytes = store.read("jci/Simple.class");
-        assertNotNull(clazzBytes);
+        assertNotNull("Expected to find jci/Simple.class", clazzBytes);
         assertTrue(clazzBytes.length > 0);
 
         final byte[] additionalTopLevelBytes = store.read("jci/AdditionalTopLevel.class");
-        assertNotNull(additionalTopLevelBytes);
+        assertNotNull("Expected to find jci/AdditionalTopLevel.class", additionalTopLevelBytes);
         assertTrue(additionalTopLevelBytes.length > 0);
 
-        assertEquals(toString(result.getWarnings()), 0, result.getWarnings().length);
+        assertEquals("Unexpected warning(s): " + toString(result.getWarnings()), 0, result.getWarnings().length);
     }
 
     public final String toString( final CompilationProblem[] pProblems ) {
