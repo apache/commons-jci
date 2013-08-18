@@ -64,7 +64,7 @@ public final class MemoryResourceStore implements ResourceStore {
             names.add(name);
         }
 
-        return (String[]) names.toArray(new String[store.size()]);
+        return names.toArray(new String[store.size()]);
     }
     
     @Override

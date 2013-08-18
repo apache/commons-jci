@@ -74,7 +74,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
         FilesystemAlterationObserver observer;
 
         synchronized (observersLock) {
-            observer = (FilesystemAlterationObserver)observers.get(pRoot);
+            observer = observers.get(pRoot);
 
             if (observer == null) {
                 final Map<File, FilesystemAlterationObserver> newObservers = new HashMap<File, FilesystemAlterationObserver>(observers);
@@ -97,7 +97,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
     }
 
     public FilesystemAlterationListener[] getListenersFor( final File pRoot  ) {
-        final FilesystemAlterationObserver observer = (FilesystemAlterationObserver)observers.get(pRoot);
+        final FilesystemAlterationObserver observer = observers.get(pRoot);
 
         if (observer == null) {
             return new FilesystemAlterationListener[0];

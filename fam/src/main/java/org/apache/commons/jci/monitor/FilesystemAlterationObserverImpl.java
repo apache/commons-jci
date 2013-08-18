@@ -121,7 +121,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
             final Set<Entry> deleted = new HashSet<Entry>(childs.values());
             for (MonitorFile f : files) {
                 final String name = f.getName();
-                final Entry entry = (Entry)childs.get(name);
+                final Entry entry = childs.get(name);
                 if (entry != null) {
                     // already recognized as child
                     deleted.remove(entry);

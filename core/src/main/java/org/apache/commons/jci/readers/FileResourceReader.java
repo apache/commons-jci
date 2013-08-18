@@ -54,7 +54,7 @@ public final class FileResourceReader implements ResourceReader {
     public String[] list() {
         final List<String> files = new ArrayList<String>();
         list(root, files);
-        return (String[]) files.toArray(new String[files.size()]);
+        return files.toArray(new String[files.size()]);
     }
 
     /**

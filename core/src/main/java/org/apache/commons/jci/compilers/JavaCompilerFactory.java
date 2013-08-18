@@ -68,7 +68,7 @@ public final class JavaCompilerFactory {
             className = pHint;
         }
         
-        Class clazz = (Class) classCache.get(className);
+        Class clazz = classCache.get(className);
         
         if (clazz == null) {
             try {

@@ -85,14 +85,14 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
             log.debug("compiling");
             unit.compile(Phases.CLASS_GENERATION);
             
-            final List<GroovyClass> classes = (List<GroovyClass>) unit.getClasses();
+            final List<GroovyClass> classes = unit.getClasses();
             for (GroovyClass clazz : classes) {
                 final byte[] bytes = clazz.getBytes();
                 pStore.write(ConversionUtils.convertClassToResourcePath(clazz.getName()), bytes);
             }
         } catch (final MultipleCompilationErrorsException e) {
             final ErrorCollector col = e.getErrorCollector();
-            final Collection<WarningMessage> warnings = (Collection<WarningMessage>) col.getWarnings();
+            final Collection<WarningMessage> warnings = col.getWarnings();
             if (warnings != null) {
                 for (WarningMessage warning : warnings) {
                     final CompilationProblem problem = new GroovyCompilationProblem(warning); 
@@ -103,7 +103,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
                 }
             }
 
-            final Collection<Message> errors = (Collection<Message>) col.getErrors();
+            final Collection<Message> errors = col.getErrors();
             if (errors != null) {
                 for (Message message : errors) {
                     final CompilationProblem problem = new GroovyCompilationProblem(message); 
