@@ -86,6 +86,7 @@ public final class FileResourceStore implements ResourceStore {
     /**
      * @deprecated
      */
+    @Deprecated
     public String[] list() {
         final List<String> files = new ArrayList<String>();
         list(root, files);
@@ -95,6 +96,7 @@ public final class FileResourceStore implements ResourceStore {
     /**
      * @deprecated
      */
+    @Deprecated
     private void list(final File pFile, final List<String> pFiles) {
         if (pFile.isDirectory()) {
             final File[] directoryFiles = pFile.listFiles();

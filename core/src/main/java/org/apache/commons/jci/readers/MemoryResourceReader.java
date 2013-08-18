@@ -59,6 +59,7 @@ public class MemoryResourceReader implements ResourceReader {
     /**
      * @deprecated
      */
+    @Deprecated
     public String[] list() {
         if (resources == null) {
             return new String[0];

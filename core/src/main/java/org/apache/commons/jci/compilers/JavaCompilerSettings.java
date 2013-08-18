@@ -38,6 +38,7 @@ public class JavaCompilerSettings {
     private boolean debug = false;
 
     /** @deprecated */
+    @Deprecated
     private boolean verbose = false;
 
     public JavaCompilerSettings() {    	
@@ -105,11 +106,13 @@ public class JavaCompilerSettings {
     }
 
     /** @deprecated */
+    @Deprecated
     public void setVerbose( final boolean pVerbose ) {
         verbose = pVerbose;
     }
 
     /** @deprecated */
+    @Deprecated
     public boolean isVerbose() {
         return verbose;
     }

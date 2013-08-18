@@ -54,6 +54,7 @@ public final class MemoryResourceStore implements ResourceStore {
     /**
      * @deprecated
      */
+    @Deprecated
     public String[] list() {
         if (store == null) {
             return new String[0];
