@@ -34,37 +34,45 @@ public class FileChangeListener extends AbstractFilesystemAlterationListener {
         return changed;
     }
     
+    @Override
     public void onStart( final FilesystemAlterationObserver pObserver ) {
         changed = false;
         super.onStart(pObserver);
     }
 
+    @Override
     public void onStop( final FilesystemAlterationObserver pObserver ) {
         super.onStop(pObserver);
     }
 
     
+    @Override
     public void onFileChange( final File pFile ) {
         changed = true;
     }
 
 
+    @Override
     public void onFileCreate( final File pFile ) {
         changed = true;
     }
 
 
+    @Override
     public void onFileDelete( final File pFile ) {
         changed = true;
     }
 
 
+    @Override
     public void onDirectoryChange( final File pDir ) {
     }
 
+    @Override
     public void onDirectoryCreate( final File pDir ) {
     }
 
+    @Override
     public void onDirectoryDelete( final File pDir ) {
     }
     

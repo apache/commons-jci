@@ -84,6 +84,7 @@ public final class EclipseJavaCompilerSettings extends JavaCompilerSettings {
         return map;
     }
     
+    @Override
     public String toString() {
         return toNativeSettings().toString();
     }

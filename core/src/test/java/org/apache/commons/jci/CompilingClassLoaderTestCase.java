@@ -107,6 +107,7 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
 
     }
     
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         
@@ -232,6 +233,7 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
         
     }
 
+    @Override
     protected void tearDown() throws Exception {
         fam.removeListener(listener);
         fam.stop();

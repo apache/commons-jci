@@ -61,6 +61,7 @@ public final class EclipseCompilationProblem implements CompilationProblem {
         return problem.getMessage();
     }
 
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append(getFileName()).append(" (");

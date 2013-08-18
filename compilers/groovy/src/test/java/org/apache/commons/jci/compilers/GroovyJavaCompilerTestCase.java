@@ -23,19 +23,23 @@ package org.apache.commons.jci.compilers;
  */
 public final class GroovyJavaCompilerTestCase extends AbstractCompilerTestCase {
 
+    @Override
     public String getCompilerName() {
         return "groovy";
     }
 
+    @Override
     public JavaCompiler createJavaCompiler() {
         return new GroovyJavaCompiler();
     }
 
+    @Override
     public void testInternalClassCompile() throws Exception {
         // FIXME: inner classes not supported in groovy?
     }
 
-	public void testCrossReferenceCompilation() throws Exception {
+	@Override
+    public void testCrossReferenceCompilation() throws Exception {
 		// FIXME: static imports not supported in groovy?
 	}
 

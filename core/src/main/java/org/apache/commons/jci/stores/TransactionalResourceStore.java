@@ -48,6 +48,7 @@ public class TransactionalResourceStore implements ResourceStore, Transactional 
         store.write(pResourceName, pResourceData);
     }
     
+    @Override
     public String toString() {
         return store.toString();
     }

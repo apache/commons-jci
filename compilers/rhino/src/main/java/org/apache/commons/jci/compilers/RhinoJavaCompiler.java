@@ -114,6 +114,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
             return problems;
         }
 
+        @Override
         protected Class findClass( final String pName ) throws ClassNotFoundException {
             final Context context = Context.enter();
             context.setErrorReporter(new ProblemCollector());

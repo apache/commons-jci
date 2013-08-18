@@ -54,6 +54,7 @@ public final class ResourceStoreClassLoader extends ClassLoader {
         return null;            
     }
     
+    @Override
     protected synchronized Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
         // log.debug(getId() + " looking for: " + name);
         Class clazz = findLoadedClass(name);
@@ -83,6 +84,7 @@ public final class ResourceStoreClassLoader extends ClassLoader {
         return clazz;
     }
 
+    @Override
     protected Class findClass( final String name ) throws ClassNotFoundException {
         final Class clazz = fastFindClass(name);
         if (clazz == null) {

@@ -93,7 +93,8 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
     		store = pStore;
     	}
 
-		public void close() throws IOException {
+		@Override
+        public void close() throws IOException {
 			super.close();
 
 			final byte[] bytes = toByteArray();
@@ -110,7 +111,8 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 
     	final Compiler compiler = new Compiler(
     			new ResourceFinder() {
-					public Resource findResource( final String pSourceName ) {
+					@Override
+                    public Resource findResource( final String pSourceName ) {
 						final byte[] bytes = pResourceReader.getBytes(pSourceName);
 						
 						if (bytes == null) {
@@ -125,7 +127,8 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
     			},
     			new ClassLoaderIClassLoader(pClassLoader),
     			new ResourceFinder() {
-					public Resource findResource( final String pResourceName ) {
+					@Override
+                    public Resource findResource( final String pResourceName ) {
 						final byte[] bytes = pStore.read(pResourceName);
 						
 						if (bytes == null) {

@@ -86,6 +86,7 @@ public final class JaninoCompilationProblem implements CompilationProblem {
         return message;
     }
 
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append(getFileName()).append(" (");

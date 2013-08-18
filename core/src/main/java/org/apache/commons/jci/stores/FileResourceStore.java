@@ -106,6 +106,7 @@ public final class FileResourceStore implements ResourceStore {
         }
     }
     
+    @Override
     public String toString() {
         return this.getClass().getName() + root.toString();
     }

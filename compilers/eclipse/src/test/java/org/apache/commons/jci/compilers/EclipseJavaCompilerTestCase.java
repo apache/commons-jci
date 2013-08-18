@@ -19,10 +19,12 @@ package org.apache.commons.jci.compilers;
 
 public final class EclipseJavaCompilerTestCase extends AbstractCompilerTestCase {
 
+    @Override
     public String getCompilerName() {
         return "eclipse";
     }
 
+    @Override
     public JavaCompiler createJavaCompiler() {
         return new EclipseJavaCompiler();
     }

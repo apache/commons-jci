@@ -37,17 +37,17 @@ public final class MemoryResourceStore implements ResourceStore {
     private final Map<String, byte[]> store = new HashMap<String, byte[]>();
 
     public byte[] read( final String pResourceName ) {
-        log.debug("reading resource " + pResourceName);
+        System.err.println("reading resource " + pResourceName);
         return store.get(pResourceName);
     }
 
     public void write( final String pResourceName, final byte[] pData ) {
-        log.debug("writing resource " + pResourceName + "(" + pData.length + ")");
+        System.err.println("writing resource " + pResourceName + "(" + pData.length + ")");
         store.put(pResourceName, pData);
     }
 
     public void remove( final String pResourceName ) {
-        log.debug("removing resource " + pResourceName);
+        System.err.println("removing resource " + pResourceName);
         store.remove(pResourceName);
     }
 
@@ -67,7 +67,9 @@ public final class MemoryResourceStore implements ResourceStore {
         return (String[]) names.toArray(new String[store.size()]);
     }
     
+    @Override
     public String toString() {
+        System.err.println("tos()");
         return this.getClass().getName() + store.toString();
     }
 }

@@ -44,12 +44,14 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
     private File directory;
 
     
+    @Override
     protected void setUp() throws Exception {
         directory = createTempDirectory();
         assertTrue(directory.exists());
         assertTrue(directory.isDirectory());
     }
     
+    @Override
     protected void tearDown() throws Exception {
         FileUtils.deleteDirectory(directory);
     }

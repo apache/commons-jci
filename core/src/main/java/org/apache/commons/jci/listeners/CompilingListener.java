@@ -81,6 +81,7 @@ public class CompilingListener extends ReloadingListener {
         return ConversionUtils.stripExtension(ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), pFile))) + getSourceFileExtension();
     }
     
+    @Override
     public ResourceStore getStore() {
         return transactionalStore;
     }
@@ -89,6 +90,7 @@ public class CompilingListener extends ReloadingListener {
         return lastResult;
     }
     
+    @Override
     public void onStart( final FilesystemAlterationObserver pObserver ) {
         super.onStart(pObserver);
 
@@ -120,6 +122,7 @@ public class CompilingListener extends ReloadingListener {
         return result;
     }
     
+    @Override
     public boolean isReloadRequired( final FilesystemAlterationObserver pObserver ) {
         boolean reload = false;
 

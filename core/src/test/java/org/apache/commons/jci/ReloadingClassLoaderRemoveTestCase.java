@@ -44,10 +44,12 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
         assertTrue(clazzSimpleA.length > 0);
     }
 
+    @Override
     protected void setUp() throws Exception {
         System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
     }
     
+    @Override
     protected void tearDown() throws Exception {
     }
 

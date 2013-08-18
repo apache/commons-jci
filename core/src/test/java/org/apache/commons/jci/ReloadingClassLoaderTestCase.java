@@ -51,6 +51,7 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         assertTrue(clazzExtended.length > 0);
     }
     
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         
@@ -157,6 +158,7 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         // FIXME: compare with delegation
     }
     
+    @Override
     protected void tearDown() throws Exception {
         fam.removeListener(listener);
         fam.stop();

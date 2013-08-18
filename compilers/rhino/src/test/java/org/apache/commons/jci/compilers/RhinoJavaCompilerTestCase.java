@@ -29,14 +29,17 @@ import org.apache.commons.jci.stores.MemoryResourceStore;
  */
 public final class RhinoJavaCompilerTestCase extends AbstractCompilerTestCase {
 
+    @Override
     public JavaCompiler createJavaCompiler() {
         return new RhinoJavaCompiler();
     }
 
+    @Override
     public String getCompilerName() {
         return "rhino";
     }
 
+    @Override
     public void testSimpleCompile() throws Exception {
         final JavaCompiler compiler = createJavaCompiler(); 
 
@@ -74,12 +77,15 @@ public final class RhinoJavaCompilerTestCase extends AbstractCompilerTestCase {
         assertTrue(clazzBytes.length > 0);
     }
 
+    @Override
     public void testExtendedCompile() throws Exception {
     }
 
+    @Override
     public void testInternalClassCompile() throws Exception {
     }
 
+    @Override
     public void testUppercasePackageNameCompile() throws Exception {
         final JavaCompiler compiler = createJavaCompiler(); 
 
@@ -117,10 +123,12 @@ public final class RhinoJavaCompilerTestCase extends AbstractCompilerTestCase {
         assertTrue(clazzBytes.length > 0);
     }
 
+    @Override
     public void testCrossReferenceCompilation() throws Exception {
         // NA
     }
 
+    @Override
     public void testAdditionalTopLevelClassCompile() throws Exception {
         // NA
     }

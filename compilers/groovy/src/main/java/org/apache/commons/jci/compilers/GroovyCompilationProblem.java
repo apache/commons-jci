@@ -99,6 +99,7 @@ public final class GroovyCompilationProblem implements CompilationProblem {
         return message;
     }
 
+    @Override
     public String toString() {
         return getMessage();
     }

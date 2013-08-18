@@ -36,6 +36,7 @@ public abstract class AbstractTestCase extends TestCase {
     
     protected File directory;
 
+    @Override
     protected void setUp() throws Exception {
 
         System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
@@ -116,6 +117,7 @@ public abstract class AbstractTestCase extends TestCase {
     }
 
 
+    @Override
     protected void tearDown() throws Exception {
         FileUtils.deleteDirectory(directory);
     }

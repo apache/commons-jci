@@ -79,6 +79,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
             return file.lastModified();
         }
 
+        @Override
         public String toString() {
             return file.toString();
         }
@@ -105,6 +106,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
         }
         
         
+        @Override
         public String toString() {
             return file.toString();
         }
