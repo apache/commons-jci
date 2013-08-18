@@ -49,7 +49,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
         final JavaCompiler compiler = createJavaCompiler();
 
         final ResourceReader reader = new ResourceReader() {
-            final private Map sources = new HashMap() {
+            final private Map<String, byte[]> sources = new HashMap<String, byte[]>() {
                 private static final long serialVersionUID = 1L;
                 {
                     put("jci/Simple.java", (
@@ -62,7 +62,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
                 }};
 
             public byte[] getBytes( final String pResourceName ) {
-                return (byte[]) sources.get(pResourceName);
+                return sources.get(pResourceName);
             }
 
             public boolean isAvailable( final String pResourceName ) {
@@ -89,7 +89,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
         final JavaCompiler compiler = createJavaCompiler();
 
         final ResourceReader reader = new ResourceReader() {
-            final private Map sources = new HashMap() {
+            final private Map<String, byte[]> sources = new HashMap<String, byte[]>() {
                 private static final long serialVersionUID = 1L;
                 {
                     put("jci/Simple.java", (
@@ -109,7 +109,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
                 }};
 
             public byte[] getBytes( final String pResourceName ) {
-                return (byte[]) sources.get(pResourceName);
+                return sources.get(pResourceName);
             }
 
             public boolean isAvailable( final String pResourceName ) {
@@ -141,7 +141,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
         final JavaCompiler compiler = createJavaCompiler();
 
         final ResourceReader reader = new ResourceReader() {
-            final private Map sources = new HashMap() {
+            final private Map<String, byte[]> sources = new HashMap<String, byte[]>() {
                 private static final long serialVersionUID = 1L;
                 {
                     put("jci/Simple.java", (
@@ -157,7 +157,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
                 }};
 
             public byte[] getBytes( final String pResourceName ) {
-                return (byte[]) sources.get(pResourceName);
+                return sources.get(pResourceName);
             }
 
             public boolean isAvailable( final String pResourceName ) {
@@ -189,7 +189,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
         final JavaCompiler compiler = createJavaCompiler();
 
         final ResourceReader reader = new ResourceReader() {
-            final private Map sources = new HashMap() {
+            final private Map<String, byte[]> sources = new HashMap<String, byte[]>() {
                 private static final long serialVersionUID = 1L;
                 {
                     put("Jci/Simple.java", (
@@ -202,7 +202,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
                 }};
 
             public byte[] getBytes( final String pResourceName ) {
-                return (byte[]) sources.get(pResourceName);
+                return sources.get(pResourceName);
             }
 
             public boolean isAvailable( final String pResourceName ) {
@@ -239,7 +239,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
       final JavaCompiler compiler = createJavaCompiler();
 
         final ResourceReader reader = new ResourceReader() {
-            final private Map sources = new HashMap() {
+            final private Map<String, byte[]> sources = new HashMap<String, byte[]>() {
                 private static final long serialVersionUID = 1L;
                 {
                     put("jci/Func1.java", (
@@ -261,7 +261,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
                 }};
 
             public byte[] getBytes( final String pResourceName ) {
-                return (byte[]) sources.get(pResourceName);
+                return sources.get(pResourceName);
             }
 
             public boolean isAvailable( final String pResourceName ) {
@@ -300,7 +300,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
         final JavaCompiler compiler = createJavaCompiler(); 
     
         final ResourceReader reader = new ResourceReader() {
-           final private Map sources = new HashMap() {
+           final private Map<String, byte[]> sources = new HashMap<String, byte[]>() {
                private static final long serialVersionUID = 1L;
                {
                    put("jci/Simple.java", (
@@ -318,7 +318,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
                }};
     
            public byte[] getBytes( final String pResourceName ) {
-               return (byte[]) sources.get(pResourceName);
+               return sources.get(pResourceName);
            }
     
            public boolean isAvailable( final String pResourceName ) {
@@ -348,8 +348,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
     public final String toString( final CompilationProblem[] pProblems ) {
         final StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < pProblems.length; i++) {
-            final CompilationProblem problem = pProblems[i];
+        for (CompilationProblem problem : pProblems) {
             sb.append(problem.getMessage()).append(", ");
         }
 

@@ -21,7 +21,6 @@ import groovy.lang.GroovyClassLoader;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.jci.problems.CompilationProblem;
@@ -80,24 +79,22 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
             unit.addSource(source[i]);
         }
         
-        final Collection problems = new ArrayList();
+        final Collection<CompilationProblem> problems = new ArrayList<CompilationProblem>();
 
         try {
             log.debug("compiling");
             unit.compile(Phases.CLASS_GENERATION);
             
-            final List classes = unit.getClasses();
-            for (final Iterator it = classes.iterator(); it.hasNext();) {
-                final GroovyClass clazz = (GroovyClass) it.next();
+            final List<GroovyClass> classes = (List<GroovyClass>) unit.getClasses();
+            for (GroovyClass clazz : classes) {
                 final byte[] bytes = clazz.getBytes();
                 pStore.write(ConversionUtils.convertClassToResourcePath(clazz.getName()), bytes);
             }
         } catch (final MultipleCompilationErrorsException e) {
             final ErrorCollector col = e.getErrorCollector();
-            final Collection warnings = col.getWarnings();
+            final Collection<WarningMessage> warnings = (Collection<WarningMessage>) col.getWarnings();
             if (warnings != null) {
-                for (final Iterator it = warnings.iterator(); it.hasNext();) {
-                    final WarningMessage warning = (WarningMessage) it.next();
+                for (WarningMessage warning : warnings) {
                     final CompilationProblem problem = new GroovyCompilationProblem(warning); 
                     if (problemHandler != null) {
                         problemHandler.handle(problem);
@@ -106,10 +103,9 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
                 }
             }
 
-            final Collection errors = col.getErrors();
+            final Collection<Message> errors = (Collection<Message>) col.getErrors();
             if (errors != null) {
-                for (final Iterator it = errors.iterator(); it.hasNext();) {
-                    final Message message = (Message) it.next();
+                for (Message message : errors) {
                     final CompilationProblem problem = new GroovyCompilationProblem(message); 
                     if (problemHandler != null) {
                         problemHandler.handle(problem);

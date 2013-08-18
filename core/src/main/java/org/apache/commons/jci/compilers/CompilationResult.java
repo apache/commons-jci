@@ -35,11 +35,10 @@ public final class CompilationResult {
     private final CompilationProblem[] warnings;
         
     public CompilationResult( final CompilationProblem[] pProblems ) {
-        final Collection errorsColl = new ArrayList();
-        final Collection warningsColl = new ArrayList();
+        final Collection<CompilationProblem> errorsColl = new ArrayList<CompilationProblem>();
+        final Collection<CompilationProblem> warningsColl = new ArrayList<CompilationProblem>();
 
-        for (int i = 0; i < pProblems.length; i++) {
-            final CompilationProblem problem = pProblems[i];
+        for (CompilationProblem problem : pProblems) {
             if (problem.isError()) {
                 errorsColl.add(problem);
             } else {

@@ -20,7 +20,6 @@ package org.apache.commons.jci.examples.commandline;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Iterator;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -115,9 +114,7 @@ public final class CommandlineCompiler {
         final JavaCompilerSettings settings = compiler.createDefaultSettings();
 
 
-        for (Iterator it = cmd.iterator(); it.hasNext();) {
-            final Option option = (Option) it.next();
-
+        for (Option option : cmd) {
             if ("classpath".equals(option.getOpt())) {
                 final String[] values = option.getValues();
                 final URL[] urls = new URL[values.length];

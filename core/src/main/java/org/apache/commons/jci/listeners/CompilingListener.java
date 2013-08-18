@@ -20,7 +20,6 @@ package org.apache.commons.jci.listeners;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.apache.commons.jci.compilers.CompilationResult;
 import org.apache.commons.jci.compilers.JavaCompiler;
@@ -99,20 +98,18 @@ public class CompilingListener extends ReloadingListener {
     }
 
     public String[] getResourcesToCompile( final FilesystemAlterationObserver pObserver ) {
-        final Collection created = getCreatedFiles();
-        final Collection changed = getChangedFiles();
+        final Collection<File> created = getCreatedFiles();
+        final Collection<File> changed = getChangedFiles();
 
-        final Collection resourceNames = new ArrayList();
+        final Collection<String> resourceNames = new ArrayList<String>();
         
-        for (final Iterator it = created.iterator(); it.hasNext();) {
-            final File createdFile = (File) it.next();
+        for (File createdFile : created) {
             if (createdFile.getName().endsWith(getSourceFileExtension())) {
                 resourceNames.add(getSourceNameFromFile(pObserver, createdFile));
             }
         }
         
-        for (final Iterator it = changed.iterator(); it.hasNext();) {
-            final File changedFile = (File) it.next();
+        for (File changedFile : changed) {
             if (changedFile.getName().endsWith(getSourceFileExtension())) {
                 resourceNames.add(getSourceNameFromFile(pObserver, changedFile));
             }
@@ -126,16 +123,14 @@ public class CompilingListener extends ReloadingListener {
     public boolean isReloadRequired( final FilesystemAlterationObserver pObserver ) {
         boolean reload = false;
 
-        final Collection created = getCreatedFiles();
-        final Collection changed = getChangedFiles();
-        final Collection deleted = getDeletedFiles();
+        final Collection<File> created = getCreatedFiles();
+        final Collection<File> changed = getChangedFiles();
+        final Collection<File> deleted = getDeletedFiles();
         
         log.debug("created:" + created.size() + " changed:" + changed.size() + " deleted:" + deleted.size() + " resources");
 
         if (deleted.size() > 0) {
-            for (Iterator it = deleted.iterator(); it.hasNext();) {
-                final File deletedFile = (File) it.next();
-
+            for (File deletedFile : deleted) {
                 final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), deletedFile));
                 
                 if (resourceName.endsWith(getSourceFileExtension())) {

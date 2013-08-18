@@ -35,12 +35,12 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
 
     private final Log log = LogFactory.getLog(AbstractFilesystemAlterationListener.class);
 
-    private final Collection createdFiles = new ArrayList();
-    private final Collection changedFiles = new ArrayList();
-    private final Collection deletedFiles = new ArrayList();
-    private final Collection createdDirectories = new ArrayList();
-    private final Collection changedDirectories = new ArrayList();
-    private final Collection deletedDirectories = new ArrayList();
+    private final Collection<File> createdFiles = new ArrayList<File>();
+    private final Collection<File> changedFiles = new ArrayList<File>();
+    private final Collection<File> deletedFiles = new ArrayList<File>();
+    private final Collection<File> createdDirectories = new ArrayList<File>();
+    private final Collection<File> changedDirectories = new ArrayList<File>();
+    private final Collection<File> deletedDirectories = new ArrayList<File>();
 
     
     private final static class Signal {
@@ -73,11 +73,11 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
     }
 
 
-    public Collection getChangedDirectories() {
+    public Collection<File> getChangedDirectories() {
         return changedDirectories;
     }
 
-    public Collection getChangedFiles() {
+    public Collection<File> getChangedFiles() {
         return changedFiles;
     }
 
@@ -85,15 +85,15 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
         return createdDirectories;
     }
 
-    public Collection getCreatedFiles() {
+    public Collection<File> getCreatedFiles() {
         return createdFiles;
     }
 
-    public Collection getDeletedDirectories() {
+    public Collection<File> getDeletedDirectories() {
         return deletedDirectories;
     }
 
-    public Collection getDeletedFiles() {
+    public Collection<File> getDeletedFiles() {
         return deletedFiles;
     }
 

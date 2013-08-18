@@ -41,7 +41,7 @@ public final class RhinoJavaCompilerTestCase extends AbstractCompilerTestCase {
         final JavaCompiler compiler = createJavaCompiler(); 
 
         final ResourceReader reader = new ResourceReader() {
-            final private Map sources = new HashMap() {
+            final private Map<String, byte[]> sources = new HashMap<String, byte[]>() {
                 private static final long serialVersionUID = 1L;
                 {
                     put("jci/Simple.js", (
@@ -51,7 +51,7 @@ public final class RhinoJavaCompilerTestCase extends AbstractCompilerTestCase {
                 }};
 
             public byte[] getBytes( final String pResourceName ) {
-                return (byte[]) sources.get(pResourceName);
+                return sources.get(pResourceName);
             }
 
             public boolean isAvailable( final String pResourceName ) {
@@ -84,7 +84,7 @@ public final class RhinoJavaCompilerTestCase extends AbstractCompilerTestCase {
         final JavaCompiler compiler = createJavaCompiler(); 
 
         final ResourceReader reader = new ResourceReader() {
-            final private Map sources = new HashMap() {
+            final private Map<String, byte[]> sources = new HashMap<String, byte[]>() {
                 private static final long serialVersionUID = 1L;
                 {
                     put("Jci/Simple.js", (
@@ -94,7 +94,7 @@ public final class RhinoJavaCompilerTestCase extends AbstractCompilerTestCase {
                 }};
 
             public byte[] getBytes( final String pResourceName ) {
-                return (byte[]) sources.get(pResourceName);
+                return sources.get(pResourceName);
             }
 
             public boolean isAvailable( final String pResourceName ) {

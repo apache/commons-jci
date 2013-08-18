@@ -104,7 +104,7 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
     
     public CompilationResult compile( final String[] pSourceNames, final ResourceReader pResourceReader, final ResourceStore pStore, final ClassLoader pClassLoader, final JavaCompilerSettings pSettings ) {
 
-    	final Collection problems = new ArrayList();
+    	final Collection<CompilationProblem> problems = new ArrayList<CompilationProblem>();
     	
     	final StringPattern[] pattern = StringPattern.PATTERNS_NONE;
 

@@ -19,7 +19,6 @@ package org.apache.commons.jci.stores;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.logging.Log;
@@ -35,11 +34,11 @@ public final class MemoryResourceStore implements ResourceStore {
 
     private final Log log = LogFactory.getLog(MemoryResourceStore.class);
 
-    private final Map store = new HashMap();
+    private final Map<String, byte[]> store = new HashMap<String, byte[]>();
 
     public byte[] read( final String pResourceName ) {
         log.debug("reading resource " + pResourceName);
-        return (byte[]) store.get(pResourceName);
+        return store.get(pResourceName);
     }
 
     public void write( final String pResourceName, final byte[] pData ) {
@@ -59,10 +58,9 @@ public final class MemoryResourceStore implements ResourceStore {
         if (store == null) {
             return new String[0];
         }
-        final List names = new ArrayList();
+        final List<String> names = new ArrayList<String>();
         
-        for (final Iterator it = store.keySet().iterator(); it.hasNext();) {
-            final String name = (String) it.next();
+        for (String name : store.keySet()) {
             names.add(name);
         }
 

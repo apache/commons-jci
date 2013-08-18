@@ -29,7 +29,7 @@ import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
  */
 public final class EclipseJavaCompilerSettings extends JavaCompilerSettings {
 
-    final private Map defaultEclipseSettings = new HashMap();
+    final private Map<String, String> defaultEclipseSettings = new HashMap<String, String>();
 
     public EclipseJavaCompilerSettings() {
         defaultEclipseSettings.put(CompilerOptions.OPTION_LineNumberAttribute, CompilerOptions.GENERATE);
@@ -46,11 +46,11 @@ public final class EclipseJavaCompilerSettings extends JavaCompilerSettings {
     	}
     }
     
-    public EclipseJavaCompilerSettings( final Map pMap ) {
+    public EclipseJavaCompilerSettings( final Map<String, String> pMap ) {
         defaultEclipseSettings.putAll(pMap);
     }
 
-    private static Map nativeVersions = new HashMap() {
+    private static Map<String, String> nativeVersions = new HashMap<String, String>() {
 		private static final long serialVersionUID = 1L;
 	{
     	put("1.1", CompilerOptions.VERSION_1_1);
@@ -63,7 +63,7 @@ public final class EclipseJavaCompilerSettings extends JavaCompilerSettings {
     }};
     
     private String toNativeVersion( final String pVersion ) {
-    	final String nativeVersion = (String) nativeVersions.get(pVersion);
+    	final String nativeVersion = nativeVersions.get(pVersion);
     	
     	if (nativeVersion == null) {
     		throw new RuntimeException("unknown version " + pVersion);
@@ -72,8 +72,8 @@ public final class EclipseJavaCompilerSettings extends JavaCompilerSettings {
     	return nativeVersion;
     }
     
-    Map toNativeSettings() {
-        final Map map = new HashMap(defaultEclipseSettings);
+    Map<String, String> toNativeSettings() {
+        final Map<String, String> map = new HashMap<String, String>(defaultEclipseSettings);
 
         map.put(CompilerOptions.OPTION_SuppressWarnings, isWarnings()?CompilerOptions.GENERATE:CompilerOptions.DO_NOT_GENERATE);
         map.put(CompilerOptions.OPTION_ReportDeprecation, isDeprecations()?CompilerOptions.GENERATE:CompilerOptions.DO_NOT_GENERATE);

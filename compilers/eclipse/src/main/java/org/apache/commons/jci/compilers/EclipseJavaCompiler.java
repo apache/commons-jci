@@ -61,7 +61,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         this(new EclipseJavaCompilerSettings());
     }
 
-    public EclipseJavaCompiler( final Map pSettings ) {
+    public EclipseJavaCompiler( final Map<String, String> pSettings ) {
         defaultSettings = new EclipseJavaCompilerSettings(pSettings);
     }
 
@@ -139,7 +139,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
 
         final Map settingsMap = new EclipseJavaCompilerSettings(pSettings).toNativeSettings();
 
-        final Collection problems = new ArrayList();
+        final Collection<CompilationProblem> problems = new ArrayList<CompilationProblem>();
 
         final ICompilationUnit[] compilationUnits = new ICompilationUnit[pSourceFiles.length];
         for (int i = 0; i < compilationUnits.length; i++) {
@@ -345,9 +345,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         final ICompilerRequestor compilerRequestor = new ICompilerRequestor() {
             public void acceptResult( final CompilationResult pResult ) {
                 if (pResult.hasProblems()) {
-                    final IProblem[] iproblems = pResult.getProblems();
-                    for (int i = 0; i < iproblems.length; i++) {
-                        final IProblem iproblem = iproblems[i];
+                    for (IProblem iproblem : pResult.getProblems()) {
                         final CompilationProblem problem = new EclipseCompilationProblem(iproblem);
                         if (problemHandler != null) {
                             problemHandler.handle(problem);
@@ -357,8 +355,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                 }
                 if (!pResult.hasErrors()) {
                     final ClassFile[] clazzFiles = pResult.getClassFiles();
-                    for (int i = 0; i < clazzFiles.length; i++) {
-                        final ClassFile clazzFile = clazzFiles[i];
+                    for (ClassFile clazzFile : clazzFiles) {
                         final char[][] compoundName = clazzFile.getCompoundName();
                         final StringBuilder clazzName = new StringBuilder();
                         for (int j = 0; j < compoundName.length; j++) {

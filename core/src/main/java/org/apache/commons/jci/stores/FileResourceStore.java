@@ -87,7 +87,7 @@ public final class FileResourceStore implements ResourceStore {
      * @deprecated
      */
     public String[] list() {
-        final List files = new ArrayList();
+        final List<String> files = new ArrayList<String>();
         list(root, files);
         return (String[]) files.toArray(new String[files.size()]);
     }
@@ -95,7 +95,7 @@ public final class FileResourceStore implements ResourceStore {
     /**
      * @deprecated
      */
-    private void list(final File pFile, final List pFiles) {
+    private void list(final File pFile, final List<String> pFiles) {
         if (pFile.isDirectory()) {
             final File[] directoryFiles = pFile.listFiles();
             for (int i=0; i < directoryFiles.length; i++) {

@@ -27,7 +27,7 @@ import java.util.HashMap;
  */
 public class MemoryResourceReader implements ResourceReader {
     
-    private Map resources = null;
+    private Map<String, byte[]> resources = null;
 
     public boolean isAvailable( final String pResourceName ) {
         if (resources == null) {
@@ -39,7 +39,7 @@ public class MemoryResourceReader implements ResourceReader {
     
     public void add( final String pResourceName, final byte[] pContent ) {
         if (resources == null) {
-            resources = new HashMap();
+            resources = new HashMap<String, byte[]>();
         }
         
         resources.put(pResourceName, pContent);
@@ -53,7 +53,7 @@ public class MemoryResourceReader implements ResourceReader {
     
 
     public byte[] getBytes( final String pResourceName ) {
-        return (byte[]) resources.get(pResourceName);
+        return resources.get(pResourceName);
     }
 
     /**

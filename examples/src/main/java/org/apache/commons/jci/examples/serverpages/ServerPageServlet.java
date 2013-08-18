@@ -20,9 +20,9 @@ package org.apache.commons.jci.examples.serverpages;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.String;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -70,23 +70,21 @@ public final class ServerPageServlet extends HttpServlet {
 
         final TransactionalResourceStore store = new TransactionalResourceStore(new MemoryResourceStore()) {
 
-            private Set newClasses;
-            private Map newServletsByClassname;
+            private Set<String> newClasses;
+            private Map<String, HttpServlet> newServletsByClassname;
 
             public void onStart() {
                 super.onStart();
 
-                newClasses = new HashSet();
-                newServletsByClassname = new HashMap(servletsByClassname);
+                newClasses = new HashSet<String>();
+                newServletsByClassname = new HashMap<String, HttpServlet>(servletsByClassname);
             }
 
             public void onStop() {
                 super.onStop();
 
                 boolean reload = false;
-                for (Iterator it = newClasses.iterator(); it.hasNext();) {
-                    final String clazzName = (String) it.next();
-
+                for (String clazzName : newClasses) {
                     try {
                         final Class clazz = classloader.loadClass(clazzName);
 
@@ -127,8 +125,8 @@ public final class ServerPageServlet extends HttpServlet {
         jspListener = new CompilingListener(new JavaCompilerFactory().createCompiler("eclipse"), store) {
 
             private final JspGenerator transformer = new JspGenerator();
-            private final Map sources = new HashMap();
-            private final Set resourceToCompile = new HashSet();
+            private final Map<String, File> sources = new HashMap<String, File>();
+            private final Set<String> resourceToCompile = new HashSet<String>();
 
             public void onStart(FilesystemAlterationObserver pObserver) {
                 super.onStart(pObserver);

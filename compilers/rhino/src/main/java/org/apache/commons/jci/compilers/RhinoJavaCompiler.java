@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.jci.problems.CompilationProblem;
 import org.apache.commons.jci.readers.ResourceReader;
@@ -67,7 +68,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
         private final ResourceReader reader;
         private final ResourceStore store;
 
-        private final Collection problems = new ArrayList();
+        private final Collection<CompilationProblem> problems = new ArrayList<CompilationProblem>();
         
         private final class ProblemCollector implements ErrorReporter {
 
@@ -109,7 +110,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
             Context.exit();
         }
 
-        public Collection getProblems() {
+        public Collection<CompilationProblem> getProblems() {
             return problems;
         }
 
@@ -143,7 +144,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
                 superclass = Class.forName((String) baseClassName);
             }
 
-            final ArrayList interfaceClasses = new ArrayList();
+            final List<Class> interfaceClasses = new ArrayList<Class>();
 
             final Object interfaceNames = ScriptableObject.getProperty(target, "__implements__");
 
@@ -265,7 +266,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
             }
         }
 
-        final Collection problems = cl.getProblems();
+        final Collection<CompilationProblem> problems = cl.getProblems();
         final CompilationProblem[] result = new CompilationProblem[problems.size()];
         problems.toArray(result);
         return new CompilationResult(result);

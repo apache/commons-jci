@@ -20,7 +20,6 @@ package org.apache.commons.jci.monitor;
 import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -37,7 +36,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
     private final Log log = LogFactory.getLog(FilesystemAlterationMonitor.class);
 
     private final Object observersLock = new Object();
-    private Map observers = Collections.unmodifiableMap(new HashMap());    
+    private Map<File, FilesystemAlterationObserver> observers = Collections.unmodifiableMap(new HashMap<File, FilesystemAlterationObserver>());    
     private long delay = 3000;
     private Thread thread = null;
 
@@ -76,7 +75,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
             observer = (FilesystemAlterationObserver)observers.get(pRoot);
 
             if (observer == null) {
-                final Map newObservers = new HashMap(observers);
+                final Map<File, FilesystemAlterationObserver> newObservers = new HashMap<File, FilesystemAlterationObserver>(observers);
                 observer = new FilesystemAlterationObserverImpl(pRoot);
                 newObservers.put(pRoot, observer);
                 observers = Collections.unmodifiableMap(newObservers);
@@ -88,8 +87,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
    
     public void removeListener( final FilesystemAlterationListener pListener ) {
         synchronized (observersLock) {
-            for (Iterator it = observers.values().iterator(); it.hasNext();) {
-                final FilesystemAlterationObserver observer = (FilesystemAlterationObserver) it.next();
+            for (FilesystemAlterationObserver observer : observers.values()) {
                 observer.removeListener(pListener);
                 // FIXME: remove observer if there are no listeners?
             }
@@ -115,10 +113,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
                 break;
             }
 
-            final Map currentObservers = observers;
-            
-            for (Iterator it = currentObservers.values().iterator(); it.hasNext();) {
-                final FilesystemAlterationObserver observer = (FilesystemAlterationObserver) it.next();
+            for (FilesystemAlterationObserver observer : observers.values()) {
                 observer.checkAndNotify();
             }
 

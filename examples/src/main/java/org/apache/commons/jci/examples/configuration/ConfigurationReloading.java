@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Properties;
 
 import org.apache.commons.jci.listeners.FileChangeListener;
@@ -45,7 +44,7 @@ public final class ConfigurationReloading {
 
         System.out.println("Watching " + configFile.getAbsolutePath());
 
-        final Collection configurables = new ArrayList();
+        final Collection<Configurable> configurables = new ArrayList<Configurable>();
 
         final FilesystemAlterationListener listener = new FileChangeListener() {
             public void onStop(FilesystemAlterationObserver pObserver) {
@@ -62,8 +61,7 @@ public final class ConfigurationReloading {
 
                         System.out.println("Notifying about configuration change " + configFile);
 
-                        for (Iterator it = configurables.iterator(); it.hasNext();) {
-                            final Configurable configurable = (Configurable) it.next();
+                        for (Configurable configurable : configurables) {
                             configurable.configure(props);
                         }
 
