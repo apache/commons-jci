@@ -85,6 +85,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
             log.debug("compiling");
             unit.compile(Phases.CLASS_GENERATION);
             
+            @SuppressWarnings("unchecked") // Groovy library is not yet generic
             final List<GroovyClass> classes = unit.getClasses();
             for (GroovyClass clazz : classes) {
                 final byte[] bytes = clazz.getBytes();
@@ -92,6 +93,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
             }
         } catch (final MultipleCompilationErrorsException e) {
             final ErrorCollector col = e.getErrorCollector();
+            @SuppressWarnings("unchecked") // Groovy library is not yet generic
             final Collection<WarningMessage> warnings = col.getWarnings();
             if (warnings != null) {
                 for (WarningMessage warning : warnings) {
@@ -103,6 +105,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
                 }
             }
 
+            @SuppressWarnings("unchecked") // Groovy library is not yet generic
             final Collection<Message> errors = col.getErrors();
             if (errors != null) {
                 for (Message message : errors) {
