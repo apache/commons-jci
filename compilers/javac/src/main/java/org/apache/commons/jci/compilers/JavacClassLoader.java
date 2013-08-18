@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.StringBuilder;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -78,7 +79,7 @@ public final class JavacClassLoader extends URLClassLoader {
             }
         }
 
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         sb.append("Could not find javac compiler class (should be in the tools.jar/classes.jar in your JRE/JDK). ");
         sb.append("os.name").append('=').append(System.getProperty("os.name")).append(", ");
         sb.append("os.version").append('=').append(System.getProperty("os.version")).append(", ");

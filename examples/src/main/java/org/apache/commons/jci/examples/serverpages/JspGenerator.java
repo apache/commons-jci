@@ -35,7 +35,7 @@ public final class JspGenerator {
 
     private String quote( final String s ) {
 
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         final char[] input = s.toCharArray();
 
         for (int i = 0; i < input.length; i++) {
@@ -57,7 +57,7 @@ public final class JspGenerator {
         return sb.toString();
     }
 
-    private void wrap( final StringBuffer pInput, final Writer pOutput ) throws IOException {
+    private void wrap( final StringBuilder pInput, final Writer pOutput ) throws IOException {
 
         pOutput.append("    out.write(\"");
 
@@ -103,7 +103,7 @@ public final class JspGenerator {
             final char[] open = "<?".toCharArray();
             final char[] close = "?>".toCharArray();
 
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             char[] watch = open;
             int w = 0;
             while(true) {
@@ -121,7 +121,7 @@ public final class JspGenerator {
 
                             wrap(sb, output);
 
-                            sb = new StringBuffer();
+                            sb = new StringBuilder();
                             watch = close;
                         } else if (watch == close) {
                             // found close
@@ -129,7 +129,7 @@ public final class JspGenerator {
                             // <? ... ?> is java
                             output.append(sb.toString());
 
-                            sb = new StringBuffer();
+                            sb = new StringBuilder();
                             watch = open;
                         }
                         w = 0;

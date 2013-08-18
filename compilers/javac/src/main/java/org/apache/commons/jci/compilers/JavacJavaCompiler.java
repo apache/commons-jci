@@ -101,7 +101,7 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 
         while (true) {
             // cleanup the buffer
-            final StringBuffer buffer = new StringBuffer();
+            final StringBuilder buffer = new StringBuilder();
 
             // most errors terminate with the '^' char
             do {
@@ -135,11 +135,11 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
             String file = tokens.nextToken();
             // When will this happen?
             if (file.length() == 1) {
-                file = new StringBuffer(file).append(":").append(
+                file = new StringBuilder(file).append(":").append(
                         tokens.nextToken()).toString();
             }
             final int line = Integer.parseInt(tokens.nextToken());
-            final StringBuffer msgBuffer = new StringBuffer();
+            final StringBuilder msgBuffer = new StringBuilder();
 
             String msg = tokens.nextToken(EOL).substring(2);
             isError = !msg.startsWith(WARNING_PREFIX);
