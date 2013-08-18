@@ -183,7 +183,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
         }
 
 
-        private Class<?> compileClass( final Context pContext, final String pSourceName, final String pClassName, final Class<?> pSuperClass, final Class<?>[] pInterfaces) throws IOException {
+        private Class<?> compileClass( final Context pContext, final String pSourceName, final String pClassName, final Class<?> pSuperClass, final Class<?>[] pInterfaces) {
 
             final CompilerEnvirons environments = new CompilerEnvirons();
             environments.initFromContext(pContext);
