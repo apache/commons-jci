@@ -231,8 +231,8 @@ public abstract class AbstractCompilerTestCase extends TestCase {
     public void testCrossReferenceCompilation() throws Exception {
       final String javaVersion = System.getProperty("java.version");
 
-      if (!(javaVersion.startsWith("1.5") || javaVersion.startsWith("1.6"))) {
-          System.err.println("WARNING! Skipping testCrossReferenceCompilation() because your runtime does not support java 1.5+ yet");
+      if (!(javaVersion.startsWith("1.5") || javaVersion.startsWith("1.6") || javaVersion.startsWith("1.7"))) {
+          System.err.println("WARNING! Skipping testCrossReferenceCompilation() because your runtime does not support java 1.5+ yet - version " + javaVersion);
           return;
       }
 
