@@ -49,6 +49,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
     public void start() {
         thread = new Thread(this);
         thread.setName("Filesystem Alteration Monitor");
+        thread.setDaemon(true);
         thread.start();
     }
 
