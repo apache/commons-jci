@@ -30,15 +30,14 @@ import org.apache.commons.jci.readers.ResourceReader;
 import org.apache.commons.jci.stores.ResourceStore;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.commons.compiler.CompileException;
+import org.codehaus.commons.compiler.LocatedException;
+import org.codehaus.commons.compiler.Location;
 import org.codehaus.janino.ClassLoaderIClassLoader;
-import org.codehaus.janino.CompileException;
 import org.codehaus.janino.Compiler;
-import org.codehaus.janino.DebuggingInformation;
 import org.codehaus.janino.FilterWarningHandler;
-import org.codehaus.janino.Location;
-import org.codehaus.janino.WarningHandler;
 import org.codehaus.janino.UnitCompiler.ErrorHandler;
-import org.codehaus.janino.util.LocatedException;
+import org.codehaus.janino.WarningHandler;
 import org.codehaus.janino.util.StringPattern;
 import org.codehaus.janino.util.resource.Resource;
 import org.codehaus.janino.util.resource.ResourceCreator;
@@ -153,7 +152,9 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
     			},
     			pSettings.getSourceEncoding(),
     			false,
-    			pSettings.isDebug()?DebuggingInformation.ALL:DebuggingInformation.NONE,
+    			pSettings.isDebug(),
+                pSettings.isDebug(),
+                pSettings.isDebug(),
     			new FilterWarningHandler(pattern, new WarningHandler() {
 						public void handleWarning( final String pHandle, final String pMessage, final Location pLocation ) {
 							final CompilationProblem problem = new JaninoCompilationProblem(pLocation.getFileName(), pLocation, pMessage, false);

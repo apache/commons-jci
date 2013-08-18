@@ -18,8 +18,8 @@
 package org.apache.commons.jci.compilers;
 
 import org.apache.commons.jci.problems.CompilationProblem;
-import org.codehaus.janino.Location;
-import org.codehaus.janino.util.LocatedException;
+import org.codehaus.commons.compiler.LocatedException;
+import org.codehaus.commons.compiler.Location;
 
 /**
  * Janino version of a CompilationProblem
