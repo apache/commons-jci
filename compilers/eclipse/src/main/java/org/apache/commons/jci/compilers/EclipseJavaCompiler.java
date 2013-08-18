@@ -44,6 +44,7 @@ import org.eclipse.jdt.internal.compiler.classfmt.ClassFormatException;
 import org.eclipse.jdt.internal.compiler.env.ICompilationUnit;
 import org.eclipse.jdt.internal.compiler.env.INameEnvironment;
 import org.eclipse.jdt.internal.compiler.env.NameEnvironmentAnswer;
+import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.jdt.internal.compiler.problem.DefaultProblemFactory;
 
 /**
@@ -372,7 +373,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             }
         };
 
-        final Compiler compiler = new Compiler(nameEnvironment, policy, settingsMap, compilerRequestor, problemFactory, false);
+        final Compiler compiler = new Compiler(nameEnvironment, policy, new CompilerOptions(settingsMap), compilerRequestor, problemFactory);
 
         compiler.compile(compilationUnits);
 
