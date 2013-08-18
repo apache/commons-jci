@@ -28,21 +28,21 @@ public interface CompilationProblem {
      * is the problem an error and compilation cannot continue
      * or just a warning and compilation can proceed
      * 
-     * @return
+     * @return true if the problem is an error
      */
     boolean isError();
 
     /**
      * name of the file where the problem occurred
      * 
-     * @return
+     * @return name of the file where the problem occurred
      */
     String getFileName();
 
     /**
      * position of where the problem starts in the source code
      * 
-     * @return
+     * @return position of where the problem starts in the source code
      */
     int getStartLine();
     int getStartColumn();
@@ -50,7 +50,7 @@ public interface CompilationProblem {
     /**
      * position of where the problem stops in the source code
      * 
-     * @return
+     * @return position of where the problem stops in the source code
      */
     int getEndLine();
     int getEndColumn();
@@ -58,7 +58,7 @@ public interface CompilationProblem {
     /**
      * the description of the problem
      * 
-     * @return
+     * @return the description of the problem
      */
     String getMessage();
 

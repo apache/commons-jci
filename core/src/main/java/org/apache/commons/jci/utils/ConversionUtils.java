@@ -84,7 +84,7 @@ public final class ConversionUtils {
      * a/b/c.java -> a/b/c.java
      * a\b\c.java -> a/b/c.java
      * @param pFileName
-     * @return
+     * @return the converted name
      */
     public static String getResourceNameFromFileName( final String pFileName ) {
         if ('/' == File.separatorChar) {
