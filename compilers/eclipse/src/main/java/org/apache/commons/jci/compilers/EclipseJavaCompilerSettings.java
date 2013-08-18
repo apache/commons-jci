@@ -59,6 +59,7 @@ public final class EclipseJavaCompilerSettings extends JavaCompilerSettings {
     	put("1.4", CompilerOptions.VERSION_1_4);
     	put("1.5", CompilerOptions.VERSION_1_5);
     	put("1.6", CompilerOptions.VERSION_1_6);
+    	put("1.7", CompilerOptions.VERSION_1_7);
     }};
     
     private String toNativeVersion( final String pVersion ) {
