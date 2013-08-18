@@ -333,11 +333,16 @@ public abstract class AbstractCompilerTestCase extends TestCase {
                }, reader, store);
     
         assertEquals(toString(result.getErrors()), 0, result.getErrors().length);
-        assertEquals(toString(result.getWarnings()), 0, result.getWarnings().length);
     
         final byte[] clazzBytes = store.read("jci/Simple.class");
         assertNotNull(clazzBytes);
         assertTrue(clazzBytes.length > 0);
+
+        final byte[] additionalTopLevelBytes = store.read("jci/AdditionalTopLevel.class");
+        assertNotNull(additionalTopLevelBytes);
+        assertTrue(additionalTopLevelBytes.length > 0);
+
+        assertEquals(toString(result.getWarnings()), 0, result.getWarnings().length);
     }
 
     public final String toString( final CompilationProblem[] pProblems ) {
