@@ -81,7 +81,7 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
         return changedFiles;
     }
 
-    public Collection getCreatedDirectories() {
+    public Collection<File> getCreatedDirectories() {
         return createdDirectories;
     }
 

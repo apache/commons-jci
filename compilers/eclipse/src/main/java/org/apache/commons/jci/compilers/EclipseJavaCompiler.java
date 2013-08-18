@@ -137,7 +137,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             final JavaCompilerSettings pSettings
             ) {
 
-        final Map settingsMap = new EclipseJavaCompilerSettings(pSettings).toNativeSettings();
+        final Map<String, String> settingsMap = new EclipseJavaCompilerSettings(pSettings).toNativeSettings();
 
         final Collection<CompilationProblem> problems = new ArrayList<CompilationProblem>();
 

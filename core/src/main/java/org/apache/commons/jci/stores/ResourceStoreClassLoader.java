@@ -39,7 +39,7 @@ public final class ResourceStoreClassLoader extends ClassLoader {
         System.arraycopy(pStores, 0, stores, 0, stores.length);	
     }
 
-    private Class fastFindClass(final String name) {
+    private Class<?> fastFindClass(final String name) {
         
         if (stores != null) {
             for (ResourceStore store : stores) {
@@ -55,9 +55,9 @@ public final class ResourceStoreClassLoader extends ClassLoader {
     }
     
     @Override
-    protected synchronized Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
+    protected synchronized Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
         // log.debug(getId() + " looking for: " + name);
-        Class clazz = findLoadedClass(name);
+        Class<?> clazz = findLoadedClass(name);
 
         if (clazz == null) {
             clazz = fastFindClass(name);
@@ -85,8 +85,8 @@ public final class ResourceStoreClassLoader extends ClassLoader {
     }
 
     @Override
-    protected Class findClass( final String name ) throws ClassNotFoundException {
-        final Class clazz = fastFindClass(name);
+    protected Class<?> findClass( final String name ) throws ClassNotFoundException {
+        final Class<?> clazz = fastFindClass(name);
         if (clazz == null) {
             throw new ClassNotFoundException(name);
         }

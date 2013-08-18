@@ -26,7 +26,7 @@ import junit.framework.TestCase;
 public final class EclipseJavaCompilerSettingsTestCase extends TestCase {
 
 	public void testDefaultSettings() {
-		final Map m = new EclipseJavaCompilerSettings().toNativeSettings();
+		final Map<String, String> m = new EclipseJavaCompilerSettings().toNativeSettings();
 		assertEquals(CompilerOptions.DO_NOT_GENERATE, m.get(CompilerOptions.OPTION_SuppressWarnings));
 		assertEquals(CompilerOptions.DO_NOT_GENERATE, m.get(CompilerOptions.OPTION_ReportDeprecation));
 		assertEquals(CompilerOptions.VERSION_1_4, m.get(CompilerOptions.OPTION_TargetPlatform));

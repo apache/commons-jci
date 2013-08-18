@@ -115,7 +115,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
         }
 
         @Override
-        protected Class findClass( final String pName ) throws ClassNotFoundException {
+        protected Class<?> findClass( final String pName ) throws ClassNotFoundException {
             final Context context = Context.enter();
             context.setErrorReporter(new ProblemCollector());
 
@@ -131,9 +131,9 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
         }
 
 
-        private Class compileClass( final Context pContext, final String pClassName) throws IOException, ClassNotFoundException {
+        private Class<?> compileClass( final Context pContext, final String pClassName) throws IOException, ClassNotFoundException {
 
-            Class superclass = null;
+            Class<?> superclass = null;
 
             final String pSourceName = pClassName.replace('.', '/') + ".js";
 
@@ -145,7 +145,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
                 superclass = Class.forName((String) baseClassName);
             }
 
-            final List<Class> interfaceClasses = new ArrayList<Class>();
+            final List<Class<?>> interfaceClasses = new ArrayList<Class<?>>();
 
             final Object interfaceNames = ScriptableObject.getProperty(target, "__implements__");
 
@@ -168,7 +168,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
 
             }
 
-            final Class[] interfaces;
+            final Class<?>[] interfaces;
 
             if (!interfaceClasses.isEmpty()) {
                 interfaces = new Class[interfaceClasses.size()];
@@ -183,7 +183,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
         }
 
 
-        private Class compileClass( final Context pContext, final String pSourceName, final String pClassName, final Class pSuperClass, final Class[] pInterfaces) throws IOException {
+        private Class<?> compileClass( final Context pContext, final String pSourceName, final String pClassName, final Class<?> pSuperClass, final Class<?>[] pInterfaces) throws IOException {
 
             final CompilerEnvirons environments = new CompilerEnvirons();
             environments.initFromContext(pContext);
@@ -203,7 +203,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
 
             final GeneratedClassLoader loader = pContext.createClassLoader(pContext.getApplicationClassLoader());
 
-            Class clazz = null;
+            Class<?> clazz = null;
 
             for (int i = 0; i < classes.length; i += 2) {
 
@@ -212,7 +212,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
 
                 store.write(clazzName.replace('.', '/') + ".class", clazzBytes);
 
-                Class c = loader.defineClass(clazzName, clazzBytes);
+                Class<?> c = loader.defineClass(clazzName, clazzBytes);
                 loader.linkClass(c);
 
                 if (i == 0) {

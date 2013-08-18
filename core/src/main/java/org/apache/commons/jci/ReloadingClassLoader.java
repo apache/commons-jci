@@ -112,7 +112,7 @@ public class ReloadingClassLoader extends ClassLoader implements ReloadNotificat
         return delegate.getResourceAsStream(name);
     }
     @Override
-    public Class loadClass(String name) throws ClassNotFoundException {
+    public Class<?> loadClass(String name) throws ClassNotFoundException {
         return delegate.loadClass(name);
     }
     @Override

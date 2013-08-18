@@ -37,7 +37,7 @@ public final class JavaCompilerFactory {
      */
     private static final JavaCompilerFactory INSTANCE = new JavaCompilerFactory();
 
-    private final Map<String, Class> classCache = new HashMap<String, Class>();
+    private final Map<String, Class<?>> classCache = new HashMap<String, Class<?>>();
     
     /**
      * @deprecated will be remove after the next release, please create an instance yourself
@@ -68,7 +68,7 @@ public final class JavaCompilerFactory {
             className = pHint;
         }
         
-        Class clazz = classCache.get(className);
+        Class<?> clazz = classCache.get(className);
         
         if (clazz == null) {
             try {
