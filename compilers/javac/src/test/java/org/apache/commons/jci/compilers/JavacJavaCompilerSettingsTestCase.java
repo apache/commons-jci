@@ -56,6 +56,8 @@ public final class JavacJavaCompilerSettingsTestCase extends TestCase {
 		assertEquals("1.5", s.toNativeSettings()[4]);
 		s.setSourceVersion("1.6");
 		assertEquals("1.6", s.toNativeSettings()[4]);
+        s.setSourceVersion("1.7");
+        assertEquals("1.7", s.toNativeSettings()[4]);
 	}
 
 	public void testTargetVersion() {
@@ -72,6 +74,8 @@ public final class JavacJavaCompilerSettingsTestCase extends TestCase {
 		assertEquals("1.5", s.toNativeSettings()[2]);
 		s.setTargetVersion("1.6");
 		assertEquals("1.6", s.toNativeSettings()[2]);
+        s.setTargetVersion("1.7");
+        assertEquals("1.7", s.toNativeSettings()[2]);
 	}
 
 	public void testEncoding() {

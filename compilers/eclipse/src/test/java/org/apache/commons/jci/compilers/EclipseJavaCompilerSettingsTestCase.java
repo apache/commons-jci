@@ -48,6 +48,8 @@ public final class EclipseJavaCompilerSettingsTestCase extends TestCase {
 		assertEquals(CompilerOptions.VERSION_1_5, s.toNativeSettings().get(CompilerOptions.OPTION_Source));
 		s.setSourceVersion("1.6");
 		assertEquals(CompilerOptions.VERSION_1_6, s.toNativeSettings().get(CompilerOptions.OPTION_Source));
+        s.setSourceVersion("1.7");
+        assertEquals(CompilerOptions.VERSION_1_7, s.toNativeSettings().get(CompilerOptions.OPTION_Source));
 	}
 
 	public void testTargetVersion() {
@@ -64,6 +66,8 @@ public final class EclipseJavaCompilerSettingsTestCase extends TestCase {
 		assertEquals(CompilerOptions.VERSION_1_5, s.toNativeSettings().get(CompilerOptions.OPTION_TargetPlatform));
 		s.setTargetVersion("1.6");
 		assertEquals(CompilerOptions.VERSION_1_6, s.toNativeSettings().get(CompilerOptions.OPTION_TargetPlatform));
+        s.setTargetVersion("1.7");
+        assertEquals(CompilerOptions.VERSION_1_7, s.toNativeSettings().get(CompilerOptions.OPTION_TargetPlatform));
 	}
 
 	public void testEncoding() {
