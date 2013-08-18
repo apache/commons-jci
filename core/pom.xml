@@ -39,7 +39,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-jci-fam</artifactId>
-            <version>1.0</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>

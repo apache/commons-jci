@@ -39,6 +39,7 @@
         <url>https://issues.apache.org/jira/browse/JCI</url>
     </issueManagement>
     <modules>
+        <module>fam</module>
         <module>core</module>
         <module>compilers/eclipse</module>
         <module>compilers/janino</module>
