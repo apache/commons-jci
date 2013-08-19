@@ -228,4 +228,85 @@
         <commons.jira.pid>12310650</commons.jira.pid>
         <release.tag>1.1-RC1</release.tag>
     </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.1.1</version>
+            </dependency>
+            <!-- compiler-eclipse -->
+            <dependency>
+                <groupId>org.eclipse.jdt.core.compiler</groupId>
+                <artifactId>ecj</artifactId>
+                <version>4.2.2</version>
+            </dependency>
+            <!-- compiler-groovy -->
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-all</artifactId>
+                <version>1.7.7</version>
+            </dependency>
+            <!-- compiler-janino -->
+            <dependency>
+                <groupId>org.codehaus.janino</groupId>
+                <artifactId>janino</artifactId>
+                <version>2.6.1</version>
+            </dependency>
+            <!-- compiler-javac -->
+            <dependency>
+                <groupId>org.vafer</groupId>
+                <artifactId>dependency</artifactId>
+                <version>0.2</version>
+            </dependency>
+            <!-- compiler-rhino -->
+            <dependency>
+                <groupId>rhino</groupId>
+                <artifactId>js</artifactId>
+                <version>1.7R2</version>
+            </dependency>
+            <!-- core -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>1.4</version>
+            </dependency>
+            <!-- examples -->
+            <dependency>
+                <groupId>commons-cli</groupId>
+                <artifactId>commons-cli</artifactId>
+                <version>1.0</version>
+            </dependency>
+            <!-- examples -->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>2.4</version>
+            </dependency>
+
+            <!-- test dependencies -->
+            <dependency>
+                <!-- core -->
+                <groupId>asm</groupId>
+                <artifactId>asm</artifactId>
+                <version>3.3</version>
+            </dependency>
+            <dependency>
+                 <!-- core -->
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.1</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.11</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>1.4</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
