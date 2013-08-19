@@ -28,7 +28,7 @@
     <version>1.1-SNAPSHOT</version>
     <name>compiler-jsr166</name>
     <description>
-        Commons JCI compiler implementation for JDK 1.6 and up.
+        Apache Commons JCI compiler implementation for JDK 1.6 and up.
     </description>
     <dependencies>
         <dependency>

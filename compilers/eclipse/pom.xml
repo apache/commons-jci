@@ -28,7 +28,7 @@
     <version>1.1-SNAPSHOT</version>
     <name>compiler-eclipse</name>
     <description>
-        Commons JCI compiler implementation for the eclipse compiler.
+        Apache Commons JCI compiler implementation for the Eclipse compiler.
     </description>
     <dependencies>
         <dependency>

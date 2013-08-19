@@ -28,7 +28,7 @@
     <version>1.1-SNAPSHOT</version>
     <name>compiler-rhino</name>
     <description>
-        Commons JCI compiler implementation for rhino javascript.
+        Apache Commons JCI compiler implementation for Rhino javascript.
     </description>
     <dependencies>
         <dependency>

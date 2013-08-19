@@ -28,7 +28,7 @@
     <version>1.1-SNAPSHOT</version>
     <name>compiler-janino</name>
     <description>
-        Commons JCI compiler implementation for the janino compiler.
+        Apache Commons JCI compiler implementation for the Janino compiler.
     </description>
     <dependencies>
         <dependency>

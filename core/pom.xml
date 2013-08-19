@@ -27,7 +27,7 @@
     <version>1.1-SNAPSHOT</version>
     <name>core</name>
     <description>
-        Commons JCI core interfaces and implementations.
+        Apache Commons JCI core interfaces and implementations.
     </description>
     <dependencies>
         <dependency>

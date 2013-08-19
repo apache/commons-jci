@@ -28,7 +28,7 @@
     <version>1.1-SNAPSHOT</version>
     <name>compiler-javac</name>
     <description>
-        Commons JCI compiler implementation for the javac compiler (up to JDK 1.5).
+        Apache Commons JCI compiler implementation for the Javac compiler (up to JDK 1.5).
     </description>
     <dependencies>
         <dependency>
