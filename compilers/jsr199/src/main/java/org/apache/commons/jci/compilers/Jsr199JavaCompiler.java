@@ -59,53 +59,63 @@ public final class Jsr199JavaCompiler extends AbstractJavaCompiler {
             name = pName;
         }
 
+        @Override
         public boolean delete() {
             log.debug("delete");
             return super.delete();
         }
 
+        @Override
         public CharSequence getCharContent(boolean encodingErrors) throws IOException {
             log.debug("getCharContent of " + name);
             byte[] content = reader.getBytes(name);
             return new String(content);
         }
 
+        @Override
         public long getLastModified() {
             log.debug("getLastModified");
             return super.getLastModified();
         }
 
+        @Override
         public String getName() {
             log.debug("getName " + super.getName());
             return super.getName();
         }
 
+        @Override
         public boolean isNameCompatible(String simpleName, Kind kind) {
             log.debug("isNameCompatible " + simpleName + " " + kind);
             // return super.isNameCompatible(simpleName, kind);
             return true;
         }
 
+        @Override
         public InputStream openInputStream() throws IOException {
             log.debug("openInputStream");
             return super.openInputStream();
         }
 
+        @Override
         public OutputStream openOutputStream() throws IOException {
             log.debug("openOutputStream");
             return super.openOutputStream();
         }
 
+        @Override
         public Reader openReader(boolean arg0) throws IOException {
             log.debug("openReader");
             return super.openReader(arg0);
         }
 
+        @Override
         public Writer openWriter() throws IOException {
             log.debug("openWriter");
             return super.openWriter();
         }
 
+        @Override
         public URI toUri() {
             // log.debug("toUri " + super.toUri());
             return super.toUri();

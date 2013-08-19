@@ -20,10 +20,12 @@
 
 public final class Jsr199JavaCompilerTestCase extends AbstractCompilerTestCase {
 
+    @Override
     public String getCompilerName() {
         return "jsr199";
     }
 
+    @Override
     public JavaCompiler createJavaCompiler() {
         return new Jsr199JavaCompiler();
     }
