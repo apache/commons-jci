@@ -73,8 +73,9 @@ public final class JavacJavaCompilerSettings extends JavaCompilerSettings {
     
     
     /** @deprecated */
-    public List getCustomCompilerArguments() {
-    	final List list = new ArrayList();
+    @Deprecated
+    public List<String> getCustomCompilerArguments() {
+    	final List<String> list = new ArrayList<String>();
     	for (int i = 0; i < customArguments.length; i++) {
 			list.add(customArguments[i]);
 		}
@@ -82,26 +83,31 @@ public final class JavacJavaCompilerSettings extends JavaCompilerSettings {
     }
 
     /** @deprecated */
-    public void setCustomCompilerArguments(List customCompilerArguments) {
-    	customArguments = (String[]) customCompilerArguments.toArray(new String[customCompilerArguments.size()]);
+    @Deprecated
+    public void setCustomCompilerArguments(List<?> customCompilerArguments) {
+    	customArguments = customCompilerArguments.toArray(new String[customCompilerArguments.size()]);
     }
 
     /** @deprecated */
+    @Deprecated
     public String getMaxmem() {
         return memMax;
     }
 
     /** @deprecated */
+    @Deprecated
     public void setMaxmem(String maxmem) {
         this.memMax = maxmem;
     }
 
     /** @deprecated */
+    @Deprecated
     public String getMeminitial() {
         return memInitial;
     }
 
     /** @deprecated */
+    @Deprecated
     public void setMeminitial(String meminitial) {
         this.memInitial = meminitial;
     }
@@ -111,7 +117,7 @@ public final class JavacJavaCompilerSettings extends JavaCompilerSettings {
     
     String[] toNativeSettings() {
     	
-    	final List args = new ArrayList();
+    	final List<String> args = new ArrayList<String>();
 
     	if (isOptimize()) {
     		args.add("-O");
@@ -152,6 +158,6 @@ public final class JavacJavaCompilerSettings extends JavaCompilerSettings {
 			}
     	}
 
-    	return (String[])args.toArray(new String[args.size()]);
+    	return args.toArray(new String[args.size()]);
     }
 }

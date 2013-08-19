@@ -33,7 +33,7 @@ import org.apache.commons.jci.utils.ConversionUtils;
  */
 public final class FileOutputStreamProxy extends OutputStream {
 
-    private final static ThreadLocal storeThreadLocal = new ThreadLocal();
+    private final static ThreadLocal<ResourceStore> storeThreadLocal = new ThreadLocal<ResourceStore>();
 
     private final ByteArrayOutputStream out = new ByteArrayOutputStream();
     private final String name;
@@ -64,14 +64,16 @@ public final class FileOutputStreamProxy extends OutputStream {
         name = ConversionUtils.getResourceNameFromFileName(pName);
     }
 
+    @Override
     public void write(int value) throws IOException {
         out.write(value);
     }
 
+    @Override
     public void close() throws IOException {
         out.close();
 
-        final ResourceStore store = (ResourceStore) storeThreadLocal.get();
+        final ResourceStore store = storeThreadLocal.get();
 
         if (store == null) {
             throw new RuntimeException("forgot to set the ResourceStore for this thread?");
@@ -80,14 +82,17 @@ public final class FileOutputStreamProxy extends OutputStream {
         store.write(name, out.toByteArray());
     }
 
+    @Override
     public void flush() throws IOException {
         out.flush();
     }
 
+    @Override
     public void write(byte[] b, int off, int len) throws IOException {
         out.write(b, off, len);
     }
 
+    @Override
     public void write(byte[] b) throws IOException {
         out.write(b);
     }

@@ -19,10 +19,12 @@ package org.apache.commons.jci.compilers;
 
 public class JavacJavaCompilerTestCase extends AbstractCompilerTestCase {
 
+    @Override
     public JavaCompiler createJavaCompiler() {
         return new JavacJavaCompiler();
     }
 
+    @Override
     public String getCompilerName() {
         return "javac";
     }

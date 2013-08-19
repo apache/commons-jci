@@ -64,7 +64,7 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
 
         try {
             final ClassLoader cl = new JavacClassLoader(pClasspathClassLoader);
-            final Class renamedClass = cl.loadClass("com.sun.tools.javac.Main");
+            final Class<?> renamedClass = cl.loadClass("com.sun.tools.javac.Main");
 
             FileInputStreamProxy.setResourceReader(pReader);
             FileOutputStreamProxy.setResourceStore(pStore);
@@ -96,7 +96,7 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
     }
 
     private CompilationResult parseModernStream( final BufferedReader pReader ) throws IOException {
-        final List problems = new ArrayList();
+        final List<CompilationProblem> problems = new ArrayList<CompilationProblem>();
         String line;
 
         while (true) {
@@ -107,7 +107,7 @@ public final class JavacJavaCompiler extends AbstractJavaCompiler {
             do {
                 line = pReader.readLine();
                 if (line == null) {
-                    return new CompilationResult((CompilationProblem[]) problems.toArray(new CompilationProblem[problems.size()]));
+                    return new CompilationResult(problems.toArray(new CompilationProblem[problems.size()]));
                 }
 
                 // TODO: there should be a better way to parse these

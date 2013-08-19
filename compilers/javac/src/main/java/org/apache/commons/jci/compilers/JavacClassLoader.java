@@ -47,7 +47,7 @@ import org.vafer.dependency.utils.ResourceRenamer;
  */
 public final class JavacClassLoader extends URLClassLoader {
 
-    private final Map loaded = new HashMap();
+    private final Map<String, Class<?>> loaded = new HashMap<String, Class<?>>();
 
     public JavacClassLoader( final ClassLoader pParent ) {
         super(getToolsJar(), pParent);
@@ -88,7 +88,8 @@ public final class JavacClassLoader extends URLClassLoader {
         throw new RuntimeException(sb.toString());
     }
 
-    protected Class findClass( final String name ) throws ClassNotFoundException {
+    @Override
+    protected Class<?> findClass( final String name ) throws ClassNotFoundException {
 
         if (name.startsWith("java.")) {
             return super.findClass(name);
@@ -96,7 +97,7 @@ public final class JavacClassLoader extends URLClassLoader {
 
         try {
 
-            final Class clazz = (Class) loaded.get(name);
+            final Class<?> clazz = loaded.get(name);
             if (clazz != null) {
                 return clazz;
             }
@@ -125,7 +126,7 @@ public final class JavacClassLoader extends URLClassLoader {
                 return super.findClass(name);
             }
 
-            final Class newClazz = defineClass(name, classBytes, 0, classBytes.length);
+            final Class<?> newClazz = defineClass(name, classBytes, 0, classBytes.length);
             loaded.put(name, newClazz);
             return newClazz;
         } catch (IOException e) {
@@ -133,9 +134,10 @@ public final class JavacClassLoader extends URLClassLoader {
         }
     }
 
-    protected synchronized Class loadClass( final String classname, final boolean resolve ) throws ClassNotFoundException {
+    @Override
+    protected synchronized Class<?> loadClass( final String classname, final boolean resolve ) throws ClassNotFoundException {
 
-        Class theClass = findLoadedClass(classname);
+        Class<?> theClass = findLoadedClass(classname);
         if (theClass != null) {
             return theClass;
         }

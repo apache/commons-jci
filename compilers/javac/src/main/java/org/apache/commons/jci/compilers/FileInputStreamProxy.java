@@ -33,7 +33,7 @@ import org.apache.commons.jci.utils.ConversionUtils;
  */
 public final class FileInputStreamProxy extends InputStream {
 
-    private final static ThreadLocal readerThreadLocal = new ThreadLocal();
+    private final static ThreadLocal<ResourceReader> readerThreadLocal = new ThreadLocal<ResourceReader>();
 
     private final InputStream in;
     private final String name;
@@ -53,7 +53,7 @@ public final class FileInputStreamProxy extends InputStream {
     public FileInputStreamProxy(String pName) throws FileNotFoundException {
         name = ConversionUtils.getResourceNameFromFileName(pName);
 
-        final ResourceReader reader = (ResourceReader) readerThreadLocal.get();
+        final ResourceReader reader = readerThreadLocal.get();
 
         if (reader == null) {
             throw new RuntimeException("forgot to set the ResourceReader for this thread?");
@@ -68,38 +68,47 @@ public final class FileInputStreamProxy extends InputStream {
         in = new ByteArrayInputStream(bytes);
     }
 
+    @Override
     public int read() throws IOException {
         return in.read();
     }
 
+    @Override
     public int available() throws IOException {
         return in.available();
     }
 
+    @Override
     public void close() throws IOException {
         in.close();
     }
 
+    @Override
     public synchronized void mark(int readlimit) {
         in.mark(readlimit);
     }
 
+    @Override
     public boolean markSupported() {
         return in.markSupported();
     }
 
+    @Override
     public int read(byte[] b, int off, int len) throws IOException {
         return in.read(b, off, len);
     }
 
+    @Override
     public int read(byte[] b) throws IOException {
         return in.read(b);
     }
 
+    @Override
     public synchronized void reset() throws IOException {
         in.reset();
     }
 
+    @Override
     public long skip(long n) throws IOException {
         return in.skip(n);
     }
