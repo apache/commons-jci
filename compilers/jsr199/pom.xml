@@ -24,7 +24,7 @@
         <version>1.1-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-    <artifactId>commons-jci-jsr166</artifactId>
+    <artifactId>commons-jci-jsr199</artifactId>
     <version>1.1-SNAPSHOT</version>
     <name>Apache Commons JCI compiler-jsr199</name>
     <description>
