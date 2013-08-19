@@ -52,6 +52,22 @@
         <!-- <module>compilers/javac</module> -->
     </modules>
 
+    <!-- Optional profiles for currently disabled modules -->
+    <profiles>
+        <profile>
+            <id>compiler-javac</id>
+            <modules>
+                <module>compilers/javac</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>compiler-jsr199</id>
+            <modules>
+                <module>compilers/jsr199</module>
+            </modules>
+        </profile>
+    </profiles>
+
     <developers>
         <developer>
             <id>tcurdt</id>
