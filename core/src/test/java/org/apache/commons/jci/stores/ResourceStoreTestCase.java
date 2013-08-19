@@ -18,8 +18,7 @@
 package org.apache.commons.jci.stores;
 
 import org.apache.commons.jci.AbstractTestCase;
-import org.apache.commons.lang.ArrayUtils;
-
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * 
