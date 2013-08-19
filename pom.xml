@@ -28,9 +28,12 @@
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-jci</artifactId>
     <version>1.1-SNAPSHOT</version>
-    <name>Commons JCI</name>
+    <name>Apache Commons JCI</name>
     <description>
-        Commons JCI is a java compiler interface. It can be used to either compile java (or any other language that can be compiled to java classes like e.g. groovy or javascript) to java. It is well integrated with a FAM (FilesystemAlterationMonitor) that can be used with the JCI compiling/reloading classloader. All the currently supported compilers (even javac before java6) feature in-memory compilation.
+        Apache Commons JCI is a java compiler interface.
+        It can be used to compile Java itself, or any other language that can be compiled to Java classes (e.g. groovy or javascript).
+        It is well integrated with a FAM (FilesystemAlterationMonitor) that can be used with the JCI compiling/reloading classloader.
+        All the currently supported compilers (even javac before java6) feature in-memory compilation.
     </description>
     <url>http://commons.apache.org/proper/commons-jci/</url>
     <inceptionYear>2004</inceptionYear>
