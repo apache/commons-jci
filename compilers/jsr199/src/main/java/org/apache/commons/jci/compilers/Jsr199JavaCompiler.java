@@ -221,7 +221,7 @@ public final class Jsr199JavaCompiler extends AbstractJavaCompiler {
 
         CompilationTask task = compiler.getTask(null, fileManager, diagnostics, null, null, units);
 
-        if (task.call()) {
+        if (task.call().booleanValue()) {
             log.debug("compiled");
         }
 
