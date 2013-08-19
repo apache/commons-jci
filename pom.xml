@@ -286,6 +286,12 @@
                 <artifactId>servlet-api</artifactId>
                 <version>2.5</version>
             </dependency>
+            <dependency>
+                <!-- javac (compile); core(test) -->
+                <groupId>asm</groupId>
+                <artifactId>asm</artifactId>
+                <version>3.3.1</version>
+            </dependency>
 
             <!-- test dependencies -->
             <dependency>

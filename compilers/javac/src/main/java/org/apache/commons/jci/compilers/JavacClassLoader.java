@@ -106,7 +106,7 @@ public final class JavacClassLoader extends URLClassLoader {
             if (name.startsWith("com.sun.tools.javac.")) {
                 final InputStream classStream = getResourceAsStream(name.replace('.', '/') + ".class");
 
-                final ClassWriter renamedCw = new ClassWriter(true, false);
+                final ClassWriter renamedCw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
                 new ClassReader(classStream).accept(new RenamingVisitor(new CheckClassAdapter(renamedCw), new ResourceRenamer() {
                     public String getNewNameFor(final String pOldName) {
                         if (pOldName.startsWith(FileOutputStream.class.getName())) {
@@ -117,7 +117,7 @@ public final class JavacClassLoader extends URLClassLoader {
                         }
                         return pOldName;
                     }
-                }), false);
+                }), 0); // We don't set ClassReader.SKIP_DEBUG
 
                 classBytes = renamedCw.toByteArray();
 
