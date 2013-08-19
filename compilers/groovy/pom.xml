@@ -26,7 +26,7 @@
     </parent>
     <artifactId>commons-jci-groovy</artifactId>
     <version>1.1-SNAPSHOT</version>
-    <name>compiler-groovy</name>
+    <name>Apache Commons JCI compiler-groovy</name>
     <description>
         Apache Commons JCI compiler implementation for the Groovy compiler.
     </description>

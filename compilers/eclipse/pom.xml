@@ -26,7 +26,7 @@
     </parent>
     <artifactId>commons-jci-eclipse</artifactId>
     <version>1.1-SNAPSHOT</version>
-    <name>compiler-eclipse</name>
+    <name>Apache Commons JCI compiler-eclipse</name>
     <description>
         Apache Commons JCI compiler implementation for the Eclipse compiler.
     </description>

@@ -25,7 +25,7 @@
     </parent>
     <artifactId>commons-jci-examples</artifactId>
     <version>1.1-SNAPSHOT</version>
-    <name>examples</name>
+    <name>Apache Commons JCI examples</name>
     <description>
         Apache Commons JCI examples.
     </description>

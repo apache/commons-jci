@@ -25,7 +25,7 @@
     </parent>
     <artifactId>commons-jci-core</artifactId>
     <version>1.1-SNAPSHOT</version>
-    <name>core</name>
+    <name>Apache Commons JCI core</name>
     <description>
         Apache Commons JCI core interfaces and implementations.
     </description>
