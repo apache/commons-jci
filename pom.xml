@@ -258,7 +258,8 @@
             <dependency>
                 <groupId>org.vafer</groupId>
                 <artifactId>dependency</artifactId>
-                <version>0.4</version>
+                <!-- 0.4 is latest, but does not contain org.vafer.dependency.utils.ResourceRenamer -->
+                <version>0.2</version>
             </dependency>
             <!-- compiler-rhino -->
             <dependency>
@@ -291,7 +292,7 @@
                 <!-- core -->
                 <groupId>asm</groupId>
                 <artifactId>asm</artifactId>
-                <version>3.3.1</version>
+                <version>3.3</version>
             </dependency>
             <dependency>
                  <!-- core -->
