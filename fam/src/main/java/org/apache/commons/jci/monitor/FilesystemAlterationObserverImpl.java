@@ -58,11 +58,11 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
         }
 
         public MonitorFile[] listFiles() {
-            final File[] childs = file.listFiles();
+            final File[] children = file.listFiles();
 
-            final MonitorFile[] providers = new MonitorFile[childs.length];
+            final MonitorFile[] providers = new MonitorFile[children.length];
             for (int i = 0; i < providers.length; i++) {
-                providers[i] = new MonitorFileImpl(childs[i]);
+                providers[i] = new MonitorFileImpl(children[i]);
             }
             return providers;
         }
@@ -95,7 +95,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
         private final MonitorFile file;
         private long lastModified = -1;
         private int lastType = TYPE_UNKNOWN;
-        private Map<String, Entry> childs = new HashMap<String, Entry>();
+        private Map<String, Entry> children = new HashMap<String, Entry>();
 
         public Entry(final MonitorFile pFile) {
             file = pFile;
@@ -112,28 +112,28 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
         }
 
 
-        private void compareChilds() {
+        private void compareChildren() {
             if (!file.isDirectory()) {
                 return;
             }
 
             final MonitorFile[] files = file.listFiles();
-            final Set<Entry> deleted = new HashSet<Entry>(childs.values());
+            final Set<Entry> deleted = new HashSet<Entry>(children.values());
             for (MonitorFile f : files) {
                 final String name = f.getName();
-                final Entry entry = childs.get(name);
+                final Entry entry = children.get(name);
                 if (entry != null) {
                     // already recognized as child
                     deleted.remove(entry);
 
                     if(entry.needsToBeDeleted()) {
                         // we have to delete this one
-                        childs.remove(name);
+                        children.remove(name);
                     }
                 } else {
                     // a new child
                     final Entry newChild = new Entry(f);
-                    childs.put(name, newChild);
+                    children.put(name, newChild);
                     newChild.needsToBeDeleted();
                 }
             }
@@ -141,17 +141,17 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
             // the ones not found on disk anymore
 
             for (Entry entry : deleted) {
-                entry.deleteChildsAndNotify();
-                childs.remove(entry.getName());
+                entry.deleteChildrenAndNotify();
+                children.remove(entry.getName());
             }
         }
 
 
-        private void deleteChildsAndNotify() {
-            for (Entry entry : childs.values()) {
-                entry.deleteChildsAndNotify();
+        private void deleteChildrenAndNotify() {
+            for (Entry entry : children.values()) {
+                entry.deleteChildrenAndNotify();
             }
-            childs.clear();
+            children.clear();
 
             if(lastType == TYPE_DIRECTORY) {
                 notifyOnDirectoryDelete(this);
@@ -167,7 +167,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
 
 //                log.debug(file + " does not exist or has been deleted");
 
-                deleteChildsAndNotify();
+                deleteChildrenAndNotify();
 
                 // mark to be deleted by parent
                 return true;
@@ -189,7 +189,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
 
 //                        log.debug(file + " has a new type");
 
-                        deleteChildsAndNotify();
+                        deleteChildrenAndNotify();
 
                         lastType = newType;
 
@@ -197,7 +197,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
 
                         if (newType == TYPE_DIRECTORY) {
                             notifyOnDirectoryCreate(this);
-                            compareChilds();
+                            compareChildren();
                         } else {
                             notifyOnFileCreate(this);
                         }
@@ -207,7 +207,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
 
                     if (newType == TYPE_DIRECTORY) {
                         notifyOnDirectoryChange(this);
-                        compareChilds();
+                        compareChildren();
                     } else {
                         notifyOnFileChange(this);
                     }
@@ -220,7 +220,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
 
 //                    log.debug(file + " does exist and has not changed");
 
-                    compareChilds();
+                    compareChildren();
 
                     return false;
                 }
