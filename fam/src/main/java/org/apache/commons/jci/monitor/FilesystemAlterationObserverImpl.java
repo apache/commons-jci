@@ -59,6 +59,9 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
 
         public MonitorFile[] listFiles() {
             final File[] children = file.listFiles();
+            if (children == null) { // not a directory or IOError (e.g. protection issue)
+                return new MonitorFile[0];
+            }
 
             final MonitorFile[] providers = new MonitorFile[children.length];
             for (int i = 0; i < providers.length; i++) {
