@@ -98,7 +98,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
         private final MonitorFile file;
         private long lastModified = -1;
         private int lastType = TYPE_UNKNOWN;
-        private Map<String, Entry> children = new HashMap<String, Entry>();
+        private final Map<String, Entry> children = new HashMap<String, Entry>();
 
         public Entry(final MonitorFile pFile) {
             file = pFile;
