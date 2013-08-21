@@ -33,7 +33,7 @@
         Apache Commons JCI is a java compiler interface.
         It can be used to compile Java itself, or any other language that can be compiled to Java classes (e.g. groovy or javascript).
         It is well integrated with a FAM (FilesystemAlterationMonitor) that can be used with the JCI compiling/reloading classloader.
-        All the currently supported compilers (even javac before java6) feature in-memory compilation.
+        All the currently supported compilers feature in-memory compilation.
     </description>
     <url>http://commons.apache.org/proper/commons-jci/</url>
     <inceptionYear>2004</inceptionYear>
@@ -49,17 +49,10 @@
         <module>compilers/groovy</module>
         <module>compilers/rhino</module>
         <!-- <module>compilers/jsr199</module> -->
-        <!-- <module>compilers/javac</module> -->
     </modules>
 
     <!-- Optional profiles for currently disabled modules -->
     <profiles>
-        <profile>
-            <id>compiler-javac</id>
-            <modules>
-                <module>compilers/javac</module>
-            </modules>
-        </profile>
         <profile>
             <!-- N.B. requires Java 1.6+ to compile -->
             <id>compiler-jsr199</id>
@@ -255,13 +248,6 @@
                 <artifactId>janino</artifactId>
                 <version>2.6.1</version>
             </dependency>
-            <!-- compiler-javac -->
-            <dependency>
-                <groupId>org.vafer</groupId>
-                <artifactId>dependency</artifactId>
-                <!-- 0.4 is latest, but does not contain org.vafer.dependency.utils.ResourceRenamer -->
-                <version>0.2</version>
-            </dependency>
             <!-- compiler-rhino -->
             <dependency>
                 <groupId>rhino</groupId>
@@ -288,7 +274,7 @@
                 <version>2.5</version>
             </dependency>
             <dependency>
-                <!-- javac (compile); core(test) -->
+                <!-- core(test) -->
                 <groupId>asm</groupId>
                 <artifactId>asm</artifactId>
                 <version>3.3.1</version>
