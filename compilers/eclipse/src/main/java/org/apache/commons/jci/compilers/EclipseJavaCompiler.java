@@ -297,6 +297,11 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
 
             private boolean isPackage( final String pClazzName ) {
 
+                // reject this early as it is cheap
+                if (pClazzName.contains("-")) { // "-" is not valid in package names
+                    return false;
+                }
+
                 final InputStream is = pClassLoader.getResourceAsStream(ConversionUtils.convertClassToResourcePath(pClazzName));
                 if (is != null) {
                     log.debug("found the class for " + pClazzName + "- no package");
@@ -315,6 +320,13 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                     return false;
                 }
 
+                /*
+                 * See https://issues.apache.org/jira/browse/JCI-59
+                 * At present, the code assumes that anything else is a package name
+                 * This is wrong, as for example jci.AdditionalTopLevel is not a package name.
+                 * It's not clear how to fix this in general.
+                 * It would seem to need access to the input classpath and/or the generated classes.
+                 */
                 return true;
             }
 
