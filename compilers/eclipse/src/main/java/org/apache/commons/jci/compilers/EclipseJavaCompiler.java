@@ -216,10 +216,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
 
                 //log.debug("finding compoundTypeName=" + result.toString());
 
-                final String string = result.toString();
-                final NameEnvironmentAnswer findType = findType(string);
-                System.err.println("findType: "+string+" "+findType);
-                return findType;
+                return findType(result.toString());
             }
 
             public NameEnvironmentAnswer findType( final char[] pTypeName, final char[][] pPackageName ) {
@@ -308,7 +305,6 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                     } catch (final IOException ie) {
                         log.error("could not close input stream", ie);
                     } 
-                    System.err.println("isPackage1: " + pClazzName+ " false");
                     return false;
                 }
 
@@ -316,11 +312,9 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                 final String source = pClazzName.replace('.', '/') + ".java";
                 if (pReader.isAvailable(source)) {
                     log.debug("found the source " + source + " for " + pClazzName + " - no package ");
-                    System.err.println("isPackage2: " + source+ " false");
                     return false;
                 }
 
-                System.err.println("isPackage3: " + pClazzName+ " true");
                 return true;
             }
 
@@ -337,15 +331,11 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
 
 //                log.debug("isPackage parentPackageName=" + result.toString() + " packageName=" + new String(packageName));
 
-                System.err.println(">>parentPackage: "+result.toString());
                 if (parentPackageName != null && parentPackageName.length > 0) {
                     result.append('.');
                 }
                 result.append(pPackageName);
-                final String string = result.toString();
-                final boolean is = isPackage(string);
-                System.err.println("<<ispackage: "+string+" => "+is);
-                return is;
+                return isPackage(result.toString());
             }
 
             public void cleanup() {
