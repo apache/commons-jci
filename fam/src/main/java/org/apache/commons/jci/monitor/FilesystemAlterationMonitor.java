@@ -36,7 +36,9 @@ public final class FilesystemAlterationMonitor implements Runnable {
     private final Log log = LogFactory.getLog(FilesystemAlterationMonitor.class);
 
     private final Object observersLock = new Object();
-    private Map<File, FilesystemAlterationObserver> observers = Collections.unmodifiableMap(new HashMap<File, FilesystemAlterationObserver>());    
+    private Map<File, FilesystemAlterationObserver> observers = Collections.unmodifiableMap(new HashMap<File, FilesystemAlterationObserver>());
+    
+    /** delay between calls to {@link FilesystemAlterationObserver#checkAndNotify()}, default 3000 ms */
     private long delay = 3000;
     private Thread thread = null;
 
@@ -64,6 +66,11 @@ public final class FilesystemAlterationMonitor implements Runnable {
     }
 
 
+    /**
+     * Set the delay between calls to the observers.
+     *  
+     * @param pDelay the delay in milliseconds (default if not set 3000 ms)
+     */
     public void setInterval( final long pDelay ) {
         delay = pDelay;
     }
