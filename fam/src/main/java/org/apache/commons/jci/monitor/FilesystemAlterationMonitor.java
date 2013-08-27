@@ -110,10 +110,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
     public void run() {
         log.debug("fam running");
         
-        while (true) {
-            if (!running) {
-                break;
-            }
+        while (running) {
 
             for (FilesystemAlterationObserver observer : observers.values()) {
                 observer.checkAndNotify();
