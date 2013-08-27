@@ -58,12 +58,10 @@ public abstract class AbstractTestCase extends TestCase {
     protected File writeFile( final String pName, final byte[] pData ) throws Exception {
         final File file = new File(directory, pName);
         final File parent = file.getParentFile();
-        if (!parent.exists()) {
-            if (!parent.mkdirs()) {
-                throw new IOException("could not create" + parent);
-            }
+        if (!parent.mkdirs() && !parent.isDirectory()) {
+            throw new IOException("could not create" + parent);
         }
-        
+
         log.debug("writing file " + pName + " (" + pData.length + " bytes)");
         
         final FileOutputStream os = new FileOutputStream(file);
@@ -79,10 +77,8 @@ public abstract class AbstractTestCase extends TestCase {
     protected File writeFile( final String pName, final String pText ) throws Exception {
         final File file = new File(directory, pName);
         final File parent = file.getParentFile();
-        if (!parent.exists()) {
-            if (!parent.mkdirs()) {
-                throw new IOException("could not create" + parent);
-            }
+        if (!parent.mkdirs() && !parent.isDirectory()) {
+            throw new IOException("could not create" + parent);
         }
         log.debug("writing " + file);
         final FileWriter writer = new FileWriter(file);

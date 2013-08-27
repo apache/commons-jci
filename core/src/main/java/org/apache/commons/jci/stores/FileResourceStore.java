@@ -60,10 +60,8 @@ public final class FileResourceStore implements ResourceStore {
         try {
             final File file = getFile(pResourceName);
             final File parent = file.getParentFile();
-            if (!parent.exists()) {
-                if (!parent.mkdirs()) {
+            if (!parent.mkdirs() && !parent.isDirectory()) {
                     throw new IOException("could not create" + parent);
-                }
             }
             os = new FileOutputStream(file);
             os.write(pData);
