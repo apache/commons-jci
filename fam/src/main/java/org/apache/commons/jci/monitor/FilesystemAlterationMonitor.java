@@ -59,9 +59,11 @@ public final class FilesystemAlterationMonitor implements Runnable {
     public void stop() {
         running = false;
 
-        try {
-            thread.join(delay);
-        } catch (InterruptedException e) {
+        if (thread != null) {
+            try {
+                thread.join(delay);
+            } catch (InterruptedException e) {
+            }
         }
     }
 
