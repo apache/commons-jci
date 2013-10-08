@@ -361,19 +361,4 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
             return res;
     	}    	
     }
-
-    /*
-     
-    public static void main( String[] args ) {
-        final FilesystemAlterationObserverImpl observer = new FilesystemAlterationObserverImpl(new File(args[0]));
-        while(true) {
-            observer.checkEntries();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-            }
-        }
-    }
-
-    */
 }
