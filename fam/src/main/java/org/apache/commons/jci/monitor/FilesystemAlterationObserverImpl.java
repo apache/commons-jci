@@ -244,7 +244,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
     private final Entry rootEntry;
 
     private FilesystemAlterationListener[] listeners = new FilesystemAlterationListener[0];
-    private Set<FilesystemAlterationListener> listenersSet = new HashSet<FilesystemAlterationListener>();
+    private final Set<FilesystemAlterationListener> listenersSet = new HashSet<FilesystemAlterationListener>();
 
     public FilesystemAlterationObserverImpl( final File pRootDirectory ) {
         rootDirectory = pRootDirectory;
