@@ -60,6 +60,12 @@
                 <module>compilers/jsr199</module>
             </modules>
         </profile>
+        <profile>
+            <id>examples</id>
+            <modules>
+                <module>examples</module>
+            </modules>
+        </profile>
     </profiles>
 
     <developers>
