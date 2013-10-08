@@ -1,0 +1,36 @@
+              Apache Commons JCI 1.1 RELEASE NOTES
+
+JCI is a java compiler interface. It can be used to either compile java
+(or any other language that can be compiled to java classes like e.g. groovy
+or javascript) to Java. It is well integrated with a filesystem alteration
+monitor that can be used with the JCI compiling/reloading classloader. All
+the currently supported compilers feature in-memory compilation. 
+
+Release 1.1
+
+Changes in this version include:
+
+Fixed bugs:
+
+o Fixed a NPE in FilesystemAlterationMonitor when the directory is not readable (JCI-68)
+o Compiling classes with cross imports using Janino no longer causes a stack overflow (JCI-53)
+o FilesystemAlterationMonitor no longer throws a NPE when calling stop() before start() (JCI-62)
+o EclipseJavaCompiler properly closes the InputStreams (JCI-58)
+o Eclipse compiler settings are no longer ignored (JCI-50, JCI-51)
+o Fixed an issue preventing the Eclipse compiler from loading resources from the ResourceStore (JCI-56)
+
+Changes:
+
+o Updated the API to use generics
+o JaninoJavaCompiler is now compatible with Janino(2.6 (JCI-69)
+o EclipseJavaCompiler is now compatible with the Eclipse JDT compiler 4.2.2
+o Dropped the javac compiler since it only worked with Java 5 (JCI-73)
+o Improved the thread safety of FilesystemAlterationMonitor (JCI-74)
+o The FilesystemAlterationMonitor thread is now a daemon thread (JCI-65)
+o The Eclipse compiler now supports source/target 1.7
+
+
+For complete information on Commons JCI, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the Apache Commons JCI website:
+
+http://commons.apache.org/jci/
