@@ -21,11 +21,11 @@
     <parent>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-jci</artifactId>
-        <version>1.1-SNAPSHOT</version>
+        <version>1.1</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>commons-jci-janino</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
     <name>Apache Commons JCI compiler-janino</name>
     <description>
         Apache Commons JCI compiler implementation for the Janino compiler.

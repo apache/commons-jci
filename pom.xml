@@ -27,7 +27,7 @@
     <packaging>pom</packaging>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-jci</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
     <name>Apache Commons JCI</name>
     <description>
         Apache Commons JCI is a java compiler interface.
