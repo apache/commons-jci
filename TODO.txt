@@ -3,7 +3,6 @@ ORDER BY IMPORTANCE
 o simplify the maven build (right now uses custom modules and so on ... which always caused problems)
 o update the maven build (bring it in line with the latest commons pom, plugins etc
 o finish common configuration for some compilers
-o deprecate javac
 o finish implementation of jsr199 compiler
 
 o removing of anonymous classes if parent class is being removed (could require interface changes)

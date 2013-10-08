@@ -26,7 +26,7 @@
             <p>
                 JCI is a java compiler interface. It can be used to either compile java (or any other language that can be
                 compiled to java classes like e.g. groovy or javascript) to java. It is well integrated with a FAM (FilesystemAlterationMonitor)
-                that can be used with the JCI compiling/reloading classloader. All the currently supported compilers (even javac before java6)
+                that can be used with the JCI compiling/reloading classloader. All the currently supported compilers
                 feature in-memory compilation.
             </p>
             <p>The current implementation supports compilation via the following compilers:</p>
@@ -34,7 +34,6 @@
                 <li>eclipse</li>
                 <li>janino</li>
                 <li>groovy</li>
-                <li>javac</li>
                 <li>rhino</li>
             </ul>
         </section>

@@ -63,11 +63,6 @@
             <includes><include>*.jar</include></includes>
         </fileSet>
         <fileSet>
-            <directory>compilers/javac/target</directory>
-            <outputDirectory>lib</outputDirectory>
-            <includes><include>*.jar</include></includes>
-        </fileSet>
-        <fileSet>
             <directory>compilers/rhino/target</directory>
             <outputDirectory>lib</outputDirectory>
             <includes><include>*.jar</include></includes>
