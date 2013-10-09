@@ -27,7 +27,7 @@
                 The <code>JavaCompiler</code> is quite simple. You have to provide the paths to
                 the sources, where to get the sources from and where to store the classes. Then
                 you just pick one of the compilers to do the work. The result of the compilation
-                is returned as <code>CompilationResult</code>.
+                is returned as a <code>CompilationResult</code>.
             </p>
             
 <source><![CDATA[
@@ -41,12 +41,13 @@ System.out.println( result.getWarnings().length + " warnings");
                 Information like line numbers of errors etc are accessible in a consistent way.
                 If supported by the compiler you can even get notified about error before the
                 end of the compilation. (see the <code>CompilationProblemHandler</code>) for that.
-                The <a href="http://commons.apache.org/jci/commons-jci-examples/index.html">example subproject</a>
-                provides a simple <a href="http://commons.apache.org/jci/xref/org/apache/commons/jci/examples/serverpages/ServerPageServlet.html">JSP servlet</a>
-                and a javac-like <a href="http://commons.apache.org/jci/xref/org/apache/commons/jci/examples/commandline/CommandlineCompiler.html">command line interface</a>.
+                The example module provides a simple
+                <a href="xref/org/apache/commons/jci/examples/serverpages/ServerPageServlet.html">JSP servlet</a>
+                and a javac-like <a href="xref/org/apache/commons/jci/examples/commandline/CommandlineCompiler.html">command line interface</a>.
             </p>
             
         </section>
+
         <section name="Filesystem monitoring">
             <p>
                 A subproject of JCI provides a <code>FilesystemAlterationMonitor</code> that can
@@ -67,10 +68,25 @@ fam.start();
             <p>
                 But you can also just implement a simple <code>FilesystemAlterationListener</code>
                 yourself and just use it to get notified about configuration files changes
-                <a href="http://commons.apache.org/jci/xref/org/apache/commons/jci/examples/configuration/ConfigurationReloading.html">for example</a>.
+                <a href="xref/org/apache/commons/jci/examples/configuration/ConfigurationReloading.html">for example</a>.
                 The example just extends the <code>FileChangeListener</code> that provides a few convenience methods.
             </p>
 
+        </section>
+      
+        <section name="Maven artifacts">
+          <p>
+            Commons JCI is split into several modules, there is one artifact per compiler. Using the Eclipse compiler
+            requires to declare the following dependency in your project:
+          </p>
+<source><![CDATA[  <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-jci-eclipse</artifactId>
+      <version>1.1</version>
+  </dependency>
+]]></source>
+          <p>The other artifacts are <code>commons-jci-groovy</code>, <code>commons-jci-janino</code>
+          and <code>commons-jci-rhino</code>.</p>  
         </section>
     </body>
 </document>
