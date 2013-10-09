@@ -29,6 +29,7 @@
             <item name="FAQ" href="faq.html"/>
             <item name="Issue Tracking" href="issue-tracking.html"/>
             <item name="Downloads" href="downloads.html"/>
+            <item name="Javadoc" href="apidocs/index.html"/>
         </menu>
     </body>
 </project>
