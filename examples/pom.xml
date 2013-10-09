@@ -52,9 +52,12 @@
             <artifactId>servlet-api</artifactId>
         </dependency>
     </dependencies>
+
     <properties>
         <commons.componentid>jci-examples</commons.componentid>
+        <maven-site-plugin.skip>true</maven-site-plugin.skip>
     </properties>
+
     <build>
         <plugins>
             <plugin>

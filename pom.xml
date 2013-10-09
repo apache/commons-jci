@@ -153,6 +153,14 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>${commons.site-plugin.version}</version>
+                <configuration>
+                    <skip>${maven-site-plugin.skip}</skip>
+                </configuration>
+            </plugin>
         </plugins>
         <extensions>
             <extension>
@@ -234,6 +242,7 @@
     </reporting>
 
     <properties>
+        <maven-site-plugin.skip>false</maven-site-plugin.skip>
         <maven.compiler.source>1.5</maven.compiler.source>
         <maven.compiler.target>1.5</maven.compiler.target>
         <commons.componentid>jci</commons.componentid>

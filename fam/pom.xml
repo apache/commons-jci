@@ -46,8 +46,10 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
     <properties>
         <commons.componentid>jci-fam</commons.componentid>
+        <maven-site-plugin.skip>true</maven-site-plugin.skip>
     </properties>
   
     <build>
