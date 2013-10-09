@@ -24,11 +24,11 @@
     </bannerRight>
     <body>
         <menu name="Apache Commons JCI">
-            <item name="About" href="http://commons.apache.org/jci/index.html"/>
-            <item name="Usage" href="http://commons.apache.org/jci/usage.html"/>
-            <item name="FAQ" href="http://commons.apache.org/jci/faq.html"/>
-            <item name="Issue Tracking" href="http://commons.apache.org/jci/issue-tracking.html"/>
-            <item name="Downloads" href="http://commons.apache.org/jci/downloads.html"/>
+            <item name="About" href="index.html"/>
+            <item name="Usage" href="usage.html"/>
+            <item name="FAQ" href="faq.html"/>
+            <item name="Issue Tracking" href="issue-tracking.html"/>
+            <item name="Downloads" href="downloads.html"/>
         </menu>
     </body>
 </project>
