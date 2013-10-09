@@ -54,8 +54,10 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
     <properties>
         <commons.componentid>jci-janino</commons.componentid>
+        <maven-site-plugin.skip>true</maven-site-plugin.skip>
     </properties> 
 
     <build>

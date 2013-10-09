@@ -56,10 +56,10 @@ public final class ServerPageServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private final ReloadingClassLoader classloader = new ReloadingClassLoader(ServerPageServlet.class.getClassLoader());
-    private FilesystemAlterationMonitor fam = null;
-    private CompilingListener jspListener = null; 
+    private FilesystemAlterationMonitor fam;
+    private CompilingListener jspListener; 
 
-    private Map servletsByClassname = new HashMap();
+    private Map<String, HttpServlet> servletsByClassname = new HashMap<String, HttpServlet>();
 
     public void init() throws ServletException {
         super.init();
@@ -125,7 +125,7 @@ public final class ServerPageServlet extends HttpServlet {
         jspListener = new CompilingListener(new JavaCompilerFactory().createCompiler("eclipse"), store) {
 
             private final JspGenerator transformer = new JspGenerator();
-            private final Map<String, File> sources = new HashMap<String, File>();
+            private final Map<String, byte[]> sources = new HashMap<String, byte[]>();
             private final Set<String> resourceToCompile = new HashSet<String>();
 
             public void onStart(FilesystemAlterationObserver pObserver) {
@@ -184,11 +184,9 @@ public final class ServerPageServlet extends HttpServlet {
 
     private String convertRequestToServletClassname( final HttpServletRequest request ) {
 
-        final String path = request.getPathInfo().substring(1);
+        String path = request.getPathInfo().substring(1);
 
-        final String clazz = ConversionUtils.stripExtension(path).replace('/', '.');
-
-        return clazz;
+        return ConversionUtils.stripExtension(path).replace('/', '.');
     }
 
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -206,8 +204,7 @@ public final class ServerPageServlet extends HttpServlet {
 
             out.append("<html><body>");
 
-            for (int i = 0; i < errors.length; i++) {
-                final CompilationProblem problem = errors[i];
+            for (CompilationProblem problem : errors) {
                 out.append(problem.toString()).append("<br/>").append('\n');
             }
 
@@ -222,7 +219,7 @@ public final class ServerPageServlet extends HttpServlet {
 
         log("Checking for serverpage " + servletClassname);
 
-        final HttpServlet servlet = (HttpServlet) servletsByClassname.get(servletClassname);
+        final HttpServlet servlet = servletsByClassname.get(servletClassname);
 
         if (servlet == null) {
             log("No servlet  for " + request.getRequestURI());

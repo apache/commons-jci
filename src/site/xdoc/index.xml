@@ -22,29 +22,30 @@
         <author email="dev@commons.apache.org">Commons Documentation Team</author>
     </properties>
     <body>
-        <section name="The JCI Component">
+        <section name="Apache Commons JCI">
             <p>
                 JCI is a java compiler interface. It can be used to either compile java (or any other language that can be
-                compiled to java classes like e.g. groovy or javascript) to java. It is well integrated with a FAM (FilesystemAlterationMonitor)
-                that can be used with the JCI compiling/reloading classloader. All the currently supported compilers
-                feature in-memory compilation.
+                compiled to java classes like e.g. groovy or javascript) to java. It is well integrated with a filesystem
+                alteration monitor that can be used with the JCI compiling/reloading classloader. All the currently
+                supported compilers feature in-memory compilation.
             </p>
             <p>The current implementation supports compilation via the following compilers:</p>
             <ul>
-                <li>eclipse</li>
-                <li>janino</li>
-                <li>groovy</li>
-                <li>rhino</li>
+                <li><a href="http://www.eclipse.org/jdt/core/">Eclipse JDT compiler</a></li>
+                <li><a href="http://docs.codehaus.org/display/JANINO/Home">Janino</a></li>
+                <li><a href="http://groovy.codehaus.org/">Groovy</a></li>
+                <li><a href="http://www.mozilla.org/rhino">Rhino</a></li>
             </ul>
         </section>
         <section name="Releases">
             <p>
-                See the <a href="downloads.html">downloads</a> page for information on obtaining releases.
+                See the <a href="download_jci.cgi">downloads</a> page for information on obtaining releases.
             </p>
         </section>
         <section name="Documentation">
             <p>
-                The <a href="apidocs/index.html">JavaDoc API documents</a> are available online.
+                The <a href="apidocs/index.html">Javadoc API documentation</a> is available online.
+                See the <a href="usage.html">Usage page</a> for some examples.
             </p>
         </section>
     </body>
