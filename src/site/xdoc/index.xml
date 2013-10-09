@@ -39,12 +39,12 @@
         </section>
         <section name="Releases">
             <p>
-                See the <a href="downloads.html">downloads</a> page for information on obtaining releases.
+                See the <a href="download_jci.cgi">downloads</a> page for information on obtaining releases.
             </p>
         </section>
         <section name="Documentation">
             <p>
-                The <a href="apidocs/index.html">JavaDoc API documents</a> are available online.
+                The <a href="apidocs/index.html">Javadoc API documents</a> are available online.
             </p>
         </section>
     </body>

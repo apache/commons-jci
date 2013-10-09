@@ -28,7 +28,7 @@
             <item name="Usage" href="usage.html"/>
             <item name="FAQ" href="faq.html"/>
             <item name="Issue Tracking" href="issue-tracking.html"/>
-            <item name="Downloads" href="downloads.html"/>
+            <item name="Downloads" href="download_jci.cgi"/>
             <item name="Javadoc" href="apidocs/index.html"/>
         </menu>
     </body>
