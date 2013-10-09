@@ -48,6 +48,7 @@
         <module>compilers/janino</module>
         <module>compilers/groovy</module>
         <module>compilers/rhino</module>
+        <module>examples</module>
         <!-- <module>compilers/jsr199</module> -->
     </modules>
 
