@@ -20,11 +20,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.apache.commons</groupId>
-        <artifactId>commons-jci</artifactId>
-        <version>1.1-SNAPSHOT</version>
+        <artifactId>commons-jci2</artifactId>
+        <version>2.0-SNAPSHOT</version>
     </parent>
-    <artifactId>commons-jci-examples</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <artifactId>commons-jci2-examples</artifactId>
+    <version>2.0-SNAPSHOT</version>
     <name>Apache Commons JCI examples</name>
     <description>
         Apache Commons JCI examples.
@@ -35,12 +35,12 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.commons</groupId>
-            <artifactId>commons-jci-core</artifactId>
+            <artifactId>commons-jci2-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
-            <artifactId>commons-jci-eclipse</artifactId>
+            <artifactId>commons-jci2-eclipse</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

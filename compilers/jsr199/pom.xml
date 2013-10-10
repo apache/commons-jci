@@ -20,12 +20,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.apache.commons</groupId>
-        <artifactId>commons-jci</artifactId>
-        <version>1.1-SNAPSHOT</version>
+        <artifactId>commons-jci2</artifactId>
+        <version>2.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-    <artifactId>commons-jci-jsr199</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <artifactId>commons-jci2-jsr199</artifactId>
+    <version>2.0-SNAPSHOT</version>
     <name>Apache Commons JCI compiler-jsr199</name>
     <description>
         Apache Commons JCI compiler implementation for JDK 1.6 and up.
@@ -33,13 +33,13 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.commons</groupId>
-            <artifactId>commons-jci-core</artifactId>
+            <artifactId>commons-jci2-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- test dependencies -->
         <dependency>
             <groupId>org.apache.commons</groupId>
-            <artifactId>commons-jci-core</artifactId>
+            <artifactId>commons-jci2-core</artifactId>
             <version>${project.version}</version>
             <type>test-jar</type>
             <scope>test</scope>

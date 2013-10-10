@@ -26,8 +26,8 @@
     </parent>
     <packaging>pom</packaging>
     <groupId>org.apache.commons</groupId>
-    <artifactId>commons-jci</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <artifactId>commons-jci2</artifactId>
+    <version>2.0-SNAPSHOT</version>
     <name>Apache Commons JCI</name>
     <description>
         Apache Commons JCI is a java compiler interface.
@@ -239,7 +239,7 @@
         <commons.jira.id>JCI</commons.jira.id>
         <commons.jira.pid>12310650</commons.jira.pid>
         <!-- configuration bits for cutting a release candidate -->
-        <commons.release.version>1.1</commons.release.version>
+        <commons.release.version>2.0</commons.release.version>
         <commons.rc.version>RC1</commons.rc.version>
     </properties>
 

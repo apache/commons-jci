@@ -1,4 +1,4 @@
-              Apache Commons JCI 1.1 RELEASE NOTES
+              Apache Commons JCI 2.0 RELEASE NOTES
 
 JCI is a java compiler interface. It can be used to either compile java
 (or any other language that can be compiled to java classes like e.g. groovy
@@ -6,7 +6,7 @@ or javascript) to Java. It is well integrated with a filesystem alteration
 monitor that can be used with the JCI compiling/reloading classloader. All
 the currently supported compilers feature in-memory compilation. 
 
-Release 1.1
+Release 2.0
 
 Changes in this version include:
 
