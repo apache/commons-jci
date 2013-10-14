@@ -27,7 +27,7 @@
     <asfext:pmc rdf:resource="http://commons.apache.org/"/>
     <shortdesc xml:lang="en">Commons JCI</shortdesc>
     <description xml:lang="en">
-        Commons-JCI provides a unified interface to any of several Java compilers.
+        Commons JCI provides a unified interface to any of several Java compilers.
   </description>
     <repository>
       <SVNRepository>
@@ -38,8 +38,15 @@
     <release>
       <Version>
         <name>commons-jci</name>
+        <created>2013-10-14</created>
+        <revision>1.1</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>commons-jci</name>
         <created>2007-06-18</created>
-        <revision>1.2</revision>
+        <revision>1.0</revision>
       </Version>
     </release>
     <mailing-list rdf:resource="http://commons.apache.org/mail-lists.html"/>
