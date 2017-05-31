@@ -236,6 +236,7 @@
         <maven.compiler.source>1.5</maven.compiler.source>
         <maven.compiler.target>1.5</maven.compiler.target>
         <commons.componentid>jci</commons.componentid>
+        <commons.module.name>org.apache.commons.jci2</commons.module.name>
         <commons.jira.id>JCI</commons.jira.id>
         <commons.jira.pid>12310650</commons.jira.pid>
         <!-- configuration bits for cutting a release candidate -->
