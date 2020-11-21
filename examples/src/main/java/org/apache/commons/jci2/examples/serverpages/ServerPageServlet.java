@@ -61,6 +61,7 @@ public final class ServerPageServlet extends HttpServlet {
 
     private Map<String, HttpServlet> servletsByClassname = new HashMap<String, HttpServlet>();
 
+    @Override
     public void init() throws ServletException {
         super.init();
 
@@ -73,6 +74,7 @@ public final class ServerPageServlet extends HttpServlet {
             private Set<String> newClasses;
             private Map<String, HttpServlet> newServletsByClassname;
 
+            @Override
             public void onStart() {
                 super.onStart();
 
@@ -80,6 +82,7 @@ public final class ServerPageServlet extends HttpServlet {
                 newServletsByClassname = new HashMap<String, HttpServlet>(servletsByClassname);
             }
 
+            @Override
             public void onStop() {
                 super.onStop();
 
@@ -109,6 +112,7 @@ public final class ServerPageServlet extends HttpServlet {
                 }
             }
 
+            @Override
             public void write(final String pResourceName, final byte[] pResourceData) {
                 super.write(pResourceName, pResourceData);
 
@@ -128,6 +132,7 @@ public final class ServerPageServlet extends HttpServlet {
             private final Map<String, byte[]> sources = new HashMap<String, byte[]>();
             private final Set<String> resourceToCompile = new HashSet<String>();
 
+            @Override
             public void onStart(final FilesystemAlterationObserver pObserver) {
                 super.onStart(pObserver);
 
@@ -135,6 +140,7 @@ public final class ServerPageServlet extends HttpServlet {
             }
 
 
+            @Override
             public void onFileChange(final File pFile) {
                 if (pFile.getName().endsWith(".jsp")) {
                     final String resourceName = ConversionUtils.stripExtension(getSourceNameFromFile(observer, pFile)) + ".java";
@@ -149,6 +155,7 @@ public final class ServerPageServlet extends HttpServlet {
             }
 
 
+            @Override
             public void onFileCreate(final File pFile) {
                 if (pFile.getName().endsWith(".jsp")) {
                     final String resourceName = ConversionUtils.stripExtension(getSourceNameFromFile(observer, pFile)) + ".java";
@@ -163,6 +170,7 @@ public final class ServerPageServlet extends HttpServlet {
             }
 
 
+            @Override
             public String[] getResourcesToCompile(final FilesystemAlterationObserver pObserver) {
                 // we only want to compile the jsp pages
                 final String[] resourceNames = new String[resourceToCompile.size()];
@@ -171,6 +179,7 @@ public final class ServerPageServlet extends HttpServlet {
             }
 
 
+            @Override
             public ResourceReader getReader( final FilesystemAlterationObserver pObserver ) {
                 return new JspReader(sources, super.getReader(pObserver));
             }
@@ -189,6 +198,7 @@ public final class ServerPageServlet extends HttpServlet {
         return ConversionUtils.stripExtension(path).replace('/', '.');
     }
 
+    @Override
     protected void service(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 
         log("Request " + request.getRequestURI());
@@ -232,6 +242,7 @@ public final class ServerPageServlet extends HttpServlet {
         servlet.service(request, response);
     }
 
+    @Override
     public void destroy() {
 
         fam.stop();

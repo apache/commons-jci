@@ -47,6 +47,7 @@ public final class ConfigurationReloading {
         final Collection<Configurable> configurables = new ArrayList<Configurable>();
 
         final FilesystemAlterationListener listener = new FileChangeListener() {
+            @Override
             public void onStop(final FilesystemAlterationObserver pObserver) {
                 super.onStop(pObserver);
 
