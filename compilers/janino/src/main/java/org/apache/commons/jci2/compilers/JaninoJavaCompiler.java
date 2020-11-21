@@ -190,9 +190,9 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
         
         try {
             compiler.compile(resources);
-        } catch ( LocatedException e ) {
+        } catch ( final LocatedException e ) {
             problems.add(new JaninoCompilationProblem(e));
-        } catch ( IOException e ) {
+        } catch ( final IOException e ) {
             // low level problems reading or writing bytes
         	log.error("this error should have been cought before", e);
         }        

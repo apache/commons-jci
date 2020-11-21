@@ -46,7 +46,7 @@ import org.apache.commons.jci2.stores.ResourceStore;
  */
 public final class CommandlineCompiler {
     
-    public static void main( String[] args ) throws Exception {
+    public static void main( final String[] args ) throws Exception {
 
         final Options options = new Options();
 
@@ -115,7 +115,7 @@ public final class CommandlineCompiler {
         final JavaCompilerSettings settings = compiler.createDefaultSettings();
 
 
-        for (Iterator it = cmd.iterator(); it.hasNext();) {
+        for (final Iterator it = cmd.iterator(); it.hasNext();) {
             final Option option = (Option) it.next();
             if ("classpath".equals(option.getOpt())) {
                 final String[] values = option.getValues();
@@ -175,8 +175,8 @@ public final class CommandlineCompiler {
         
         final String[] resource = cmd.getArgs();
         
-        for (int i = 0; i < resource.length; i++) {
-            System.out.println("compiling " + resource[i]);
+        for (final String element : resource) {
+            System.out.println("compiling " + element);
         }
         
         final CompilationResult result = compiler.compile(resource, reader, store, classloader);

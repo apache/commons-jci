@@ -34,10 +34,10 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
     private final Log log = LogFactory.getLog(ReloadingClassLoaderRemoveTestCase.class);
     
     private final byte[] clazzSimpleA;
-    private MemoryResourceStore store1 = new MemoryResourceStore();
-    private MemoryResourceStore store2 = new MemoryResourceStore();
-    private MemoryResourceStore store3 = new MemoryResourceStore();
-    private MemoryResourceStore store4 = new MemoryResourceStore();
+    private final MemoryResourceStore store1 = new MemoryResourceStore();
+    private final MemoryResourceStore store2 = new MemoryResourceStore();
+    private final MemoryResourceStore store3 = new MemoryResourceStore();
+    private final MemoryResourceStore store4 = new MemoryResourceStore();
 
     public ReloadingClassLoaderRemoveTestCase() throws Exception {
         clazzSimpleA = SimpleDump.dump("SimpleA");
@@ -60,7 +60,7 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
      * Bug: The While loop in the removeResourceStore() throws an ArrayOutOfBoundsException
      */
     public void testRemoveStoreNotFoundClassLoaderNoStores() {
-        ReloadingClassLoader loader = new ReloadingClassLoader(getClass().getClassLoader());
+        final ReloadingClassLoader loader = new ReloadingClassLoader(getClass().getClassLoader());
         checkRemoveResourceStore("No ResourceStore", loader, store1, false);
     }
 
@@ -71,7 +71,7 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
      * Bug: The While loop in the removeResourceStore() throws an ArrayOutOfBoundsException
      */
     public void testRemoveStoreNotFoundClassLoaderHasStores() {
-        ReloadingClassLoader loader = new ReloadingClassLoader(getClass().getClassLoader());
+        final ReloadingClassLoader loader = new ReloadingClassLoader(getClass().getClassLoader());
         loader.addResourceStore(store1);
         loader.addResourceStore(store2);
         checkRemoveResourceStore("Has ResourceStore", loader, store3, false);
@@ -86,7 +86,7 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
      *      array is too large.
      */
     public void testRemoveStoresOne() {
-        ReloadingClassLoader loader = new ReloadingClassLoader(getClass().getClassLoader());
+        final ReloadingClassLoader loader = new ReloadingClassLoader(getClass().getClassLoader());
         loader.addResourceStore(store1);
         loader.addResourceStore(store2);
         loader.addResourceStore(store3);
@@ -113,7 +113,7 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
      *      ArrayIndexOutOfBoundsException (??not sure why??)
      */
     public void testRemoveStoresTwo() {
-        ReloadingClassLoader loader = new ReloadingClassLoader(getClass().getClassLoader());
+        final ReloadingClassLoader loader = new ReloadingClassLoader(getClass().getClassLoader());
         loader.addResourceStore(store1);
         loader.addResourceStore(store2);
         loader.addResourceStore(store3);
@@ -140,7 +140,7 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
      *      and copies store3 and store2 to their same positions
      */
     public void testRemoveStoresThree() {
-        ReloadingClassLoader loader = new ReloadingClassLoader(getClass().getClassLoader());
+        final ReloadingClassLoader loader = new ReloadingClassLoader(getClass().getClassLoader());
         loader.addResourceStore(store1);
         loader.addResourceStore(store2);
         loader.addResourceStore(store3);
@@ -167,7 +167,7 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
      *      ArrayIndexOutOfBoundsException because the length to copy is -1
      */
     public void testRemoveStoresFour() {
-        ReloadingClassLoader loader = new ReloadingClassLoader(getClass().getClassLoader());
+        final ReloadingClassLoader loader = new ReloadingClassLoader(getClass().getClassLoader());
         loader.addResourceStore(store1);
         loader.addResourceStore(store2);
         loader.addResourceStore(store3);
@@ -199,37 +199,37 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
     public void testLoadClassAfterResourceStoreRemoved() {
 
         // Create a class loader & add resource store
-        ReloadingClassLoader loader = new ReloadingClassLoader(this.getClass().getClassLoader());
-        MemoryResourceStore store = new MemoryResourceStore();
+        final ReloadingClassLoader loader = new ReloadingClassLoader(this.getClass().getClassLoader());
+        final MemoryResourceStore store = new MemoryResourceStore();
         loader.addResourceStore(store);
 
         // Check "jci2.Simple" class can't be loaded
         try {
             loader.loadClass("jci2.Simple").newInstance();
             fail("Success loadClass[1]");
-        } catch(ClassNotFoundException e) {
+        } catch(final ClassNotFoundException e) {
             // expected not found
-        } catch(Exception e) {
+        } catch(final Exception e) {
             log.error(e);
             fail("Error loadClass[1]: " + e);
         }
 
         // Add "jci2.Simple" class to the resource store
-        String toStringValue = "FooBar";
+        final String toStringValue = "FooBar";
         try {
-            byte[] classBytes = SimpleDump.dump(toStringValue);
+            final byte[] classBytes = SimpleDump.dump(toStringValue);
             store.write("jci2/Simple.class", classBytes);
-        } catch(Exception e) {
+        } catch(final Exception e) {
             log.error(e);
             fail("Error adding class to store: " + e);
         }
 
         // Check "jci2.Simple" class can now be loaded
         try {
-            Object simple2 = loader.loadClass("jci2.Simple").newInstance();
+            final Object simple2 = loader.loadClass("jci2.Simple").newInstance();
             assertNotNull("Found loadClass[2]",  simple2);        
             assertEquals("toString loadClass[2]",  toStringValue, simple2.toString());        
-        } catch(Exception e) {
+        } catch(final Exception e) {
             log.error(e);
             fail("Error loadClass[2]: " + e);
         }
@@ -241,9 +241,9 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
         try {
             loader.loadClass("jci2.Simple").newInstance();
             fail("Success loadClass[3]");
-        } catch(ClassNotFoundException e) {
+        } catch(final ClassNotFoundException e) {
             // expected not found
-        } catch(Exception e) {
+        } catch(final Exception e) {
             log.error(e);
             fail("Error loadClass[3]: " + e);
         }
@@ -253,10 +253,10 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
     /**
      * Check removing a ResourceStore from ReloadingClassLoader
      */
-    private void checkRemoveResourceStore(String label, ReloadingClassLoader loader, ResourceStore store, boolean expected) {
+    private void checkRemoveResourceStore(final String label, final ReloadingClassLoader loader, final ResourceStore store, final boolean expected) {
         try {
             assertEquals(label, expected, loader.removeResourceStore(store));
-        } catch(Exception e) {
+        } catch(final Exception e) {
             log.error(label, e);
             fail(label + " failed: " + e);
         }

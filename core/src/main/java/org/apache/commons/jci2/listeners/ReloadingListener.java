@@ -77,7 +77,7 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
         log.debug("created:" + created.size() + " changed:" + changed.size() + " deleted:" + deleted.size() + " resources");
 
         if (deleted.size() > 0) {
-            for (File file : deleted) {
+            for (final File file : deleted) {
                 final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), file));
                 store.remove(resourceName);
             }
@@ -85,7 +85,7 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
         }
 
         if (created.size() > 0) {
-            for (File file : created) {
+            for (final File file : created) {
                 FileInputStream is = null;
                 try {
                     is = new FileInputStream(file);
@@ -101,7 +101,7 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
         }
 
         if (changed.size() > 0) {
-            for (File file : changed) {
+            for (final File file : changed) {
                 FileInputStream is = null;
                 try {
                     is = new FileInputStream(file);
@@ -142,7 +142,7 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
     }
 
     void notifyReloadNotificationListeners() {
-        for (ReloadNotificationListener listener : notificationListeners) {
+        for (final ReloadNotificationListener listener : notificationListeners) {
             log.debug("notifying listener " + listener);
 
             listener.handleNotification();

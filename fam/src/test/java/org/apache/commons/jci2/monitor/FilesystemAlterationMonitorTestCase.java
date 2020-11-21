@@ -182,7 +182,7 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
     	try {
         	listener.waitForFirstCheck();
         	fail("should be an timeout");
-        } catch(Exception e) {
+        } catch(final Exception e) {
         	assertEquals("timeout", e.getMessage());
         }
 
@@ -191,7 +191,7 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
         try {
         	listener.waitForEvent();
         	fail("should be an timeout");
-        } catch(Exception e) {
+        } catch(final Exception e) {
         	assertEquals("timeout", e.getMessage());
         }
         
@@ -200,7 +200,7 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
         try {
         	listener.waitForCheck();
         	fail("should be an timeout");
-        } catch(Exception e) {
+        } catch(final Exception e) {
         	assertEquals("timeout", e.getMessage());
         }
     
@@ -341,12 +341,12 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
         fam.setInterval(interval);
 
         listener.waitForCheck();
-        long t1 = System.currentTimeMillis();
+        final long t1 = System.currentTimeMillis();
 
         listener.waitForCheck();
-        long t2 = System.currentTimeMillis();
+        final long t2 = System.currentTimeMillis();
         
-        long diff = t2-t1;
+        final long diff = t2-t1;
         
         // interval should be at around the same interval
         assertTrue("the interval was set to " + interval + " but the time difference was " + diff, (diff > (interval-50)) && (diff < (interval+50)));

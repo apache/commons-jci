@@ -48,7 +48,7 @@ public final class FileResourceStore implements ResourceStore {
             is = new FileInputStream(getFile(pResourceName));
             final byte[] data = IOUtils.toByteArray(is);
             return data;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             return null;
         } finally {
             IOUtils.closeQuietly(is);
@@ -65,7 +65,7 @@ public final class FileResourceStore implements ResourceStore {
             }
             os = new FileOutputStream(file);
             os.write(pData);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             // FIXME: now what?
         } finally {
             IOUtils.closeQuietly(os);
@@ -98,8 +98,8 @@ public final class FileResourceStore implements ResourceStore {
     private void list(final File pFile, final List<String> pFiles) {
         if (pFile.isDirectory()) {
             final File[] directoryFiles = pFile.listFiles();
-            for (int i=0; i < directoryFiles.length; i++) {
-                list(directoryFiles[i], pFiles);
+            for (final File directoryFile : directoryFiles) {
+                list(directoryFile, pFiles);
             }
         } else {
             pFiles.add(pFile.getAbsolutePath().substring(root.getAbsolutePath().length()+1));

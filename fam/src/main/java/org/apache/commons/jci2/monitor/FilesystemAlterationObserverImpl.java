@@ -122,7 +122,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
 
             final MonitorFile[] files = file.listFiles();
             final Set<Entry> deleted = new HashSet<Entry>(children.values());
-            for (MonitorFile f : files) {
+            for (final MonitorFile f : files) {
                 final String name = f.getName();
                 final Entry entry = children.get(name);
                 if (entry != null) {
@@ -143,7 +143,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
 
             // the ones not found on disk anymore
 
-            for (Entry entry : deleted) {
+            for (final Entry entry : deleted) {
                 entry.deleteChildrenAndNotify();
                 children.remove(entry.getName());
             }
@@ -151,7 +151,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
 
 
         private void deleteChildrenAndNotify() {
-            for (Entry entry : children.values()) {
+            for (final Entry entry : children.values()) {
                 entry.deleteChildrenAndNotify();
             }
             children.clear();
@@ -255,51 +255,51 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
 
     private void notifyOnStart() {
         log.debug("onStart " + rootEntry);
-        for (FilesystemAlterationListener listener : listeners) {
+        for (final FilesystemAlterationListener listener : listeners) {
             listener.onStart(this);
         }
     }
     private void notifyOnStop() {
         log.debug("onStop " + rootEntry);
-        for (FilesystemAlterationListener listener : listeners) {
+        for (final FilesystemAlterationListener listener : listeners) {
             listener.onStop(this);
         }
     }
 
     private void notifyOnFileCreate( final Entry pEntry ) {
         log.debug("onFileCreate " + pEntry);
-        for (FilesystemAlterationListener listener : listeners) {
+        for (final FilesystemAlterationListener listener : listeners) {
             listener.onFileCreate(((MonitorFileImpl)pEntry.getFile()).file );
         }
     }
     private void notifyOnFileChange( final Entry pEntry ) {
         log.debug("onFileChange " + pEntry);
-        for (FilesystemAlterationListener listener : listeners) {
+        for (final FilesystemAlterationListener listener : listeners) {
             listener.onFileChange(((MonitorFileImpl)pEntry.getFile()).file );
         }
     }
     private void notifyOnFileDelete( final Entry pEntry ) {
         log.debug("onFileDelete " + pEntry);
-        for (FilesystemAlterationListener listener : listeners) {
+        for (final FilesystemAlterationListener listener : listeners) {
             listener.onFileDelete(((MonitorFileImpl)pEntry.getFile()).file );
         }
     }
 
     private void notifyOnDirectoryCreate( final Entry pEntry ) {
         log.debug("onDirectoryCreate " + pEntry);
-        for (FilesystemAlterationListener listener : listeners) {
+        for (final FilesystemAlterationListener listener : listeners) {
             listener.onDirectoryCreate(((MonitorFileImpl)pEntry.getFile()).file );
         }
     }
     private void notifyOnDirectoryChange( final Entry pEntry ) {
         log.debug("onDirectoryChange " + pEntry);
-        for (FilesystemAlterationListener listener : listeners) {
+        for (final FilesystemAlterationListener listener : listeners) {
             listener.onDirectoryChange(((MonitorFileImpl)pEntry.getFile()).file );
         }
     }
     private void notifyOnDirectoryDelete( final Entry pEntry ) {
         log.debug("onDirectoryDelete " + pEntry);
-        for (FilesystemAlterationListener listener : listeners) {
+        for (final FilesystemAlterationListener listener : listeners) {
             listener.onDirectoryDelete(((MonitorFileImpl)pEntry.getFile()).file );
         }
     }

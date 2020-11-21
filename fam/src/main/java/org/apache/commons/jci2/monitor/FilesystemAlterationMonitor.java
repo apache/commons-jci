@@ -62,7 +62,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
         if (thread != null) {
             try {
                 thread.join(delay);
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
             }
         }
     }
@@ -98,7 +98,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
    
     public void removeListener( final FilesystemAlterationListener pListener ) {
         synchronized (observersLock) {
-            for (FilesystemAlterationObserver observer : observers.values()) {
+            for (final FilesystemAlterationObserver observer : observers.values()) {
                 observer.removeListener(pListener);
                 // FIXME: remove observer if there are no listeners?
             }
@@ -121,7 +121,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
         
         while (running) {
 
-            for (FilesystemAlterationObserver observer : observers.values()) {
+            for (final FilesystemAlterationObserver observer : observers.values()) {
                 observer.checkAndNotify();
             }
 

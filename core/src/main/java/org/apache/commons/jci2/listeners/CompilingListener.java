@@ -105,13 +105,13 @@ public class CompilingListener extends ReloadingListener {
 
         final Collection<String> resourceNames = new ArrayList<String>();
         
-        for (File createdFile : created) {
+        for (final File createdFile : created) {
             if (createdFile.getName().endsWith(getSourceFileExtension())) {
                 resourceNames.add(getSourceNameFromFile(pObserver, createdFile));
             }
         }
         
-        for (File changedFile : changed) {
+        for (final File changedFile : changed) {
             if (changedFile.getName().endsWith(getSourceFileExtension())) {
                 resourceNames.add(getSourceNameFromFile(pObserver, changedFile));
             }
@@ -133,7 +133,7 @@ public class CompilingListener extends ReloadingListener {
         log.debug("created:" + created.size() + " changed:" + changed.size() + " deleted:" + deleted.size() + " resources");
 
         if (deleted.size() > 0) {
-            for (File deletedFile : deleted) {
+            for (final File deletedFile : deleted) {
                 final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), deletedFile));
                 
                 if (resourceName.endsWith(getSourceFileExtension())) {
@@ -170,8 +170,8 @@ public class CompilingListener extends ReloadingListener {
             if (errors.length > 0) {
                 // FIXME: they need to be marked for re-compilation
                 // and then added as compileables again
-                for (int j = 0; j < resourcesToCompile.length; j++) {
-                    transactionalStore.remove(resourcesToCompile[j]);
+                for (final String element : resourcesToCompile) {
+                    transactionalStore.remove(element);
                 }
             }
             

@@ -81,7 +81,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             reader = pReader;
             clazzName = ConversionUtils.convertResourceToClassName(pSourceFile);
             fileName = pSourceFile;
-            int dot = clazzName.lastIndexOf('.');
+            final int dot = clazzName.lastIndexOf('.');
             if (dot > 0) {
                 typeName = clazzName.substring(dot + 1).toCharArray();
             } else {
@@ -221,8 +221,8 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
 
             public NameEnvironmentAnswer findType( final char[] pTypeName, final char[][] pPackageName ) {
                 final StringBuilder result = new StringBuilder();
-                for (int i = 0; i < pPackageName.length; i++) {
-                    result.append(pPackageName[i]);
+                for (final char[] element : pPackageName) {
+                    result.append(element);
                     result.append('.');
                 }
 
@@ -330,7 +330,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                 return true;
             }
 
-            public boolean isPackage( char[][] parentPackageName, char[] pPackageName ) {
+            public boolean isPackage( final char[][] parentPackageName, final char[] pPackageName ) {
                 final StringBuilder result = new StringBuilder();
                 if (parentPackageName != null) {
                     for (int i = 0; i < parentPackageName.length; i++) {
@@ -358,7 +358,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         final ICompilerRequestor compilerRequestor = new ICompilerRequestor() {
             public void acceptResult( final CompilationResult pResult ) {
                 if (pResult.hasProblems()) {
-                    for (IProblem iproblem : pResult.getProblems()) {
+                    for (final IProblem iproblem : pResult.getProblems()) {
                         final CompilationProblem problem = new EclipseCompilationProblem(iproblem);
                         if (problemHandler != null) {
                             problemHandler.handle(problem);
@@ -368,7 +368,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                 }
                 if (!pResult.hasErrors()) {
                     final ClassFile[] clazzFiles = pResult.getClassFiles();
-                    for (ClassFile clazzFile : clazzFiles) {
+                    for (final ClassFile clazzFile : clazzFiles) {
                         final char[][] compoundName = clazzFile.getCompoundName();
                         final StringBuilder clazzName = new StringBuilder();
                         for (int j = 0; j < compoundName.length; j++) {

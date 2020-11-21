@@ -66,9 +66,9 @@ public final class Jsr199JavaCompiler extends AbstractJavaCompiler {
         }
 
         @Override
-        public CharSequence getCharContent(boolean encodingErrors) throws IOException {
+        public CharSequence getCharContent(final boolean encodingErrors) throws IOException {
             log.debug("getCharContent of " + name);
-            byte[] content = reader.getBytes(name);
+            final byte[] content = reader.getBytes(name);
             return new String(content);
         }
 
@@ -85,7 +85,7 @@ public final class Jsr199JavaCompiler extends AbstractJavaCompiler {
         }
 
         @Override
-        public boolean isNameCompatible(String simpleName, Kind kind) {
+        public boolean isNameCompatible(final String simpleName, final Kind kind) {
             log.debug("isNameCompatible " + simpleName + " " + kind);
             // return super.isNameCompatible(simpleName, kind);
             return true;
@@ -104,7 +104,7 @@ public final class Jsr199JavaCompiler extends AbstractJavaCompiler {
         }
 
         @Override
-        public Reader openReader(boolean arg0) throws IOException {
+        public Reader openReader(final boolean arg0) throws IOException {
             log.debug("openReader");
             return super.openReader(arg0);
         }
@@ -137,51 +137,51 @@ public final class Jsr199JavaCompiler extends AbstractJavaCompiler {
         public void flush() {
             log.debug("flush");
         }
-        public ClassLoader getClassLoader(JavaFileManager.Location location) {
+        public ClassLoader getClassLoader(final JavaFileManager.Location location) {
             log.debug("getClassLoader");
             return null;
         }
-        public FileObject getFileForInput(JavaFileManager.Location location, String packageName, String relativeName) {
+        public FileObject getFileForInput(final JavaFileManager.Location location, final String packageName, final String relativeName) {
             log.debug("getFileForInput");
             return null;
         }
-        public FileObject getFileForOutput(JavaFileManager.Location location, String packageName, String relativeName, FileObject sibling) {
+        public FileObject getFileForOutput(final JavaFileManager.Location location, final String packageName, final String relativeName, final FileObject sibling) {
             log.debug("getFileForOutput");
             return null;
         }
-        public JavaFileObject getJavaFileForInput(JavaFileManager.Location location, String className, JavaFileObject.Kind kind) {
+        public JavaFileObject getJavaFileForInput(final JavaFileManager.Location location, final String className, final JavaFileObject.Kind kind) {
             log.debug("getJavaFileForInput");
             return null;
         }
-        public JavaFileObject getJavaFileForOutput(JavaFileManager.Location location, String className, JavaFileObject.Kind kind, FileObject sibling) {
+        public JavaFileObject getJavaFileForOutput(final JavaFileManager.Location location, final String className, final JavaFileObject.Kind kind, final FileObject sibling) {
             log.debug("getJavaFileForOutput");
             return null;
         }
-        public int isSupportedOption(String option) {
+        public int isSupportedOption(final String option) {
             log.debug("isSupportedOption " + option);
             return 0;
         }
-        public boolean handleOption(String current, Iterator<String> remaining) {
+        public boolean handleOption(final String current, final Iterator<String> remaining) {
             log.debug("handleOption " + current);
             return false;
         }
-        public boolean hasLocation(JavaFileManager.Location location) {
+        public boolean hasLocation(final JavaFileManager.Location location) {
             log.debug("hasLocation " + location);
             return false;
         }
-        public String inferBinaryName(JavaFileManager.Location location, JavaFileObject file) {
-            String s = file.getName().replaceFirst(".java", ".class"); 
+        public String inferBinaryName(final JavaFileManager.Location location, final JavaFileObject file) {
+            final String s = file.getName().replaceFirst(".java", ".class"); 
             log.debug("inferBinaryName " + file.getName() + " -> " + s);
             return s;
         }
-        public Iterable<JavaFileObject> list(JavaFileManager.Location location, String packageName, Set<JavaFileObject.Kind> kinds, boolean recurse) {
+        public Iterable<JavaFileObject> list(final JavaFileManager.Location location, final String packageName, final Set<JavaFileObject.Kind> kinds, final boolean recurse) {
             if (packageName.startsWith("java.")) {
                 return new ArrayList<JavaFileObject>();
             }
             log.debug("list " + location + packageName + kinds + recurse);
             return units;
         }
-        public boolean isSameFile(FileObject fileobject, FileObject fileobject1) {
+        public boolean isSameFile(final FileObject fileobject, final FileObject fileobject1) {
           return false;
         }
     }
@@ -196,11 +196,10 @@ public final class Jsr199JavaCompiler extends AbstractJavaCompiler {
         settings = pSettings;
     }
 
-    public CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader classLoader, JavaCompilerSettings settings) {
+    public CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader classLoader, final JavaCompilerSettings settings) {
 
         final Collection<JavaFileObject> units = new ArrayList<JavaFileObject>();
-        for (int i = 0; i < pResourcePaths.length; i++) {
-            final String sourcePath = pResourcePaths[i];
+        for (final String sourcePath : pResourcePaths) {
             log.debug("compiling " + sourcePath);
             units.add(new CompilationUnit(sourcePath, pReader));
         }
@@ -208,7 +207,7 @@ public final class Jsr199JavaCompiler extends AbstractJavaCompiler {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
         if (compiler == null) {
-            ServiceLoader<javax.tools.JavaCompiler> loader = ServiceLoader.load(javax.tools.JavaCompiler.class);
+            final ServiceLoader<javax.tools.JavaCompiler> loader = ServiceLoader.load(javax.tools.JavaCompiler.class);
             compiler = loader.iterator().next();
         }
 
@@ -219,7 +218,7 @@ public final class Jsr199JavaCompiler extends AbstractJavaCompiler {
         final JavaFileManager fileManager = new JciJavaFileManager(units, pStore);
         final DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
 
-        CompilationTask task = compiler.getTask(null, fileManager, diagnostics, null, null, units);
+        final CompilationTask task = compiler.getTask(null, fileManager, diagnostics, null, null, units);
 
         if (task.call().booleanValue()) {
             log.debug("compiled");

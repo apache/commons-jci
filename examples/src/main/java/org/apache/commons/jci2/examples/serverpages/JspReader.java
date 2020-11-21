@@ -36,7 +36,7 @@ public final class JspReader implements ResourceReader {
     }
 
 
-    public byte[] getBytes( String pResourceName ) {
+    public byte[] getBytes( final String pResourceName ) {
 
         final byte[] bytes = sources.get(pResourceName);
 
@@ -47,7 +47,7 @@ public final class JspReader implements ResourceReader {
         return reader.getBytes(pResourceName);
     }
 
-    public boolean isAvailable( String pResourceName ) {
+    public boolean isAvailable( final String pResourceName ) {
 
         if (sources.containsKey(pResourceName)) {
             return true;

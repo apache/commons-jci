@@ -343,7 +343,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
     public final String toString( final CompilationProblem[] pProblems ) {
         final StringBuilder sb = new StringBuilder();
 
-        for (CompilationProblem problem : pProblems) {
+        for (final CompilationProblem problem : pProblems) {
             sb.append(problem.getMessage()).append(", ");
         }
 

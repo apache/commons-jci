@@ -38,7 +38,7 @@ public final class ConfigurationReloading {
 
     private final FilesystemAlterationMonitor fam = new FilesystemAlterationMonitor();
 
-    private void run(String[] args) {
+    private void run(final String[] args) {
 
         final File configFile = new File("some.properties");
 
@@ -47,7 +47,7 @@ public final class ConfigurationReloading {
         final Collection<Configurable> configurables = new ArrayList<Configurable>();
 
         final FilesystemAlterationListener listener = new FileChangeListener() {
-            public void onStop(FilesystemAlterationObserver pObserver) {
+            public void onStop(final FilesystemAlterationObserver pObserver) {
                 super.onStop(pObserver);
 
                 if (hasChanged()) {
@@ -61,16 +61,16 @@ public final class ConfigurationReloading {
 
                         System.out.println("Notifying about configuration change " + configFile);
 
-                        for (Configurable configurable : configurables) {
+                        for (final Configurable configurable : configurables) {
                             configurable.configure(props);
                         }
 
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                         System.err.println("Failed to load configuration " + configFile);
                     } finally {
                     	try {
 							is.close();
-						} catch (IOException e) {
+						} catch (final IOException e) {
 						}
                     }
 
@@ -86,12 +86,12 @@ public final class ConfigurationReloading {
         while(true) {
             try {
                 Thread.sleep(1000);
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
             }
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         new ConfigurationReloading().run(args);
     }
 }

@@ -61,7 +61,7 @@ public final class MemoryResourceStore implements ResourceStore {
         }
         final List<String> names = new ArrayList<String>();
         
-        for (String name : store.keySet()) {
+        for (final String name : store.keySet()) {
             names.add(name);
         }
 

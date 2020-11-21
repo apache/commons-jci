@@ -38,7 +38,7 @@ public final class CompilationResult {
         final Collection<CompilationProblem> errorsColl = new ArrayList<CompilationProblem>();
         final Collection<CompilationProblem> warningsColl = new ArrayList<CompilationProblem>();
 
-        for (CompilationProblem problem : pProblems) {
+        for (final CompilationProblem problem : pProblems) {
             if (problem.isError()) {
                 errorsColl.add(problem);
             } else {

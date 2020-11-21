@@ -27,7 +27,7 @@ public class ExtendedDump implements Opcodes {
 
     public static byte[] dump() throws Exception {
 
-        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+        final ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
         MethodVisitor mv;
 
         cw.visit(V1_4, ACC_PUBLIC + ACC_SUPER, "jci2/Extended", null, "jci2/Simple", null);
@@ -37,13 +37,13 @@ public class ExtendedDump implements Opcodes {
         {
             mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
             mv.visitCode();
-            Label l0 = new Label();
+            final Label l0 = new Label();
             mv.visitLabel(l0);
             mv.visitLineNumber(3, l0);
             mv.visitVarInsn(ALOAD, 0);
             mv.visitMethodInsn(INVOKESPECIAL, "jci2/Simple", "<init>", "()V");
             mv.visitInsn(RETURN);
-            Label l1 = new Label();
+            final Label l1 = new Label();
             mv.visitLabel(l1);
             mv.visitLocalVariable("this", "Ljci/Extended;", null, l0, l1, 0);
             mv.visitMaxs(1, 1);
@@ -52,7 +52,7 @@ public class ExtendedDump implements Opcodes {
         {
             mv = cw.visitMethod(ACC_PUBLIC, "toString", "()Ljava/lang/String;", null, null);
             mv.visitCode();
-            Label l0 = new Label();
+            final Label l0 = new Label();
             mv.visitLabel(l0);
             mv.visitLineNumber(6, l0);
             mv.visitTypeInsn(NEW, "java/lang/StringBuffer");
@@ -64,7 +64,7 @@ public class ExtendedDump implements Opcodes {
             mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuffer", "append", "(Ljava/lang/String;)Ljava/lang/StringBuffer;");
             mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuffer", "toString", "()Ljava/lang/String;");
             mv.visitInsn(ARETURN);
-            Label l1 = new Label();
+            final Label l1 = new Label();
             mv.visitLabel(l1);
             mv.visitLocalVariable("this", "Ljci/Extended;", null, l0, l1, 0);
             mv.visitMaxs(3, 1);

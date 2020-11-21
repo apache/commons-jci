@@ -76,7 +76,7 @@ public final class JavaCompilerFactory {
             try {
                 clazz = Class.forName(className);
                 classCache.put(className, clazz);
-            } catch (ClassNotFoundException e) {
+            } catch (final ClassNotFoundException e) {
                 clazz = null;
             }
         }
@@ -87,7 +87,7 @@ public final class JavaCompilerFactory {
         
         try {
             return (JavaCompiler) clazz.newInstance();
-        } catch (Throwable t) {
+        } catch (final Throwable t) {
             return null;
         }
     }

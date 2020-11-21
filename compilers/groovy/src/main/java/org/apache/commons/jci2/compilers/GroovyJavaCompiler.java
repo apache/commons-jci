@@ -87,7 +87,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
             
             @SuppressWarnings("unchecked") // Groovy library is not yet generic
             final List<GroovyClass> classes = unit.getClasses();
-            for (GroovyClass clazz : classes) {
+            for (final GroovyClass clazz : classes) {
                 final byte[] bytes = clazz.getBytes();
                 pStore.write(ConversionUtils.convertClassToResourcePath(clazz.getName()), bytes);
             }
@@ -96,7 +96,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
             @SuppressWarnings("unchecked") // Groovy library is not yet generic
             final Collection<WarningMessage> warnings = col.getWarnings();
             if (warnings != null) {
-                for (WarningMessage warning : warnings) {
+                for (final WarningMessage warning : warnings) {
                     final CompilationProblem problem = new GroovyCompilationProblem(warning); 
                     if (problemHandler != null) {
                         problemHandler.handle(problem);
@@ -108,7 +108,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
             @SuppressWarnings("unchecked") // Groovy library is not yet generic
             final Collection<Message> errors = col.getErrors();
             if (errors != null) {
-                for (Message message : errors) {
+                for (final Message message : errors) {
                     final CompilationProblem problem = new GroovyCompilationProblem(message); 
                     if (problemHandler != null) {
                         problemHandler.handle(problem);
@@ -116,7 +116,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
                     problems.add(problem);
                 }
             }
-        } catch (CompilationFailedException e) {
+        } catch (final CompilationFailedException e) {
             throw new RuntimeException("no expected");
         }
 

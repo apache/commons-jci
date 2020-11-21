@@ -46,8 +46,8 @@ public final class GroovyCompilationProblem implements CompilationProblem {
             error = true;
         }
         if (pMessage instanceof SyntaxErrorMessage) {
-            SyntaxErrorMessage syntaxErrorMessage = (SyntaxErrorMessage)pMessage;
-            SyntaxException syntaxException = syntaxErrorMessage.getCause();
+            final SyntaxErrorMessage syntaxErrorMessage = (SyntaxErrorMessage)pMessage;
+            final SyntaxException syntaxException = syntaxErrorMessage.getCause();
             message = syntaxException.getMessage();
             fileName = syntaxException.getSourceLocator();
             // FIXME: getStartLine() vs. getLine()

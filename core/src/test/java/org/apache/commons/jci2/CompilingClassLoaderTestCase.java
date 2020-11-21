@@ -51,10 +51,9 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
 
         private final Log log = LogFactory.getLog(MockJavaCompiler.class);
 
-        public CompilationResult compile(String[] pResourcePaths, ResourceReader pReader, ResourceStore pStore, ClassLoader pClassLoader, JavaCompilerSettings pSettings ) {
+        public CompilationResult compile(final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader pClassLoader, final JavaCompilerSettings pSettings ) {
 
-            for (int i = 0; i < pResourcePaths.length; i++) {
-                final String resourcePath = pResourcePaths[i];
+            for (final String resourcePath : pResourcePaths) {
                 final byte[] resourceContent = pReader.getBytes(resourcePath);
 
                 log.debug("resource " + resourcePath + " = " + ((resourceContent!=null)?new String(resourceContent):null) );
@@ -65,7 +64,7 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
 
                     try {
                         data = SimpleDump.dump(new String(resourceContent));
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                         throw new RuntimeException("cannot handle resource " + resourcePath, e);
                     }
 
@@ -73,7 +72,7 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
 
                     try {
                         data = ExtendedDump.dump();
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                         throw new RuntimeException("cannot handle resource " + resourcePath, e);
                     }
 
@@ -90,15 +89,15 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
             return new CompilationResult(new CompilationProblem[0]);
         }
 
-        public CompilationResult compile(String[] pResourcePaths, ResourceReader pReader, ResourceStore pStore, ClassLoader pClassLoader) {
+        public CompilationResult compile(final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader pClassLoader) {
             return compile(pResourcePaths, pReader, pStore, pClassLoader, null);
         }
 
-        public CompilationResult compile(String[] pResourcePaths, ResourceReader pReader, ResourceStore pStore) {
+        public CompilationResult compile(final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore) {
             return compile(pResourcePaths, pReader, pStore, null);
         }
 
-        public void setCompilationProblemHandler(CompilationProblemHandler pHandler) {
+        public void setCompilationProblemHandler(final CompilationProblemHandler pHandler) {
         }
 
         public JavaCompilerSettings createDefaultSettings() {

@@ -72,7 +72,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
         
         private final class ProblemCollector implements ErrorReporter {
 
-            public void error(String pMessage, String pFileName, int pLine, String pScript, int pColumn) {
+            public void error(final String pMessage, final String pFileName, final int pLine, final String pScript, final int pColumn) {
 
                 final CompilationProblem problem = new RhinoCompilationProblem(pMessage, pFileName, pLine, pScript, pColumn, true); 
 
@@ -83,7 +83,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
                 problems.add(problem); 
             }
 
-            public void warning(String pMessage, String pFileName, int pLine, String pScript, int pColumn) {
+            public void warning(final String pMessage, final String pFileName, final int pLine, final String pScript, final int pColumn) {
 
                 final CompilationProblem problem = new RhinoCompilationProblem(pMessage, pFileName, pLine, pScript, pColumn, false); 
 
@@ -94,7 +94,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
                 problems.add(problem); 
             }
 
-            public EvaluatorException runtimeError(String pMessage, String pFileName, int pLine, String pScript, int pColumn) {
+            public EvaluatorException runtimeError(final String pMessage, final String pFileName, final int pLine, final String pScript, final int pColumn) {
                 return new EvaluatorException(pMessage, pFileName, pLine, pScript, pColumn);
             }
         }
@@ -121,9 +121,9 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
 
             try {
                 return compileClass(context, pName);
-            } catch( EvaluatorException e ) {
+            } catch( final EvaluatorException e ) {
                 throw new ClassNotFoundException(e.getMessage(), e);
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 throw new ClassNotFoundException(e.getMessage(), e);
             } finally {
                 Context.exit();
@@ -212,7 +212,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
 
                 store.write(clazzName.replace('.', '/') + ".class", clazzBytes);
 
-                Class<?> c = loader.defineClass(clazzName, clazzBytes);
+                final Class<?> c = loader.defineClass(clazzName, clazzBytes);
                 loader.linkClass(c);
 
                 if (i == 0) {
@@ -224,7 +224,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
             return clazz;
         }
 
-        private String getName(String s) {
+        private String getName(final String s) {
             final int i = s.lastIndexOf('/');
             if (i < 0) {
                 return s;
@@ -257,13 +257,13 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
 
         final RhinoCompilingClassLoader cl = new RhinoCompilingClassLoader(pReader, pStore, pClassLoader);
 
-        for (int i = 0; i < pResourcePaths.length; i++) {
-            log.debug("compiling " + pResourcePaths[i]);
+        for (final String pResourcePath : pResourcePaths) {
+            log.debug("compiling " + pResourcePath);
             
-            final String clazzName = ConversionUtils.convertResourceToClassName(pResourcePaths[i]);
+            final String clazzName = ConversionUtils.convertResourceToClassName(pResourcePath);
             try {
                 cl.loadClass(clazzName);
-            } catch (ClassNotFoundException e) {
+            } catch (final ClassNotFoundException e) {
             }
         }
 

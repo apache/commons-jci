@@ -35,7 +35,7 @@ public final class EclipseJavaCompilerTestCase extends AbstractCompilerTestCase 
     public void testAdditionalTopLevelClassCompile() throws Exception {
         try {
             super.testAdditionalTopLevelClassCompile();
-        } catch (AssertionFailedError e) {
+        } catch (final AssertionFailedError e) {
             if (e.getMessage().contains("The type AdditionalTopLevel collides")) {
                 System.err.println("WARNING: See JCI-59 - EclipseJavaCompile#isPackage() is not yet working correctly - ignoring the failure for now");
             } else {

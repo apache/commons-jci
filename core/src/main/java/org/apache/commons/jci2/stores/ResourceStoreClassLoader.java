@@ -42,7 +42,7 @@ public final class ResourceStoreClassLoader extends ClassLoader {
     private Class<?> fastFindClass(final String name) {
         
         if (stores != null) {
-            for (ResourceStore store : stores) {
+            for (final ResourceStore store : stores) {
                 final byte[] clazzBytes = store.read(ConversionUtils.convertClassToResourcePath(name));
                 if (clazzBytes != null) {
                     log.debug(getId() + " found class: " + name  + " (" + clazzBytes.length + " bytes)");
@@ -55,7 +55,7 @@ public final class ResourceStoreClassLoader extends ClassLoader {
     }
     
     @Override
-    protected synchronized Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+    protected synchronized Class<?> loadClass(final String name, final boolean resolve) throws ClassNotFoundException {
         // log.debug(getId() + " looking for: " + name);
         Class<?> clazz = findLoadedClass(name);
 

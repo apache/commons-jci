@@ -180,7 +180,7 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
                 if (!pSignal.triggered) {
                     try {
                         pSignal.wait(1000);
-                    } catch (InterruptedException e) {
+                    } catch (final InterruptedException e) {
                     }
 
                     if (++i > pSecondsTimeout) {

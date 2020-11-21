@@ -38,7 +38,7 @@ public final class JspGenerator {
         final StringBuilder sb = new StringBuilder();
         final char[] input = s.toCharArray();
 
-        for (char c : input) {
+        for (final char c : input) {
             if (c == '"') {
                 sb.append('\\');
             }
@@ -106,7 +106,7 @@ public final class JspGenerator {
             char[] watch = open;
             int w = 0;
             while(true) {
-                int c = input.read();
+                final int c = input.read();
 
                 if (c < 0) {
                     break;
@@ -156,12 +156,12 @@ public final class JspGenerator {
 
             return outputStream.toByteArray();
 
-        } catch (IOException e) {
+        } catch (final IOException e) {
             return null;
         } finally {
             try {
 				output.close();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 			}        	
         }
     }

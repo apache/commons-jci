@@ -104,27 +104,27 @@ public class ReloadingClassLoader extends ClassLoader implements ReloadNotificat
         delegate.clearAssertionStatus();
     }
     @Override
-    public URL getResource(String name) {
+    public URL getResource(final String name) {
         return delegate.getResource(name);
     }
     @Override
-    public InputStream getResourceAsStream(String name) {
+    public InputStream getResourceAsStream(final String name) {
         return delegate.getResourceAsStream(name);
     }
     @Override
-    public Class<?> loadClass(String name) throws ClassNotFoundException {
+    public Class<?> loadClass(final String name) throws ClassNotFoundException {
         return delegate.loadClass(name);
     }
     @Override
-    public void setClassAssertionStatus(String className, boolean enabled) {
+    public void setClassAssertionStatus(final String className, final boolean enabled) {
         delegate.setClassAssertionStatus(className, enabled);
     }
     @Override
-    public void setDefaultAssertionStatus(boolean enabled) {
+    public void setDefaultAssertionStatus(final boolean enabled) {
         delegate.setDefaultAssertionStatus(enabled);
     }
     @Override
-    public void setPackageAssertionStatus(String packageName, boolean enabled) {
+    public void setPackageAssertionStatus(final String packageName, final boolean enabled) {
         delegate.setPackageAssertionStatus(packageName, enabled);
     }
 }
