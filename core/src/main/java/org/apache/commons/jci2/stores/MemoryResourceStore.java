@@ -27,7 +27,7 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Store just in memory
- * 
+ *
  * @author tcurdt
  */
 public final class MemoryResourceStore implements ResourceStore {
@@ -60,14 +60,14 @@ public final class MemoryResourceStore implements ResourceStore {
             return new String[0];
         }
         final List<String> names = new ArrayList<String>();
-        
+
         for (final String name : store.keySet()) {
             names.add(name);
         }
 
         return names.toArray(new String[store.size()]);
     }
-    
+
     @Override
     public String toString() {
         return this.getClass().getName() + store.toString();

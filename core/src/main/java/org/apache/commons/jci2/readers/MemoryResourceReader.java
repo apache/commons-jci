@@ -22,11 +22,11 @@ import java.util.HashMap;
 
 /**
  * A memory based reader to compile from memory
- * 
+ *
  * @author tcurdt
  */
 public class MemoryResourceReader implements ResourceReader {
-    
+
     private Map<String, byte[]> resources = null;
 
     public boolean isAvailable( final String pResourceName ) {
@@ -36,21 +36,21 @@ public class MemoryResourceReader implements ResourceReader {
 
         return resources.containsKey(pResourceName);
     }
-    
+
     public void add( final String pResourceName, final byte[] pContent ) {
         if (resources == null) {
             resources = new HashMap<String, byte[]>();
         }
-        
+
         resources.put(pResourceName, pContent);
     }
-    
+
     public void remove( final String pResourceName ) {
         if (resources != null) {
             resources.remove(pResourceName);
-        }    
-    }    
-    
+        }
+    }
+
 
     public byte[] getBytes( final String pResourceName ) {
         return resources.get(pResourceName);

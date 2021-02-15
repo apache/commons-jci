@@ -24,7 +24,7 @@ import org.apache.commons.jci2.readers.ResourceReader;
 import org.apache.commons.jci2.stores.MemoryResourceStore;
 
 /**
- * 
+ *
  * @author tcurdt
  */
 public final class RhinoJavaCompilerTestCase extends AbstractCompilerTestCase {
@@ -41,7 +41,7 @@ public final class RhinoJavaCompilerTestCase extends AbstractCompilerTestCase {
 
     @Override
     public void testSimpleCompile() throws Exception {
-        final JavaCompiler compiler = createJavaCompiler(); 
+        final JavaCompiler compiler = createJavaCompiler();
 
         final ResourceReader reader = new ResourceReader() {
             final private Map<String, byte[]> sources = new HashMap<String, byte[]>() {
@@ -87,7 +87,7 @@ public final class RhinoJavaCompilerTestCase extends AbstractCompilerTestCase {
 
     @Override
     public void testUppercasePackageNameCompile() throws Exception {
-        final JavaCompiler compiler = createJavaCompiler(); 
+        final JavaCompiler compiler = createJavaCompiler();
 
         final ResourceReader reader = new ResourceReader() {
             final private Map<String, byte[]> sources = new HashMap<String, byte[]>() {

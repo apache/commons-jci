@@ -57,7 +57,7 @@ public final class ServerPageServlet extends HttpServlet {
 
     private final ReloadingClassLoader classloader = new ReloadingClassLoader(ServerPageServlet.class.getClassLoader());
     private FilesystemAlterationMonitor fam;
-    private CompilingListener jspListener; 
+    private CompilingListener jspListener;
 
     private Map<String, HttpServlet> servletsByClassname = new HashMap<String, HttpServlet>();
 
@@ -185,7 +185,7 @@ public final class ServerPageServlet extends HttpServlet {
             }
         };
         jspListener.addReloadNotificationListener(classloader);
-        
+
         fam = new FilesystemAlterationMonitor();
         fam.addListener(serverpagesDir, jspListener);
         fam.start();

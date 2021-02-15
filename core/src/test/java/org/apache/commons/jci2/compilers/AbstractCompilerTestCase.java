@@ -292,8 +292,8 @@ public abstract class AbstractCompilerTestCase extends TestCase {
      * https://issues.apache.org/jira/browse/JCI-59
      */
     public void testAdditionalTopLevelClassCompile() throws Exception {
-        final JavaCompiler compiler = createJavaCompiler(); 
-    
+        final JavaCompiler compiler = createJavaCompiler();
+
         final ResourceReader reader = new ResourceReader() {
            final private Map<String, byte[]> sources = new HashMap<String, byte[]>() {
                private static final long serialVersionUID = 1L;
@@ -311,24 +311,24 @@ public abstract class AbstractCompilerTestCase extends TestCase {
                        "  }\n" +
                        "}").getBytes());
                }};
-    
+
            public byte[] getBytes( final String pResourceName ) {
                return sources.get(pResourceName);
            }
-    
+
            public boolean isAvailable( final String pResourceName ) {
                return sources.containsKey(pResourceName);
            }
         };
-    
+
         final MemoryResourceStore store = new MemoryResourceStore();
         final CompilationResult result = compiler.compile(
                new String[] {
                        "jci2/Simple.java"
                }, reader, store);
-    
+
         assertEquals("Unexpected errors(s): " + toString(result.getErrors()), 0, result.getErrors().length);
-    
+
         final byte[] clazzBytes = store.read("jci2/Simple.class");
         assertNotNull("Expected to find jci2/Simple.class", clazzBytes);
         assertTrue(clazzBytes.length > 0);

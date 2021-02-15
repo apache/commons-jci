@@ -45,7 +45,7 @@ import org.apache.commons.jci2.stores.ResourceStore;
  * @author tcurdt
  */
 public final class CommandlineCompiler {
-    
+
     public static void main( final String[] args ) throws Exception {
 
         final Options options = new Options();
@@ -141,7 +141,7 @@ public final class CommandlineCompiler {
 
         final ResourceReader reader = new FileResourceReader(sourcepath);
         final ResourceStore store = new FileResourceStore(targetpath);
-        
+
         final int maxErrors = maxerrs;
         final int maxWarnings = maxwarns;
         compiler.setCompilationProblemHandler(new CompilationProblemHandler() {
@@ -172,15 +172,15 @@ public final class CommandlineCompiler {
                 return true;
             }
         });
-        
+
         final String[] resource = cmd.getArgs();
-        
+
         for (final String element : resource) {
             System.out.println("compiling " + element);
         }
-        
+
         final CompilationResult result = compiler.compile(resource, reader, store, classloader);
-        
+
         System.out.println( result.getErrors().length + " errors");
         System.out.println( result.getWarnings().length + " warnings");
 

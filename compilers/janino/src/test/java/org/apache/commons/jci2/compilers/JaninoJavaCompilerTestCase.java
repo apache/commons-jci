@@ -18,7 +18,7 @@
 package org.apache.commons.jci2.compilers;
 
 /**
- * 
+ *
  * @author tcurdt
  */
 public final class JaninoJavaCompilerTestCase extends AbstractCompilerTestCase {

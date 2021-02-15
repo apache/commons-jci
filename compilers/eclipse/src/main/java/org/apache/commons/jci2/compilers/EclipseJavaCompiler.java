@@ -309,7 +309,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                         is.close();
                     } catch (final IOException ie) {
                         log.error("could not close input stream", ie);
-                    } 
+                    }
                     return false;
                 }
 

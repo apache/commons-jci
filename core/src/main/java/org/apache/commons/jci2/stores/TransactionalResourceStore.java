@@ -21,23 +21,23 @@ package org.apache.commons.jci2.stores;
 /**
  * A TransactionalResourceStore get signals of the compilation process as a whole.
  * When it started and when the compiler finished.
- * 
+ *
  * @author tcurdt
  */
 public class TransactionalResourceStore implements ResourceStore, Transactional {
 
     private final ResourceStore store;
-    
+
     public TransactionalResourceStore( final ResourceStore pStore ) {
         store = pStore;
     }
-    
+
     public void onStart() {
     }
-    
+
     public void onStop() {
     }
-    
+
     public byte[] read( final String pResourceName ) {
         return store.read(pResourceName);
     }
@@ -47,7 +47,7 @@ public class TransactionalResourceStore implements ResourceStore, Transactional 
     public void write( final String pResourceName, final byte[] pResourceData ) {
         store.write(pResourceName, pResourceData);
     }
-    
+
     @Override
     public String toString() {
         return store.toString();

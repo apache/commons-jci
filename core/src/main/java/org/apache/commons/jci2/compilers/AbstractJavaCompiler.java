@@ -25,7 +25,7 @@ import org.apache.commons.jci2.stores.ResourceStore;
 /**
  * Base class for compiler implementations. Provides just a few
  * convenience methods.
- * 
+ *
  * @author tcurdt
  */
 public abstract class AbstractJavaCompiler implements JavaCompiler {

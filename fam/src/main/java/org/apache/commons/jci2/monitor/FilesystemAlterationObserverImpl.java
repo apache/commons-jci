@@ -28,13 +28,13 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Implementation of a FilesystemAlterationObserver
- * 
+ *
  * @author tcurdt
  */
 public class FilesystemAlterationObserverImpl implements FilesystemAlterationObserver {
 
     private final Log log = LogFactory.getLog(FilesystemAlterationObserverImpl.class);
-    
+
     private interface MonitorFile {
 
         long lastModified();
@@ -44,7 +44,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
         String getName();
 
     }
-    
+
     private final static class MonitorFileImpl implements MonitorFile {
 
         private final File file;
@@ -107,8 +107,8 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
         public String getName() {
             return file.getName();
         }
-        
-        
+
+
         @Override
         public String toString() {
             return file.toString();
@@ -176,7 +176,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
                 return true;
             } else {
                 // exists
-                final long currentModified = file.lastModified(); 
+                final long currentModified = file.lastModified();
 
                 if (currentModified != lastModified) {
                     // last modified has changed
@@ -185,7 +185,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
 //                    log.debug(file + " has new last modified");
 
                     // types only changes when also the last modified changes
-                    final int newType = (file.isDirectory()?TYPE_DIRECTORY:TYPE_FILE); 
+                    final int newType = (file.isDirectory()?TYPE_DIRECTORY:TYPE_FILE);
 
                     if (lastType != newType) {
                         // the type has changed
@@ -229,7 +229,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
                 }
             }
         }
-        
+
         public MonitorFile getFile() {
             return file;
         }
@@ -312,22 +312,22 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
         }
     }
 
-    
+
     public void checkAndNotify() {
     	synchronized(listenersSet) {
 	        if (listeners.length == 0) {
 	            return;
 	        }
-	
+
 	        notifyOnStart();
-	        
+
 	        checkEntries();
-	        
+
 	        notifyOnStop();
     	}
     }
 
-    
+
     public File getRootDirectory() {
         return rootDirectory;
     }
@@ -359,6 +359,6 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
         	final FilesystemAlterationListener[] res = new FilesystemAlterationListener[listeners.length];
         	System.arraycopy(listeners, 0, res, 0, res.length);
             return res;
-    	}    	
+    	}
     }
 }

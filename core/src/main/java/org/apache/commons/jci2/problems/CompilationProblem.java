@@ -19,7 +19,7 @@ package org.apache.commons.jci2.problems;
 
 /**
  * An abstract definition of a compilation problem
- * 
+ *
  * @author tcurdt
  */
 public interface CompilationProblem {
@@ -27,21 +27,21 @@ public interface CompilationProblem {
     /**
      * is the problem an error and compilation cannot continue
      * or just a warning and compilation can proceed
-     * 
+     *
      * @return true if the problem is an error
      */
     boolean isError();
 
     /**
      * name of the file where the problem occurred
-     * 
+     *
      * @return name of the file where the problem occurred
      */
     String getFileName();
 
     /**
      * position of where the problem starts in the source code
-     * 
+     *
      * @return position of where the problem starts in the source code
      */
     int getStartLine();
@@ -49,7 +49,7 @@ public interface CompilationProblem {
 
     /**
      * position of where the problem stops in the source code
-     * 
+     *
      * @return position of where the problem stops in the source code
      */
     int getEndLine();
@@ -57,7 +57,7 @@ public interface CompilationProblem {
 
     /**
      * the description of the problem
-     * 
+     *
      * @return the description of the problem
      */
     String getMessage();

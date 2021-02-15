@@ -42,14 +42,14 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
     private final Collection<File> changedDirectories = new ArrayList<File>();
     private final Collection<File> deletedDirectories = new ArrayList<File>();
 
-    
+
     private final static class Signal {
         public boolean triggered;
     }
 
     private final Signal eventSignal = new Signal();
     private final Signal checkSignal = new Signal();
-    
+
     protected FilesystemAlterationObserver observer;
 
     public void onDirectoryCreate( final File pDir ) {
@@ -133,7 +133,7 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
         signals();
         observer = null;
     }
-        
+
     public void waitForEvent() throws Exception {
         synchronized(eventSignal) {
             eventSignal.triggered = false;
@@ -143,24 +143,24 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
             throw new Exception("timeout");
         }
     }
-    
+
     /**
      * we don't reset the signal so if there was a check it is
      * already true and exit immediatly otherwise it will behave just
      * like waitForCheck()
-     * 
+     *
      * @throws Exception in case of a timeout
      */
     public void waitForFirstCheck() throws Exception {
         log.debug("waiting for first check");
         if (!waitForSignal(checkSignal, 10)) {
             throw new Exception("timeout");
-        }        
+        }
     }
 
     /**
      * wait for the next filesystem check to happen
-     * 
+     *
      * @throws Exception in case of a timeout
      */
     public void waitForCheck() throws Exception {
@@ -172,7 +172,7 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
             throw new Exception("timeout");
         }
     }
-    
+
     private boolean waitForSignal(final Signal pSignal, final int pSecondsTimeout) {
         int i = 0;
         while(true) {
@@ -187,13 +187,13 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
                         log.error("timeout after " + pSecondsTimeout + "s");
                         return false;
                     }
-                    
+
                 } else {
                     pSignal.triggered = false;
                     break;
                 }
             }
-        }        
+        }
         return true;
     }
 

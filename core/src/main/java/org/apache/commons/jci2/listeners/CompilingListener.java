@@ -38,18 +38,18 @@ import org.apache.commons.logging.LogFactory;
 /**
  * A CompilingListener is an improved version of the ReloadingListener.
  * It even compiles the classes from source before doing the reloading.
- * 
+ *
  * @author tcurdt
  */
 public class CompilingListener extends ReloadingListener {
 
     private final Log log = LogFactory.getLog(CompilingListener.class);
-    
+
     private final JavaCompiler compiler;
     private final TransactionalResourceStore transactionalStore;
     private ResourceReader reader;
     private CompilationResult lastResult;
-    
+
     public CompilingListener() {
         this(new JavaCompilerFactory().createCompiler("eclipse"));
     }
@@ -57,18 +57,18 @@ public class CompilingListener extends ReloadingListener {
     public CompilingListener( final JavaCompiler pCompiler ) {
         this(pCompiler, new TransactionalResourceStore(new MemoryResourceStore()));
     }
-    
+
     public CompilingListener( final JavaCompiler pCompiler, final TransactionalResourceStore pTransactionalStore ) {
         super(pTransactionalStore);
         compiler = pCompiler;
         transactionalStore = pTransactionalStore;
         lastResult = null;
     }
-    
+
     public JavaCompiler getCompiler() {
         return compiler;
     }
-    
+
     public String getSourceFileExtension() {
         return ".java";
     }
@@ -80,7 +80,7 @@ public class CompilingListener extends ReloadingListener {
     public String getSourceNameFromFile( final FilesystemAlterationObserver pObserver, final File pFile ) {
         return ConversionUtils.stripExtension(ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), pFile))) + getSourceFileExtension();
     }
-    
+
     @Override
     public ResourceStore getStore() {
         return transactionalStore;
@@ -89,7 +89,7 @@ public class CompilingListener extends ReloadingListener {
     public synchronized CompilationResult getCompilationResult() {
         return lastResult;
     }
-    
+
     @Override
     public void onStart( final FilesystemAlterationObserver pObserver ) {
         super.onStart(pObserver);
@@ -104,13 +104,13 @@ public class CompilingListener extends ReloadingListener {
         final Collection<File> changed = getChangedFiles();
 
         final Collection<String> resourceNames = new ArrayList<String>();
-        
+
         for (final File createdFile : created) {
             if (createdFile.getName().endsWith(getSourceFileExtension())) {
                 resourceNames.add(getSourceNameFromFile(pObserver, createdFile));
             }
         }
-        
+
         for (final File changedFile : changed) {
             if (changedFile.getName().endsWith(getSourceFileExtension())) {
                 resourceNames.add(getSourceNameFromFile(pObserver, changedFile));
@@ -121,7 +121,7 @@ public class CompilingListener extends ReloadingListener {
         resourceNames.toArray(result);
         return result;
     }
-    
+
     @Override
     public boolean isReloadRequired( final FilesystemAlterationObserver pObserver ) {
         boolean reload = false;
@@ -129,44 +129,44 @@ public class CompilingListener extends ReloadingListener {
         final Collection<File> created = getCreatedFiles();
         final Collection<File> changed = getChangedFiles();
         final Collection<File> deleted = getDeletedFiles();
-        
+
         log.debug("created:" + created.size() + " changed:" + changed.size() + " deleted:" + deleted.size() + " resources");
 
         if (deleted.size() > 0) {
             for (final File deletedFile : deleted) {
                 final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), deletedFile));
-                
+
                 if (resourceName.endsWith(getSourceFileExtension())) {
-                    // if source resource got removed delete the corresponding class 
+                    // if source resource got removed delete the corresponding class
                     transactionalStore.remove(ConversionUtils.stripExtension(resourceName) + ".class");
                 } else {
                     // ordinary resource to be removed
                     transactionalStore.remove(resourceName);
                 }
-                
+
                 // FIXME: does not remove nested classes
-                
+
             }
             reload = true;
         }
-                                
+
         final String[] resourcesToCompile = getResourcesToCompile(pObserver);
 
         if (resourcesToCompile.length > 0) {
 
             log.debug(resourcesToCompile.length + " classes to compile");
-            
+
             final CompilationResult result = compiler.compile(resourcesToCompile, reader, transactionalStore);
-            
+
             synchronized(this) {
                 lastResult = result;
             }
-            
+
             final CompilationProblem[] errors = result.getErrors();
             final CompilationProblem[] warnings = result.getWarnings();
-            
+
             log.debug(errors.length + " errors, " + warnings.length + " warnings");
-        
+
             if (errors.length > 0) {
                 // FIXME: they need to be marked for re-compilation
                 // and then added as compileables again
@@ -174,10 +174,10 @@ public class CompilingListener extends ReloadingListener {
                     transactionalStore.remove(element);
                 }
             }
-            
+
             reload = true;
         }
-        
+
         return reload;
-    }    
+    }
 }

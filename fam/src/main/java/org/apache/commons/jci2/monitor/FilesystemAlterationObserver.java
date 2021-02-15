@@ -23,7 +23,7 @@ import java.io.File;
  * FilesystemAlterationObserver represents the state of files
  * below a certain root directory. It implements the code to
  * check the filesystem and notify listeners.
- * 
+ *
  * @author tcurdt
  */
 public interface FilesystemAlterationObserver {

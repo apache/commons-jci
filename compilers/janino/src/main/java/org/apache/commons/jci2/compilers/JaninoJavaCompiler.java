@@ -55,21 +55,21 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
     public JaninoJavaCompiler() {
     	this(new JaninoJavaCompilerSettings());
     }
-    
+
     public JaninoJavaCompiler( final JaninoJavaCompilerSettings pSettings ) {
     	defaultSettings = pSettings;
     }
-    
+
     private final static class JciResource implements Resource {
 
     	private final String name;
     	private final byte[] bytes;
-    	
+
     	public JciResource( final String pName, final byte[] pBytes ) {
     		name = pName;
     		bytes = pBytes;
     	}
-    	
+
 		public String getFileName() {
 			return name;
 		}
@@ -98,15 +98,15 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 			super.close();
 
 			final byte[] bytes = toByteArray();
-			
+
 			store.write(name, bytes);
 		}
     }
-    
+
     public CompilationResult compile( final String[] pSourceNames, final ResourceReader pResourceReader, final ResourceStore pStore, final ClassLoader pClassLoader, final JavaCompilerSettings pSettings ) {
 
     	final Collection<CompilationProblem> problems = new ArrayList<CompilationProblem>();
-    	
+
     	final StringPattern[] pattern = StringPattern.PATTERNS_NONE;
 
     	final Compiler compiler = new Compiler(
@@ -114,32 +114,32 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 					@Override
                     public Resource findResource( final String pSourceName ) {
 						final byte[] bytes = pResourceReader.getBytes(pSourceName);
-						
+
 						if (bytes == null) {
 							log.debug("failed to find source " + pSourceName);
 							return null;
 						}
-						
+
 						log.debug("reading " + pSourceName + " (" + bytes.length + ")");
-						
+
 						return new JciResource(pSourceName, bytes);
-					}    		
+					}
     			},
     			new ClassLoaderIClassLoader(pClassLoader),
     			new ResourceFinder() {
 					@Override
                     public Resource findResource( final String pResourceName ) {
 						final byte[] bytes = pStore.read(pResourceName);
-						
+
 						if (bytes == null) {
 							log.debug("failed to find " + pResourceName);
 							return null;
 						}
 
 						log.debug("reading " + pResourceName + " (" + bytes.length + ")");
-						
+
 						return new JciResource(pResourceName, bytes);
-					}    		
+					}
     			},
     			new ResourceCreator() {
 					public OutputStream createResource( final String pResourceName ) throws IOException {
@@ -151,7 +151,7 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 
 						pStore.remove(pResourceName);
 						return true;
-					}    				
+					}
     			},
     			pSettings.getSourceEncoding(),
     			false,
@@ -165,11 +165,11 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 								problemHandler.handle(problem);
 							}
 							problems.add(problem);
-						}    		
-			    	})    			
+						}
+			    	})
     			);
-    	
-    	
+
+
     	compiler.setCompileErrorHandler(new ErrorHandler() {
 			public void handleError( final String pMessage, final Location pLocation ) throws CompileException {
 				final CompilationProblem problem = new JaninoCompilationProblem(pLocation.getFileName(), pLocation, pMessage, true);
@@ -179,7 +179,7 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 				problems.add(problem);
 			}
     	});
-    	
+
 
     	final Resource[] resources = new Resource[pSourceNames.length];
         for (int i = 0; i < pSourceNames.length; i++) {
@@ -187,7 +187,7 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
             final byte[] source = pResourceReader.getBytes(pSourceNames[i]);
             resources[i] = new JciResource(pSourceNames[i], source);
         }
-        
+
         try {
             compiler.compile(resources);
         } catch ( final LocatedException e ) {
@@ -195,7 +195,7 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
         } catch ( final IOException e ) {
             // low level problems reading or writing bytes
         	log.error("this error should have been cought before", e);
-        }        
+        }
         final CompilationProblem[] result = new CompilationProblem[problems.size()];
         problems.toArray(result);
         return new CompilationResult(result);
@@ -204,5 +204,5 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
     public JavaCompilerSettings createDefaultSettings() {
         return new JaninoJavaCompilerSettings(defaultSettings);
     }
-    
+
 }

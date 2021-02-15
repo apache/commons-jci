@@ -20,7 +20,7 @@ package org.apache.commons.jci2.readers;
 import org.apache.commons.jci2.AbstractTestCase;
 
 /**
- * 
+ *
  * @author tcurdt
  */
 public final class ResourceReaderTestCase extends AbstractTestCase {
@@ -44,7 +44,7 @@ public final class ResourceReaderTestCase extends AbstractTestCase {
         assertTrue(reader.isAvailable("test"));
         final byte[] content = reader.getBytes("test");
         assertTrue(content != null);
-        assertEquals("test", new String(content));        
+        assertEquals("test", new String(content));
 
         assertFalse(reader.isAvailable("bla"));
         assertTrue(reader.getBytes("bla") == null);

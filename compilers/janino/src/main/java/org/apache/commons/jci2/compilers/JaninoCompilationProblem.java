@@ -23,7 +23,7 @@ import org.codehaus.commons.compiler.Location;
 
 /**
  * Janino version of a CompilationProblem
- * 
+ *
  * @author tcurdt
  */
 public final class JaninoCompilationProblem implements CompilationProblem {

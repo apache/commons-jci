@@ -36,16 +36,16 @@ import org.apache.commons.logging.LogFactory;
 /**
  * This Listener waits for FAM events to trigger a reload of classes
  * or resources.
- * 
+ *
  * @author tcurdt
  */
 public class ReloadingListener extends AbstractFilesystemAlterationListener {
 
     private final Log log = LogFactory.getLog(ReloadingListener.class);
-    
+
     private final Set<ReloadNotificationListener> notificationListeners = new HashSet<ReloadNotificationListener>();
     private final ResourceStore store;
-    
+
     public ReloadingListener() {
         this(new MemoryResourceStore());
     }
@@ -66,14 +66,14 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
         }
 
     }
-    
+
     public boolean isReloadRequired( final FilesystemAlterationObserver pObserver ) {
         boolean reload = false;
 
         final Collection<File> created = getCreatedFiles();
         final Collection<File> changed = getChangedFiles();
         final Collection<File> deleted = getDeletedFiles();
-        
+
         log.debug("created:" + created.size() + " changed:" + changed.size() + " deleted:" + deleted.size() + " resources");
 
         if (deleted.size() > 0) {
@@ -119,11 +119,11 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
 
         return reload;
     }
-    
+
     @Override
     public void onStop( final FilesystemAlterationObserver pObserver ) {
-        
-        
+
+
         if (store instanceof Transactional) {
             ((Transactional)store).onStart();
         }
@@ -133,11 +133,11 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
         if (store instanceof Transactional) {
             ((Transactional)store).onStop();
         }
-        
+
         if (reload) {
             notifyReloadNotificationListeners();
         }
-        
+
         super.onStop(pObserver);
     }
 
@@ -148,12 +148,12 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
             listener.handleNotification();
         }
     }
-    
+
     @Override
-    public void onDirectoryCreate( final File pDir ) {                
+    public void onDirectoryCreate( final File pDir ) {
     }
     @Override
-    public void onDirectoryChange( final File pDir ) {                
+    public void onDirectoryChange( final File pDir ) {
     }
     @Override
     public void onDirectoryDelete( final File pDir ) {

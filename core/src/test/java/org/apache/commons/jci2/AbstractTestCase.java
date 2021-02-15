@@ -27,13 +27,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * 
+ *
  * @author tcurdt
  */
 public abstract class AbstractTestCase extends TestCase {
 
     private final Log log = LogFactory.getLog(AbstractTestCase.class);
-    
+
     protected File directory;
 
     @Override
@@ -45,8 +45,8 @@ public abstract class AbstractTestCase extends TestCase {
         assertTrue(directory.exists());
         assertTrue(directory.isDirectory());
     }
-    
-    
+
+
     protected File createDirectory( final String pName ) throws Exception {
         final File newDirectory = new File(directory, pName);
         assertTrue(newDirectory.mkdir());
@@ -54,7 +54,7 @@ public abstract class AbstractTestCase extends TestCase {
         assertTrue(newDirectory.isDirectory());
         return newDirectory;
     }
-    
+
     protected File writeFile( final String pName, final byte[] pData ) throws Exception {
         final File file = new File(directory, pName);
         final File parent = file.getParentFile();
@@ -63,14 +63,14 @@ public abstract class AbstractTestCase extends TestCase {
         }
 
         log.debug("writing file " + pName + " (" + pData.length + " bytes)");
-        
+
         final FileOutputStream os = new FileOutputStream(file);
         os.write(pData);
         os.close();
-        
+
         assertTrue(file.exists());
         assertTrue(file.isFile());
-        
+
         return file;
     }
 
@@ -84,32 +84,32 @@ public abstract class AbstractTestCase extends TestCase {
         final FileWriter writer = new FileWriter(file);
         writer.write(pText);
         writer.close();
-        
+
         assertTrue(file.exists());
         assertTrue(file.isFile());
-        
+
         return file;
     }
-    
+
     protected void delay() {
         try {
             Thread.sleep(1500);
         } catch (final InterruptedException e) {
         }
     }
-    
+
     protected File createTempDirectory() throws IOException {
         final File tempFile = File.createTempFile("jci2", null);
-        
+
         if (!tempFile.delete()) {
             throw new IOException();
         }
-        
+
         if (!tempFile.mkdir()) {
             throw new IOException();
         }
-        
-        return tempFile;         
+
+        return tempFile;
     }
 
 

@@ -42,18 +42,18 @@ import org.codehaus.groovy.tools.GroovyClass;
 
 /**
  * Groovy implementation of the JavaCompiler interface
- * 
+ *
  * @author tcurdt
  */
 public final class GroovyJavaCompiler extends AbstractJavaCompiler {
 
     private final Log log = LogFactory.getLog(GroovyJavaCompiler.class);
     private final GroovyJavaCompilerSettings defaultSettings;
-    
+
     public GroovyJavaCompiler() {
         defaultSettings = new GroovyJavaCompilerSettings(new CompilerConfiguration());
     }
-        
+
     public CompilationResult compile(
             final String[] pResourceNames,
             final ResourceReader pReader,
@@ -78,13 +78,13 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
                     );
             unit.addSource(source[i]);
         }
-        
+
         final Collection<CompilationProblem> problems = new ArrayList<CompilationProblem>();
 
         try {
             log.debug("compiling");
             unit.compile(Phases.CLASS_GENERATION);
-            
+
             @SuppressWarnings("unchecked") // Groovy library is not yet generic
             final List<GroovyClass> classes = unit.getClasses();
             for (final GroovyClass clazz : classes) {
@@ -97,7 +97,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
             final Collection<WarningMessage> warnings = col.getWarnings();
             if (warnings != null) {
                 for (final WarningMessage warning : warnings) {
-                    final CompilationProblem problem = new GroovyCompilationProblem(warning); 
+                    final CompilationProblem problem = new GroovyCompilationProblem(warning);
                     if (problemHandler != null) {
                         problemHandler.handle(problem);
                     }
@@ -109,7 +109,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
             final Collection<Message> errors = col.getErrors();
             if (errors != null) {
                 for (final Message message : errors) {
-                    final CompilationProblem problem = new GroovyCompilationProblem(message); 
+                    final CompilationProblem problem = new GroovyCompilationProblem(message);
                     if (problemHandler != null) {
                         problemHandler.handle(problem);
                     }

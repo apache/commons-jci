@@ -31,7 +31,7 @@ import org.apache.commons.jci2.monitor.FilesystemAlterationMonitor;
 import org.apache.commons.jci2.monitor.FilesystemAlterationObserver;
 
 /**
- * 
+ *
  * @author tcurdt
  */
 public final class ConfigurationReloading {
@@ -55,7 +55,7 @@ public final class ConfigurationReloading {
                     System.out.println("Configuration change detected " + configFile);
 
                     final Properties props = new Properties();
-                    InputStream is = null; 
+                    InputStream is = null;
                     try {
                     	is = new FileInputStream(configFile);
                         props.load(is);

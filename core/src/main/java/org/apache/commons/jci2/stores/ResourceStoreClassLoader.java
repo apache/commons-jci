@@ -23,7 +23,7 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * A ClassLoader backed by an array of ResourceStores
- * 
+ *
  * @author tcurdt
  */
 public final class ResourceStoreClassLoader extends ClassLoader {
@@ -34,26 +34,26 @@ public final class ResourceStoreClassLoader extends ClassLoader {
 
     public ResourceStoreClassLoader( final ClassLoader pParent, final ResourceStore[] pStores ) {
         super(pParent);
-        
-        stores = new ResourceStore[pStores.length]; 
-        System.arraycopy(pStores, 0, stores, 0, stores.length);	
+
+        stores = new ResourceStore[pStores.length];
+        System.arraycopy(pStores, 0, stores, 0, stores.length);
     }
 
     private Class<?> fastFindClass(final String name) {
-        
+
         if (stores != null) {
             for (final ResourceStore store : stores) {
                 final byte[] clazzBytes = store.read(ConversionUtils.convertClassToResourcePath(name));
                 if (clazzBytes != null) {
                     log.debug(getId() + " found class: " + name  + " (" + clazzBytes.length + " bytes)");
                     return defineClass(name, clazzBytes, 0, clazzBytes.length);
-                }            
+                }
             }
         }
-        
-        return null;            
+
+        return null;
     }
-    
+
     @Override
     protected synchronized Class<?> loadClass(final String name, final boolean resolve) throws ClassNotFoundException {
         // log.debug(getId() + " looking for: " + name);
@@ -61,7 +61,7 @@ public final class ResourceStoreClassLoader extends ClassLoader {
 
         if (clazz == null) {
             clazz = fastFindClass(name);
-            
+
             if (clazz == null) {
 
                 final ClassLoader parent = getParent();
@@ -71,7 +71,7 @@ public final class ResourceStoreClassLoader extends ClassLoader {
                 } else {
                     throw new ClassNotFoundException(name);
                 }
-                
+
             } else {
                 log.debug(getId() + " loaded from store: " + name);
             }
@@ -92,7 +92,7 @@ public final class ResourceStoreClassLoader extends ClassLoader {
         }
         return clazz;
     }
-    
+
     private String getId() {
         return "" + this + "[" + this.getClass().getClassLoader() + "]";
     }

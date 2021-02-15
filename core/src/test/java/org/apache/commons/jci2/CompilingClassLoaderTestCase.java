@@ -36,7 +36,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * 
+ *
  * @author tcurdt
  */
 public final class CompilingClassLoaderTestCase extends AbstractTestCase {
@@ -46,7 +46,7 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
     private ReloadingClassLoader classloader;
     private CompilingListener listener;
     private FilesystemAlterationMonitor fam;
-        
+
     private final static class MockJavaCompiler implements JavaCompiler {
 
         private final Log log = LogFactory.getLog(MockJavaCompiler.class);
@@ -105,63 +105,63 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
         }
 
     }
-    
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        
+
         classloader = new ReloadingClassLoader(this.getClass().getClassLoader());
-        listener = new CompilingListener(new MockJavaCompiler());   
+        listener = new CompilingListener(new MockJavaCompiler());
 
         listener.addReloadNotificationListener(classloader);
-        
+
         fam = new FilesystemAlterationMonitor();
         fam.addListener(directory, listener);
         fam.start();
     }
 
     private void initialCompile() throws Exception {
-        log.debug("initial compile");        
+        log.debug("initial compile");
 
         listener.waitForFirstCheck();
-                
+
         writeFile("jci2/Simple.java", "Simple1");
         writeFile("jci2/Extended.java", "Extended");
-        
-        log.debug("waiting for compile changes to get applied");        
+
+        log.debug("waiting for compile changes to get applied");
         listener.waitForCheck();
-        
-        log.debug("*** ready to test");        
+
+        log.debug("*** ready to test");
     }
-    
+
     public void testCreate() throws Exception {
         initialCompile();
-        
-        log.debug("loading Simple");        
+
+        log.debug("loading Simple");
         final Object simple = classloader.loadClass("jci2.Simple").newInstance();
         assertEquals("Simple1", simple.toString());
-        
-        log.debug("loading Extended");        
+
+        log.debug("loading Extended");
         final Object extended = classloader.loadClass("jci2.Extended").newInstance();
         assertEquals("Extended:Simple1", extended.toString());
     }
 
-    public void testChange() throws Exception {        
+    public void testChange() throws Exception {
         initialCompile();
 
         final Object simple = classloader.loadClass("jci2.Simple").newInstance();
         assertEquals("Simple1", simple.toString());
-        
+
         final Object extended = classloader.loadClass("jci2.Extended").newInstance();
         assertEquals("Extended:Simple1", extended.toString());
 
         delay();
         writeFile("jci2/Simple.java", "Simple2");
         listener.waitForCheck();
-    
+
         final Object simple2 = classloader.loadClass("jci2.Simple").newInstance();
         assertEquals("Simple2", simple2.toString());
-        
+
         final Object newExtended = classloader.loadClass("jci2.Extended").newInstance();
         assertEquals("Extended:Simple2", newExtended.toString());
     }
@@ -171,17 +171,17 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
 
         final Object simple = classloader.loadClass("jci2.Simple").newInstance();
         assertEquals("Simple1", simple.toString());
-        
+
         final Object extended = classloader.loadClass("jci2.Extended").newInstance();
         assertEquals("Extended:Simple1", extended.toString());
-                
+
         listener.waitForCheck();
-        
+
         log.debug("deleting source file");
         assertTrue(new File(directory, "jci2/Extended.java").delete());
-        
+
         listener.waitForCheck();
-       
+
         log.debug("loading Simple");
         final Object oldSimple = classloader.loadClass("jci2.Simple").newInstance();
         assertEquals("Simple1", oldSimple.toString());
@@ -192,8 +192,8 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
             fail();
         } catch(final ClassNotFoundException e) {
             assertEquals("jci2.Extended", e.getMessage());
-        }        
-        
+        }
+
         log.debug("deleting whole directory");
         FileUtils.deleteDirectory(new File(directory, "jci2"));
 
@@ -209,15 +209,15 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
 
     }
 
-    public void testDeleteDependency() throws Exception {        
+    public void testDeleteDependency() throws Exception {
         initialCompile();
 
         final Object simple = classloader.loadClass("jci2.Simple").newInstance();
         assertEquals("Simple1", simple.toString());
-        
+
         final Object extended = classloader.loadClass("jci2.Extended").newInstance();
         assertEquals("Extended:Simple1", extended.toString());
-        
+
         log.debug("deleting source file");
         assertTrue(new File(directory, "jci2/Simple.java").delete());
         listener.waitForCheck();
@@ -229,7 +229,7 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
         } catch(final NoClassDefFoundError e) {
             assertEquals("jci2/Simple", e.getMessage());
         }
-        
+
     }
 
     @Override
@@ -237,5 +237,5 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
         fam.removeListener(listener);
         fam.stop();
         super.tearDown();
-    }    
+    }
 }

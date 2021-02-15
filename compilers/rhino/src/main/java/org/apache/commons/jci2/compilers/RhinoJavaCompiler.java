@@ -52,12 +52,12 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
     private final Log log = LogFactory.getLog(RhinoJavaCompiler.class);
 
     private final JavaCompilerSettings defaultSettings;
-    
-    
+
+
     public RhinoJavaCompiler() {
         defaultSettings = new RhinoJavaCompilerSettings();
     }
-    
+
     /**
      * based on code from dev.helma.org
      * http://dev.helma.org/source/file/helma/branches/rhinoloader/src/org/helma/javascript/RhinoLoader.java/?revision=95
@@ -69,29 +69,29 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
         private final ResourceStore store;
 
         private final Collection<CompilationProblem> problems = new ArrayList<CompilationProblem>();
-        
+
         private final class ProblemCollector implements ErrorReporter {
 
             public void error(final String pMessage, final String pFileName, final int pLine, final String pScript, final int pColumn) {
 
-                final CompilationProblem problem = new RhinoCompilationProblem(pMessage, pFileName, pLine, pScript, pColumn, true); 
+                final CompilationProblem problem = new RhinoCompilationProblem(pMessage, pFileName, pLine, pScript, pColumn, true);
 
                 if (problemHandler != null) {
                     problemHandler.handle(problem);
                 }
 
-                problems.add(problem); 
+                problems.add(problem);
             }
 
             public void warning(final String pMessage, final String pFileName, final int pLine, final String pScript, final int pColumn) {
 
-                final CompilationProblem problem = new RhinoCompilationProblem(pMessage, pFileName, pLine, pScript, pColumn, false); 
+                final CompilationProblem problem = new RhinoCompilationProblem(pMessage, pFileName, pLine, pScript, pColumn, false);
 
                 if (problemHandler != null) {
                     problemHandler.handle(problem);
                 }
 
-                problems.add(problem); 
+                problems.add(problem);
             }
 
             public EvaluatorException runtimeError(final String pMessage, final String pFileName, final int pLine, final String pScript, final int pColumn) {
@@ -251,15 +251,15 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
         }
 
     }
-    
-    
+
+
     public CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader pClassLoader, final JavaCompilerSettings pSettings ) {
 
         final RhinoCompilingClassLoader cl = new RhinoCompilingClassLoader(pReader, pStore, pClassLoader);
 
         for (final String pResourcePath : pResourcePaths) {
             log.debug("compiling " + pResourcePath);
-            
+
             final String clazzName = ConversionUtils.convertResourceToClassName(pResourcePath);
             try {
                 cl.loadClass(clazzName);

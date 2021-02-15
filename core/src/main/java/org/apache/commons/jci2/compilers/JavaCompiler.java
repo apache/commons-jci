@@ -26,14 +26,14 @@ import org.apache.commons.jci2.stores.ResourceStore;
  * The general compiler interface. All compilers implementing
  * this interface should read the resources from the reader
  * and store the java class files into the ResourceStore.
- * 
+ *
  * The actual compilation language does not matter. But the
  * contract is that the result of the compilation will be a
  * class file.
- * 
+ *
  * If possible the compiler should notify the optional
  * CompilationProblemHandler as soon as a problem is found.
- * 
+ *
  * @author tcurdt
  */
 public interface JavaCompiler {
@@ -43,7 +43,7 @@ public interface JavaCompiler {
      * or warning as soon as this information is available from
      * the compiler.
      * Note: Some compilers might not support this feature.
-     * 
+     *
      * @param pHandler
      */
     void setCompilationProblemHandler( final CompilationProblemHandler pHandler );
@@ -52,7 +52,7 @@ public interface JavaCompiler {
      * factory method to create the underlying default settings
      */
     JavaCompilerSettings createDefaultSettings();
-    
+
     /**
      * uses the default compiler settings and the current classloader
      */
@@ -67,14 +67,14 @@ public interface JavaCompiler {
      * Compiles the java resources "some/path/to/MyJava.java"
      * read through the ResourceReader and then stores the resulting
      * classes in the ResourceStore under "some/path/to/MyJava.class".
-     * Note: As these are resource path you always have to use "/" 
-     * 
+     * Note: As these are resource path you always have to use "/"
+     *
      * The result of the compilation run including detailed error
      * information is returned as CompilationResult. If you need to
      * get notified already during the compilation process you can
      * register a CompilationProblemHandler.
      * Note: Not all compilers might support this notification mechanism.
-     * 
+     *
      * @param pResourcePaths
      * @param pReader
      * @param pStore

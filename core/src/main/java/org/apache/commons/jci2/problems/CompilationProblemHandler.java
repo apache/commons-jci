@@ -26,10 +26,10 @@ package org.apache.commons.jci2.problems;
  * The handler can be used to asynchronously update a
  * GUI or stop compilation by returning false (e.g.
  * when a maximum number of erros has been reached)
- * 
+ *
  * NOTE:
  * has to be supported by the compiler implementation!!
- * 
+ *
  * @author tcurdt
  */
 public interface CompilationProblemHandler {

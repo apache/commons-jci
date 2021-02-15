@@ -19,7 +19,7 @@ package org.apache.commons.jci2.listeners;
 
 /**
  * Classes implementing this interface can get notified by ReloadingListeners
- * 
+ *
  * @author tcurdt
  */
 public interface ReloadNotificationListener {

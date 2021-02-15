@@ -26,14 +26,14 @@ import org.apache.commons.jci2.problems.CompilationProblem;
  * It includes errors (which failed the compilation) or warnings
  * (that can be ignored and do not affect the creation of the
  * class files)
- * 
+ *
  * @author tcurdt
  */
 public final class CompilationResult {
-    
+
     private final CompilationProblem[] errors;
     private final CompilationProblem[] warnings;
-        
+
     public CompilationResult( final CompilationProblem[] pProblems ) {
         final Collection<CompilationProblem> errorsColl = new ArrayList<CompilationProblem>();
         final Collection<CompilationProblem> warningsColl = new ArrayList<CompilationProblem>();
@@ -45,14 +45,14 @@ public final class CompilationResult {
                 warningsColl.add(problem);
             }
         }
-        
+
         errors = new CompilationProblem[errorsColl.size()];
         errorsColl.toArray(errors);
 
         warnings = new CompilationProblem[warningsColl.size()];
         warningsColl.toArray(warnings);
     }
-    
+
     public CompilationProblem[] getErrors() {
     	final CompilationProblem[] res = new CompilationProblem[errors.length];
     	System.arraycopy(errors, 0, res, 0, res.length);

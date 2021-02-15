@@ -21,7 +21,7 @@ import org.apache.commons.jci2.AbstractTestCase;
 import org.apache.commons.lang3.ArrayUtils;
 
 /**
- * 
+ *
  * @author tcurdt
  */
 public final class ResourceStoreTestCase extends AbstractTestCase {
@@ -36,10 +36,10 @@ public final class ResourceStoreTestCase extends AbstractTestCase {
         checkRemove(new FileResourceStore(directory));
     }
 
-    public void testTransactionalFileResourceStore() {    	
+    public void testTransactionalFileResourceStore() {
         checkReadWrite(new TransactionalResourceStore(new FileResourceStore(directory)));
         checkRemove(new TransactionalResourceStore(new FileResourceStore(directory)));
-        
+
         final ResourceStore rs = new FileResourceStore(directory);
         final TransactionalResourceStore trs = new TransactionalResourceStore(rs);
         assertEquals(rs.toString(), trs.toString());
@@ -48,9 +48,9 @@ public final class ResourceStoreTestCase extends AbstractTestCase {
     private void checkReadWrite( final ResourceStore pStore ) {
         final byte[] data = { 1, 2, 3 };
         pStore.write("key", data);
-        
+
         final byte[] read = pStore.read("key");
-        
+
         assertTrue(read != null);
         assertTrue(ArrayUtils.isEquals(data, read));
     }
@@ -58,16 +58,16 @@ public final class ResourceStoreTestCase extends AbstractTestCase {
     private void checkRemove( final ResourceStore pStore ) {
         final byte[] data = { 1, 2, 3 };
         pStore.write("key", data);
-        
+
         final byte[] read = pStore.read("key");
-        
+
         assertTrue(read != null);
         assertTrue(ArrayUtils.isEquals(data, read));
 
         pStore.remove("key");
 
         final byte[] empty = pStore.read("key");
-        
+
         assertTrue(empty == null);
-    }    
+    }
 }

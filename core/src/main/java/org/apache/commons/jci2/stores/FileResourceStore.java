@@ -31,7 +31,7 @@ import org.apache.commons.io.IOUtils;
 
 /**
  * Stores the results on disk
- * 
+ *
  * @author tcurdt
  */
 public final class FileResourceStore implements ResourceStore {
@@ -41,7 +41,7 @@ public final class FileResourceStore implements ResourceStore {
     public FileResourceStore( final File pFile ) {
         root = pFile;
     }
-    
+
     public byte[] read( final String pResourceName ) {
         InputStream is = null;
         try {
@@ -54,7 +54,7 @@ public final class FileResourceStore implements ResourceStore {
             IOUtils.closeQuietly(is);
         }
     }
-    
+
     public void write( final String pResourceName, final byte[] pData ) {
         OutputStream os = null;
         try {
@@ -105,7 +105,7 @@ public final class FileResourceStore implements ResourceStore {
             pFiles.add(pFile.getAbsolutePath().substring(root.getAbsolutePath().length()+1));
         }
     }
-    
+
     @Override
     public String toString() {
         return this.getClass().getName() + root.toString();

@@ -28,7 +28,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * It's a runnable that spawns of a monitoring thread triggering the
  * the observers and managing the their listeners.
- * 
+ *
  * @author tcurdt
  */
 public final class FilesystemAlterationMonitor implements Runnable {
@@ -37,13 +37,13 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
     private final Object observersLock = new Object();
     private Map<File, FilesystemAlterationObserver> observers = Collections.unmodifiableMap(new HashMap<File, FilesystemAlterationObserver>());
-    
+
     /** delay between calls to {@link FilesystemAlterationObserver#checkAndNotify()}, default 3000 ms */
     private volatile long delay = 3000; // volatile because shared with daemon thread
     private Thread thread = null;
 
     private volatile boolean running = true;
-        
+
     public FilesystemAlterationMonitor() {
     }
 
@@ -70,7 +70,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
     /**
      * Set the delay between calls to the observers.
-     *  
+     *
      * @param pDelay the delay in milliseconds (default if not set 3000 ms)
      */
     public void setInterval( final long pDelay ) {
@@ -95,7 +95,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
         observer.addListener(pListener);
     }
-   
+
     public void removeListener( final FilesystemAlterationListener pListener ) {
         synchronized (observersLock) {
             for (final FilesystemAlterationObserver observer : observers.values()) {
@@ -118,7 +118,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
     public void run() {
         log.debug("fam running");
-        
+
         while (running) {
 
             for (final FilesystemAlterationObserver observer : observers.values()) {
@@ -130,7 +130,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
             } catch (final InterruptedException e) {
             }
         }
-        
+
         log.debug("fam exiting");
     }
 

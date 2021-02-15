@@ -25,7 +25,7 @@ import org.apache.commons.io.FileUtils;
 
 /**
  * A simple file system based Reader implementation
- * 
+ *
  * @author tcurdt
  */
 public final class FileResourceReader implements ResourceReader {
@@ -33,9 +33,9 @@ public final class FileResourceReader implements ResourceReader {
     private final File root;
 
     public FileResourceReader( final File pRoot ) {
-        root = pRoot;        
+        root = pRoot;
     }
-    
+
     public boolean isAvailable( final String pResourceName ) {
         return new File(root, pResourceName).exists();
     }
@@ -47,7 +47,7 @@ public final class FileResourceReader implements ResourceReader {
             return null;
         }
     }
-    
+
     /**
      * @deprecated
      */
@@ -71,5 +71,5 @@ public final class FileResourceReader implements ResourceReader {
         } else {
             pFiles.add(pFile.getAbsolutePath().substring(root.getAbsolutePath().length()+1));
         }
-    }   
+    }
 }

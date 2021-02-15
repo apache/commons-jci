@@ -24,7 +24,7 @@ import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 
 /**
  * Native Eclipse compiler settings
- * 
+ *
  * @author tcurdt
  */
 public final class EclipseJavaCompilerSettings extends JavaCompilerSettings {
@@ -37,15 +37,15 @@ public final class EclipseJavaCompilerSettings extends JavaCompilerSettings {
         defaultEclipseSettings.put(CompilerOptions.OPTION_ReportUnusedImport, CompilerOptions.IGNORE);
         defaultEclipseSettings.put(CompilerOptions.OPTION_LocalVariableAttribute, CompilerOptions.GENERATE);
     }
-    
+
     public EclipseJavaCompilerSettings( final JavaCompilerSettings pSettings ) {
     	super(pSettings);
-    	
+
     	if (pSettings instanceof EclipseJavaCompilerSettings) {
     		defaultEclipseSettings.putAll(((EclipseJavaCompilerSettings)pSettings).toNativeSettings());
     	}
     }
-    
+
     public EclipseJavaCompilerSettings( final Map<String, String> pMap ) {
         defaultEclipseSettings.putAll(pMap);
     }
@@ -61,17 +61,17 @@ public final class EclipseJavaCompilerSettings extends JavaCompilerSettings {
     	put("1.6", CompilerOptions.VERSION_1_6);
     	put("1.7", CompilerOptions.VERSION_1_7);
     }};
-    
+
     private String toNativeVersion( final String pVersion ) {
     	final String nativeVersion = nativeVersions.get(pVersion);
-    	
+
     	if (nativeVersion == null) {
     		throw new RuntimeException("unknown version " + pVersion);
     	}
-    	
+
     	return nativeVersion;
     }
-    
+
     Map<String, String> toNativeSettings() {
         final Map<String, String> map = new HashMap<String, String>(defaultEclipseSettings);
 
@@ -83,7 +83,7 @@ public final class EclipseJavaCompilerSettings extends JavaCompilerSettings {
 
         return map;
     }
-    
+
     @Override
     public String toString() {
         return toNativeSettings().toString();

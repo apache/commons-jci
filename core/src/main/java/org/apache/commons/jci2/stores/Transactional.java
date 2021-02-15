@@ -19,7 +19,7 @@ package org.apache.commons.jci2.stores;
 
 /**
  * Receive start/stop events
- * 
+ *
  * @author tcurdt
  */
 public interface Transactional {

@@ -31,32 +31,32 @@ import org.apache.commons.logging.LogFactory;
  * classes to be reloaded. That means that loadClass calls may
  * return different results if the class was changed in the underlying
  * ResourceStore.
- * 
+ *
  * @author tcurdt
  */
 public class ReloadingClassLoader extends ClassLoader implements ReloadNotificationListener {
-    
+
     private final Log log = LogFactory.getLog(ReloadingClassLoader.class);
-    
+
     private final ClassLoader parent;
     private ResourceStore[] stores = new ResourceStore[0];
     private ClassLoader delegate;
 
-    public ReloadingClassLoader( final ClassLoader pParent ) {        
+    public ReloadingClassLoader( final ClassLoader pParent ) {
         super(pParent);
-        parent = pParent;        
+        parent = pParent;
 
         delegate = new ResourceStoreClassLoader(parent, stores);
     }
 
     public boolean addResourceStore( final ResourceStore pStore ) {
-        try {        
+        try {
             final int n = stores.length;
             final ResourceStore[] newStores = new ResourceStore[n + 1];
             System.arraycopy(stores, 0, newStores, 1, n);
             newStores[0] = pStore;
             stores = newStores;
-            delegate = new ResourceStoreClassLoader(parent, stores);            
+            delegate = new ResourceStoreClassLoader(parent, stores);
             return true;
         } catch ( final RuntimeException e ) {
             log.error("could not add resource store " + pStore);
@@ -68,19 +68,19 @@ public class ReloadingClassLoader extends ClassLoader implements ReloadNotificat
 
         final int n = stores.length;
         int i = 0;
-           
+
         // FIXME: this should be improved with a Map
         // find the pStore and index position with var i
         while ( ( i < n )  && ( stores[i] != pStore ) ) {
             i++;
         }
-                    
+
         // pStore was not found
         if ( i == n ) {
             return false;
         }
-        
-        // if stores length > 1 then array copy old values, else create new empty store 
+
+        // if stores length > 1 then array copy old values, else create new empty store
         final ResourceStore[] newStores = new ResourceStore[n - 1];
         if (i > 0) {
             System.arraycopy(stores, 0, newStores, 0, i);
@@ -88,17 +88,17 @@ public class ReloadingClassLoader extends ClassLoader implements ReloadNotificat
         if (i < n - 1) {
             System.arraycopy(stores, i + 1, newStores, i, (n - i - 1));
         }
-            
+
         stores = newStores;
         delegate = new ResourceStoreClassLoader(parent, stores);
         return true;
     }
-    
+
     public void handleNotification() {
         log.debug("reloading");
         delegate = new ResourceStoreClassLoader(parent, stores);
     }
-    
+
     @Override
     public void clearAssertionStatus() {
         delegate.clearAssertionStatus();

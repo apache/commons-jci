@@ -32,7 +32,7 @@ import org.apache.commons.jci2.stores.MemoryResourceStore;
 public class ReloadingClassLoaderRemoveTestCase extends TestCase {
 
     private final Log log = LogFactory.getLog(ReloadingClassLoaderRemoveTestCase.class);
-    
+
     private final byte[] clazzSimpleA;
     private final MemoryResourceStore store1 = new MemoryResourceStore();
     private final MemoryResourceStore store2 = new MemoryResourceStore();
@@ -48,7 +48,7 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
     protected void setUp() throws Exception {
         System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
     }
-    
+
     @Override
     protected void tearDown() throws Exception {
     }
@@ -227,8 +227,8 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
         // Check "jci2.Simple" class can now be loaded
         try {
             final Object simple2 = loader.loadClass("jci2.Simple").newInstance();
-            assertNotNull("Found loadClass[2]",  simple2);        
-            assertEquals("toString loadClass[2]",  toStringValue, simple2.toString());        
+            assertNotNull("Found loadClass[2]",  simple2);
+            assertEquals("toString loadClass[2]",  toStringValue, simple2.toString());
         } catch(final Exception e) {
             log.error(e);
             fail("Error loadClass[2]: " + e);

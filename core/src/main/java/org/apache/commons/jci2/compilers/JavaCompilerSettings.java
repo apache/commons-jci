@@ -21,11 +21,11 @@ package org.apache.commons.jci2.compilers;
 
 /**
  * Most common denominator for JavaCompiler settings.
- * 
+ *
  * If you need more specific settings you have to provide
  * the native compiler configurations to the compilers.
- * Writing of a custom factory is suggested. 
- * 
+ * Writing of a custom factory is suggested.
+ *
  * @author tcurdt
  */
 public class JavaCompilerSettings {
@@ -41,9 +41,9 @@ public class JavaCompilerSettings {
     @Deprecated
     private boolean verbose = false;
 
-    public JavaCompilerSettings() {    	
+    public JavaCompilerSettings() {
     }
-    
+
     public JavaCompilerSettings( final JavaCompilerSettings pSettings ) {
     	targetVersion = pSettings.targetVersion;
     	sourceVersion = pSettings.sourceVersion;
@@ -52,7 +52,7 @@ public class JavaCompilerSettings {
     	deprecations = pSettings.deprecations;
     	debug = pSettings.debug;
     }
-    
+
     public void setTargetVersion( final String pTargetVersion ) {
         targetVersion = pTargetVersion;
     }

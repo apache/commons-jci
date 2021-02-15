@@ -162,7 +162,7 @@ public final class JspGenerator {
             try {
 				output.close();
 			} catch (final IOException e) {
-			}        	
+			}
         }
     }
 

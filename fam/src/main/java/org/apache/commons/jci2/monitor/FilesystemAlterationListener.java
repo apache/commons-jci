@@ -23,7 +23,7 @@ import java.io.File;
  * A listener that receives events of filesystem modifications.
  * The observer basically represents the source of the events.
  * The file root and its state. (see FilesystemAlterationObserver)
- * 
+ *
  * @author tcurdt
  */
 public interface FilesystemAlterationListener {

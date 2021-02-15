@@ -25,9 +25,9 @@ import org.apache.commons.jci2.utils.ConversionUtils;
 
 /**
  * Creates JavaCompilers
- * 
+ *
  * TODO use META-INF discovery mechanism
- * 
+ *
  * @author tcurdt
  */
 public final class JavaCompilerFactory {
@@ -39,7 +39,7 @@ public final class JavaCompilerFactory {
     private static final JavaCompilerFactory INSTANCE = new JavaCompilerFactory();
 
     private final Map<String, Class<?>> classCache = new HashMap<String, Class<?>>();
-    
+
     /**
      * @deprecated will be remove after the next release, please create an instance yourself
      */
@@ -51,27 +51,27 @@ public final class JavaCompilerFactory {
     /**
      * Tries to guess the class name by convention. So for compilers
      * following the naming convention
-     * 
+     *
      *   org.apache.commons.jci2.compilers.SomeJavaCompiler
-     *   
+     *
      * you can use the short-hands "some"/"Some"/"SOME". Otherwise
      * you have to provide the full class name. The compiler is
      * getting instanciated via (cached) reflection.
-     * 
+     *
      * @param pHint
      * @return JavaCompiler or null
      */
     public JavaCompiler createCompiler(final String pHint) {
-        
+
         final String className;
         if (pHint.indexOf('.') < 0) {
             className = "org.apache.commons.jci2.compilers." + ConversionUtils.toJavaCasing(pHint) + "JavaCompiler";
         } else {
             className = pHint;
         }
-        
+
         Class<?> clazz = classCache.get(className);
-        
+
         if (clazz == null) {
             try {
                 clazz = Class.forName(className);
@@ -84,12 +84,12 @@ public final class JavaCompilerFactory {
         if (clazz == null) {
             return null;
         }
-        
+
         try {
             return (JavaCompiler) clazz.newInstance();
         } catch (final Throwable t) {
             return null;
         }
     }
-    
+
 }

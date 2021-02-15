@@ -23,17 +23,17 @@ import org.apache.commons.jci2.monitor.FilesystemAlterationObserver;
 
 /**
  * The most simple implemenation of an FilesystemAlterationListener.
- * 
+ *
  * @author tcurdt
  */
 public class FileChangeListener extends AbstractFilesystemAlterationListener {
 
     private boolean changed;
-    
+
     public boolean hasChanged() {
         return changed;
     }
-    
+
     @Override
     public void onStart( final FilesystemAlterationObserver pObserver ) {
         changed = false;
@@ -45,7 +45,7 @@ public class FileChangeListener extends AbstractFilesystemAlterationListener {
         super.onStop(pObserver);
     }
 
-    
+
     @Override
     public void onFileChange( final File pFile ) {
         changed = true;
@@ -75,5 +75,5 @@ public class FileChangeListener extends AbstractFilesystemAlterationListener {
     @Override
     public void onDirectoryDelete( final File pDir ) {
     }
-    
+
 }
