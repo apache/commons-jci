@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+
 import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
@@ -99,15 +101,7 @@ public abstract class AbstractTestCase extends TestCase {
     }
 
     protected File createTempDirectory() throws IOException {
-        final File tempFile = File.createTempFile("jci2", null);
-
-        if (!tempFile.delete()) {
-            throw new IOException();
-        }
-
-        if (!tempFile.mkdir()) {
-            throw new IOException();
-        }
+        final File tempFile = Files.createTempDirectory("jci2").toFile();
 
         return tempFile;
     }
