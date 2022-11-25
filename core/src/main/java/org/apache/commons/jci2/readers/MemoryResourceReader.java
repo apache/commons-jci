@@ -64,6 +64,6 @@ public class MemoryResourceReader implements ResourceReader {
         if (resources == null) {
             return new String[0];
         }
-        return resources.keySet().toArray(new String[resources.size()]);
+        return resources.keySet().toArray(new String[0]);
     }
 }
