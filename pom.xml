@@ -234,8 +234,8 @@
 
     <properties>
         <maven-site-plugin.skip>false</maven-site-plugin.skip>
-        <maven.compiler.source>1.5</maven.compiler.source>
-        <maven.compiler.target>1.5</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <commons.componentid>jci</commons.componentid>
         <commons.module.name>org.apache.commons.jci2</commons.module.name>
         <commons.jira.id>JCI</commons.jira.id>
