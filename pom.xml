@@ -108,18 +108,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.2</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>clean</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <descriptors>
@@ -219,15 +207,6 @@
                     <aggregate>true</aggregate>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>${commons.cobertura.version}</version>
-                <configuration>
-                    <aggregate>true</aggregate>
-                    <check/>
-                </configuration>
-            </plugin>
         </plugins>
     </reporting>
 
@@ -235,6 +214,7 @@
         <maven-site-plugin.skip>false</maven-site-plugin.skip>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
         <commons.componentid>jci</commons.componentid>
         <commons.module.name>org.apache.commons.jci2</commons.module.name>
         <commons.jira.id>JCI</commons.jira.id>
