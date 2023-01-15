@@ -32,7 +32,7 @@
             </subsection>
             <subsection name="Doesn't JSR199 already deprecate JCI?">
                 Well, as said before ...there are no backports so far. And if you give the
-                the final java tools API in Java 6 a try you might well come back and
+                final java tools API in Java 6 a try you might well come back and
                 enjoy JCI :)
             </subsection>
             <subsection name="How well tested is the code?">
