@@ -20,7 +20,7 @@ package org.apache.commons.jci2.compilers;
 
 /**
  * @author tcurdt
- * @todo implement rhino settings
+ * TODO implement rhino settings
  */
 public final class RhinoJavaCompilerSettings extends JavaCompilerSettings {
 
