@@ -94,7 +94,7 @@
         <url>https://gitbox.apache.org/repos/asf/commons-jci</url>
     </scm>
     <build>
-	    <defaultGoal>clean verify</defaultGoal>
+	    <defaultGoal>clean verify javadoc:javadoc</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
