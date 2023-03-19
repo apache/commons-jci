@@ -30,7 +30,7 @@ public final class ConversionUtils {
 
     /**
      * Please do not use - internal
-     * org/my/Class.xxx -> org.my.Class
+     * org/my/Class.xxx -&gt; org.my.Class
      */
     public static String convertResourceToClassName( final String pResourceName ) {
         return ConversionUtils.stripExtension(pResourceName).replace('/', '.');
