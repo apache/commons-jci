@@ -38,7 +38,7 @@ public final class ConversionUtils {
 
     /**
      * Please do not use - internal
-     * org.my.Class -> org/my/Class.class
+     * org.my.Class -&gt; org/my/Class.class
      */
     public static String convertClassToResourcePath( final String pName ) {
         return pName.replace('.', '/') + ".class";
@@ -46,7 +46,7 @@ public final class ConversionUtils {
 
     /**
      * Please do not use - internal
-     * org/my/Class.xxx -> org/my/Class
+     * org/my/Class.xxx -&gt; org/my/Class
      */
     public static String stripExtension( final String pResourceName ) {
         final int i = pResourceName.lastIndexOf('.');
@@ -81,8 +81,8 @@ public final class ConversionUtils {
     }
 
     /**
-     * a/b/c.java -> a/b/c.java
-     * a\b\c.java -> a/b/c.java
+     * a/b/c.java -&gt; a/b/c.java
+     * a\b\c.java -&gt; a/b/c.java
      * @param pFileName
      * @return the converted name
      */
