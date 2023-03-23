@@ -239,8 +239,8 @@
             <dependency>
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy-all</artifactId>
-                <!-- 1.7 series is obsolete. 1.7.11 is the last of that series -->
-                <version>1.7.11</version>
+                <!-- 1.7 series is obsolete. 2.4.21 is the last of that series -->
+                <version>2.4.21</version>
             </dependency>
             <!-- compiler-janino -->
             <dependency>
