@@ -81,6 +81,18 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="update" dev="ggregory" due-to="Dependabot">
         Bump maven-pmd-plugin from 2.3 to 3.19.0 #5.
       </action>
+      <action type="update" dev="ggregory" due-to="Dependabot">
+        Bump wagon-ssh-external from 1.0-beta-2 to 3.5.3 #14.
+      </action>
+      <action type="update" dev="ggregory" due-to="Dependabot">
+        Bump asm from 5.0.2 to 9.4 #15.
+      </action>
+      <action type="update" dev="ggregory" due-to="Dependabot">
+        Bump ecj from 4.2.2 to 4.6.1 #16.
+      </action>
+      <action type="update" dev="ggregory" due-to="Dependabot">
+        Bump groovy-all from 1.7.11 to 2.4.21 #17.
+      </action>
     </release>
   </body>
 </document>
