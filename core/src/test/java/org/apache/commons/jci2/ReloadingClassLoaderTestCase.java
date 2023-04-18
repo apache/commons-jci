@@ -111,7 +111,7 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         try {
             classloader.loadClass("jci2.Simple").newInstance();
             fail();
-        } catch(final ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
             assertEquals("jci2.Simple", e.getMessage());
         }
     }
@@ -137,7 +137,7 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         try {
             classloader.loadClass("jci2.Extended").newInstance();
             fail();
-        } catch(final NoClassDefFoundError e) {
+        } catch (final NoClassDefFoundError e) {
             assertEquals("jci2/Simple", e.getMessage());
         }
     }
@@ -146,7 +146,7 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         try {
             classloader.loadClass("bla");
             fail();
-        } catch(final ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
         }
     }
 

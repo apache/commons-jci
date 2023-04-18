@@ -92,7 +92,7 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
                     final byte[] bytes = IOUtils.toByteArray(is);
                     final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), file));
                     store.write(resourceName, bytes);
-                } catch(final Exception e) {
+                } catch (final Exception e) {
                     log.error("could not load " + file, e);
                 } finally {
                     IOUtils.closeQuietly(is);
@@ -108,7 +108,7 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
                     final byte[] bytes = IOUtils.toByteArray(is);
                     final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), file));
                     store.write(resourceName, bytes);
-                } catch(final Exception e) {
+                } catch (final Exception e) {
                     log.error("could not load " + file, e);
                 } finally {
                     IOUtils.closeQuietly(is);

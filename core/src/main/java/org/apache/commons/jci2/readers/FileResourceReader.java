@@ -43,7 +43,7 @@ public final class FileResourceReader implements ResourceReader {
     public byte[] getBytes( final String pResourceName ) {
         try {
             return FileUtils.readFileToString(new File(root, pResourceName), "UTF-8").getBytes();
-        } catch(final Exception e) {
+        } catch (final Exception e) {
             return null;
         }
     }

@@ -182,7 +182,7 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
     	try {
         	listener.waitForFirstCheck();
         	fail("should be an timeout");
-        } catch(final Exception e) {
+        } catch (final Exception e) {
         	assertEquals("timeout", e.getMessage());
         }
 
@@ -191,7 +191,7 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
         try {
         	listener.waitForEvent();
         	fail("should be an timeout");
-        } catch(final Exception e) {
+        } catch (final Exception e) {
         	assertEquals("timeout", e.getMessage());
         }
 
@@ -200,7 +200,7 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
         try {
         	listener.waitForCheck();
         	fail("should be an timeout");
-        } catch(final Exception e) {
+        } catch (final Exception e) {
         	assertEquals("timeout", e.getMessage());
         }
 

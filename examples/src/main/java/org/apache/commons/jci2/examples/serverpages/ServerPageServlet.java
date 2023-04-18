@@ -101,7 +101,7 @@ public final class ServerPageServlet extends HttpServlet {
                         newServletsByClassname.put(clazzName, servlet);
 
                         reload = true;
-                    } catch(final Exception e) {
+                    } catch (final Exception e) {
                         log("", e);
                     }
                 }

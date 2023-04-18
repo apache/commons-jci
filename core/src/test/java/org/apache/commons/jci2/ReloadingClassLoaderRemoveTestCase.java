@@ -207,9 +207,9 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
         try {
             loader.loadClass("jci2.Simple").newInstance();
             fail("Success loadClass[1]");
-        } catch(final ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
             // expected not found
-        } catch(final Exception e) {
+        } catch (final Exception e) {
             log.error(e);
             fail("Error loadClass[1]: " + e);
         }
@@ -219,7 +219,7 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
         try {
             final byte[] classBytes = SimpleDump.dump(toStringValue);
             store.write("jci2/Simple.class", classBytes);
-        } catch(final Exception e) {
+        } catch (final Exception e) {
             log.error(e);
             fail("Error adding class to store: " + e);
         }
@@ -229,7 +229,7 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
             final Object simple2 = loader.loadClass("jci2.Simple").newInstance();
             assertNotNull("Found loadClass[2]",  simple2);
             assertEquals("toString loadClass[2]",  toStringValue, simple2.toString());
-        } catch(final Exception e) {
+        } catch (final Exception e) {
             log.error(e);
             fail("Error loadClass[2]: " + e);
         }
@@ -241,9 +241,9 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
         try {
             loader.loadClass("jci2.Simple").newInstance();
             fail("Success loadClass[3]");
-        } catch(final ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
             // expected not found
-        } catch(final Exception e) {
+        } catch (final Exception e) {
             log.error(e);
             fail("Error loadClass[3]: " + e);
         }
@@ -256,7 +256,7 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
     private void checkRemoveResourceStore(final String label, final ReloadingClassLoader loader, final ResourceStore store, final boolean expected) {
         try {
             assertEquals(label, expected, loader.removeResourceStore(store));
-        } catch(final Exception e) {
+        } catch (final Exception e) {
             log.error(label, e);
             fail(label + " failed: " + e);
         }

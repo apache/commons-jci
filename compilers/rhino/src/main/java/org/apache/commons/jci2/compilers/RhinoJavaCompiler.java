@@ -121,7 +121,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
 
             try {
                 return compileClass(context, pName);
-            } catch( final EvaluatorException e ) {
+            } catch ( final EvaluatorException e ) {
                 throw new ClassNotFoundException(e.getMessage(), e);
             } catch (final IOException e) {
                 throw new ClassNotFoundException(e.getMessage(), e);
