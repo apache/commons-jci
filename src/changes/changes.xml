@@ -99,6 +99,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="update" dev="ggregory" due-to="Dependabot">
         Bump taglist-maven-plugin from 2.2 to 3.0.0 #28.
       </action>
+      <action type="update" dev="ggregory" due-to="Dependabot">
+        Bump commons-parent from 56 to 57 #36.
+      </action>
     </release>
   </body>
 </document>
