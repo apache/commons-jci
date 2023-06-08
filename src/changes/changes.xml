@@ -67,7 +67,7 @@ The <action> type attribute can be add,update,fix,remove.
     <release version="2.0" date="202Y-MM-DD" description="Major release (Java 8).">
       <!-- UPDATE -->
       <action type="update" dev="ggregory" due-to="Dependabot, Gary Gregory">
-        Bump commons-io from 2.2 to 2.12.0 #11.
+        Bump commons-io from 2.2 to 2.13.0 #11.
       </action>
       <action type="update" dev="ggregory" due-to="Dependabot">
         Bump junit from 4.11 to 4.13.2 #10.
