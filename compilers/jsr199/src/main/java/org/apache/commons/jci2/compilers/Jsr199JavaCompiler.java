@@ -212,7 +212,7 @@ public final class Jsr199JavaCompiler extends AbstractJavaCompiler {
         }
 
         if (compiler == null) {
-            throw new RuntimeException("No java compiler in class path");
+            throw new IllegalStateException("No java compiler in class path");
         }
 
         final JavaFileManager fileManager = new JciJavaFileManager(units, pStore);

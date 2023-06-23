@@ -72,6 +72,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="fix" dev="ggregory" due-to="Gary Gregory">
        GroovyJavaCompiler.compile() now throws IllegalArgumentException instead of RuntimeException.
       </action>
+      <action type="fix" dev="ggregory" due-to="Gary Gregory">
+       Jsr199JavaCompiler.compile() now throws IllegalStateException instead of RuntimeException when there is no compiler available.
+      </action>
       <!-- UPDATE -->
       <action type="update" dev="ggregory" due-to="Dependabot, Gary Gregory">
         Bump commons-io from 2.2 to 2.13.0 #11.
