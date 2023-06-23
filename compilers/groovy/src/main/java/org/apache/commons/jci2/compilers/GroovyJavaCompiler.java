@@ -117,7 +117,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
                 }
             }
         } catch (final CompilationFailedException e) {
-            throw new RuntimeException("no expected");
+            throw new IllegalArgumentException("no expected");
         }
 
         final CompilationProblem[] result = new CompilationProblem[problems.size()];
