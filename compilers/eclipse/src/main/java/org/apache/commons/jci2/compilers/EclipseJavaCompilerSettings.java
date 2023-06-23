@@ -63,13 +63,9 @@ public final class EclipseJavaCompilerSettings extends JavaCompilerSettings {
     }};
 
     private String toNativeVersion( final String pVersion ) {
-    	final String nativeVersion = nativeVersions.get(pVersion);
-
-    	if (nativeVersion == null) {
-    		throw new RuntimeException("unknown version " + pVersion);
-    	}
-
-    	return nativeVersion;
+        return nativeVersions.computeIfAbsent(pVersion, k -> {
+            throw new IllegalArgumentException("unknown version " + pVersion);
+        });
     }
 
     Map<String, String> toNativeSettings() {
