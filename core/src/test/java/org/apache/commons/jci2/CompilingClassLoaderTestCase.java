@@ -65,7 +65,7 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
                     try {
                         data = SimpleDump.dump(new String(resourceContent));
                     } catch (final Exception e) {
-                        throw new RuntimeException("cannot handle resource " + resourcePath, e);
+                        throw new IllegalArgumentException("cannot handle resource " + resourcePath, e);
                     }
 
                 } else if ("jci2/Extended.java".equals(resourcePath)) {
@@ -73,11 +73,11 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
                     try {
                         data = ExtendedDump.dump();
                     } catch (final Exception e) {
-                        throw new RuntimeException("cannot handle resource " + resourcePath, e);
+                        throw new IllegalArgumentException("cannot handle resource " + resourcePath, e);
                     }
 
                 } else {
-                    throw new RuntimeException("cannot handle resource " + resourcePath);
+                    throw new IllegalArgumentException("cannot handle resource " + resourcePath);
                 }
 
                 log.debug("compiling " + resourcePath + " (" + data.length + ")");
