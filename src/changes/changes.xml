@@ -67,14 +67,17 @@ The <action> type attribute can be add,update,fix,remove.
     <release version="2.0" date="202Y-MM-DD" description="Major release (Java 8).">
       <!--  FIX -->
       <action type="fix" dev="ggregory" due-to="Gary Gregory">
-        EclipseJavaCompilerSettings.toNativeVersion(String) now throws IllegalArgumentException instead of RuntimeException.
+         EclipseJavaCompilerSettings.toNativeVersion(String) now throws IllegalArgumentException instead of RuntimeException.
       </action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory">
-       GroovyJavaCompiler.compile() now throws IllegalArgumentException instead of RuntimeException.
+        GroovyJavaCompiler.compile() now throws IllegalArgumentException instead of RuntimeException.
       </action>
       <action type="fix" dev="ggregory" due-to="Gary Gregory">
-       Jsr199JavaCompiler.compile() now throws IllegalStateException instead of RuntimeException when there is no compiler available.
+        Jsr199JavaCompiler.compile() now throws IllegalStateException instead of RuntimeException when there is no compiler available.
       </action>
+      <action dev="ggregory" type="fix" due-to="step-security-bot, Gary Gregory">
+        [StepSecurity] ci: Harden GitHub Actions #39.
+      </action>            
       <!-- UPDATE -->
       <action type="update" dev="ggregory" due-to="Dependabot, Gary Gregory">
         Bump commons-io from 2.2 to 2.13.0 #11.
