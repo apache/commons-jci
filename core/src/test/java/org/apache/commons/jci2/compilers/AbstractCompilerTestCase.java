@@ -61,11 +61,11 @@ public abstract class AbstractCompilerTestCase extends TestCase {
                         "}").getBytes());
                 }};
 
-            public byte[] getBytes( final String pResourceName ) {
+            public byte[] getBytes(final String pResourceName) {
                 return sources.get(pResourceName);
             }
 
-            public boolean isAvailable( final String pResourceName ) {
+            public boolean isAvailable(final String pResourceName) {
                 return sources.containsKey(pResourceName);
             }
 
@@ -81,7 +81,7 @@ public abstract class AbstractCompilerTestCase extends TestCase {
         assertEquals(toString(result.getWarnings()), 0, result.getWarnings().length);
 
         final byte[] clazzBytes = store.read("jci2/Simple.class");
-        assertNotNull("jci2/Simple.class is not null",clazzBytes);
+        assertNotNull("jci2/Simple.class is not null", clazzBytes);
         assertTrue("jci2/Simple.class is not empty", clazzBytes.length > 0);
     }
 
