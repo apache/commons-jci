@@ -49,6 +49,7 @@
 
     <properties>
         <commons.componentid>jci-fam</commons.componentid>
+        <commons.module.name>org.apache.commons.jci2.fam</commons.module.name>
         <maven-site-plugin.skip>true</maven-site-plugin.skip>
     </properties>
   

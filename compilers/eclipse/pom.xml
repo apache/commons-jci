@@ -57,6 +57,7 @@
 
     <properties>
         <commons.componentid>jci-eclipse</commons.componentid>
+        <commons.module.name>org.apache.commons.jci2.eclipse</commons.module.name>
         <maven-site-plugin.skip>true</maven-site-plugin.skip>
     </properties> 
   

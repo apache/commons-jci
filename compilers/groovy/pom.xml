@@ -57,7 +57,8 @@
 
     <properties>
         <commons.componentid>jci-groovy</commons.componentid>
-        <maven-site-plugin.skip>true</maven-site-plugin.skip>
+         <commons.module.name>org.apache.commons.jci2.groovy</commons.module.name>
+       <maven-site-plugin.skip>true</maven-site-plugin.skip>
     </properties> 
   
     <build>
