@@ -19,7 +19,7 @@ package org.apache.commons.jci2.examples.serverpages;
 
 import java.util.Map;
 
-import org.apache.commons.jci2.readers.ResourceReader;
+import org.apache.commons.jci2.core.readers.ResourceReader;
 
 /**
  * @author tcurdt

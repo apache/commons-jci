@@ -57,7 +57,7 @@
 
     <properties>
         <commons.componentid>jci-rhino</commons.componentid>
-        <commons.module.name>org.apache.commons.jci2.rhino</commons.module.name>
+        <commons.module.name>org.apache.commons.jci2.core.rhino</commons.module.name>
         <maven-site-plugin.skip>true</maven-site-plugin.skip>
     </properties>
   

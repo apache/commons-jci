@@ -103,8 +103,8 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="update" dev="ggregory" due-to="Dependabot">
         Bump ecj from 4.2.2 to 4.6.1 #16.
       </action>
-      <action type="update" dev="ggregory" due-to="Dependabot">
-        Bump groovy-all from 1.7.11 to 2.4.21 #17.
+      <action type="update" dev="ggregory" due-to="Dependabot, Gary Gregory">
+        Bump Groovy from 1 to 3 #17.
       </action>
       <action type="update" dev="ggregory" due-to="Dependabot">
         Bump commons-cli from 1.2 to 1.5.0 #29.
@@ -113,7 +113,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump taglist-maven-plugin from 2.2 to 3.0.0 #28.
       </action>
       <action type="update" dev="ggregory" due-to="Dependabot">
-        Bump commons-parent from 56 to 58 #36, #37.
+        Bump commons-parent from 56 to 59 #36, #37.
       </action>
     </release>
   </body>

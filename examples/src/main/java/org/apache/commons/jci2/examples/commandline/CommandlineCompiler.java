@@ -28,16 +28,16 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.apache.commons.jci2.compilers.CompilationResult;
-import org.apache.commons.jci2.compilers.JavaCompiler;
-import org.apache.commons.jci2.compilers.JavaCompilerFactory;
-import org.apache.commons.jci2.compilers.JavaCompilerSettings;
-import org.apache.commons.jci2.problems.CompilationProblem;
-import org.apache.commons.jci2.problems.CompilationProblemHandler;
-import org.apache.commons.jci2.readers.FileResourceReader;
-import org.apache.commons.jci2.readers.ResourceReader;
-import org.apache.commons.jci2.stores.FileResourceStore;
-import org.apache.commons.jci2.stores.ResourceStore;
+import org.apache.commons.jci2.core.compiler.CompilationResult;
+import org.apache.commons.jci2.core.compiler.JavaCompiler;
+import org.apache.commons.jci2.core.compiler.JavaCompilerFactory;
+import org.apache.commons.jci2.core.compiler.JavaCompilerSettings;
+import org.apache.commons.jci2.core.problems.CompilationProblem;
+import org.apache.commons.jci2.core.problems.CompilationProblemHandler;
+import org.apache.commons.jci2.core.readers.FileResourceReader;
+import org.apache.commons.jci2.core.readers.ResourceReader;
+import org.apache.commons.jci2.core.stores.FileResourceStore;
+import org.apache.commons.jci2.core.stores.ResourceStore;
 
 /**
  * A simple front end to jci2 mimicking the javac command line

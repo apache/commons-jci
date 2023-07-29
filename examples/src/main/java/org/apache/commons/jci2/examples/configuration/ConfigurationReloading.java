@@ -25,10 +25,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
 
-import org.apache.commons.jci2.listeners.FileChangeListener;
-import org.apache.commons.jci2.monitor.FilesystemAlterationListener;
-import org.apache.commons.jci2.monitor.FilesystemAlterationMonitor;
-import org.apache.commons.jci2.monitor.FilesystemAlterationObserver;
+import org.apache.commons.jci2.core.listeners.FileChangeListener;
+import org.apache.commons.jci2.fam.monitor.FilesystemAlterationListener;
+import org.apache.commons.jci2.fam.monitor.FilesystemAlterationMonitor;
+import org.apache.commons.jci2.fam.monitor.FilesystemAlterationObserver;
 
 /**
  *

@@ -26,7 +26,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 
-import org.apache.commons.jci2.utils.ConversionUtils;
+import org.apache.commons.jci2.core.utils.ConversionUtils;
 
 /**
  * @author tcurdt

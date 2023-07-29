@@ -55,7 +55,7 @@
         <maven.compile.source>1.6</maven.compile.source>
         <maven.compile.target>1.6</maven.compile.target>
         <commons.componentid>jci-jsr166</commons.componentid>
-        <commons.module.name>org.apache.commons.jci2.jsr199</commons.module.name>
+        <commons.module.name>org.apache.commons.jci2.core.jsr199</commons.module.name>
         <maven-site-plugin.skip>true</maven-site-plugin.skip>
     </properties>
 

@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-parent</artifactId>
-        <version>58</version>
+        <version>59</version>
     </parent>
     <packaging>pom</packaging>
     <artifactId>commons-jci2</artifactId>
@@ -239,8 +239,9 @@
             <dependency>
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy-all</artifactId>
-                <!-- 1.7 series is obsolete. 2.4.21 is the last of that series -->
-                <version>2.4.21</version>
+                <version>3.0.18</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <!-- compiler-janino -->
             <dependency>

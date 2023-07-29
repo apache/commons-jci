@@ -20,7 +20,6 @@ package org.apache.commons.jci2.examples.serverpages;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.String;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -31,17 +30,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.jci2.ReloadingClassLoader;
-import org.apache.commons.jci2.compilers.CompilationResult;
-import org.apache.commons.jci2.compilers.JavaCompilerFactory;
-import org.apache.commons.jci2.listeners.CompilingListener;
-import org.apache.commons.jci2.monitor.FilesystemAlterationMonitor;
-import org.apache.commons.jci2.monitor.FilesystemAlterationObserver;
-import org.apache.commons.jci2.problems.CompilationProblem;
-import org.apache.commons.jci2.readers.ResourceReader;
-import org.apache.commons.jci2.stores.MemoryResourceStore;
-import org.apache.commons.jci2.stores.TransactionalResourceStore;
-import org.apache.commons.jci2.utils.ConversionUtils;
+import org.apache.commons.jci2.core.ReloadingClassLoader;
+import org.apache.commons.jci2.core.compiler.CompilationResult;
+import org.apache.commons.jci2.core.compiler.JavaCompilerFactory;
+import org.apache.commons.jci2.core.listeners.CompilingListener;
+import org.apache.commons.jci2.core.problems.CompilationProblem;
+import org.apache.commons.jci2.core.readers.ResourceReader;
+import org.apache.commons.jci2.core.stores.MemoryResourceStore;
+import org.apache.commons.jci2.core.stores.TransactionalResourceStore;
+import org.apache.commons.jci2.core.utils.ConversionUtils;
+import org.apache.commons.jci2.fam.monitor.FilesystemAlterationMonitor;
+import org.apache.commons.jci2.fam.monitor.FilesystemAlterationObserver;
 
 
 /**
