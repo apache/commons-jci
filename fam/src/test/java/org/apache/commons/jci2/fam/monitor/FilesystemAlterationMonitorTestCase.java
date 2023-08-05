@@ -318,7 +318,7 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
 
         createDirectory("dir/sub");
 
-        assertTrue(directory.lastModified() == modified);
+        assertEquals(directory.lastModified(), modified);
     }
 
     public void testCreatingFileInSubDirectoryChangesLastModified() throws Exception {
@@ -330,7 +330,7 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
 
         writeFile("dir/file", "file");
 
-        assertTrue(directory.lastModified() == modified);
+        assertEquals(directory.lastModified(), modified);
     }
 
     public void testInterval() throws Exception {

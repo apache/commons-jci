@@ -47,6 +47,6 @@ public final class ResourceReaderTestCase extends AbstractTestCase {
         assertEquals("test", new String(content));
 
         assertFalse(reader.isAvailable("bla"));
-        assertTrue(reader.getBytes("bla") == null);
+        assertNull(reader.getBytes("bla"));
     }
 }

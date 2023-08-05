@@ -68,6 +68,6 @@ public final class ResourceStoreTestCase extends AbstractTestCase {
 
         final byte[] empty = pStore.read("key");
 
-        assertTrue(empty == null);
+        assertNull(empty);
     }
 }
