@@ -72,7 +72,7 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         writeFile("jci2/Simple.class", clazzSimple1);
         listener.waitForCheck();
 
-        final Object simple = classloader.loadClass("jci2.Simple").newInstance();
+        final Object simple = classloader.loadClass("jci2.Simple").getConstructor().newInstance();
         assertEquals("Simple1", simple.toString());
     }
 
@@ -83,14 +83,14 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         writeFile("jci2/Simple.class", clazzSimple1);
         listener.waitForCheck();
 
-        final Object simple1 = classloader.loadClass("jci2.Simple").newInstance();
+        final Object simple1 = classloader.loadClass("jci2.Simple").getConstructor().newInstance();
         assertEquals("Simple1", simple1.toString());
 
         log.debug("changing class");
         writeFile("jci2/Simple.class", clazzSimple2);
         listener.waitForEvent();
 
-        final Object simple2 = classloader.loadClass("jci2.Simple").newInstance();
+        final Object simple2 = classloader.loadClass("jci2.Simple").getConstructor().newInstance();
         assertEquals("Simple2", simple2.toString());
     }
 
@@ -101,7 +101,7 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         writeFile("jci2/Simple.class", clazzSimple1);
         listener.waitForCheck();
 
-        final Object simple = classloader.loadClass("jci2.Simple").newInstance();
+        final Object simple = classloader.loadClass("jci2.Simple").getConstructor().newInstance();
         assertEquals("Simple1", simple.toString());
 
         log.debug("deleting class");
@@ -109,7 +109,7 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         listener.waitForEvent();
 
         try {
-            classloader.loadClass("jci2.Simple").newInstance();
+            classloader.loadClass("jci2.Simple").getConstructor().newInstance();
             fail();
         } catch (final ClassNotFoundException e) {
             assertEquals("jci2.Simple", e.getMessage());
@@ -124,10 +124,10 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         writeFile("jci2/Extended.class", clazzExtended);
         listener.waitForCheck();
 
-        final Object simple = classloader.loadClass("jci2.Simple").newInstance();
+        final Object simple = classloader.loadClass("jci2.Simple").getConstructor().newInstance();
         assertEquals("Simple1", simple.toString());
 
-        final Object extended = classloader.loadClass("jci2.Extended").newInstance();
+        final Object extended = classloader.loadClass("jci2.Extended").getConstructor().newInstance();
         assertEquals("Extended:Simple1", extended.toString());
 
         log.debug("deleting class dependency");
@@ -135,7 +135,7 @@ public final class ReloadingClassLoaderTestCase extends AbstractTestCase {
         listener.waitForEvent();
 
         try {
-            classloader.loadClass("jci2.Extended").newInstance();
+            classloader.loadClass("jci2.Extended").getConstructor().newInstance();
             fail();
         } catch (final NoClassDefFoundError e) {
             assertEquals("jci2/Simple", e.getMessage());

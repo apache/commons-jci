@@ -205,7 +205,7 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
 
         // Check "jci2.Simple" class can't be loaded
         try {
-            loader.loadClass("jci2.Simple").newInstance();
+            loader.loadClass("jci2.Simple").getConstructor().newInstance();
             fail("Success loadClass[1]");
         } catch (final ClassNotFoundException e) {
             // expected not found
@@ -226,7 +226,7 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
 
         // Check "jci2.Simple" class can now be loaded
         try {
-            final Object simple2 = loader.loadClass("jci2.Simple").newInstance();
+            final Object simple2 = loader.loadClass("jci2.Simple").getConstructor().newInstance();
             assertNotNull("Found loadClass[2]",  simple2);
             assertEquals("toString loadClass[2]",  toStringValue, simple2.toString());
         } catch (final Exception e) {
@@ -239,7 +239,7 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
 
         // Test "jci2.Simple" class can't be loaded after ResourceStore removed
         try {
-            loader.loadClass("jci2.Simple").newInstance();
+            loader.loadClass("jci2.Simple").getConstructor().newInstance();
             fail("Success loadClass[3]");
         } catch (final ClassNotFoundException e) {
             // expected not found

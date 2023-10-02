@@ -89,7 +89,7 @@ public final class JavaCompilerFactory {
         }
 
         try {
-            return (JavaCompiler) clazz.newInstance();
+            return (JavaCompiler) clazz.getConstructor().newInstance();
         } catch (final Throwable t) {
             return null;
         }

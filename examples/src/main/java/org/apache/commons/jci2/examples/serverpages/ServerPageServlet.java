@@ -96,7 +96,7 @@ public final class ServerPageServlet extends HttpServlet {
                         }
 
                         // create new instance of jsp page
-                        final HttpServlet servlet = (HttpServlet) clazz.newInstance();
+                        final HttpServlet servlet = (HttpServlet) clazz.getConstructor().newInstance();
                         newServletsByClassname.put(clazzName, servlet);
 
                         reload = true;

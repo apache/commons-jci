@@ -138,41 +138,41 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
         initialCompile();
 
         log.debug("loading Simple");
-        final Object simple = classloader.loadClass("jci2.Simple").newInstance();
+        final Object simple = classloader.loadClass("jci2.Simple").getConstructor().newInstance();
         assertEquals("Simple1", simple.toString());
 
         log.debug("loading Extended");
-        final Object extended = classloader.loadClass("jci2.Extended").newInstance();
+        final Object extended = classloader.loadClass("jci2.Extended").getConstructor().newInstance();
         assertEquals("Extended:Simple1", extended.toString());
     }
 
     public void testChange() throws Exception {
         initialCompile();
 
-        final Object simple = classloader.loadClass("jci2.Simple").newInstance();
+        final Object simple = classloader.loadClass("jci2.Simple").getConstructor().newInstance();
         assertEquals("Simple1", simple.toString());
 
-        final Object extended = classloader.loadClass("jci2.Extended").newInstance();
+        final Object extended = classloader.loadClass("jci2.Extended").getConstructor().newInstance();
         assertEquals("Extended:Simple1", extended.toString());
 
         delay();
         writeFile("jci2/Simple.java", "Simple2");
         listener.waitForCheck();
 
-        final Object simple2 = classloader.loadClass("jci2.Simple").newInstance();
+        final Object simple2 = classloader.loadClass("jci2.Simple").getConstructor().newInstance();
         assertEquals("Simple2", simple2.toString());
 
-        final Object newExtended = classloader.loadClass("jci2.Extended").newInstance();
+        final Object newExtended = classloader.loadClass("jci2.Extended").getConstructor().newInstance();
         assertEquals("Extended:Simple2", newExtended.toString());
     }
 
     public void testDelete() throws Exception {
         initialCompile();
 
-        final Object simple = classloader.loadClass("jci2.Simple").newInstance();
+        final Object simple = classloader.loadClass("jci2.Simple").getConstructor().newInstance();
         assertEquals("Simple1", simple.toString());
 
-        final Object extended = classloader.loadClass("jci2.Extended").newInstance();
+        final Object extended = classloader.loadClass("jci2.Extended").getConstructor().newInstance();
         assertEquals("Extended:Simple1", extended.toString());
 
         listener.waitForCheck();
@@ -183,12 +183,12 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
         listener.waitForCheck();
 
         log.debug("loading Simple");
-        final Object oldSimple = classloader.loadClass("jci2.Simple").newInstance();
+        final Object oldSimple = classloader.loadClass("jci2.Simple").getConstructor().newInstance();
         assertEquals("Simple1", oldSimple.toString());
 
         log.debug("trying to loading Extended");
         try {
-            classloader.loadClass("jci2.Extended").newInstance();
+            classloader.loadClass("jci2.Extended").getConstructor().newInstance();
             fail();
         } catch (final ClassNotFoundException e) {
             assertEquals("jci2.Extended", e.getMessage());
@@ -201,7 +201,7 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
 
         log.debug("trying to loading Simple");
         try {
-            classloader.loadClass("jci2.Simple").newInstance();
+            classloader.loadClass("jci2.Simple").getConstructor().newInstance();
             fail();
         } catch (final ClassNotFoundException e) {
             assertEquals("jci2.Simple", e.getMessage());
@@ -212,10 +212,10 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
     public void testDeleteDependency() throws Exception {
         initialCompile();
 
-        final Object simple = classloader.loadClass("jci2.Simple").newInstance();
+        final Object simple = classloader.loadClass("jci2.Simple").getConstructor().newInstance();
         assertEquals("Simple1", simple.toString());
 
-        final Object extended = classloader.loadClass("jci2.Extended").newInstance();
+        final Object extended = classloader.loadClass("jci2.Extended").getConstructor().newInstance();
         assertEquals("Extended:Simple1", extended.toString());
 
         log.debug("deleting source file");
@@ -224,7 +224,7 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
 
         log.debug("trying to load dependend class");
         try {
-            classloader.loadClass("jci2.Extended").newInstance();
+            classloader.loadClass("jci2.Extended").getConstructor().newInstance();
             fail();
         } catch (final NoClassDefFoundError e) {
             assertEquals("jci2/Simple", e.getMessage());
