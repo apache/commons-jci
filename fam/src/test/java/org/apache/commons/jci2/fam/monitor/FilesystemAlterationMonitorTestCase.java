@@ -125,7 +125,7 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
 
 
 
-    private static class MyFilesystemAlterationListener extends AbstractFilesystemAlterationListener {
+    private static final class MyFilesystemAlterationListener extends AbstractFilesystemAlterationListener {
     }
 
     private void start() throws Exception {
