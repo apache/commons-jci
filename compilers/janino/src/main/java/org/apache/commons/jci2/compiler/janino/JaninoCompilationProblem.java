@@ -33,23 +33,23 @@ public final class JaninoCompilationProblem implements CompilationProblem {
     private final String message;
     private final boolean error;
 
-    public JaninoCompilationProblem(final LocatedException pLocatedException) {
-        this(pLocatedException.getLocation(), pLocatedException.getMessage(), true);
+    public JaninoCompilationProblem(final LocatedException locatedException) {
+        this(locatedException.getLocation(), locatedException.getMessage(), true);
     }
 
-    public JaninoCompilationProblem(final Location pLocation, final String pMessage, final boolean pError) {
-      this(pLocation.getFileName(), pLocation, pMessage, pError);
+    public JaninoCompilationProblem(final Location pLocation, final String message, final boolean error) {
+      this(pLocation.getFileName(), pLocation, message, error);
     }
 
-    public JaninoCompilationProblem(final String pFilename, final String pMessage, final boolean pError) {
-        this(pFilename, null, pMessage, pError);
+    public JaninoCompilationProblem(final String fileName, final String message, final boolean error) {
+        this(fileName, null, message, error);
     }
 
-    public JaninoCompilationProblem(final String pFilename, final Location pLocation, final String pMessage, final boolean pError) {
-        location = pLocation;
-        fileName = pFilename;
-        message = pMessage;
-        error = pError;
+    public JaninoCompilationProblem(final String fileName, final Location location, final String message, final boolean error) {
+        this.location = location;
+        this.fileName = fileName;
+        this.message = message;
+        this.error = error;
     }
 
     public boolean isError() {
