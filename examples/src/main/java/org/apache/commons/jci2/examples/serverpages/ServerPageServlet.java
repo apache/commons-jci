@@ -58,7 +58,7 @@ public final class ServerPageServlet extends HttpServlet {
     private FilesystemAlterationMonitor fam;
     private CompilingListener jspListener;
 
-    private Map<String, HttpServlet> servletsByClassname = new HashMap<String, HttpServlet>();
+    private Map<String, HttpServlet> servletsByClassName = new HashMap<String, HttpServlet>();
 
     @Override
     public void init() throws ServletException {
@@ -71,14 +71,14 @@ public final class ServerPageServlet extends HttpServlet {
         final TransactionalResourceStore store = new TransactionalResourceStore(new MemoryResourceStore()) {
 
             private Set<String> newClasses;
-            private Map<String, HttpServlet> newServletsByClassname;
+            private Map<String, HttpServlet> newServletsByClassName;
 
             @Override
             public void onStart() {
                 super.onStart();
 
                 newClasses = new HashSet<String>();
-                newServletsByClassname = new HashMap<String, HttpServlet>(servletsByClassname);
+                newServletsByClassName = new HashMap<String, HttpServlet>(servletsByClassName);
             }
 
             @Override
@@ -97,7 +97,7 @@ public final class ServerPageServlet extends HttpServlet {
 
                         // create new instance of jsp page
                         final HttpServlet servlet = (HttpServlet) clazz.getConstructor().newInstance();
-                        newServletsByClassname.put(clazzName, servlet);
+                        newServletsByClassName.put(clazzName, servlet);
 
                         reload = true;
                     } catch (final Exception e) {
@@ -106,8 +106,8 @@ public final class ServerPageServlet extends HttpServlet {
                 }
 
                 if (reload) {
-                    log("Activating new map of servlets "+ newServletsByClassname);
-                    servletsByClassname = newServletsByClassname;
+                    log("Activating new map of servlets "+ newServletsByClassName);
+                    servletsByClassName = newServletsByClassName;
                 }
             }
 
@@ -228,7 +228,7 @@ public final class ServerPageServlet extends HttpServlet {
 
         log("Checking for serverpage " + servletClassname);
 
-        final HttpServlet servlet = servletsByClassname.get(servletClassname);
+        final HttpServlet servlet = servletsByClassName.get(servletClassname);
 
         if (servlet == null) {
             log("No servlet  for " + request.getRequestURI());
