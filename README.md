@@ -44,7 +44,7 @@ Apache Commons JCI
 ===================
 
 [![Travis-CI Status](https://travis-ci.org/apache/commons-jci.svg)](https://travis-ci.org/apache/commons-jci)
-[![GitHub Actions Status](https://github.com/apache/commons-jci/workflows/Java%20CI/badge.svg)](https://github.com/apache/commons-jci/actions)
+[![Java CI](https://github.com/apache/commons-jci/actions/workflows/maven.yml/badge.svg)](https://github.com/apache/commons-jci/actions/workflows/maven.yml)
 [![Coverage Status](https://coveralls.io/repos/apache/commons-jci/badge.svg)](https://coveralls.io/r/apache/commons-jci)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.apache.commons/commons-jci2/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.apache.commons/commons-jci2/)
 [![Javadocs](https://javadoc.io/badge/org.apache.commons/commons-jci2/2.0.svg)](https://javadoc.io/doc/org.apache.commons/commons-jci2/2.0)
