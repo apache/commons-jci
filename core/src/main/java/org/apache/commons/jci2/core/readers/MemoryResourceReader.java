@@ -27,7 +27,7 @@ import java.util.Map;
  */
 public class MemoryResourceReader implements ResourceReader {
 
-    private Map<String, byte[]> resources = null;
+    private Map<String, byte[]> resources;
 
     public boolean isAvailable( final String pResourceName ) {
         if (resources == null) {

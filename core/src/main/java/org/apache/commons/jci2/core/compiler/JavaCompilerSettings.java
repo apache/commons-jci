@@ -33,13 +33,13 @@ public class JavaCompilerSettings {
     private String targetVersion = "1.4";
     private String sourceVersion = "1.4";
     private String sourceEncoding = "UTF-8";
-    private boolean warnings = false;
-    private boolean deprecations = false;
-    private boolean debug = false;
+    private boolean warnings;
+    private boolean deprecations;
+    private boolean debug;
 
     /** @deprecated */
     @Deprecated
-    private boolean verbose = false;
+    private boolean verbose;
 
     public JavaCompilerSettings() {
     }

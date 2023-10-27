@@ -40,7 +40,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
     /** delay between calls to {@link FilesystemAlterationObserver#checkAndNotify()}, default 3000 ms */
     private volatile long delay = 3000; // volatile because shared with daemon thread
-    private Thread thread = null;
+    private Thread thread;
 
     private volatile boolean running = true;
 
