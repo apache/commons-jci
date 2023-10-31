@@ -69,7 +69,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
 
     /**
-     * Set the delay between calls to the observers.
+     * Sets the delay between calls to the observers.
      *
      * @param pDelay the delay in milliseconds (default if not set 3000 ms)
      */

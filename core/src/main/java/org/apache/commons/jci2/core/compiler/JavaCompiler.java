@@ -39,7 +39,7 @@ import org.apache.commons.jci2.core.stores.ResourceStore;
 public interface JavaCompiler {
 
     /**
-     * Set the handler that gets the notification of an error
+     * Sets the handler that gets the notification of an error
      * or warning as soon as this information is available from
      * the compiler.
      * Note: Some compilers might not support this feature.
