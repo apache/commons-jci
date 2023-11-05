@@ -52,7 +52,7 @@ public final class Jsr199JavaCompiler extends AbstractJavaCompiler {
 
     private final Log log = LogFactory.getLog(Jsr199JavaCompiler.class);
 
-    private class CompilationUnit extends SimpleJavaFileObject {
+    private final class CompilationUnit extends SimpleJavaFileObject {
         final private ResourceReader reader;
         final private String name;
 
@@ -125,7 +125,7 @@ public final class Jsr199JavaCompiler extends AbstractJavaCompiler {
         }
     }
 
-    private class JciJavaFileManager implements JavaFileManager  {
+    private final class JciJavaFileManager implements JavaFileManager  {
         // private final ResourceStore store;
         final Collection<JavaFileObject> units;
 
