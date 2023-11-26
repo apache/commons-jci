@@ -24,7 +24,7 @@ import org.apache.commons.jci2.core.stores.ResourceStore;
 /**
  * The general compiler interface. All compilers implementing
  * this interface should read the resources from the reader
- * and store the java class files into the ResourceStore.
+ * and store the Java class files into the ResourceStore.
  *
  * The actual compilation language does not matter. But the
  * contract is that the result of the compilation will be a
@@ -63,7 +63,7 @@ public interface JavaCompiler {
     CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader pClassLoader );
 
     /**
-     * Compiles the java resources "some/path/to/MyJava.java"
+     * Compiles the Java resources "some/path/to/MyJava.java"
      * read through the ResourceReader and then stores the resulting
      * classes in the ResourceStore under "some/path/to/MyJava.class".
      * Note: As these are resource path you always have to use "/"
