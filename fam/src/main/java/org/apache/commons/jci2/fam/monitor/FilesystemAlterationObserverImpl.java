@@ -108,12 +108,10 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
             return file.getName();
         }
 
-
         @Override
         public String toString() {
             return file.toString();
         }
-
 
         private void compareChildren() {
             if (!file.isDirectory()) {
@@ -148,7 +146,6 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
                 children.remove(entry.getName());
             }
         }
-
 
         private void deleteChildrenAndNotify() {
             for (final Entry entry : children.values()) {
@@ -251,8 +248,6 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
         rootEntry = new Entry(new MonitorFileImpl(pRootDirectory));
     }
 
-
-
     private void notifyOnStart() {
         log.debug("onStart " + rootEntry);
         for (final FilesystemAlterationListener listener : listeners) {
@@ -304,14 +299,12 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
         }
     }
 
-
     private void checkEntries() {
         if(rootEntry.needsToBeDeleted()) {
             // root not existing
             rootEntry.lastType = Entry.TYPE_UNKNOWN;
         }
     }
-
 
     public void checkAndNotify() {
     	synchronized(listenersSet) {
@@ -326,7 +319,6 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
 	        notifyOnStop();
     	}
     }
-
 
     public File getRootDirectory() {
         return rootDirectory;

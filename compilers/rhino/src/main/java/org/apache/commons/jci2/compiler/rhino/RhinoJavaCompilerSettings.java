@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-
 package org.apache.commons.jci2.compiler.rhino;
 
 import org.apache.commons.jci2.core.compiler.JavaCompilerSettings;

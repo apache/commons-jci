@@ -20,7 +20,6 @@ import org.apache.commons.jci2.core.utils.ConversionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
 /**
  * A ClassLoader backed by an array of ResourceStores
  *

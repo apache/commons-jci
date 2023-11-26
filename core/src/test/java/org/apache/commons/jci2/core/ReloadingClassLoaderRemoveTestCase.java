@@ -186,7 +186,6 @@ public class ReloadingClassLoaderRemoveTestCase extends TestCase {
         checkRemoveResourceStore("Four: Store 1 Not Found", loader, store1, false);
     }
 
-
     /**
      * Test that a class can't be loaded after the ResourceStore containing
      * it has been removed.

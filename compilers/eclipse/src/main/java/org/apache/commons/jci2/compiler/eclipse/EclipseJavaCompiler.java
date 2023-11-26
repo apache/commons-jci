@@ -130,7 +130,6 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         }
     }
 
-
     public org.apache.commons.jci2.core.compiler.CompilationResult compile(
             final String[] pSourceFiles,
             final ResourceReader pReader,

@@ -47,14 +47,12 @@ public final class FilesystemAlterationMonitor implements Runnable {
     public FilesystemAlterationMonitor() {
     }
 
-
     public void start() {
         thread = new Thread(this);
         thread.setName("Filesystem Alteration Monitor");
         thread.setDaemon(true);
         thread.start();
     }
-
 
     public void stop() {
         running = false;
@@ -67,7 +65,6 @@ public final class FilesystemAlterationMonitor implements Runnable {
         }
     }
 
-
     /**
      * Sets the delay between calls to the observers.
      *
@@ -76,7 +73,6 @@ public final class FilesystemAlterationMonitor implements Runnable {
     public void setInterval( final long pDelay ) {
         delay = pDelay;
     }
-
 
     public void addListener( final File pRoot, final FilesystemAlterationListener pListener ) {
 
@@ -114,7 +110,6 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
         return observer.getListeners();
     }
-
 
     public void run() {
         log.debug("fam running");

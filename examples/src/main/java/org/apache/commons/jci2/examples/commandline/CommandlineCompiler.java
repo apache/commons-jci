@@ -110,10 +110,8 @@ public final class CommandlineCompiler {
         int maxwarns = 10;
         final boolean nowarn = cmd.hasOption("nowarn");
 
-
         final JavaCompiler compiler = new JavaCompilerFactory().createCompiler("eclipse");
         final JavaCompilerSettings settings = compiler.createDefaultSettings();
-
 
         for (final Iterator it = cmd.iterator(); it.hasNext();) {
             final Option option = (Option) it.next();

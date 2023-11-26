@@ -17,8 +17,6 @@
 
 package org.apache.commons.jci2.core.compiler;
 
-
-
 /**
  * Most common denominator for JavaCompiler settings.
  *
@@ -61,7 +59,6 @@ public class JavaCompilerSettings {
         return targetVersion;
     }
 
-
     public void setSourceVersion( final String pSourceVersion ) {
         sourceVersion = pSourceVersion;
     }
@@ -69,7 +66,6 @@ public class JavaCompilerSettings {
     public String getSourceVersion() {
         return sourceVersion;
     }
-
 
     public void setSourceEncoding( final String pSourceEncoding ) {
         sourceEncoding = pSourceEncoding;
@@ -79,7 +75,6 @@ public class JavaCompilerSettings {
         return sourceEncoding;
     }
 
-
     public void setWarnings( final boolean pWarnings ) {
         warnings = pWarnings;
     }
@@ -87,7 +82,6 @@ public class JavaCompilerSettings {
     public boolean isWarnings() {
         return warnings;
     }
-
 
     public void setDeprecations( final boolean pDeprecations )  {
         deprecations = pDeprecations;

@@ -21,7 +21,6 @@ import org.apache.commons.jci2.core.problems.CompilationProblemHandler;
 import org.apache.commons.jci2.core.readers.ResourceReader;
 import org.apache.commons.jci2.core.stores.ResourceStore;
 
-
 /**
  * Base class for compiler implementations. Provides just a few
  * convenience methods.

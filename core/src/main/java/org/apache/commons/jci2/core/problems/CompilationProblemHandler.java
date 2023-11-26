@@ -17,7 +17,6 @@
 
 package org.apache.commons.jci2.core.problems;
 
-
 /**
  * A CompilationProblemHandler gets access to a problem
  * as soon as the problem is available while the

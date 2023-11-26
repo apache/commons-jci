@@ -172,7 +172,6 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 			    	})
     			);
 
-
     	compiler.setCompileErrorHandler(new ErrorHandler() {
 			public void handleError( final String pMessage, final Location pLocation ) throws CompileException {
 				final CompilationProblem problem = new JaninoCompilationProblem(pLocation.getFileName(), pLocation, pMessage, true);
@@ -182,7 +181,6 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 				problems.add(problem);
 			}
     	});
-
 
     	final Resource[] resources = new Resource[pSourceNames.length];
         for (int i = 0; i < pSourceNames.length; i++) {

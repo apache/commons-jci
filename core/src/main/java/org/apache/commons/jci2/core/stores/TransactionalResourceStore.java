@@ -17,7 +17,6 @@
 
 package org.apache.commons.jci2.core.stores;
 
-
 /**
  * A TransactionalResourceStore get signals of the compilation process as a whole.
  * When it started and when the compiler finished.

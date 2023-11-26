@@ -29,7 +29,6 @@ import org.apache.commons.logging.LogFactory;
 
 import junit.framework.TestCase;
 
-
 /**
  *
  * @author tcurdt
@@ -43,7 +42,6 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
 
     private File directory;
 
-
     @Override
     protected void setUp() throws Exception {
         directory = createTempDirectory();
@@ -55,7 +53,6 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
     protected void tearDown() throws Exception {
         FileUtils.deleteDirectory(directory);
     }
-
 
     protected File createDirectory( final String pName ) throws Exception {
         final File newDirectory = new File(directory, pName);
@@ -115,15 +112,12 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
         return tempFile;
     }
 
-
     protected void delay() {
         try {
             Thread.sleep(1500);
         } catch (final InterruptedException e) {
         }
     }
-
-
 
     private static final class MyFilesystemAlterationListener extends AbstractFilesystemAlterationListener {
     }

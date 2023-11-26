@@ -42,7 +42,6 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
     private final Collection<File> changedDirectories = new ArrayList<File>();
     private final Collection<File> deletedDirectories = new ArrayList<File>();
 
-
     private final static class Signal {
         public boolean triggered;
     }
@@ -71,7 +70,6 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
     public void onFileDelete( final File pFile ) {
         deletedFiles.add(pFile);
     }
-
 
     public Collection<File> getChangedDirectories() {
         return changedDirectories;

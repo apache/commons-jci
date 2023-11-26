@@ -51,7 +51,6 @@ public class MemoryResourceReader implements ResourceReader {
         }
     }
 
-
     public byte[] getBytes( final String pResourceName ) {
         return resources.get(pResourceName);
     }

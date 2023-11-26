@@ -29,12 +29,10 @@ public final class JspReader implements ResourceReader {
     private final Map<String, byte[]> sources;
     private final ResourceReader reader;
 
-
     public JspReader( final Map<String, byte[]> pSources, final ResourceReader pReader ) {
         reader = pReader;
         sources = pSources;
     }
-
 
     public byte[] getBytes( final String pResourceName ) {
 

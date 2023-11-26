@@ -56,7 +56,6 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
 
     private final JavaCompilerSettings defaultSettings;
 
-
     public RhinoJavaCompiler() {
         defaultSettings = new RhinoJavaCompilerSettings();
     }
@@ -133,7 +132,6 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
             }
         }
 
-
         private Class<?> compileClass( final Context pContext, final String pClassName) throws IOException, ClassNotFoundException {
 
             Class<?> superclass = null;
@@ -184,7 +182,6 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
             return compileClass(pContext, pSourceName, pClassName, superclass, interfaces);
 
         }
-
 
         private Class<?> compileClass( final Context pContext, final String pSourceName, final String pClassName, final Class<?> pSuperClass, final Class<?>[] pInterfaces) {
 
@@ -255,7 +252,6 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
 
     }
 
-
     public CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader pClassLoader, final JavaCompilerSettings pSettings ) {
 
         final RhinoCompilingClassLoader cl = new RhinoCompilingClassLoader(pReader, pStore, pClassLoader);
@@ -275,7 +271,6 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
         problems.toArray(result);
         return new CompilationResult(result);
     }
-
 
     public JavaCompilerSettings createDefaultSettings() {
         return defaultSettings;

@@ -64,5 +64,4 @@ public class Jsr199CompilationProblem implements CompilationProblem {
         return false;
     }
 
-
 }

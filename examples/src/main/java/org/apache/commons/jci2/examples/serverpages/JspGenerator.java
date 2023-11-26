@@ -87,7 +87,6 @@ public final class JspGenerator {
                 output.append("package ").append(packageName).append(";").append('\n');
             }
 
-
             output.append("import java.io.PrintWriter;").append('\n');
             output.append("import java.io.IOException;").append('\n');
             output.append("import javax.servlet.http.HttpServlet;").append('\n');
@@ -97,7 +96,6 @@ public final class JspGenerator {
             output.append("public class ").append(className).append(" extends HttpServlet {").append('\n');
             output.append("  protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {").append('\n');
             output.append("    final PrintWriter out = response.getWriter();").append('\n');
-
 
             final char[] open = "<?".toCharArray();
             final char[] close = "?>".toCharArray();
@@ -147,7 +145,6 @@ public final class JspGenerator {
             if (watch == open) {
                 wrap(sb, output);
             }
-
 
             output.append("    out.close();").append('\n');
             output.append("    out.flush();").append('\n');

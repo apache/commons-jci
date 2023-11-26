@@ -124,7 +124,6 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
     @Override
     public void onStop( final FilesystemAlterationObserver pObserver ) {
 
-
         if (store instanceof Transactional) {
             ((Transactional)store).onStart();
         }

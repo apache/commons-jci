@@ -21,7 +21,6 @@ import org.apache.commons.jci2.core.problems.CompilationProblemHandler;
 import org.apache.commons.jci2.core.readers.ResourceReader;
 import org.apache.commons.jci2.core.stores.ResourceStore;
 
-
 /**
  * The general compiler interface. All compilers implementing
  * this interface should read the resources from the reader

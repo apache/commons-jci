@@ -28,7 +28,6 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
-
 /**
  * Stores the results on disk
  *

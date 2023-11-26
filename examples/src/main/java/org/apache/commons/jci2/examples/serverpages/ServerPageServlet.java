@@ -42,7 +42,6 @@ import org.apache.commons.jci2.core.utils.ConversionUtils;
 import org.apache.commons.jci2.fam.monitor.FilesystemAlterationMonitor;
 import org.apache.commons.jci2.fam.monitor.FilesystemAlterationObserver;
 
-
 /**
  * A mini JSP servlet that monitors a certain directory and
  * recompiles and then instantiates the JSP pages as soon as
@@ -138,7 +137,6 @@ public final class ServerPageServlet extends HttpServlet {
                 resourceToCompile.clear();
             }
 
-
             @Override
             public void onFileChange(final File pFile) {
                 if (pFile.getName().endsWith(".jsp")) {
@@ -152,7 +150,6 @@ public final class ServerPageServlet extends HttpServlet {
                 }
                 super.onFileChange(pFile);
             }
-
 
             @Override
             public void onFileCreate(final File pFile) {
@@ -168,7 +165,6 @@ public final class ServerPageServlet extends HttpServlet {
                 super.onFileCreate(pFile);
             }
 
-
             @Override
             public String[] getResourcesToCompile(final FilesystemAlterationObserver pObserver) {
                 // we only want to compile the jsp pages
@@ -176,7 +172,6 @@ public final class ServerPageServlet extends HttpServlet {
                 resourceToCompile.toArray(resourceNames);
                 return resourceNames;
             }
-
 
             @Override
             public ResourceReader getReader( final FilesystemAlterationObserver pObserver ) {

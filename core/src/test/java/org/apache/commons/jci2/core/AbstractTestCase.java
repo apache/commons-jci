@@ -48,7 +48,6 @@ public abstract class AbstractTestCase extends TestCase {
         assertTrue(directory.isDirectory());
     }
 
-
     protected File createDirectory( final String pName ) throws Exception {
         final File newDirectory = new File(directory, pName);
         assertTrue(newDirectory.mkdir());
@@ -113,7 +112,6 @@ public abstract class AbstractTestCase extends TestCase {
 
         return tempFile;
     }
-
 
     @Override
     protected void tearDown() throws Exception {
