@@ -18,6 +18,7 @@
 package org.apache.commons.jci2.core.readers;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,9 +41,9 @@ public final class FileResourceReader implements ResourceReader {
         return new File(root, pResourceName).exists();
     }
 
-    public byte[] getBytes( final String pResourceName ) {
+    public byte[] getBytes(final String pResourceName) {
         try {
-            return FileUtils.readFileToString(new File(root, pResourceName), "UTF-8").getBytes();
+            return FileUtils.readFileToString(new File(root, pResourceName), StandardCharsets.UTF_8).getBytes();
         } catch (final Exception e) {
             return null;
         }
