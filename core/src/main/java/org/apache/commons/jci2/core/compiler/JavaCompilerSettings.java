@@ -17,6 +17,8 @@
 
 package org.apache.commons.jci2.core.compiler;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * Most common denominator for JavaCompiler settings.
  *
@@ -30,7 +32,7 @@ public class JavaCompilerSettings {
 
     private String targetVersion = "1.4";
     private String sourceVersion = "1.4";
-    private String sourceEncoding = "UTF-8";
+    private String sourceEncoding = StandardCharsets.UTF_8.name();
     private boolean warnings;
     private boolean deprecations;
     private boolean debug;

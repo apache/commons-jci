@@ -17,6 +17,7 @@
 
 package org.apache.commons.jci2.compiler.eclipse;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
@@ -31,7 +32,7 @@ public final class EclipseJavaCompilerSettingsTestCase extends TestCase {
 		assertEquals(CompilerOptions.DO_NOT_GENERATE, m.get(CompilerOptions.OPTION_ReportDeprecation));
 		assertEquals(CompilerOptions.VERSION_1_4, m.get(CompilerOptions.OPTION_TargetPlatform));
 		assertEquals(CompilerOptions.VERSION_1_4, m.get(CompilerOptions.OPTION_Source));
-		assertEquals("UTF-8", m.get(CompilerOptions.OPTION_Encoding));
+		assertEquals(StandardCharsets.UTF_8.name(), m.get(CompilerOptions.OPTION_Encoding));
 	}
 
 	public void testSourceVersion() {
