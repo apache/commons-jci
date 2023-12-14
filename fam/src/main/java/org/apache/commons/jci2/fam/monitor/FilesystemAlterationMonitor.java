@@ -38,7 +38,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
     private final Object observersLock = new Object();
     private Map<File, FilesystemAlterationObserver> observers = Collections.unmodifiableMap(new HashMap<File, FilesystemAlterationObserver>());
 
-    /** delay between calls to {@link FilesystemAlterationObserver#checkAndNotify()}, default 3000 ms */
+    /** Delay between calls to {@link FilesystemAlterationObserver#checkAndNotify()}, default 3000 ms */
     private volatile long delay = 3000; // volatile because shared with daemon thread
     private Thread thread;
 
