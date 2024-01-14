@@ -62,7 +62,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
 
     /**
      * based on code from dev.helma.org
-     * http://dev.helma.org/source/file/helma/branches/rhinoloader/src/org/helma/javascript/RhinoLoader.java/?revision=95
+     * https://dev.helma.org/source/file/helma/branches/rhinoloader/src/org/helma/javascript/RhinoLoader.java/?revision=95
      */
     private final class RhinoCompilingClassLoader extends ClassLoader {
 
