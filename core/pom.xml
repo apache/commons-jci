@@ -65,6 +65,7 @@
         <commons.componentid>jci-core</commons.componentid>
         <commons.module.name>org.apache.commons.jci2.core</commons.module.name>
         <maven-site-plugin.skip>true</maven-site-plugin.skip>
+        <project.build.outputTimestamp>2024-01-01T00:00:00Z</project.build.outputTimestamp>
     </properties>
 
     <build>
