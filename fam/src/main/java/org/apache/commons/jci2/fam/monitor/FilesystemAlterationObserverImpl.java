@@ -27,7 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Implementation of a FilesystemAlterationObserver
+ * Implements {@link FilesystemAlterationObserver}.
  *
  * @author tcurdt
  */
