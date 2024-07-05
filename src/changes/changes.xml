@@ -38,7 +38,6 @@ and commit
 
 The <action> type attribute can be add,update,fix,remove.
 -->
-
 <document xmlns="http://maven.apache.org/changes/1.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
@@ -46,7 +45,6 @@ The <action> type attribute can be add,update,fix,remove.
     <title>Apache Commons JCI Release Notes</title>
     <author email="dev@commons.apache.org">Apache Commons developers</author>
   </properties>
-
     <!-- NOTE:
     The description below is specially formatted so as to improve the layout of the generated release notes:
     The parsing process removes all line feeds, replacing them with a single space.
@@ -62,12 +60,11 @@ The <action> type attribute can be add,update,fix,remove.
 
     Defining changes.version allows one to create the RN without first removing the SNAPSHOT suffix.
      -->
-
   <body>
     <release version="2.0" date="202Y-MM-DD" description="Major release (Java 8 or above).">
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add Maven property project.build.outputTimestamp for build reproducibility.</action>
-      <!--  FIX -->
+      <!-- FIX -->
       <action type="fix" dev="ggregory" due-to="Gary Gregory">
          EclipseJavaCompilerSettings.toNativeVersion(String) now throws IllegalArgumentException instead of RuntimeException.
       </action>
@@ -116,6 +113,9 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action type="update" dev="ggregory" due-to="Dependabot, Gary Gregory">
         Bump commons-parent from 56 to 71 #36, #37, #72, #97.
+      </action>
+      <action type="update" dev="ggregory" due-to="Dependabot, Gary Gregory">
+        Bump org.codehaus.mojo:taglist-maven-plugin from 3.0.0 to 3.1.0 #112.
       </action>
     </release>
   </body>
