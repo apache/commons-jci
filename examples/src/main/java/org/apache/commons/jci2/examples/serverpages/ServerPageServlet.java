@@ -57,7 +57,7 @@ public final class ServerPageServlet extends HttpServlet {
     private FilesystemAlterationMonitor fam;
     private CompilingListener jspListener;
 
-    private Map<String, HttpServlet> servletsByClassName = new HashMap<String, HttpServlet>();
+    private Map<String, HttpServlet> servletsByClassName = new HashMap<>();
 
     @Override
     public void init() throws ServletException {
@@ -76,8 +76,8 @@ public final class ServerPageServlet extends HttpServlet {
             public void onStart() {
                 super.onStart();
 
-                newClasses = new HashSet<String>();
-                newServletsByClassName = new HashMap<String, HttpServlet>(servletsByClassName);
+                newClasses = new HashSet<>();
+                newServletsByClassName = new HashMap<>(servletsByClassName);
             }
 
             @Override
@@ -127,8 +127,8 @@ public final class ServerPageServlet extends HttpServlet {
         jspListener = new CompilingListener(new JavaCompilerFactory().createCompiler("eclipse"), store) {
 
             private final JspGenerator transformer = new JspGenerator();
-            private final Map<String, byte[]> sources = new HashMap<String, byte[]>();
-            private final Set<String> resourceToCompile = new HashSet<String>();
+            private final Map<String, byte[]> sources = new HashMap<>();
+            private final Set<String> resourceToCompile = new HashSet<>();
 
             @Override
             public void onStart(final FilesystemAlterationObserver pObserver) {
