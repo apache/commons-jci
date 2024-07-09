@@ -29,6 +29,7 @@ public class MemoryResourceReader implements ResourceReader {
 
     private Map<String, byte[]> resources;
 
+    @Override
     public boolean isAvailable( final String pResourceName ) {
         if (resources == null) {
             return false;
@@ -39,7 +40,7 @@ public class MemoryResourceReader implements ResourceReader {
 
     public void add( final String pResourceName, final byte[] pContent ) {
         if (resources == null) {
-            resources = new HashMap<String, byte[]>();
+            resources = new HashMap<>();
         }
 
         resources.put(pResourceName, pContent);
@@ -51,6 +52,7 @@ public class MemoryResourceReader implements ResourceReader {
         }
     }
 
+    @Override
     public byte[] getBytes( final String pResourceName ) {
         return resources.get(pResourceName);
     }
