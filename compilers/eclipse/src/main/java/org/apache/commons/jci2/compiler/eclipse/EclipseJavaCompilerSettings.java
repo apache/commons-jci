@@ -30,7 +30,7 @@ import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
  */
 public final class EclipseJavaCompilerSettings extends JavaCompilerSettings {
 
-    final private Map<String, String> defaultEclipseSettings = new HashMap<String, String>();
+    final private Map<String, String> defaultEclipseSettings = new HashMap<>();
 
     public EclipseJavaCompilerSettings() {
         defaultEclipseSettings.put(CompilerOptions.OPTION_LineNumberAttribute, CompilerOptions.GENERATE);
@@ -70,7 +70,7 @@ public final class EclipseJavaCompilerSettings extends JavaCompilerSettings {
     }
 
     Map<String, String> toNativeSettings() {
-        final Map<String, String> map = new HashMap<String, String>(defaultEclipseSettings);
+        final Map<String, String> map = new HashMap<>(defaultEclipseSettings);
 
         map.put(CompilerOptions.OPTION_SuppressWarnings, isWarnings()?CompilerOptions.GENERATE:CompilerOptions.DO_NOT_GENERATE);
         map.put(CompilerOptions.OPTION_ReportDeprecation, isDeprecations()?CompilerOptions.GENERATE:CompilerOptions.DO_NOT_GENERATE);
