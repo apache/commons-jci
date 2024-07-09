@@ -53,10 +53,12 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
             file = pFile;
         }
 
+        @Override
         public boolean exists() {
             return file.exists();
         }
 
+        @Override
         public MonitorFile[] listFiles() {
             final File[] children = file.listFiles();
             if (children == null) { // not a directory or IOError (e.g. protection issue)
@@ -70,14 +72,17 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
             return providers;
         }
 
+        @Override
         public String getName() {
             return file.getName();
         }
 
+        @Override
         public boolean isDirectory() {
             return file.isDirectory();
         }
 
+        @Override
         public long lastModified() {
             return file.lastModified();
         }
@@ -98,7 +103,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
         private final MonitorFile file;
         private long lastModified = -1;
         private int lastType = TYPE_UNKNOWN;
-        private final Map<String, Entry> children = new HashMap<String, Entry>();
+        private final Map<String, Entry> children = new HashMap<>();
 
         public Entry(final MonitorFile pFile) {
             file = pFile;
@@ -119,7 +124,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
             }
 
             final MonitorFile[] files = file.listFiles();
-            final Set<Entry> deleted = new HashSet<Entry>(children.values());
+            final Set<Entry> deleted = new HashSet<>(children.values());
             for (final MonitorFile f : files) {
                 final String name = f.getName();
                 final Entry entry = children.get(name);
@@ -171,60 +176,56 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
 
                 // mark to be deleted by parent
                 return true;
-            } else {
-                // exists
-                final long currentModified = file.lastModified();
+            }
+            // exists
+            final long currentModified = file.lastModified();
 
-                if (currentModified != lastModified) {
-                    // last modified has changed
-                    lastModified = currentModified;
+            if (currentModified != lastModified) {
+                // last modified has changed
+                lastModified = currentModified;
 
 //                    log.debug(file + " has new last modified");
 
-                    // types only changes when also the last modified changes
-                    final int newType = (file.isDirectory()?TYPE_DIRECTORY:TYPE_FILE);
+                // types only changes when also the last modified changes
+                final int newType = file.isDirectory()?TYPE_DIRECTORY:TYPE_FILE;
 
-                    if (lastType != newType) {
-                        // the type has changed
+                if (lastType != newType) {
+                    // the type has changed
 
 //                        log.debug(file + " has a new type");
 
-                        deleteChildrenAndNotify();
+                    deleteChildrenAndNotify();
 
-                        lastType = newType;
+                    lastType = newType;
 
-                        // and then an add as the new type
-
-                        if (newType == TYPE_DIRECTORY) {
-                            notifyOnDirectoryCreate(this);
-                            compareChildren();
-                        } else {
-                            notifyOnFileCreate(this);
-                        }
-
-                        return false;
-                    }
+                    // and then an add as the new type
 
                     if (newType == TYPE_DIRECTORY) {
-                        notifyOnDirectoryChange(this);
+                        notifyOnDirectoryCreate(this);
                         compareChildren();
                     } else {
-                        notifyOnFileChange(this);
+                        notifyOnFileCreate(this);
                     }
-
-                    return false;
-
-                } else {
-
-                    // so exists and has not changed
-
-//                    log.debug(file + " does exist and has not changed");
-
-                    compareChildren();
 
                     return false;
                 }
+
+                if (newType == TYPE_DIRECTORY) {
+                    notifyOnDirectoryChange(this);
+                    compareChildren();
+                } else {
+                    notifyOnFileChange(this);
+                }
+
+            } else {
+
+                // so exists and has not changed
+
+//                    log.debug(file + " does exist and has not changed");
+
+                compareChildren();
             }
+            return false;
         }
 
         public MonitorFile getFile() {
@@ -240,8 +241,8 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
     private final File rootDirectory;
     private final Entry rootEntry;
 
-    private FilesystemAlterationListener[] listeners = new FilesystemAlterationListener[0];
-    private final Set<FilesystemAlterationListener> listenersSet = new HashSet<FilesystemAlterationListener>();
+    private FilesystemAlterationListener[] listeners = {};
+    private final Set<FilesystemAlterationListener> listenersSet = new HashSet<>();
 
     public FilesystemAlterationObserverImpl( final File pRootDirectory ) {
         rootDirectory = pRootDirectory;
@@ -306,6 +307,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
         }
     }
 
+    @Override
     public void checkAndNotify() {
     	synchronized(listenersSet) {
 	        if (listeners.length == 0) {
@@ -320,10 +322,12 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
     	}
     }
 
+    @Override
     public File getRootDirectory() {
         return rootDirectory;
     }
 
+    @Override
     public void addListener( final FilesystemAlterationListener pListener ) {
     	synchronized(listenersSet) {
 	        if (listenersSet.add(pListener)) {
@@ -332,6 +336,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
     	}
     }
 
+    @Override
     public void removeListener( final FilesystemAlterationListener pListener ) {
     	synchronized(listenersSet) {
 	        if (listenersSet.remove(pListener)) {
@@ -346,6 +351,7 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
         return newListeners;
     }
 
+    @Override
     public FilesystemAlterationListener[] getListeners() {
     	synchronized(listenersSet) {
         	final FilesystemAlterationListener[] res = new FilesystemAlterationListener[listeners.length];
