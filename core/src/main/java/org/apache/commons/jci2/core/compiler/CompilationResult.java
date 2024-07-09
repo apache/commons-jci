@@ -36,8 +36,8 @@ public final class CompilationResult {
     private final CompilationProblem[] warnings;
 
     public CompilationResult( final CompilationProblem[] pProblems ) {
-        final Collection<CompilationProblem> errorsColl = new ArrayList<CompilationProblem>();
-        final Collection<CompilationProblem> warningsColl = new ArrayList<CompilationProblem>();
+        final Collection<CompilationProblem> errorsColl = new ArrayList<>();
+        final Collection<CompilationProblem> warningsColl = new ArrayList<>();
 
         for (final CompilationProblem problem : pProblems) {
             if (problem.isError()) {
