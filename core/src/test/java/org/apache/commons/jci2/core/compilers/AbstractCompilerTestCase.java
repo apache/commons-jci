@@ -65,10 +65,12 @@ public abstract class AbstractCompilerTestCase extends TestCase {
                         "}").getBytes());
                 }};
 
+            @Override
             public byte[] getBytes(final String pResourceName) {
                 return sources.get(pResourceName);
             }
 
+            @Override
             public boolean isAvailable(final String pResourceName) {
                 return sources.containsKey(pResourceName);
             }
@@ -112,10 +114,12 @@ public abstract class AbstractCompilerTestCase extends TestCase {
                     "}").getBytes());
                 }};
 
+            @Override
             public byte[] getBytes( final String pResourceName ) {
                 return sources.get(pResourceName);
             }
 
+            @Override
             public boolean isAvailable( final String pResourceName ) {
                 return sources.containsKey(pResourceName);
             }
@@ -160,10 +164,12 @@ public abstract class AbstractCompilerTestCase extends TestCase {
                     "}").getBytes());
                 }};
 
+            @Override
             public byte[] getBytes( final String pResourceName ) {
                 return sources.get(pResourceName);
             }
 
+            @Override
             public boolean isAvailable( final String pResourceName ) {
                 return sources.containsKey(pResourceName);
             }
@@ -205,10 +211,12 @@ public abstract class AbstractCompilerTestCase extends TestCase {
                     "}").getBytes());
                 }};
 
+            @Override
             public byte[] getBytes( final String pResourceName ) {
                 return sources.get(pResourceName);
             }
 
+            @Override
             public boolean isAvailable( final String pResourceName ) {
                 return sources.containsKey(pResourceName);
             }
@@ -259,10 +267,12 @@ public abstract class AbstractCompilerTestCase extends TestCase {
                     "}").getBytes());
                 }};
 
+            @Override
             public byte[] getBytes( final String pResourceName ) {
                 return sources.get(pResourceName);
             }
 
+            @Override
             public boolean isAvailable( final String pResourceName ) {
                 return sources.containsKey(pResourceName);
             }
@@ -316,11 +326,13 @@ public abstract class AbstractCompilerTestCase extends TestCase {
                        "}").getBytes());
                }};
 
-           public byte[] getBytes( final String pResourceName ) {
+           @Override
+        public byte[] getBytes( final String pResourceName ) {
                return sources.get(pResourceName);
            }
 
-           public boolean isAvailable( final String pResourceName ) {
+           @Override
+        public boolean isAvailable( final String pResourceName ) {
                return sources.containsKey(pResourceName);
            }
         };
