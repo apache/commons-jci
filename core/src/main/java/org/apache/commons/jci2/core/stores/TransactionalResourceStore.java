@@ -31,18 +31,23 @@ public class TransactionalResourceStore implements ResourceStore, Transactional 
         store = pStore;
     }
 
+    @Override
     public void onStart() {
     }
 
+    @Override
     public void onStop() {
     }
 
+    @Override
     public byte[] read( final String pResourceName ) {
         return store.read(pResourceName);
     }
+    @Override
     public void remove( final String pResourceName ) {
         store.remove(pResourceName);
     }
+    @Override
     public void write( final String pResourceName, final byte[] pResourceData ) {
         store.write(pResourceName, pResourceData);
     }
