@@ -57,6 +57,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
         defaultSettings = new GroovyJavaCompilerSettings(new CompilerConfiguration());
     }
 
+    @Override
     public CompilationResult compile(
             final String[] pResourceNames,
             final ResourceReader pReader,
@@ -82,7 +83,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
             unit.addSource(source[i]);
         }
 
-        final Collection<CompilationProblem> problems = new ArrayList<CompilationProblem>();
+        final Collection<CompilationProblem> problems = new ArrayList<>();
 
         try {
             log.debug("compiling");
@@ -128,6 +129,7 @@ public final class GroovyJavaCompiler extends AbstractJavaCompiler {
         return new CompilationResult(result);
     }
 
+    @Override
     public JavaCompilerSettings createDefaultSettings() {
         return defaultSettings;
     }
