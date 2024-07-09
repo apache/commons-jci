@@ -71,30 +71,37 @@ public final class GroovyCompilationProblem implements CompilationProblem {
         }
     }
 
+    @Override
     public boolean isError() {
         return error;
     }
 
+    @Override
     public String getFileName() {
         return fileName;
     }
 
+    @Override
     public int getStartLine() {
         return startLine;
     }
 
+    @Override
     public int getStartColumn() {
         return startColumn;
     }
 
+    @Override
     public int getEndLine() {
         return endLine;
     }
 
+    @Override
     public int getEndColumn() {
         return endColumn;
     }
 
+    @Override
     public String getMessage() {
         return message;
     }
