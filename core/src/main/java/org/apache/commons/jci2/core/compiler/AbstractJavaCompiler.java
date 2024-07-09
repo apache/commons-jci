@@ -31,10 +31,12 @@ public abstract class AbstractJavaCompiler implements JavaCompiler {
 
     protected CompilationProblemHandler problemHandler;
 
+    @Override
     public void setCompilationProblemHandler( final CompilationProblemHandler pHandler ) {
         problemHandler = pHandler;
     }
 
+    @Override
     public CompilationResult compile( final String[] pClazzNames, final ResourceReader pReader, final ResourceStore pStore ) {
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -46,6 +48,7 @@ public abstract class AbstractJavaCompiler implements JavaCompiler {
         return compile(pClazzNames, pReader, pStore, classLoader, createDefaultSettings());
     }
 
+    @Override
     public CompilationResult compile( final String[] pClazzNames, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader pClassLoader ) {
         return compile(pClazzNames, pReader, pStore, pClassLoader, createDefaultSettings());
     }
