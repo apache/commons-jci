@@ -29,36 +29,43 @@ public class Jsr199CompilationProblem implements CompilationProblem {
         problem = pProblem;
     }
 
+    @Override
     public int getEndColumn() {
         // TODO Auto-generated method stub
         return 0;
     }
 
+    @Override
     public int getEndLine() {
         // TODO Auto-generated method stub
         return 0;
     }
 
+    @Override
     public String getFileName() {
         // TODO Auto-generated method stub
         return null;
     }
 
+    @Override
     public String getMessage() {
         // TODO Auto-generated method stub
         return null;
     }
 
+    @Override
     public int getStartColumn() {
         // TODO Auto-generated method stub
         return 0;
     }
 
+    @Override
     public int getStartLine() {
         // TODO Auto-generated method stub
         return 0;
     }
 
+    @Override
     public boolean isError() {
         // TODO Auto-generated method stub
         return false;
