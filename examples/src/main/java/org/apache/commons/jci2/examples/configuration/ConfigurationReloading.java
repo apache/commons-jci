@@ -44,7 +44,7 @@ public final class ConfigurationReloading {
 
         System.out.println("Watching " + configFile.getAbsolutePath());
 
-        final Collection<Configurable> configurables = new ArrayList<Configurable>();
+        final Collection<Configurable> configurables = new ArrayList<>();
 
         final FilesystemAlterationListener listener = new FileChangeListener() {
             @Override
