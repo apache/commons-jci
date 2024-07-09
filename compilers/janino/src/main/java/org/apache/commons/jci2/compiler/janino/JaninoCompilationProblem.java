@@ -52,14 +52,17 @@ public final class JaninoCompilationProblem implements CompilationProblem {
         this.error = error;
     }
 
+    @Override
     public boolean isError() {
         return error;
     }
 
+    @Override
     public String getFileName() {
         return fileName;
     }
 
+    @Override
     public int getStartLine() {
         if (location == null) {
             return 0;
@@ -67,6 +70,7 @@ public final class JaninoCompilationProblem implements CompilationProblem {
         return location.getLineNumber();
     }
 
+    @Override
     public int getStartColumn() {
         if (location == null) {
             return 0;
@@ -74,14 +78,17 @@ public final class JaninoCompilationProblem implements CompilationProblem {
         return location.getColumnNumber();
     }
 
+    @Override
     public int getEndLine() {
         return getStartLine();
     }
 
+    @Override
     public int getEndColumn() {
         return getStartColumn();
     }
 
+    @Override
     public String getMessage() {
         return message;
     }
