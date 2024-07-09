@@ -33,14 +33,10 @@ import org.apache.commons.jci2.core.readers.ResourceReader;
 import org.apache.commons.jci2.core.stores.ResourceStore;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.codehaus.commons.compiler.CompileException;
 import org.codehaus.commons.compiler.LocatedException;
-import org.codehaus.commons.compiler.Location;
 import org.codehaus.janino.ClassLoaderIClassLoader;
 import org.codehaus.janino.Compiler;
 import org.codehaus.janino.FilterWarningHandler;
-import org.codehaus.janino.UnitCompiler.ErrorHandler;
-import org.codehaus.janino.WarningHandler;
 import org.codehaus.janino.util.StringPattern;
 import org.codehaus.janino.util.resource.Resource;
 import org.codehaus.janino.util.resource.ResourceCreator;
@@ -73,15 +69,18 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
     		bytes = pBytes;
     	}
 
-		public String getFileName() {
+		@Override
+        public String getFileName() {
 			return name;
 		}
 
-		public long lastModified() {
+		@Override
+        public long lastModified() {
 			return 0;
 		}
 
-		public InputStream open() throws IOException {
+		@Override
+        public InputStream open() throws IOException {
 			return new ByteArrayInputStream(bytes);
 		}
     }
@@ -106,9 +105,10 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 		}
     }
 
+    @Override
     public CompilationResult compile( final String[] pSourceNames, final ResourceReader pResourceReader, final ResourceStore pStore, final ClassLoader pClassLoader, final JavaCompilerSettings pSettings ) {
 
-    	final Collection<CompilationProblem> problems = new ArrayList<CompilationProblem>();
+    	final Collection<CompilationProblem> problems = new ArrayList<>();
 
     	final StringPattern[] pattern = StringPattern.PATTERNS_NONE;
 
@@ -145,11 +145,13 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
 					}
     			},
     			new ResourceCreator() {
-					public OutputStream createResource( final String pResourceName ) throws IOException {
+					@Override
+                    public OutputStream createResource( final String pResourceName ) throws IOException {
 						return new JciOutputStream(pResourceName, pStore);
 					}
 
-					public boolean deleteResource( final String pResourceName ) {
+					@Override
+                    public boolean deleteResource( final String pResourceName ) {
 						log.debug("removing " + pResourceName);
 
 						pStore.remove(pResourceName);
@@ -161,26 +163,22 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
     			pSettings.isDebug(),
                 pSettings.isDebug(),
                 pSettings.isDebug(),
-    			new FilterWarningHandler(pattern, new WarningHandler() {
-						public void handleWarning( final String pHandle, final String pMessage, final Location pLocation ) {
-							final CompilationProblem problem = new JaninoCompilationProblem(pLocation.getFileName(), pLocation, pMessage, false);
-							if (problemHandler != null) {
-								problemHandler.handle(problem);
-							}
-							problems.add(problem);
-						}
-			    	})
+    			new FilterWarningHandler(pattern, (pHandle, pMessage, pLocation) -> {
+                	final CompilationProblem problem = new JaninoCompilationProblem(pLocation.getFileName(), pLocation, pMessage, false);
+                	if (problemHandler != null) {
+                		problemHandler.handle(problem);
+                	}
+                	problems.add(problem);
+                })
     			);
 
-    	compiler.setCompileErrorHandler(new ErrorHandler() {
-			public void handleError( final String pMessage, final Location pLocation ) throws CompileException {
-				final CompilationProblem problem = new JaninoCompilationProblem(pLocation.getFileName(), pLocation, pMessage, true);
-				if (problemHandler != null) {
-					problemHandler.handle(problem);
-				}
-				problems.add(problem);
-			}
-    	});
+    	compiler.setCompileErrorHandler((pMessage, pLocation) -> {
+        	final CompilationProblem problem = new JaninoCompilationProblem(pLocation.getFileName(), pLocation, pMessage, true);
+        	if (problemHandler != null) {
+        		problemHandler.handle(problem);
+        	}
+        	problems.add(problem);
+        });
 
     	final Resource[] resources = new Resource[pSourceNames.length];
         for (int i = 0; i < pSourceNames.length; i++) {
@@ -202,6 +200,7 @@ public final class JaninoJavaCompiler extends AbstractJavaCompiler {
         return new CompilationResult(result);
     }
 
+    @Override
     public JavaCompilerSettings createDefaultSettings() {
         return new JaninoJavaCompilerSettings(defaultSettings);
     }
