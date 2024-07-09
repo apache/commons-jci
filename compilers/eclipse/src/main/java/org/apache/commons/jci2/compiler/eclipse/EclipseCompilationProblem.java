@@ -33,30 +33,37 @@ public final class EclipseCompilationProblem implements CompilationProblem {
         problem = pProblem;
     }
 
+    @Override
     public boolean isError() {
         return problem.isError();
     }
 
+    @Override
     public String getFileName() {
         return new String(problem.getOriginatingFileName());
     }
 
+    @Override
     public int getStartLine() {
         return problem.getSourceLineNumber();
     }
 
+    @Override
     public int getStartColumn() {
         return problem.getSourceStart();
     }
 
+    @Override
     public int getEndLine() {
         return getStartLine();
     }
 
+    @Override
     public int getEndColumn() {
         return problem.getSourceEnd();
     }
 
+    @Override
     public String getMessage() {
         return problem.getMessage();
     }
