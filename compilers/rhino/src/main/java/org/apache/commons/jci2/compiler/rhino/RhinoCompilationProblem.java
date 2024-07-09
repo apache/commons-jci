@@ -39,30 +39,37 @@ public final class RhinoCompilationProblem implements CompilationProblem {
         error = pError;
     }
 
+    @Override
     public int getEndColumn() {
         return column;
     }
 
+    @Override
     public int getEndLine() {
         return line;
     }
 
+    @Override
     public String getFileName() {
         return fileName;
     }
 
+    @Override
     public String getMessage() {
         return message;
     }
 
+    @Override
     public int getStartColumn() {
         return column;
     }
 
+    @Override
     public int getStartLine() {
         return line;
     }
 
+    @Override
     public boolean isError() {
         return error;
     }
