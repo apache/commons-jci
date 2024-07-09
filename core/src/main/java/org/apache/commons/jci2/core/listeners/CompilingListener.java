@@ -103,7 +103,7 @@ public class CompilingListener extends ReloadingListener {
         final Collection<File> created = getCreatedFiles();
         final Collection<File> changed = getChangedFiles();
 
-        final Collection<String> resourceNames = new ArrayList<String>();
+        final Collection<String> resourceNames = new ArrayList<>();
 
         for (final File createdFile : created) {
             if (createdFile.getName().endsWith(getSourceFileExtension())) {
