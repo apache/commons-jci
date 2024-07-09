@@ -41,6 +41,7 @@ public final class FileResourceStore implements ResourceStore {
         root = pFile;
     }
 
+    @Override
     public byte[] read( final String pResourceName ) {
         InputStream is = null;
         try {
@@ -54,6 +55,7 @@ public final class FileResourceStore implements ResourceStore {
         }
     }
 
+    @Override
     public void write( final String pResourceName, final byte[] pData ) {
         OutputStream os = null;
         try {
@@ -71,6 +73,7 @@ public final class FileResourceStore implements ResourceStore {
         }
     }
 
+    @Override
     public void remove( final String pResourceName ) {
         getFile(pResourceName).delete();
     }
@@ -85,7 +88,7 @@ public final class FileResourceStore implements ResourceStore {
      */
     @Deprecated
     public String[] list() {
-        final List<String> files = new ArrayList<String>();
+        final List<String> files = new ArrayList<>();
         list(root, files);
         return files.toArray(new String[0]);
     }
