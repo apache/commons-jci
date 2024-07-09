@@ -39,7 +39,7 @@ public class ReloadingClassLoader extends ClassLoader implements ReloadNotificat
     private final Log log = LogFactory.getLog(ReloadingClassLoader.class);
 
     private final ClassLoader parent;
-    private ResourceStore[] stores = new ResourceStore[0];
+    private ResourceStore[] stores = {};
     private ClassLoader delegate;
 
     public ReloadingClassLoader( final ClassLoader pParent ) {
@@ -71,7 +71,7 @@ public class ReloadingClassLoader extends ClassLoader implements ReloadNotificat
 
         // FIXME: this should be improved with a Map
         // find the pStore and index position with var i
-        while ( ( i < n )  && ( stores[i] != pStore ) ) {
+        while ( i < n  && stores[i] != pStore ) {
             i++;
         }
 
@@ -86,7 +86,7 @@ public class ReloadingClassLoader extends ClassLoader implements ReloadNotificat
             System.arraycopy(stores, 0, newStores, 0, i);
         }
         if (i < n - 1) {
-            System.arraycopy(stores, i + 1, newStores, i, (n - i - 1));
+            System.arraycopy(stores, i + 1, newStores, i, n - i - 1);
         }
 
         stores = newStores;
@@ -94,6 +94,7 @@ public class ReloadingClassLoader extends ClassLoader implements ReloadNotificat
         return true;
     }
 
+    @Override
     public void handleNotification() {
         log.debug("reloading");
         delegate = new ResourceStoreClassLoader(parent, stores);
