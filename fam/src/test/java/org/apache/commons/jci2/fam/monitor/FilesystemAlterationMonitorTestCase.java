@@ -343,7 +343,7 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
         final long diff = t2-t1;
 
         // interval should be at around the same interval
-        assertTrue("the interval was set to " + interval + " but the time difference was " + diff, (diff > (interval-50)) && (diff < (interval+50)));
+        assertTrue("the interval was set to " + interval + " but the time difference was " + diff, diff > interval-50 && diff < interval+50);
 
         stop();
     }
