@@ -44,7 +44,7 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
 
     private final Log log = LogFactory.getLog(ReloadingListener.class);
 
-    private final Set<ReloadNotificationListener> notificationListeners = new HashSet<ReloadNotificationListener>();
+    private final Set<ReloadNotificationListener> notificationListeners = new HashSet<>();
     private final ResourceStore store;
 
     public ReloadingListener() {
