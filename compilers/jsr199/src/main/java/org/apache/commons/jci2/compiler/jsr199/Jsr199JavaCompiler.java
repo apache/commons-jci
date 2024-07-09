@@ -134,56 +134,69 @@ public final class Jsr199JavaCompiler extends AbstractJavaCompiler {
           units = pUnits;
         }
 
+        @Override
         public void close() {
             log.debug("close");
         }
+        @Override
         public void flush() {
             log.debug("flush");
         }
+        @Override
         public ClassLoader getClassLoader(final JavaFileManager.Location location) {
             log.debug("getClassLoader");
             return null;
         }
+        @Override
         public FileObject getFileForInput(final JavaFileManager.Location location, final String packageName, final String relativeName) {
             log.debug("getFileForInput");
             return null;
         }
+        @Override
         public FileObject getFileForOutput(final JavaFileManager.Location location, final String packageName, final String relativeName, final FileObject sibling) {
             log.debug("getFileForOutput");
             return null;
         }
+        @Override
         public JavaFileObject getJavaFileForInput(final JavaFileManager.Location location, final String className, final JavaFileObject.Kind kind) {
             log.debug("getJavaFileForInput");
             return null;
         }
+        @Override
         public JavaFileObject getJavaFileForOutput(final JavaFileManager.Location location, final String className, final JavaFileObject.Kind kind, final FileObject sibling) {
             log.debug("getJavaFileForOutput");
             return null;
         }
+        @Override
         public int isSupportedOption(final String option) {
             log.debug("isSupportedOption " + option);
             return 0;
         }
+        @Override
         public boolean handleOption(final String current, final Iterator<String> remaining) {
             log.debug("handleOption " + current);
             return false;
         }
+        @Override
         public boolean hasLocation(final JavaFileManager.Location location) {
             log.debug("hasLocation " + location);
             return false;
         }
+        @Override
         public String inferBinaryName(final JavaFileManager.Location location, final JavaFileObject file) {
             final String s = file.getName().replaceFirst(".java", ".class");
             log.debug("inferBinaryName " + file.getName() + " -> " + s);
             return s;
         }
+        @Override
         public Iterable<JavaFileObject> list(final JavaFileManager.Location location, final String packageName, final Set<JavaFileObject.Kind> kinds, final boolean recurse) {
             if (packageName.startsWith("java.")) {
-                return new ArrayList<JavaFileObject>();
+                return new ArrayList<>();
             }
             log.debug("list " + location + packageName + kinds + recurse);
             return units;
         }
+        @Override
         public boolean isSameFile(final FileObject fileobject, final FileObject fileobject1) {
           return false;
         }
@@ -199,9 +212,10 @@ public final class Jsr199JavaCompiler extends AbstractJavaCompiler {
         settings = pSettings;
     }
 
+    @Override
     public CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader classLoader, final JavaCompilerSettings settings) {
 
-        final Collection<JavaFileObject> units = new ArrayList<JavaFileObject>();
+        final Collection<JavaFileObject> units = new ArrayList<>();
         for (final String sourcePath : pResourcePaths) {
             log.debug("compiling " + sourcePath);
             units.add(new CompilationUnit(sourcePath, pReader));
@@ -219,7 +233,7 @@ public final class Jsr199JavaCompiler extends AbstractJavaCompiler {
         }
 
         final JavaFileManager fileManager = new JciJavaFileManager(units, pStore);
-        final DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
+        final DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
 
         final CompilationTask task = compiler.getTask(null, fileManager, diagnostics, null, null, units);
 
@@ -237,6 +251,7 @@ public final class Jsr199JavaCompiler extends AbstractJavaCompiler {
         return new CompilationResult(problems);
     }
 
+    @Override
     public JavaCompilerSettings createDefaultSettings() {
         return this.settings;
     }
