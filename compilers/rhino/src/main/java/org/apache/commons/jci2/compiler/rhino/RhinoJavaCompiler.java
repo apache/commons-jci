@@ -70,10 +70,11 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
         private final ResourceReader reader;
         private final ResourceStore store;
 
-        private final Collection<CompilationProblem> problems = new ArrayList<CompilationProblem>();
+        private final Collection<CompilationProblem> problems = new ArrayList<>();
 
         private final class ProblemCollector implements ErrorReporter {
 
+            @Override
             public void error(final String pMessage, final String pFileName, final int pLine, final String pScript, final int pColumn) {
 
                 final CompilationProblem problem = new RhinoCompilationProblem(pMessage, pFileName, pLine, pScript, pColumn, true);
@@ -85,6 +86,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
                 problems.add(problem);
             }
 
+            @Override
             public void warning(final String pMessage, final String pFileName, final int pLine, final String pScript, final int pColumn) {
 
                 final CompilationProblem problem = new RhinoCompilationProblem(pMessage, pFileName, pLine, pScript, pColumn, false);
@@ -96,6 +98,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
                 problems.add(problem);
             }
 
+            @Override
             public EvaluatorException runtimeError(final String pMessage, final String pFileName, final int pLine, final String pScript, final int pColumn) {
                 return new EvaluatorException(pMessage, pFileName, pLine, pScript, pColumn);
             }
@@ -123,9 +126,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
 
             try {
                 return compileClass(context, pName);
-            } catch ( final EvaluatorException e ) {
-                throw new ClassNotFoundException(e.getMessage(), e);
-            } catch (final IOException e) {
+            } catch (final EvaluatorException | IOException e) {
                 throw new ClassNotFoundException(e.getMessage(), e);
             } finally {
                 Context.exit();
@@ -146,7 +147,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
                 superclass = Class.forName((String) baseClassName);
             }
 
-            final List<Class<?>> interfaceClasses = new ArrayList<Class<?>>();
+            final List<Class<?>> interfaceClasses = new ArrayList<>();
 
             final Object interfaceNames = ScriptableObject.getProperty(target, "__implements__");
 
@@ -252,6 +253,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
 
     }
 
+    @Override
     public CompilationResult compile( final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader pClassLoader, final JavaCompilerSettings pSettings ) {
 
         final RhinoCompilingClassLoader cl = new RhinoCompilingClassLoader(pReader, pStore, pClassLoader);
@@ -272,6 +274,7 @@ public final class RhinoJavaCompiler extends AbstractJavaCompiler {
         return new CompilationResult(result);
     }
 
+    @Override
     public JavaCompilerSettings createDefaultSettings() {
         return defaultSettings;
     }
