@@ -82,7 +82,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
             observer = observers.get(pRoot);
 
             if (observer == null) {
-                final Map<File, FilesystemAlterationObserver> newObservers = new HashMap<File, FilesystemAlterationObserver>(observers);
+                final Map<File, FilesystemAlterationObserver> newObservers = new HashMap<>(observers);
                 observer = new FilesystemAlterationObserverImpl(pRoot);
                 newObservers.put(pRoot, observer);
                 observers = Collections.unmodifiableMap(newObservers);
@@ -111,6 +111,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
         return observer.getListeners();
     }
 
+    @Override
     public void run() {
         log.debug("fam running");
 
