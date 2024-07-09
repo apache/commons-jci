@@ -56,10 +56,12 @@ public final class RhinoJavaCompilerTestCase extends AbstractCompilerTestCase {
                     ).getBytes());
                 }};
 
+            @Override
             public byte[] getBytes( final String pResourceName ) {
                 return sources.get(pResourceName);
             }
 
+            @Override
             public boolean isAvailable( final String pResourceName ) {
                 return sources.containsKey(pResourceName);
             }
@@ -102,10 +104,12 @@ public final class RhinoJavaCompilerTestCase extends AbstractCompilerTestCase {
                     ).getBytes());
                 }};
 
+            @Override
             public byte[] getBytes( final String pResourceName ) {
                 return sources.get(pResourceName);
             }
 
+            @Override
             public boolean isAvailable( final String pResourceName ) {
                 return sources.containsKey(pResourceName);
             }
