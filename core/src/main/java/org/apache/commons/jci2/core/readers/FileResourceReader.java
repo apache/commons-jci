@@ -37,10 +37,12 @@ public final class FileResourceReader implements ResourceReader {
         root = pRoot;
     }
 
+    @Override
     public boolean isAvailable( final String pResourceName ) {
         return new File(root, pResourceName).exists();
     }
 
+    @Override
     public byte[] getBytes(final String pResourceName) {
         try {
             return FileUtils.readFileToString(new File(root, pResourceName), StandardCharsets.UTF_8).getBytes();
@@ -54,7 +56,7 @@ public final class FileResourceReader implements ResourceReader {
      */
     @Deprecated
     public String[] list() {
-        final List<String> files = new ArrayList<String>();
+        final List<String> files = new ArrayList<>();
         list(root, files);
         return files.toArray(new String[0]);
     }
