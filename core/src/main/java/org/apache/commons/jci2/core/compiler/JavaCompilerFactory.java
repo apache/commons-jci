@@ -38,7 +38,7 @@ public final class JavaCompilerFactory {
     @Deprecated
     private static final JavaCompilerFactory INSTANCE = new JavaCompilerFactory();
 
-    private final Map<String, Class<?>> classCache = new HashMap<String, Class<?>>();
+    private final Map<String, Class<?>> classCache = new HashMap<>();
 
     /**
      * @deprecated will be remove after the next release, please create an instance yourself
