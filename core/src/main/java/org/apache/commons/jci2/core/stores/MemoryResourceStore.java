@@ -34,18 +34,21 @@ public final class MemoryResourceStore implements ResourceStore {
 
     private final Log log = LogFactory.getLog(MemoryResourceStore.class);
 
-    private final Map<String, byte[]> store = new HashMap<String, byte[]>();
+    private final Map<String, byte[]> store = new HashMap<>();
 
+    @Override
     public byte[] read( final String pResourceName ) {
         log.debug("reading resource " + pResourceName);
         return store.get(pResourceName);
     }
 
+    @Override
     public void write( final String pResourceName, final byte[] pData ) {
         log.debug("writing resource " + pResourceName + "(" + pData.length + ")");
         store.put(pResourceName, pData);
     }
 
+    @Override
     public void remove( final String pResourceName ) {
         log.debug("removing resource " + pResourceName);
         store.remove(pResourceName);
@@ -59,11 +62,9 @@ public final class MemoryResourceStore implements ResourceStore {
         if (store == null) {
             return new String[0];
         }
-        final List<String> names = new ArrayList<String>();
+        final List<String> names = new ArrayList<>();
 
-        for (final String name : store.keySet()) {
-            names.add(name);
-        }
+        names.addAll(store.keySet());
 
         return names.toArray(new String[0]);
     }
