@@ -145,6 +145,8 @@ public final class CommandlineCompiler {
         compiler.setCompilationProblemHandler(new CompilationProblemHandler() {
             int errors = 0;
             int warnings = 0;
+
+            @Override
             public boolean handle(final CompilationProblem pProblem) {
 
                 if (pProblem.isError()) {
