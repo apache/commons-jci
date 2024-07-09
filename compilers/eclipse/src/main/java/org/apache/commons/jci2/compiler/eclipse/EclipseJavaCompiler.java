@@ -35,7 +35,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.internal.compiler.ClassFile;
-import org.eclipse.jdt.internal.compiler.CompilationResult;
 import org.eclipse.jdt.internal.compiler.Compiler;
 import org.eclipse.jdt.internal.compiler.DefaultErrorHandlingPolicies;
 import org.eclipse.jdt.internal.compiler.ICompilerRequestor;
@@ -102,10 +101,12 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             }
         }
 
+        @Override
         public char[] getFileName() {
             return fileName.toCharArray();
         }
 
+        @Override
         public char[] getContents() {
             final byte[] content = reader.getBytes(fileName);
 
@@ -117,19 +118,23 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             return new String(content).toCharArray();
         }
 
+        @Override
         public char[] getMainTypeName() {
             return typeName;
         }
 
+        @Override
         public char[][] getPackageName() {
             return packageName;
         }
 
+        @Override
         public boolean ignoreOptionalProblems() {
             return false;
         }
     }
 
+    @Override
     public org.apache.commons.jci2.core.compiler.CompilationResult compile(
             final String[] pSourceFiles,
             final ResourceReader pReader,
@@ -140,7 +145,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
 
         final Map<String, String> settingsMap = new EclipseJavaCompilerSettings(pSettings).toNativeSettings();
 
-        final Collection<CompilationProblem> problems = new ArrayList<CompilationProblem>();
+        final Collection<CompilationProblem> problems = new ArrayList<>();
 
         final ICompilationUnit[] compilationUnits = new ICompilationUnit[pSourceFiles.length];
         for (int i = 0; i < compilationUnits.length; i++) {
@@ -154,30 +159,37 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
 
                 final CompilationProblem problem = new CompilationProblem() {
 
+                    @Override
                     public int getEndColumn() {
                         return 0;
                     }
 
+                    @Override
                     public int getEndLine() {
                         return 0;
                     }
 
+                    @Override
                     public String getFileName() {
                         return sourceFile;
                     }
 
+                    @Override
                     public String getMessage() {
                         return "Source " + sourceFile + " could not be found";
                     }
 
+                    @Override
                     public int getStartColumn() {
                         return 0;
                     }
 
+                    @Override
                     public int getStartLine() {
                         return 0;
                     }
 
+                    @Override
                     public boolean isError() {
                         return true;
                     }
@@ -206,6 +218,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         final IProblemFactory problemFactory = new DefaultProblemFactory(Locale.getDefault());
         final INameEnvironment nameEnvironment = new INameEnvironment() {
 
+            @Override
             public NameEnvironmentAnswer findType( final char[][] pCompoundTypeName ) {
                 final StringBuilder result = new StringBuilder();
                 for (int i = 0; i < pCompoundTypeName.length; i++) {
@@ -220,6 +233,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                 return findType(result.toString());
             }
 
+            @Override
             public NameEnvironmentAnswer findType( final char[] pTypeName, final char[][] pPackageName ) {
                 final StringBuilder result = new StringBuilder();
                 for (final char[] element : pPackageName) {
@@ -331,6 +345,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                 return true;
             }
 
+            @Override
             public boolean isPackage( final char[][] parentPackageName, final char[] pPackageName ) {
                 final StringBuilder result = new StringBuilder();
                 if (parentPackageName != null) {
@@ -351,35 +366,34 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                 return isPackage(result.toString());
             }
 
+            @Override
             public void cleanup() {
                 log.debug("cleanup");
             }
         };
 
-        final ICompilerRequestor compilerRequestor = new ICompilerRequestor() {
-            public void acceptResult( final CompilationResult pResult ) {
-                if (pResult.hasProblems()) {
-                    for (final IProblem iproblem : pResult.getProblems()) {
-                        final CompilationProblem problem = new EclipseCompilationProblem(iproblem);
-                        if (problemHandler != null) {
-                            problemHandler.handle(problem);
-                        }
-                        problems.add(problem);
+        final ICompilerRequestor compilerRequestor = pResult -> {
+            if (pResult.hasProblems()) {
+                for (final IProblem iproblem : pResult.getProblems()) {
+                    final CompilationProblem problem = new EclipseCompilationProblem(iproblem);
+                    if (problemHandler != null) {
+                        problemHandler.handle(problem);
                     }
+                    problems.add(problem);
                 }
-                if (!pResult.hasErrors()) {
-                    final ClassFile[] clazzFiles = pResult.getClassFiles();
-                    for (final ClassFile clazzFile : clazzFiles) {
-                        final char[][] compoundName = clazzFile.getCompoundName();
-                        final StringBuilder clazzName = new StringBuilder();
-                        for (int j = 0; j < compoundName.length; j++) {
-                            if (j != 0) {
-                                clazzName.append('.');
-                            }
-                            clazzName.append(compoundName[j]);
+            }
+            if (!pResult.hasErrors()) {
+                final ClassFile[] clazzFiles = pResult.getClassFiles();
+                for (final ClassFile clazzFile : clazzFiles) {
+                    final char[][] compoundName = clazzFile.getCompoundName();
+                    final StringBuilder clazzName = new StringBuilder();
+                    for (int j = 0; j < compoundName.length; j++) {
+                        if (j != 0) {
+                            clazzName.append('.');
                         }
-                        pStore.write(clazzName.toString().replace('.', '/') + ".class", clazzFile.getBytes());
+                        clazzName.append(compoundName[j]);
                     }
+                    pStore.write(clazzName.toString().replace('.', '/') + ".class", clazzFile.getBytes());
                 }
             }
         };
@@ -393,6 +407,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         return new org.apache.commons.jci2.core.compiler.CompilationResult(result);
     }
 
+    @Override
     public JavaCompilerSettings createDefaultSettings() {
         return new EclipseJavaCompilerSettings(defaultSettings);
     }
