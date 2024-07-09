@@ -35,12 +35,12 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
 
     private final Log log = LogFactory.getLog(AbstractFilesystemAlterationListener.class);
 
-    private final Collection<File> createdFiles = new ArrayList<File>();
-    private final Collection<File> changedFiles = new ArrayList<File>();
-    private final Collection<File> deletedFiles = new ArrayList<File>();
-    private final Collection<File> createdDirectories = new ArrayList<File>();
-    private final Collection<File> changedDirectories = new ArrayList<File>();
-    private final Collection<File> deletedDirectories = new ArrayList<File>();
+    private final Collection<File> createdFiles = new ArrayList<>();
+    private final Collection<File> changedFiles = new ArrayList<>();
+    private final Collection<File> deletedFiles = new ArrayList<>();
+    private final Collection<File> createdDirectories = new ArrayList<>();
+    private final Collection<File> changedDirectories = new ArrayList<>();
+    private final Collection<File> deletedDirectories = new ArrayList<>();
 
     private final static class Signal {
         public boolean triggered;
@@ -51,22 +51,28 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
 
     protected FilesystemAlterationObserver observer;
 
+    @Override
     public void onDirectoryCreate( final File pDir ) {
         createdDirectories.add(pDir);
     }
+    @Override
     public void onDirectoryChange( final File pDir ) {
         changedDirectories.add(pDir);
     }
+    @Override
     public void onDirectoryDelete( final File pDir ) {
         deletedDirectories.add(pDir);
     }
 
+    @Override
     public void onFileCreate( final File pFile) {
         createdFiles.add(pFile);
     }
+    @Override
     public void onFileChange( final File pFile ) {
         changedFiles.add(pFile);
     }
+    @Override
     public void onFileDelete( final File pFile ) {
         deletedFiles.add(pFile);
     }
@@ -116,6 +122,7 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
         }
     }
 
+    @Override
     public void onStart( final FilesystemAlterationObserver pObserver ) {
         observer = pObserver;
 
@@ -127,6 +134,7 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
         deletedDirectories.clear();
     }
 
+    @Override
     public void onStop( final FilesystemAlterationObserver pObserver ) {
         signals();
         observer = null;
