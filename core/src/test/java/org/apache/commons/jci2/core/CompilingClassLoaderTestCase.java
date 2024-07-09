@@ -51,12 +51,13 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
 
         private final Log log = LogFactory.getLog(MockJavaCompiler.class);
 
+        @Override
         public CompilationResult compile(final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader pClassLoader, final JavaCompilerSettings pSettings ) {
 
             for (final String resourcePath : pResourcePaths) {
                 final byte[] resourceContent = pReader.getBytes(resourcePath);
 
-                log.debug("resource " + resourcePath + " = " + ((resourceContent!=null)?new String(resourceContent):null) );
+                log.debug("resource " + resourcePath + " = " + (resourceContent!=null?new String(resourceContent):null) );
 
                 final byte[] data;
 
@@ -89,17 +90,21 @@ public final class CompilingClassLoaderTestCase extends AbstractTestCase {
             return new CompilationResult(new CompilationProblem[0]);
         }
 
+        @Override
         public CompilationResult compile(final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore, final ClassLoader pClassLoader) {
             return compile(pResourcePaths, pReader, pStore, pClassLoader, null);
         }
 
+        @Override
         public CompilationResult compile(final String[] pResourcePaths, final ResourceReader pReader, final ResourceStore pStore) {
             return compile(pResourcePaths, pReader, pStore, null);
         }
 
+        @Override
         public void setCompilationProblemHandler(final CompilationProblemHandler pHandler) {
         }
 
+        @Override
         public JavaCompilerSettings createDefaultSettings() {
             return null;
         }
