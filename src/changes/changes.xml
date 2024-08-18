@@ -112,7 +112,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump taglist-maven-plugin from 2.2 to 3.0.0 #28.
       </action>
       <action type="update" dev="ggregory" due-to="Dependabot, Gary Gregory">
-        Bump commons-parent from 56 to 72 #36, #37, #72, #97.
+        Bump commons-parent from 56 to 73 #36, #37, #72, #97, 73 #125.
       </action>
       <action type="update" dev="ggregory" due-to="Dependabot, Gary Gregory">
         Bump org.codehaus.mojo:taglist-maven-plugin from 3.0.0 to 3.1.0 #112.
