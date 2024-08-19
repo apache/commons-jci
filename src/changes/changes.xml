@@ -88,7 +88,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump org.apache.commons:commons-lang3 from 3.1 to 3.16.0 #9, #114, #119.
       </action>
       <action type="update" dev="ggregory" due-to="Dependabot, Gary Gregory">
-        Bump commons-logging from 1.1.3 to 1.3.3 #7, #99, #111.
+        Bump commons-logging from 1.1.3 to 1.3.4 #7, #99, #111, #126.
       </action>
       <action type="update" dev="ggregory" due-to="Dependabot">
         Bump maven-pmd-plugin from 2.3 to 3.19.0 #5.
