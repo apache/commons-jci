@@ -62,9 +62,7 @@ public final class MemoryResourceStore implements ResourceStore {
         if (store == null) {
             return new String[0];
         }
-        final List<String> names = new ArrayList<>();
-
-        names.addAll(store.keySet());
+        final List<String> names = new ArrayList<>(store.keySet());
 
         return names.toArray(new String[0]);
     }
