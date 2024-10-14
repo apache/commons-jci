@@ -44,7 +44,7 @@ Apache Commons JCI
 ===================
 
 [![Java CI](https://github.com/apache/commons-jci/actions/workflows/maven.yml/badge.svg)](https://github.com/apache/commons-jci/actions/workflows/maven.yml)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.apache.commons/commons-jci/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.apache.commons/commons-jci/)
+[![Maven Central](https://img.shields.io/maven-central/v/org.apache.commons/commons-jci?label=Maven%20Central)](https://search.maven.org/artifact/org.apache.commons/commons-jci)
 [![Javadocs](https://javadoc.io/badge/org.apache.commons/commons-jci2/2.0.svg)](https://javadoc.io/doc/org.apache.commons/commons-jci2/2.0)
 
 Apache Commons JCI is a java compiler interface.
