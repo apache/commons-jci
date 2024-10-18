@@ -61,7 +61,7 @@ The <action> type attribute can be add,update,fix,remove.
     Defining changes.version allows one to create the RN without first removing the SNAPSHOT suffix.
      -->
   <body>
-    <release version="2.0" date="202Y-MM-DD" description="Major release (Java 8 or above).">
+    <release version="2.0" date="YYYY-MM-DD" description="Major release (Java 8 or above).">
       <!-- ADD -->
       <action type="add" dev="ggregory" due-to="Gary Gregory">Add Maven property project.build.outputTimestamp for build reproducibility.</action>
       <!-- FIX -->
@@ -100,7 +100,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump wagon-ssh-external from 1.0-beta-2 to 3.5.3 #14.
       </action>
       <action type="update" dev="ggregory" due-to="Dependabot, Gary Gregory">
-        Bump org.ow2.asm:asm from 5.0.2 to 9.7 #15, #34, #61, #102.
+        Bump org.ow2.asm:asm from 5.0.2 to 9.7.1 #15, #34, #61, #102, #142.
       </action>
       <action type="update" dev="ggregory" due-to="Dependabot">
         Bump ecj from 4.2.2 to 4.6.1 #16.
