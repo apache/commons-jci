@@ -40,6 +40,7 @@
       <includes>
         <include>*.jar</include>
       </includes>
+      <fileMode>644</fileMode>
     </fileSet>
     <fileSet>
       <directory>examples/target</directory>
@@ -47,6 +48,7 @@
       <includes>
         <include>*.jar</include>
       </includes>
+      <fileMode>644</fileMode>
     </fileSet>
     <fileSet>
       <directory>fam/target</directory>
@@ -54,6 +56,7 @@
       <includes>
         <include>*.jar</include>
       </includes>
+      <fileMode>644</fileMode>
     </fileSet>
     <fileSet>
       <directory>compilers/eclipse/target</directory>
@@ -61,6 +64,7 @@
       <includes>
         <include>*.jar</include>
       </includes>
+      <fileMode>644</fileMode>
     </fileSet>
     <fileSet>
       <directory>compilers/groovy/target</directory>
@@ -68,6 +72,7 @@
       <includes>
         <include>*.jar</include>
       </includes>
+      <fileMode>644</fileMode>
     </fileSet>
     <fileSet>
       <directory>compilers/janino/target</directory>
@@ -75,6 +80,7 @@
       <includes>
         <include>*.jar</include>
       </includes>
+      <fileMode>644</fileMode>
     </fileSet>
     <fileSet>
       <directory>compilers/rhino/target</directory>
@@ -82,6 +88,7 @@
       <includes>
         <include>*.jar</include>
       </includes>
+      <fileMode>644</fileMode>
     </fileSet>
   </fileSets>
 </assembly>
