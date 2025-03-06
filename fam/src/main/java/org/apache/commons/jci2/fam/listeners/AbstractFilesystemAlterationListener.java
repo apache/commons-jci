@@ -102,9 +102,9 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
     }
 
     protected void signals() {
-        if (createdFiles.size() > 0 || createdDirectories.size() > 0 ||
-            changedFiles.size() > 0 || changedDirectories.size() > 0 ||
-            deletedFiles.size() > 0 || deletedDirectories.size() > 0) {
+        if (!createdFiles.isEmpty() || !createdDirectories.isEmpty() ||
+            !changedFiles.isEmpty() || !changedDirectories.isEmpty() ||
+            !deletedFiles.isEmpty() || !deletedDirectories.isEmpty()) {
 
             log.debug("event signal");
 

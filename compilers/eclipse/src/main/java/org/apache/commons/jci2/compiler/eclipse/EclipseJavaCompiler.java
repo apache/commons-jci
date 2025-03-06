@@ -208,7 +208,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             }
         }
 
-        if (problems.size() > 0) {
+        if (!problems.isEmpty()) {
             final CompilationProblem[] result = new CompilationProblem[problems.size()];
             problems.toArray(result);
             return new org.apache.commons.jci2.core.compiler.CompilationResult(result);

@@ -132,7 +132,7 @@ public class CompilingListener extends ReloadingListener {
 
         log.debug("created:" + created.size() + " changed:" + changed.size() + " deleted:" + deleted.size() + " resources");
 
-        if (deleted.size() > 0) {
+        if (!deleted.isEmpty()) {
             for (final File deletedFile : deleted) {
                 final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), deletedFile));
 
