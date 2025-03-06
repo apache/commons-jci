@@ -18,9 +18,9 @@
 package org.apache.commons.jci2.examples.configuration;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
@@ -57,7 +57,7 @@ public final class ConfigurationReloading {
                     final Properties props = new Properties();
                     InputStream is = null;
                     try {
-                    	is = new FileInputStream(configFile);
+                    	is = Files.newInputStream(configFile.toPath());
                         props.load(is);
 
                         System.out.println("Notifying about configuration change " + configFile);

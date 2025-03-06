@@ -18,11 +18,10 @@
 package org.apache.commons.jci2.core.stores;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +44,7 @@ public final class FileResourceStore implements ResourceStore {
     public byte[] read( final String pResourceName ) {
         InputStream is = null;
         try {
-            is = new FileInputStream(getFile(pResourceName));
+            is = Files.newInputStream(getFile(pResourceName).toPath());
             final byte[] data = IOUtils.toByteArray(is);
             return data;
         } catch (final Exception e) {
@@ -64,7 +63,7 @@ public final class FileResourceStore implements ResourceStore {
             if (!parent.mkdirs() && !parent.isDirectory()) {
                     throw new IOException("could not create" + parent);
             }
-            os = new FileOutputStream(file);
+            os = Files.newOutputStream(file.toPath());
             os.write(pData);
         } catch (final Exception e) {
             // FIXME: now what?
