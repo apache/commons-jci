@@ -248,8 +248,8 @@ public final class FilesystemAlterationMonitorTestCase extends TestCase {
         delay();
 
         FileUtils.deleteDirectory(dir);
-        assertTrue(!dir.exists());
-        assertTrue(!file.exists());
+        assertFalse(dir.exists());
+        assertFalse(file.exists());
 
         listener.waitForCheck();
 
