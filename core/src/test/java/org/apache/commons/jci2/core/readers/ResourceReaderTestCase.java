@@ -43,7 +43,7 @@ public final class ResourceReaderTestCase extends AbstractTestCase {
     private void checkRead( final ResourceReader reader ) throws Exception {
         assertTrue(reader.isAvailable("test"));
         final byte[] content = reader.getBytes("test");
-        assertTrue(content != null);
+        assertNotNull(content);
         assertEquals("test", new String(content));
 
         assertFalse(reader.isAvailable("bla"));

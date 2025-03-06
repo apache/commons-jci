@@ -51,7 +51,7 @@ public final class ResourceStoreTestCase extends AbstractTestCase {
 
         final byte[] read = pStore.read("key");
 
-        assertTrue(read != null);
+        assertNotNull(read);
         assertTrue(ArrayUtils.isEquals(data, read));
     }
 
@@ -61,7 +61,7 @@ public final class ResourceStoreTestCase extends AbstractTestCase {
 
         final byte[] read = pStore.read("key");
 
-        assertTrue(read != null);
+        assertNotNull(read);
         assertTrue(ArrayUtils.isEquals(data, read));
 
         pStore.remove("key");
