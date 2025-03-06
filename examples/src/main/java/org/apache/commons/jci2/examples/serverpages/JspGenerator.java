@@ -68,9 +68,8 @@ public final class JspGenerator {
     public byte[] generateJavaSource( final  String pResourceName, final File pFile ) {
 
     	final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        final Writer output = new OutputStreamWriter(outputStream);
 
-        try {
+        try (Writer output = new OutputStreamWriter(outputStream)) {
             final Reader input = new InputStreamReader(new FileInputStream(pFile));
 
             final int p = pResourceName.lastIndexOf('/');
@@ -155,11 +154,6 @@ public final class JspGenerator {
 
         } catch (final IOException e) {
             return null;
-        } finally {
-            try {
-				output.close();
-			} catch (final IOException e) {
-			}
         }
     }
 
