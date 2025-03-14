@@ -55,9 +55,7 @@ public final class ConfigurationReloading {
                     System.out.println("Configuration change detected " + configFile);
 
                     final Properties props = new Properties();
-                    InputStream is = null;
-                    try {
-                    	is = new FileInputStream(configFile);
+                    try (InputStream is = new FileInputStream(configFile)) {
                         props.load(is);
 
                         System.out.println("Notifying about configuration change " + configFile);
@@ -68,11 +66,6 @@ public final class ConfigurationReloading {
 
                     } catch (final Exception e) {
                         System.err.println("Failed to load configuration " + configFile);
-                    } finally {
-                    	try {
-							is.close();
-						} catch (final IOException e) {
-						}
                     }
 
                 }
