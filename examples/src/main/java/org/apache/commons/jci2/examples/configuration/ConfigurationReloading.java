@@ -39,52 +39,40 @@ public final class ConfigurationReloading {
     private final FilesystemAlterationMonitor fam = new FilesystemAlterationMonitor();
 
     private void run(final String[] args) {
-
         final File configFile = new File("some.properties");
-
         System.out.println("Watching " + configFile.getAbsolutePath());
-
         final Collection<Configurable> configurables = new ArrayList<>();
-
         final FilesystemAlterationListener listener = new FileChangeListener() {
+
             @Override
             public void onStop(final FilesystemAlterationObserver pObserver) {
                 super.onStop(pObserver);
-
                 if (hasChanged()) {
                     System.out.println("Configuration change detected " + configFile);
-
                     final Properties props = new Properties();
                     InputStream is = null;
                     try {
-                    	is = new FileInputStream(configFile);
+                        is = new FileInputStream(configFile);
                         props.load(is);
-
                         System.out.println("Notifying about configuration change " + configFile);
-
                         for (final Configurable configurable : configurables) {
                             configurable.configure(props);
                         }
-
                     } catch (final Exception e) {
                         System.err.println("Failed to load configuration " + configFile);
                     } finally {
-                    	try {
-							is.close();
-						} catch (final IOException e) {
-						}
+                        try {
+                            is.close();
+                        } catch (final IOException e) {
+                        }
                     }
-
                 }
             }
         };
-
         fam.addListener(configFile, listener);
-		fam.start();
-
-		configurables.add(new Something());
-
-        while(true) {
+        fam.start();
+        configurables.add(new Something());
+        while (true) {
             try {
                 Thread.sleep(1000);
             } catch (final InterruptedException e) {
