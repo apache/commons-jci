@@ -29,7 +29,6 @@ import org.apache.commons.logging.LogFactory;
 /**
  * AbstractFilesystemAlterationListener provides some convenience methods helping to
  * implement a FilesystemAlterationListener.
- * @author tcurdt
  */
 public abstract class AbstractFilesystemAlterationListener implements FilesystemAlterationListener {
 
