@@ -18,15 +18,13 @@
 package org.apache.commons.jci2.core.stores;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.file.PathUtils;
 
 /**
  * Stores the results on disk
@@ -37,50 +35,42 @@ public final class FileResourceStore implements ResourceStore {
 
     private final File root;
 
-    public FileResourceStore( final File pFile ) {
+    public FileResourceStore(final File pFile) {
         root = pFile;
     }
 
     @Override
-    public byte[] read( final String pResourceName ) {
-        InputStream is = null;
+    public byte[] read(final String pResourceName) {
         try {
-            is = new FileInputStream(getFile(pResourceName));
-            final byte[] data = IOUtils.toByteArray(is);
-            return data;
+            return Files.readAllBytes(getPath(pResourceName));
         } catch (final Exception e) {
             return null;
-        } finally {
-            IOUtils.closeQuietly(is);
         }
     }
 
     @Override
-    public void write( final String pResourceName, final byte[] pData ) {
-        OutputStream os = null;
+    public void write(final String pResourceName, final byte[] pData) {
         try {
-            final File file = getFile(pResourceName);
-            final File parent = file.getParentFile();
-            if (!parent.mkdirs() && !parent.isDirectory()) {
-                    throw new IOException("could not create" + parent);
-            }
-            os = new FileOutputStream(file);
-            os.write(pData);
+            final Path path = getPath(pResourceName);
+            PathUtils.createParentDirectories(path);
+            Files.write(path, pData);
         } catch (final Exception e) {
             // FIXME: now what?
-        } finally {
-            IOUtils.closeQuietly(os);
         }
     }
 
     @Override
-    public void remove( final String pResourceName ) {
+    public void remove(final String pResourceName) {
         getFile(pResourceName).delete();
     }
 
-    private File getFile( final String pResourceName ) {
+    private File getFile(final String pResourceName) {
+        return getPath(pResourceName).toFile();
+    }
+
+    private Path getPath(final String pResourceName) {
         final String fileName = pResourceName.replace('/', File.separatorChar);
-        return new File(root, fileName);
+        return Paths.get(root.toString(), fileName);
     }
 
     /**
@@ -104,7 +94,7 @@ public final class FileResourceStore implements ResourceStore {
                 list(directoryFile, pFiles);
             }
         } else {
-            pFiles.add(pFile.getAbsolutePath().substring(root.getAbsolutePath().length()+1));
+            pFiles.add(pFile.getAbsolutePath().substring(root.getAbsolutePath().length() + 1));
         }
     }
 
@@ -112,5 +102,4 @@ public final class FileResourceStore implements ResourceStore {
     public String toString() {
         return this.getClass().getName() + root.toString();
     }
-
 }
