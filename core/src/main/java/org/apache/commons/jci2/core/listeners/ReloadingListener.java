@@ -18,12 +18,11 @@
 package org.apache.commons.jci2.core.listeners;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.nio.file.Files;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.jci2.core.ReloadingClassLoader;
 import org.apache.commons.jci2.core.stores.MemoryResourceStore;
 import org.apache.commons.jci2.core.stores.ResourceStore;
@@ -87,32 +86,22 @@ public class ReloadingListener extends AbstractFilesystemAlterationListener {
 
         if (!created.isEmpty()) {
             for (final File file : created) {
-                FileInputStream is = null;
                 try {
-                    is = new FileInputStream(file);
-                    final byte[] bytes = IOUtils.toByteArray(is);
                     final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), file));
-                    store.write(resourceName, bytes);
+                    store.write(resourceName, Files.readAllBytes(file.toPath()));
                 } catch (final Exception e) {
                     log.error("could not load " + file, e);
-                } finally {
-                    IOUtils.closeQuietly(is);
                 }
             }
         }
 
         if (!changed.isEmpty()) {
             for (final File file : changed) {
-                FileInputStream is = null;
                 try {
-                    is = new FileInputStream(file);
-                    final byte[] bytes = IOUtils.toByteArray(is);
                     final String resourceName = ConversionUtils.getResourceNameFromFileName(ConversionUtils.relative(pObserver.getRootDirectory(), file));
-                    store.write(resourceName, bytes);
+                    store.write(resourceName, Files.readAllBytes(file.toPath()));
                 } catch (final Exception e) {
                     log.error("could not load " + file, e);
-                } finally {
-                    IOUtils.closeQuietly(is);
                 }
             }
             reload = true;

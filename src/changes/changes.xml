@@ -77,6 +77,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="step-security-bot, Gary Gregory">
         [StepSecurity] ci: Harden GitHub Actions #39.
       </action>            
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Use more of NIO's APIs.
+      </action>            
       <!-- UPDATE -->
       <action type="update" dev="ggregory" due-to="Dependabot, Gary Gregory">
         Bump commons-parent from 56 to 78 #36, #37, #72, #97, #73 #125, #128, #134, #138, #141, #149.
