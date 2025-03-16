@@ -19,8 +19,6 @@ package org.apache.commons.jci2.core.problems;
 
 /**
  * An abstract definition of a compilation problem
- *
- * @author tcurdt
  */
 public interface CompilationProblem {
 

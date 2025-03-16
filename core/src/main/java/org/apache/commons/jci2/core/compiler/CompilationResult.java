@@ -27,8 +27,6 @@ import org.apache.commons.jci2.core.problems.CompilationProblem;
  * It includes errors (which failed the compilation) or warnings
  * (that can be ignored and do not affect the creation of the
  * class files)
- *
- * @author tcurdt
  */
 public final class CompilationResult {
 

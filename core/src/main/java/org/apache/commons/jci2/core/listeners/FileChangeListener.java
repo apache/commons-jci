@@ -24,8 +24,6 @@ import org.apache.commons.jci2.fam.monitor.FilesystemAlterationObserver;
 
 /**
  * The most simple implemenation of an FilesystemAlterationListener.
- *
- * @author tcurdt
  */
 public class FileChangeListener extends AbstractFilesystemAlterationListener {
 

@@ -23,8 +23,6 @@ import java.util.Locale;
 /**
  * Mainly common path manipultation helper methods
  * NOT FOR USE OUTSIDE OF JCI
- *
- * @author tcurdt
  */
 public final class ConversionUtils {
 

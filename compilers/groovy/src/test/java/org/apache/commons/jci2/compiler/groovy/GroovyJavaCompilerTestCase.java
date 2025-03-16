@@ -21,8 +21,6 @@ import org.apache.commons.jci2.core.compiler.JavaCompiler;
 import org.apache.commons.jci2.core.compilers.AbstractCompilerTestCase;
 
 /**
- *
- * @author tcurdt
  */
 public final class GroovyJavaCompilerTestCase extends AbstractCompilerTestCase {
 

@@ -46,8 +46,6 @@ import org.apache.commons.jci2.fam.monitor.FilesystemAlterationObserver;
  * A mini JSP servlet that monitors a certain directory and
  * recompiles and then instantiates the JSP pages as soon as
  * they have changed.
- *
- * @author tcurdt
  */
 public final class ServerPageServlet extends HttpServlet {
 

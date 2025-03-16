@@ -31,8 +31,6 @@ import org.apache.commons.jci2.fam.monitor.FilesystemAlterationMonitor;
 import org.apache.commons.jci2.fam.monitor.FilesystemAlterationObserver;
 
 /**
- *
- * @author tcurdt
  */
 public final class ConfigurationReloading {
 

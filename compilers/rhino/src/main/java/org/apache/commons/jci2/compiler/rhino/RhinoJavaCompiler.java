@@ -47,8 +47,7 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.optimizer.ClassCompiler;
 
-/**
- * @author tcurdt
+/*
  */
 public final class RhinoJavaCompiler extends AbstractJavaCompiler {
 

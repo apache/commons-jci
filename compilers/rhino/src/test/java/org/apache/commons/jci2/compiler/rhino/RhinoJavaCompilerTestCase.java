@@ -27,8 +27,6 @@ import org.apache.commons.jci2.core.readers.ResourceReader;
 import org.apache.commons.jci2.core.stores.MemoryResourceStore;
 
 /**
- *
- * @author tcurdt
  */
 public final class RhinoJavaCompilerTestCase extends AbstractCompilerTestCase {
 

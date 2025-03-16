@@ -25,8 +25,6 @@ import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 
 /**
  * Native Eclipse compiler settings
- *
- * @author tcurdt
  */
 public final class EclipseJavaCompilerSettings extends JavaCompilerSettings {
 

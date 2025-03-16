@@ -20,8 +20,6 @@ package org.apache.commons.jci2.compiler.rhino;
 import org.apache.commons.jci2.core.problems.CompilationProblem;
 
 /**
- *
- * @author tcurdt
  */
 public final class RhinoCompilationProblem implements CompilationProblem {
 

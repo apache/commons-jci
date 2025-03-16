@@ -19,8 +19,6 @@ package org.apache.commons.jci2.core.readers;
 
 /**
  * A ResourceReader provide acces to resource like e.g. source code
- *
- * @author tcurdt
  */
 public interface ResourceReader {
 

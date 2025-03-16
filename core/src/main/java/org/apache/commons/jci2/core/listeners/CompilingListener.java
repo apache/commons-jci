@@ -38,8 +38,6 @@ import org.apache.commons.logging.LogFactory;
 /**
  * A CompilingListener is an improved version of the ReloadingListener.
  * It even compiles the classes from source before doing the reloading.
- *
- * @author tcurdt
  */
 public class CompilingListener extends ReloadingListener {
 

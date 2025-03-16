@@ -20,8 +20,6 @@ package org.apache.commons.jci2.core.readers;
 import org.apache.commons.jci2.core.AbstractTestCase;
 
 /**
- *
- * @author tcurdt
  */
 public final class ResourceReaderTestCase extends AbstractTestCase {
 

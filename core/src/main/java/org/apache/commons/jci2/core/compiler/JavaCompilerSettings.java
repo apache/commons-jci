@@ -25,8 +25,6 @@ import java.nio.charset.StandardCharsets;
  * If you need more specific settings you have to provide
  * the native compiler configurations to the compilers.
  * Writing of a custom factory is suggested.
- *
- * @author tcurdt
  */
 public class JavaCompilerSettings {
 

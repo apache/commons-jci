@@ -26,8 +26,6 @@ import org.codehaus.groovy.syntax.SyntaxException;
 
 /**
  * Groovy version of a CompilationProblem
- *
- * @author tcurdt
  */
 public final class GroovyCompilationProblem implements CompilationProblem {
 

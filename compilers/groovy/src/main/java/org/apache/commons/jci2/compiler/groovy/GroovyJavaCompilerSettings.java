@@ -22,8 +22,6 @@ import org.codehaus.groovy.control.CompilerConfiguration;
 
 /**
  * Native configuration for the Groovy compiler
- *
- * @author tcurdt
  */
 public final class GroovyJavaCompilerSettings extends JavaCompilerSettings {
 

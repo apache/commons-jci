@@ -32,8 +32,6 @@ import org.apache.commons.jci2.core.stores.ResourceStore;
  *
  * If possible the compiler should notify the optional
  * CompilationProblemHandler as soon as a problem is found.
- *
- * @author tcurdt
  */
 public interface JavaCompiler {
 

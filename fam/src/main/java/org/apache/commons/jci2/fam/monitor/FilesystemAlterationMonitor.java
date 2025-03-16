@@ -28,8 +28,6 @@ import org.apache.commons.logging.LogFactory;
 /**
  * It's a runnable that spawns of a monitoring thread triggering the
  * the observers and managing the their listeners.
- *
- * @author tcurdt
  */
 public final class FilesystemAlterationMonitor implements Runnable {
 

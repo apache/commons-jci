@@ -27,8 +27,6 @@ import org.apache.commons.jci2.core.utils.ConversionUtils;
  * Creates JavaCompilers
  *
  * TODO use META-INF discovery mechanism
- *
- * @author tcurdt
  */
 public final class JavaCompilerFactory {
 

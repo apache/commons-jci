@@ -21,8 +21,6 @@ import org.apache.commons.jci2.core.AbstractTestCase;
 import org.apache.commons.lang3.ArrayUtils;
 
 /**
- *
- * @author tcurdt
  */
 public final class ResourceStoreTestCase extends AbstractTestCase {
 

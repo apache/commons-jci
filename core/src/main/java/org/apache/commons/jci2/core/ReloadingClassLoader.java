@@ -31,8 +31,6 @@ import org.apache.commons.logging.LogFactory;
  * classes to be reloaded. That means that loadClass calls may
  * return different results if the class was changed in the underlying
  * ResourceStore.
- *
- * @author tcurdt
  */
 public class ReloadingClassLoader extends ClassLoader implements ReloadNotificationListener {
 

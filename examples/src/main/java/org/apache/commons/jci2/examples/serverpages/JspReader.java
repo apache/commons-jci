@@ -21,8 +21,7 @@ import java.util.Map;
 
 import org.apache.commons.jci2.core.readers.ResourceReader;
 
-/**
- * @author tcurdt
+/*
  */
 public final class JspReader implements ResourceReader {
 

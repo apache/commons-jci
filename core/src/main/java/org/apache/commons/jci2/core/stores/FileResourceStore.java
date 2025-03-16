@@ -28,8 +28,6 @@ import org.apache.commons.io.file.PathUtils;
 
 /**
  * Stores the results on disk
- *
- * @author tcurdt
  */
 public final class FileResourceStore implements ResourceStore {
 

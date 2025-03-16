@@ -29,8 +29,6 @@ import org.apache.commons.logging.LogFactory;
 import junit.framework.TestCase;
 
 /**
- *
- * @author tcurdt
  */
 public abstract class AbstractTestCase extends TestCase {
 

@@ -32,8 +32,6 @@ import junit.framework.TestCase;
 
 /**
  * Providing convenience methods for JavaCompiler TestCases
- *
- * @author tcurdt
  */
 public abstract class AbstractCompilerTestCase extends TestCase {
 

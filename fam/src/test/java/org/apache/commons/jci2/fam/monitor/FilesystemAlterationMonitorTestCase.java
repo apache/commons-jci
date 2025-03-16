@@ -30,8 +30,6 @@ import org.apache.commons.logging.LogFactory;
 import junit.framework.TestCase;
 
 /**
- *
- * @author tcurdt
  */
 public final class FilesystemAlterationMonitorTestCase extends TestCase {
 

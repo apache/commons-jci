@@ -28,8 +28,6 @@ package org.apache.commons.jci2.core.problems;
  *
  * NOTE:
  * has to be supported by the compiler implementation!!
- *
- * @author tcurdt
  */
 public interface CompilationProblemHandler {
 

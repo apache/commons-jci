@@ -28,8 +28,6 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Implements {@link FilesystemAlterationObserver}.
- *
- * @author tcurdt
  */
 public class FilesystemAlterationObserverImpl implements FilesystemAlterationObserver {
 

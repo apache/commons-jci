@@ -45,8 +45,6 @@ import groovy.lang.GroovyClassLoader;
 
 /**
  * Groovy implementation of the JavaCompiler interface
- *
- * @author tcurdt
  */
 public final class GroovyJavaCompiler extends AbstractJavaCompiler {
 

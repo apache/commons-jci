@@ -41,8 +41,6 @@ import org.apache.commons.jci2.core.stores.ResourceStore;
 
 /**
  * A simple front end to jci2 mimicking the javac command line
- *
- * @author tcurdt
  */
 public final class CommandlineCompiler {
 
