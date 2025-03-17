@@ -79,7 +79,10 @@ The <action> type attribute can be add,update,fix,remove.
       </action>            
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
         Use more of NIO's APIs.
-      </action>            
+      </action>
+      <action dev="ggregory" type="fix" due-to="Arturo Bernal, Sebb, Gary Gregory">
+        Use try-with-resources #181.
+      </action> 
       <!-- UPDATE -->
       <action type="update" dev="ggregory" due-to="Dependabot, Gary Gregory">
         Bump commons-parent from 56 to 78 #36, #37, #72, #97, #73 #125, #128, #134, #138, #141, #149.
