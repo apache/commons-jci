@@ -19,12 +19,12 @@ package org.apache.commons.jci2.examples.serverpages;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.file.Files;
 
 import org.apache.commons.jci2.core.utils.ConversionUtils;
 
@@ -70,7 +70,7 @@ public final class JspGenerator {
         final Writer output = new OutputStreamWriter(outputStream);
 
         try {
-            final Reader input = new InputStreamReader(new FileInputStream(pFile));
+            final Reader input = new InputStreamReader(Files.newInputStream(pFile.toPath()));
 
             final int p = pResourceName.lastIndexOf('/');
 
