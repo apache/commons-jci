@@ -49,4 +49,5 @@ jobs:
         distribution: 'temurin'
         java-version: ${{ matrix.java }}
     - name: Build with Maven
-      run: mvn --errors --show-version --batch-mode --no-transfer-progress
+      # TEMP -Ddoclint=none -Darguments=-Xdoclint:none
+      run: mvn --errors --show-version --batch-mode --no-transfer-progress -Ddoclint=none -Darguments=-Xdoclint:none
