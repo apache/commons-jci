@@ -37,16 +37,16 @@ public final class EclipseJavaCompilerSettings extends JavaCompilerSettings {
         defaultEclipseSettings.put(CompilerOptions.OPTION_LocalVariableAttribute, CompilerOptions.GENERATE);
     }
 
-    public EclipseJavaCompilerSettings( final JavaCompilerSettings pSettings ) {
-    	super(pSettings);
+    public EclipseJavaCompilerSettings( final JavaCompilerSettings settings ) {
+    	super(settings);
 
-    	if (pSettings instanceof EclipseJavaCompilerSettings) {
-    		defaultEclipseSettings.putAll(((EclipseJavaCompilerSettings)pSettings).toNativeSettings());
+    	if (settings instanceof EclipseJavaCompilerSettings) {
+    		defaultEclipseSettings.putAll(((EclipseJavaCompilerSettings)settings).toNativeSettings());
     	}
     }
 
-    public EclipseJavaCompilerSettings( final Map<String, String> pMap ) {
-        defaultEclipseSettings.putAll(pMap);
+    public EclipseJavaCompilerSettings( final Map<String, String> map ) {
+        defaultEclipseSettings.putAll(map);
     }
 
     private static Map<String, String> nativeVersions = new HashMap<String, String>() {
@@ -61,9 +61,9 @@ public final class EclipseJavaCompilerSettings extends JavaCompilerSettings {
     	put("1.7", CompilerOptions.VERSION_1_7);
     }};
 
-    private String toNativeVersion( final String pVersion ) {
-        return nativeVersions.computeIfAbsent(pVersion, k -> {
-            throw new IllegalArgumentException("unknown version " + pVersion);
+    private String toNativeVersion( final String version ) {
+        return nativeVersions.computeIfAbsent(version, k -> {
+            throw new IllegalArgumentException("unknown version " + version);
         });
     }
 

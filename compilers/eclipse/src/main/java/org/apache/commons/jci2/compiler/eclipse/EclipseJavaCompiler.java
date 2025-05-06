@@ -60,12 +60,12 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         this(new EclipseJavaCompilerSettings());
     }
 
-    public EclipseJavaCompiler( final Map<String, String> pSettings ) {
-        defaultSettings = new EclipseJavaCompilerSettings(pSettings);
+    public EclipseJavaCompiler( final Map<String, String> settings ) {
+        defaultSettings = new EclipseJavaCompilerSettings(settings);
     }
 
-    public EclipseJavaCompiler( final EclipseJavaCompilerSettings pSettings ) {
-        defaultSettings = pSettings;
+    public EclipseJavaCompiler( final EclipseJavaCompilerSettings settings ) {
+        defaultSettings = settings;
     }
 
     final class CompilationUnit implements ICompilationUnit {
@@ -76,10 +76,10 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         final private char[][] packageName;
         final private ResourceReader reader;
 
-        CompilationUnit( final ResourceReader pReader, final String pSourceFile ) {
-            reader = pReader;
-            clazzName = ConversionUtils.convertResourceToClassName(pSourceFile);
-            fileName = pSourceFile;
+        CompilationUnit( final ResourceReader reader, final String sourceFile ) {
+            this.reader = reader;
+            clazzName = ConversionUtils.convertResourceToClassName(sourceFile);
+            fileName = sourceFile;
             final int dot = clazzName.lastIndexOf('.');
             if (dot > 0) {
                 typeName = clazzName.substring(dot + 1).toCharArray();
@@ -134,23 +134,23 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
 
     @Override
     public org.apache.commons.jci2.core.compiler.CompilationResult compile(
-            final String[] pSourceFiles,
-            final ResourceReader pReader,
-            final ResourceStore pStore,
-            final ClassLoader pClassLoader,
-            final JavaCompilerSettings pSettings
+            final String[] sourceFiles,
+            final ResourceReader resourceReader,
+            final ResourceStore resourceStore,
+            final ClassLoader classLoader,
+            final JavaCompilerSettings settings
             ) {
 
-        final Map<String, String> settingsMap = new EclipseJavaCompilerSettings(pSettings).toNativeSettings();
+        final Map<String, String> settingsMap = new EclipseJavaCompilerSettings(settings).toNativeSettings();
 
         final Collection<CompilationProblem> problems = new ArrayList<>();
 
-        final ICompilationUnit[] compilationUnits = new ICompilationUnit[pSourceFiles.length];
+        final ICompilationUnit[] compilationUnits = new ICompilationUnit[sourceFiles.length];
         for (int i = 0; i < compilationUnits.length; i++) {
-            final String sourceFile = pSourceFiles[i];
+            final String sourceFile = sourceFiles[i];
 
-            if (pReader.isAvailable(sourceFile)) {
-                compilationUnits[i] = new CompilationUnit(pReader, sourceFile);
+            if (resourceReader.isAvailable(sourceFile)) {
+                compilationUnits[i] = new CompilationUnit(resourceReader, sourceFile);
                 log.debug("compiling " + sourceFile);
             } else {
                 // log.error("source not found " + sourceFile);
@@ -217,13 +217,13 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
         final INameEnvironment nameEnvironment = new INameEnvironment() {
 
             @Override
-            public NameEnvironmentAnswer findType( final char[][] pCompoundTypeName ) {
+            public NameEnvironmentAnswer findType( final char[][] compoundTypeName ) {
                 final StringBuilder result = new StringBuilder();
-                for (int i = 0; i < pCompoundTypeName.length; i++) {
+                for (int i = 0; i < compoundTypeName.length; i++) {
                     if (i != 0) {
                         result.append('.');
                     }
-                    result.append(pCompoundTypeName[i]);
+                    result.append(compoundTypeName[i]);
                 }
 
                 //log.debug("finding compoundTypeName=" + result.toString());
@@ -232,34 +232,34 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             }
 
             @Override
-            public NameEnvironmentAnswer findType( final char[] pTypeName, final char[][] pPackageName ) {
+            public NameEnvironmentAnswer findType( final char[] typeName, final char[][] packageName ) {
                 final StringBuilder result = new StringBuilder();
-                for (final char[] element : pPackageName) {
+                for (final char[] element : packageName) {
                     result.append(element);
                     result.append('.');
                 }
 
 //                log.debug("finding typeName=" + new String(typeName) + " packageName=" + result.toString());
 
-                result.append(pTypeName);
+                result.append(typeName);
                 return findType(result.toString());
             }
 
-            private NameEnvironmentAnswer findType( final String pClazzName ) {
+            private NameEnvironmentAnswer findType( final String className ) {
 
-                if (isPackage(pClazzName)) {
+                if (isPackage(className)) {
                     return null;
                 }
 
-                log.debug("finding " + pClazzName);
+                log.debug("finding " + className);
 
-                final String resourceName = ConversionUtils.convertClassToResourcePath(pClazzName);
+                final String resourceName = ConversionUtils.convertClassToResourcePath(className);
 
-                final byte[] clazzBytes = pStore.read(resourceName);
+                final byte[] clazzBytes = resourceStore.read(resourceName);
                 if (clazzBytes != null) {
-                    log.debug("loading from store " + pClazzName);
+                    log.debug("loading from store " + className);
 
-                    final char[] fileName = pClazzName.toCharArray();
+                    final char[] fileName = className.toCharArray();
                     try {
                         final ClassFileReader classFileReader = new ClassFileReader(clazzBytes, fileName, true);
                         return new NameEnvironmentAnswer(classFileReader, null);
@@ -269,11 +269,11 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                     }
                 }
 
-                log.debug("not in store " + pClazzName);
+                log.debug("not in store " + className);
 
-                final InputStream is = pClassLoader.getResourceAsStream(resourceName);
+                final InputStream is = classLoader.getResourceAsStream(resourceName);
                 if (is == null) {
-                    log.debug("class " + pClazzName + " not found");
+                    log.debug("class " + className + " not found");
                     return null;
                 }
 
@@ -285,7 +285,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                         baos.write(buffer, 0, count);
                     }
                     baos.flush();
-                    final char[] fileName = pClazzName.toCharArray();
+                    final char[] fileName = className.toCharArray();
                     final ClassFileReader classFileReader = new ClassFileReader(baos.toByteArray(), fileName, true);
                     return new NameEnvironmentAnswer(classFileReader, null);
                 } catch (final IOException e) {
@@ -308,16 +308,16 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                 }
             }
 
-            private boolean isPackage( final String pClazzName ) {
+            private boolean isPackage( final String className ) {
 
                 // reject this early as it is cheap
-                if (pClazzName.contains("-")) { // "-" is not valid in package names
+                if (className.contains("-")) { // "-" is not valid in package names
                     return false;
                 }
 
-                final InputStream is = pClassLoader.getResourceAsStream(ConversionUtils.convertClassToResourcePath(pClazzName));
+                final InputStream is = classLoader.getResourceAsStream(ConversionUtils.convertClassToResourcePath(className));
                 if (is != null) {
-                    log.debug("found the class for " + pClazzName + "- no package");
+                    log.debug("found the class for " + className + "- no package");
                     try {
                         is.close();
                     } catch (final IOException ie) {
@@ -327,9 +327,9 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                 }
 
                 // FIXME: this should not be tied to the extension
-                final String source = pClazzName.replace('.', '/') + ".java";
-                if (pReader.isAvailable(source)) {
-                    log.debug("found the source " + source + " for " + pClazzName + " - no package ");
+                final String source = className.replace('.', '/') + ".java";
+                if (resourceReader.isAvailable(source)) {
+                    log.debug("found the source " + source + " for " + className + " - no package ");
                     return false;
                 }
 
@@ -344,7 +344,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             }
 
             @Override
-            public boolean isPackage( final char[][] parentPackageName, final char[] pPackageName ) {
+            public boolean isPackage( final char[][] parentPackageName, final char[] packageName ) {
                 final StringBuilder result = new StringBuilder();
                 if (parentPackageName != null) {
                     for (int i = 0; i < parentPackageName.length; i++) {
@@ -360,7 +360,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                 if (parentPackageName != null && parentPackageName.length > 0) {
                     result.append('.');
                 }
-                result.append(pPackageName);
+                result.append(packageName);
                 return isPackage(result.toString());
             }
 
@@ -370,9 +370,9 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
             }
         };
 
-        final ICompilerRequestor compilerRequestor = pResult -> {
-            if (pResult.hasProblems()) {
-                for (final IProblem iproblem : pResult.getProblems()) {
+        final ICompilerRequestor compilerRequestor = result -> {
+            if (result.hasProblems()) {
+                for (final IProblem iproblem : result.getProblems()) {
                     final CompilationProblem problem = new EclipseCompilationProblem(iproblem);
                     if (problemHandler != null) {
                         problemHandler.handle(problem);
@@ -380,8 +380,8 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                     problems.add(problem);
                 }
             }
-            if (!pResult.hasErrors()) {
-                final ClassFile[] clazzFiles = pResult.getClassFiles();
+            if (!result.hasErrors()) {
+                final ClassFile[] clazzFiles = result.getClassFiles();
                 for (final ClassFile clazzFile : clazzFiles) {
                     final char[][] compoundName = clazzFile.getCompoundName();
                     final StringBuilder clazzName = new StringBuilder();
@@ -391,7 +391,7 @@ public final class EclipseJavaCompiler extends AbstractJavaCompiler {
                         }
                         clazzName.append(compoundName[j]);
                     }
-                    pStore.write(clazzName.toString().replace('.', '/') + ".class", clazzFile.getBytes());
+                    resourceStore.write(clazzName.toString().replace('.', '/') + ".class", clazzFile.getBytes());
                 }
             }
         };

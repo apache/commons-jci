@@ -27,8 +27,8 @@ public final class EclipseCompilationProblem implements CompilationProblem {
 
     private final IProblem problem;
 
-    public EclipseCompilationProblem(final IProblem pProblem) {
-        problem = pProblem;
+    public EclipseCompilationProblem(final IProblem problem) {
+        this.problem = problem;
     }
 
     @Override
