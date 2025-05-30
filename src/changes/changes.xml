@@ -112,7 +112,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump ecj from 4.2.2 to 4.6.1 #16.
       </action>
       <action type="update" dev="ggregory" due-to="Dependabot, Gary Gregory">
-        Bump org.codehaus.groovy:groovy-all from 1 to 3.0.24 #17, #77, #98, #110, #156, #176.
+        Bump org.codehaus.groovy:groovy-all from 1 to 3.0.25 #17, #77, #98, #110, #156, #176, #199.
       </action>
       <action type="update" dev="ggregory" due-to="Dependabot, Gary Gregory">
         Bump commons-cli from 1.2 to 1.9.0 #29, #123.
