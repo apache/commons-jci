@@ -117,7 +117,7 @@ public final class CommandlineCompiler {
                 final String[] values = option.getValues();
                 final URL[] urls = new URL[values.length];
                 for (int i = 0; i < urls.length; i++) {
-                    urls[i] = new File(values[i]).toURL();
+                    urls[i] = new File(values[i]).toURI().toURL();
                 }
                 classloader = new URLClassLoader(urls);
             } else if ("source".equals(option.getOpt())) {
