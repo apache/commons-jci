@@ -40,6 +40,10 @@
         <system>JIRA</system>
         <url>https://issues.apache.org/jira/browse/JCI</url>
     </issueManagement>
+    <ciManagement>
+      <system>GitHub</system>
+      <url>https://github.com/apache/commons-jci/actions</url>
+    </ciManagement>
     <modules>
         <module>fam</module>
         <module>core</module>
