@@ -27,6 +27,7 @@ import org.apache.commons.jci2.core.compiler.JavaCompilerSettings;
 import org.apache.commons.jci2.core.problems.CompilationProblem;
 import org.apache.commons.jci2.core.readers.ResourceReader;
 import org.apache.commons.jci2.core.stores.MemoryResourceStore;
+import org.apache.commons.lang3.SystemProperties;
 
 import junit.framework.TestCase;
 
@@ -239,8 +240,6 @@ public abstract class AbstractCompilerTestCase extends TestCase {
      * https://issues.apache.org/jira/browse/JCI-53
      */
     public void testCrossReferenceCompilation() throws Exception {
-      final String javaVersion = System.getProperty("java.version");
-
       final JavaCompiler compiler = createJavaCompiler();
 
         final ResourceReader reader = new ResourceReader() {
