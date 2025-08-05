@@ -26,7 +26,7 @@ import org.apache.commons.logging.LogFactory;
 import junit.framework.TestCase;
 
 /**
- * Test ReloadingClassLoader's <code>removeResourceStore({@link ResourceStore})</code>
+ * Tests {@link ReloadingClassLoader#removeResourceStore(ResourceStore)}.
  * method.
  */
 public class ReloadingClassLoaderRemoveTestCase extends TestCase {
