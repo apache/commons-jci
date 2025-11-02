@@ -34,7 +34,7 @@
         It is well integrated with a FAM (FilesystemAlterationMonitor) that can be used with the JCI compiling/reloading classloader.
         All the currently supported compilers feature in-memory compilation.
     </description>
-    <url>http://commons.apache.org/proper/commons-jci/</url>
+    <url>https://commons.apache.org/proper/commons-jci/</url>
     <inceptionYear>2004</inceptionYear>
     <issueManagement>
         <system>JIRA</system>
@@ -72,7 +72,7 @@
             <name>Torsten Curdt</name>
             <email>tcurdt at apache.org</email>
             <organization>ASF</organization>
-            <organizationUrl>http://www.apache.org/</organizationUrl>
+            <organizationUrl>https://www.apache.org/</organizationUrl>
             <timezone>+1</timezone>
         </developer>
     </developers>
@@ -81,7 +81,7 @@
             <name>Don Brown</name>
             <email>mrdon at apache.org</email>
             <organization>ASF</organization>
-            <organizationUrl>http://www.apache.org/</organizationUrl>
+            <organizationUrl>https://www.apache.org/</organizationUrl>
         </contributor>
         <contributor>
             <name>Joerk Heinicke</name>
