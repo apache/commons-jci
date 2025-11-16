@@ -242,6 +242,11 @@ public class FilesystemAlterationObserverImpl implements FilesystemAlterationObs
     private FilesystemAlterationListener[] listeners = {};
     private final Set<FilesystemAlterationListener> listenersSet = new HashSet<>();
 
+    /**
+     * Constructs a new instance.
+     *
+     * @param pRootDirectory The root directory to observe.
+     */
     public FilesystemAlterationObserverImpl( final File pRootDirectory ) {
         rootDirectory = pRootDirectory;
         rootEntry = new Entry(new MonitorFileImpl(pRootDirectory));

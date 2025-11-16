@@ -20,20 +20,40 @@ package org.apache.commons.jci2.fam.monitor;
 import java.io.File;
 
 /**
- * FilesystemAlterationObserver represents the state of files
- * below a certain root directory. It implements the code to
- * check the filesystem and notify listeners.
+ * Represents the state of files below a certain root directory. Implementors check the file system and notify listeners.
  */
 public interface FilesystemAlterationObserver {
 
+    /**
+     * Gets the root directory.
+     *
+     * @return the root directory.
+     */
     File getRootDirectory();
 
+    /**
+     * Notifies listeners.
+     */
     void checkAndNotify();
 
-    void addListener( final FilesystemAlterationListener pListener );
+    /**
+     * Add a listener.
+     *
+     * @param listener a listener.
+     */
+    void addListener(final FilesystemAlterationListener listener);
 
-    void removeListener( final FilesystemAlterationListener pListener );
+    /**
+     * Removes the given listener.
+     *
+     * @param listener a listener
+     */
+    void removeListener(final FilesystemAlterationListener listener);
 
+    /**
+     * Gets listeners.
+     *
+     * @return The listeners.
+     */
     FilesystemAlterationListener[] getListeners();
-
 }

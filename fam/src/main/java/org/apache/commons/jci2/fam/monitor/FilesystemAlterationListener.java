@@ -20,18 +20,65 @@ package org.apache.commons.jci2.fam.monitor;
 import java.io.File;
 
 /**
- * A listener that receives events of filesystem modifications.
- * The observer basically represents the source of the events.
- * The file root and its state. (see FilesystemAlterationObserver)
+ * A listener that receives events of file system modifications. The observer basically represents the source of the events. The file root and its state.
+ *
+ * @see FilesystemAlterationObserver
  */
 public interface FilesystemAlterationListener {
 
-    void onStart( final FilesystemAlterationObserver pObserver );
-    void onFileCreate( final File pFile );
-    void onFileChange( final File pFile );
-    void onFileDelete( final File pFile );
-    void onDirectoryCreate( final File pDir );
-    void onDirectoryChange( final File pDir );
-    void onDirectoryDelete( final File pDir );
-    void onStop( final FilesystemAlterationObserver pObserver );
+    /**
+     * Receives notification that we are starting to observe.
+     *
+     * @param observer the observer.
+     */
+    void onStart(final FilesystemAlterationObserver observer);
+
+    /**
+     * Receives notification that a file was created.
+     *
+     * @param file the file.
+     */
+    void onFileCreate(final File file);
+
+    /**
+     * Receives notification that a file was changed.
+     *
+     * @param file the file.
+     */
+    void onFileChange(final File file);
+
+    /**
+     * Receives notification that a file was deleted.
+     *
+     * @param file the file.
+     */
+    void onFileDelete(final File file);
+
+    /**
+     * Receives notification that a directory was created.
+     *
+     * @param directory the directory.
+     */
+    void onDirectoryCreate(final File directory);
+
+    /**
+     * Receives notification that a directory was changed.
+     *
+     * @param directory the directory.
+     */
+    void onDirectoryChange(final File directory);
+
+    /**
+     * Receives notification that a directory was deleted.
+     *
+     * @param directory the directory.
+     */
+    void onDirectoryDelete(final File directory);
+
+    /**
+     * Receives notification that we are stopping to observe.
+     *
+     * @param observer the observer.
+     */
+    void onStop(final FilesystemAlterationObserver observer);
 }

@@ -26,8 +26,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * It's a runnable that spawns of a monitoring thread triggering the
- * the observers and managing the their listeners.
+ * Spawns of a monitoring thread triggering the the observers and managing the their listeners.
  */
 public final class FilesystemAlterationMonitor implements Runnable {
 
@@ -42,9 +41,15 @@ public final class FilesystemAlterationMonitor implements Runnable {
 
     private volatile boolean running = true;
 
+    /**
+     * Constructs a new instance.
+     */
     public FilesystemAlterationMonitor() {
     }
 
+    /**
+     * Starts the internal thread.
+     */
     public void start() {
         thread = new Thread(this);
         thread.setName("Filesystem Alteration Monitor");
@@ -52,9 +57,11 @@ public final class FilesystemAlterationMonitor implements Runnable {
         thread.start();
     }
 
+    /**
+     * Joins the internal running thread. 
+     */
     public void stop() {
         running = false;
-
         if (thread != null) {
             try {
                 thread.join(delay);
@@ -72,6 +79,12 @@ public final class FilesystemAlterationMonitor implements Runnable {
         delay = pDelay;
     }
 
+    /**
+     * Adds the given listener for the given file.
+     *
+     * @param pRoot The file to observe.
+     * @param pListener The listener.
+     */
     public void addListener( final File pRoot, final FilesystemAlterationListener pListener ) {
 
         FilesystemAlterationObserver observer;
@@ -90,6 +103,11 @@ public final class FilesystemAlterationMonitor implements Runnable {
         observer.addListener(pListener);
     }
 
+    /**
+     * Removes the given listener.
+     *
+     * @param pListener The listener to remove.
+     */
     public void removeListener( final FilesystemAlterationListener pListener ) {
         synchronized (observersLock) {
             for (final FilesystemAlterationObserver observer : observers.values()) {
@@ -99,6 +117,12 @@ public final class FilesystemAlterationMonitor implements Runnable {
         }
     }
 
+    /**
+     * Gets the array of listeners for the given file.
+     *
+     * @param pRoot the file to query.
+     * @return the array of listeners for the given file or an empty array.
+     */
     public FilesystemAlterationListener[] getListenersFor( final File pRoot  ) {
         final FilesystemAlterationObserver observer = observers.get(pRoot);
 

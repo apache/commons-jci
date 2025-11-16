@@ -27,8 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * AbstractFilesystemAlterationListener provides some convenience methods helping to
- * implement a FilesystemAlterationListener.
+ * Provides convenience methods helping to implement a {@link FilesystemAlterationListener}.
  */
 public abstract class AbstractFilesystemAlterationListener implements FilesystemAlterationListener {
 
@@ -48,6 +47,16 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
     private final Signal eventSignal = new Signal();
     private final Signal checkSignal = new Signal();
 
+    /**
+     * Constructs a new instance.
+     */
+    public AbstractFilesystemAlterationListener() {
+        // empty
+    }
+
+    /**
+     * The observer called on file changes.
+     */
     protected FilesystemAlterationObserver observer;
 
     @Override
@@ -76,46 +85,75 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
         deletedFiles.add(pFile);
     }
 
+    /**
+     * Gets the changed directories.
+     *
+     * @return the changed directories.
+     */
     public Collection<File> getChangedDirectories() {
         return changedDirectories;
     }
 
+    /**
+     * Gets the changed files.
+     *
+     * @return the changed files.
+     */
     public Collection<File> getChangedFiles() {
         return changedFiles;
     }
 
+    /**
+     * Gets the changed directories.
+     *
+     * @return the changed directories.
+     */
     public Collection<File> getCreatedDirectories() {
         return createdDirectories;
     }
 
+    /**
+     * Gets the changed files.
+     *
+     * @return the changed files.
+     */
     public Collection<File> getCreatedFiles() {
         return createdFiles;
     }
 
+    /**
+     * Gets the deleted directories.
+     *
+     * @return the deleted directories.
+     */
     public Collection<File> getDeletedDirectories() {
         return deletedDirectories;
     }
 
+    /**
+     * Gets the deleted files.
+     *
+     * @return the deleted files.
+     */
     public Collection<File> getDeletedFiles() {
         return deletedFiles;
     }
 
+    /**
+     * Notifies the internal signal if enabled.
+     */
     protected void signals() {
         if (!createdFiles.isEmpty() || !createdDirectories.isEmpty() ||
             !changedFiles.isEmpty() || !changedDirectories.isEmpty() ||
             !deletedFiles.isEmpty() || !deletedDirectories.isEmpty()) {
-
             log.debug("event signal");
-
-            synchronized(eventSignal) {
+            synchronized (eventSignal) {
                 eventSignal.triggered = true;
                 eventSignal.notifyAll();
             }
         }
-
         log.debug("check signal");
-
-        synchronized(checkSignal) {
+        synchronized (checkSignal) {
             checkSignal.triggered = true;
             checkSignal.notifyAll();
         }
@@ -124,7 +162,6 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
     @Override
     public void onStart( final FilesystemAlterationObserver pObserver ) {
         observer = pObserver;
-
         createdFiles.clear();
         changedFiles.clear();
         deletedFiles.clear();
@@ -139,6 +176,11 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
         observer = null;
     }
 
+    /**
+     * Waits of the signal to be triggered.
+     *
+     * @throws Exception Throws on timeout.
+     */
     public void waitForEvent() throws Exception {
         synchronized(eventSignal) {
             eventSignal.triggered = false;
