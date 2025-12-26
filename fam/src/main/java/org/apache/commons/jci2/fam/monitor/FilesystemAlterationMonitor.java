@@ -26,7 +26,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Spawns of a monitoring thread triggering the the observers and managing the their listeners.
+ * Spawns of a monitoring thread triggering the observers and managing the their listeners.
  */
 public final class FilesystemAlterationMonitor implements Runnable {
 
