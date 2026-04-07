@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-parent</artifactId>
-        <version>97</version>
+        <version>98</version>
     </parent>
     <packaging>pom</packaging>
     <artifactId>commons-jci2</artifactId>
