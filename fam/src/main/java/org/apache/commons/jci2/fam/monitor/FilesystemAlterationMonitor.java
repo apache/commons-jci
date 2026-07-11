@@ -73,7 +73,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
     /**
      * Sets the delay between calls to the observers.
      *
-     * @param pDelay the delay in milliseconds (default if not set 3000 ms)
+     * @param pDelay The delay in milliseconds (default if not set 3000 ms)
      */
     public void setInterval( final long pDelay ) {
         delay = pDelay;
@@ -120,7 +120,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
     /**
      * Gets the array of listeners for the given file.
      *
-     * @param pRoot the file to query.
+     * @param pRoot The file to query.
      * @return The array of listeners for the given file or an empty array.
      */
     public FilesystemAlterationListener[] getListenersFor( final File pRoot  ) {

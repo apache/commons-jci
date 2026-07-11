@@ -39,14 +39,14 @@ public interface FilesystemAlterationObserver {
     /**
      * Add a listener.
      *
-     * @param listener a listener.
+     * @param listener A listener.
      */
     void addListener(final FilesystemAlterationListener listener);
 
     /**
      * Removes the given listener.
      *
-     * @param listener a listener
+     * @param listener A listener
      */
     void removeListener(final FilesystemAlterationListener listener);
 

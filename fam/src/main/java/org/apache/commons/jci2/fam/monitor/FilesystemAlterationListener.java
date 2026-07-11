@@ -29,56 +29,56 @@ public interface FilesystemAlterationListener {
     /**
      * Receives notification that we are starting to observe.
      *
-     * @param observer the observer.
+     * @param observer The observer.
      */
     void onStart(final FilesystemAlterationObserver observer);
 
     /**
      * Receives notification that a file was created.
      *
-     * @param file the file.
+     * @param file The file.
      */
     void onFileCreate(final File file);
 
     /**
      * Receives notification that a file was changed.
      *
-     * @param file the file.
+     * @param file The file.
      */
     void onFileChange(final File file);
 
     /**
      * Receives notification that a file was deleted.
      *
-     * @param file the file.
+     * @param file The file.
      */
     void onFileDelete(final File file);
 
     /**
      * Receives notification that a directory was created.
      *
-     * @param directory the directory.
+     * @param directory The directory.
      */
     void onDirectoryCreate(final File directory);
 
     /**
      * Receives notification that a directory was changed.
      *
-     * @param directory the directory.
+     * @param directory The directory.
      */
     void onDirectoryChange(final File directory);
 
     /**
      * Receives notification that a directory was deleted.
      *
-     * @param directory the directory.
+     * @param directory The directory.
      */
     void onDirectoryDelete(final File directory);
 
     /**
      * Receives notification that we are stopping to observe.
      *
-     * @param observer the observer.
+     * @param observer The observer.
      */
     void onStop(final FilesystemAlterationObserver observer);
 }
