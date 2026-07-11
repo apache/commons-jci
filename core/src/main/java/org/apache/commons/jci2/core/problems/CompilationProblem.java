@@ -56,7 +56,7 @@ public interface CompilationProblem {
     /**
      * the description of the problem
      *
-     * @return the description of the problem
+     * @return The description of the problem
      */
     String getMessage();
 

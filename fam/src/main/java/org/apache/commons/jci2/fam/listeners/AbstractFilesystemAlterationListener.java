@@ -88,7 +88,7 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
     /**
      * Gets the changed directories.
      *
-     * @return the changed directories.
+     * @return The changed directories.
      */
     public Collection<File> getChangedDirectories() {
         return changedDirectories;
@@ -97,7 +97,7 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
     /**
      * Gets the changed files.
      *
-     * @return the changed files.
+     * @return The changed files.
      */
     public Collection<File> getChangedFiles() {
         return changedFiles;
@@ -106,7 +106,7 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
     /**
      * Gets the changed directories.
      *
-     * @return the changed directories.
+     * @return The changed directories.
      */
     public Collection<File> getCreatedDirectories() {
         return createdDirectories;
@@ -115,7 +115,7 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
     /**
      * Gets the changed files.
      *
-     * @return the changed files.
+     * @return The changed files.
      */
     public Collection<File> getCreatedFiles() {
         return createdFiles;
@@ -124,7 +124,7 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
     /**
      * Gets the deleted directories.
      *
-     * @return the deleted directories.
+     * @return The deleted directories.
      */
     public Collection<File> getDeletedDirectories() {
         return deletedDirectories;
@@ -133,7 +133,7 @@ public abstract class AbstractFilesystemAlterationListener implements Filesystem
     /**
      * Gets the deleted files.
      *
-     * @return the deleted files.
+     * @return The deleted files.
      */
     public Collection<File> getDeletedFiles() {
         return deletedFiles;

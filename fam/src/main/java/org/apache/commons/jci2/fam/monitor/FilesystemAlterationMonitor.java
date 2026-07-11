@@ -121,7 +121,7 @@ public final class FilesystemAlterationMonitor implements Runnable {
      * Gets the array of listeners for the given file.
      *
      * @param pRoot the file to query.
-     * @return the array of listeners for the given file or an empty array.
+     * @return The array of listeners for the given file or an empty array.
      */
     public FilesystemAlterationListener[] getListenersFor( final File pRoot  ) {
         final FilesystemAlterationObserver observer = observers.get(pRoot);

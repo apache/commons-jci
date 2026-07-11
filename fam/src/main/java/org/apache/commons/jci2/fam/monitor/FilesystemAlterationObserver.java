@@ -27,7 +27,7 @@ public interface FilesystemAlterationObserver {
     /**
      * Gets the root directory.
      *
-     * @return the root directory.
+     * @return The root directory.
      */
     File getRootDirectory();
 
