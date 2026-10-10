@@ -16,6 +16,8 @@
 github:
   description: "Apache Commons JCI"
   homepage: https://commons.apache.org/jci/
+  autolink_jira:
+    - JCI
   
   pull_requests:
     # allow auto-merge
