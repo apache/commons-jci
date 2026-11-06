@@ -54,7 +54,7 @@ public final class JavaCompilerFactory {
      *
      * you can use the short-hands "some"/"Some"/"SOME". Otherwise
      * you have to provide the full class name. The compiler is
-     * getting instanciated via (cached) reflection.
+     * getting instantiated via (cached) reflection.
      *
      * @param pHint
      * @return JavaCompiler or null
